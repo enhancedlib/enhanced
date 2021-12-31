@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeSharedSettings">
+    <configurations>
+      <configuration PROFILE_NAME="MinGW-x64-Debug" ENABLED="true" GENERATION_DIR="build/MinGW-x64-Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="MinGW x64" GENERATION_OPTIONS="-G &quot;MinGW Makefiles&quot; -DCMAKE_C_STANDARD=11 -DCMAKE_CXX_STANDARD=20 -DCMAKE_INSTALL_PREFIX=$CMakeProjectDir$/debug" />
+      <configuration PROFILE_NAME="MinGW-x64-Release" ENABLED="true" GENERATION_DIR="build/MinGW-x64-Release" CONFIG_NAME="Release" TOOLCHAIN_NAME="MinGW x64" GENERATION_OPTIONS="-G &quot;MinGW Makefiles&quot; -DCMAKE_C_STANDARD=11 -DCMAKE_CXX_STANDARD=20 -DCMAKE_INSTALL_PREFIX=$CMakeProjectDir$/release/MinGW-x64" />
+      <configuration PROFILE_NAME="MinGW-x86-Debug" ENABLED="true" GENERATION_DIR="build/MinGW-x86-Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="MinGW x86" GENERATION_OPTIONS="-G &quot;MinGW Makefiles&quot; -DCMAKE_C_STANDARD=11 -DCMAKE_CXX_STANDARD=20 -DCMAKE_INSTALL_PREFIX=$CMakeProjectDir$/debug" />
+      <configuration PROFILE_NAME="MinGW-x86-Release" ENABLED="true" GENERATION_DIR="build/MinGW-x86-Release" CONFIG_NAME="Release" TOOLCHAIN_NAME="MinGW x86" GENERATION_OPTIONS="-G &quot;MinGW Makefiles&quot; -DCMAKE_C_STANDARD=11 -DCMAKE_CXX_STANDARD=20 -DCMAKE_INSTALL_PREFIX=$CMakeProjectDir$/release/MinGW-x86" />
+      <configuration PROFILE_NAME="MSVC-x64-Debug" ENABLED="true" GENERATION_DIR="build/MSVC-x64-Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Microsoft Visual C++ x64" GENERATION_OPTIONS="-G &quot;Visual Studio 17 2022&quot; -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_STANDARD=11 -DCMAKE_CXX_STANDARD=20 -DCMAKE_INSTALL_PREFIX=$CMakeProjectDir$/debug" />
+      <configuration PROFILE_NAME="MSVC-x64-Release" ENABLED="true" GENERATION_DIR="build/MSVC-x64-Release" CONFIG_NAME="Release" TOOLCHAIN_NAME="Microsoft Visual C++ x64" GENERATION_OPTIONS="-G &quot;Visual Studio 17 2022&quot; -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_STANDARD=11 -DCMAKE_CXX_STANDARD=20 -DCMAKE_INSTALL_PREFIX=$CMakeProjectDir$/release/MSVC-x64" />
+      <configuration PROFILE_NAME="MSVC-x86-Debug" ENABLED="true" GENERATION_DIR="build/MSVC-x86-Debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Microsoft Visual C++ x86" GENERATION_OPTIONS="-G &quot;Visual Studio 17 2022&quot; -A Win32 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_STANDARD=11 -DCMAKE_CXX_STANDARD=20 -DCMAKE_INSTALL_PREFIX=$CMakeProjectDir$/debug" />
+      <configuration PROFILE_NAME="MSVC-x86-Release" ENABLED="true" GENERATION_DIR="build/MSVC-x86-Release" CONFIG_NAME="Release" TOOLCHAIN_NAME="Microsoft Visual C++ x86" GENERATION_OPTIONS="-G &quot;Visual Studio 17 2022&quot; -A Win32 -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_STANDARD=11 -DCMAKE_CXX_STANDARD=20 -DCMAKE_INSTALL_PREFIX=$CMakeProjectDir$/release/MSVC-x86" />
+    </configurations>
+  </component>
+</project>
