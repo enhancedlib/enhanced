@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -70,12 +70,12 @@ ENHANCED_CORE_API void arraySet(void *array, Size count, void *address, Size siz
  * @example arrayCopy(string, srcString, 50, sizeof(char))
  * @example arrayCopy(array, oldArray, 20, sizeof(int))
  *
- * @param tarArray       The target array (or the new pointer).
+ * @param destArray      The target array (or the new pointer).
  * @param srcArray       An array (or a pointer).
  * @param count          The count of the original array.
  * @param sizeOfType     The byte size of array type (generally: "sizeof(<array type>)").
  */
-ENHANCED_CORE_API void arrayCopy(void *tarArray, void *srcArray, Size count, Size sizeOfType);
+ENHANCED_CORE_API void arrayCopy(void *destArray, void *srcArray, Size count, Size sizeOfType);
 
 EXTERN_C_END
 

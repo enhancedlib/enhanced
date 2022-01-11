@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -26,7 +26,7 @@
 typedef char int8;
 typedef short int16;
 typedef int int32;
-#if defined(WINDOWS_OS) // Windows OS
+#if defined(WINDOWS_OS) /* Windows OS */ || defined(ARCH_32_BIT) /* 32-bit */
 typedef long long int64;
 #elif defined(LINUX_OS) // Linux OS
 typedef long int64;

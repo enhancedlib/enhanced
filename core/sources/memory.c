@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -41,7 +41,7 @@ void memoryFree(void *const ptr) {
     }
 }
 
-void memorySet(void *const ptr, const Byte byte, const Size size) {
+void memorySet(void *ptr, const Byte byte, const Size size) {
     assert(ptr != null), assert(size > 0);
 
     for (Size index = 0; index < size; ++ index) {
@@ -49,10 +49,17 @@ void memorySet(void *const ptr, const Byte byte, const Size size) {
     }
 }
 
-void memoryCopy(void *const target, void *const source, const Size size) {
-    assert(target != null), assert(source != null), assert(size > 0);
+void memoryCopy(void *destination, void *const source, const Size size) {
+    assert(destination != null), assert(source != null), assert(size > 0);
 
-    for (Size index = 0; index < size; ++ index) {
-        ((Byte *) target)[index] = ((Byte *) source)[index];
+    Size countBlock = size / sizeof(qword);
+    Size countByte = size % sizeof(qword);
+
+    while ((countBlock --) > 0) {
+        ((qword *) destination)[countBlock] = ((qword *) source)[countBlock];
+    }
+
+    while ((countByte --) > 0) {
+        ((Byte *) destination)[countByte] = ((Byte *) source)[countByte];
     }
 }

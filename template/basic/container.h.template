@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao. All rights reserved.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -18,16 +18,16 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#ifndef ENHANCED_CONTAINER_H
-#define ENHANCED_CONTAINER_H
+#ifndef ENHANCED_BASIC_H
+#define ENHANCED_BASIC_H
 
 #include "EnhancedCore/defines.h"
 
 #ifdef CXX_LANGUAGE // C++ language
 
-namespace EnhancedContainer {
-} // namespace EnhancedContainer
+namespace EnhancedBasic {
+} // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE
 
-#endif // !ENHANCED_CONTAINER_H
+#endif // !ENHANCED_BASIC_H

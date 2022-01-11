@@ -1,22 +1,4 @@
-﻿## Copyright (C) 2021 Liu Baihao. All rights reserved.
-## This product is licensed under Enhanced License.
-##
-## This copyright disclaimer is subject to change without notice.
-##
-## This software is a free software,
-## everyone can change, copy, publication, demonstrate, use, etc.
-##
-## If you change and publication this software,
-## must credit the original software source and author's name,
-## and include this copyright disclaimer and
-## the license of this software in your software.
-##
-## This software and documentation may provide
-## third-party content, product and other information.
-## I am not responsible for any loss or damage caused
-## by your access to or use of third-party content, products, etc.
-
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 
 project("Enhanced")
 
@@ -26,14 +8,12 @@ set(
     MODULES
     "core"
     "basic"
-    "container"
 )
 
 set(
     MODULES_FULL_NAME
     "EnhancedCore"
     "EnhancedBasic"
-    "EnhancedContainer"
 )
 
 if (!${CMAKE_BUILD_TYPE})
@@ -76,7 +56,7 @@ endif ()
 message("${PROMPT} Configuring modules done")
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    install(FILES "ReadMe" DESTINATION ".")
+    install(FILES "ReadMe.md" DESTINATION ".")
     message("${PROMPT} Installs file \"readme\" to ${CMAKE_INSTALL_PREFIX}/.")
     install(DIRECTORY "licenses" DESTINATION ".")
     message("${PROMPT} Installs directory \"licenses\" to ${CMAKE_INSTALL_PREFIX}/.")

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao. All rights reserved.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -24,6 +24,8 @@
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 
+EXTERN_C_START
+
 ENHANCED_CORE_API void assertFailed(const char *message, const char *file, unsigned int line);
 
 #ifdef assert
@@ -38,5 +40,7 @@ ENHANCED_CORE_API void assertFailed(const char *message, const char *file, unsig
 #else
 #define assert(exception) (void) 0
 #endif // DEBUG
+
+EXTERN_C_END
 
 #endif // !ENHANCED_CORE_ASSERT_H

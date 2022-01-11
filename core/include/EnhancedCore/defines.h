@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -21,7 +21,7 @@
 #ifndef ENHANCED_CORE_DEFINES_H
 #define ENHANCED_CORE_DEFINES_H
 
-// Checks current using which compiler to compile.
+// Detects current using which compiler to compile.
 #if defined(__GNUC__) // GNU C/C++ Compiler
 #define COMPILER_GCC
 #elif defined(__clang__) // Clang
@@ -32,7 +32,7 @@
 #define COMPILER_UNKNOWN
 #endif // defined(__GNUC__)
 
-// Checks the architecture for the current platform
+// Detects the architecture for the current platform
 #if defined(_M_IX86) || defined(__i386__) // 32-bit
 #define ARCH_32_BIT
 #elif defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64__) // 64-bit
@@ -41,7 +41,7 @@
 #define ARCH_UNKNOWN
 #endif // defined(_M_IX86) || defined(__i386__)
 
-// Checks current operating system.
+// Detects current operating system.
 #if defined(_WIN32) || defined(_WIN64) // Microsoft Windows Operating System
 #define WINDOWS_OS
 #elif defined(__linux__) || defined(__linux) // Linux (GNU/Linux)
@@ -50,7 +50,7 @@
 #define UNKNOWN_OS
 #endif // defined(_WIN32)
 
-// Checks whether the current language is the C language or the C++ language.
+// Detects the current language and its standard.
 #ifdef __cplusplus // C++ language
 
 #ifdef COMPILER_MSVC // Microsoft Visual C++
@@ -109,7 +109,7 @@
 
 #endif // __cplusplus
 
-#if defined(_DEBUG) && !defined(DEBUG)
+#if (defined(_DEBUG) || defined(DBG)) && !defined(DEBUG)
 #define DEBUG
 #endif // defined(_DEBUG) && !defined(DEBUG)
 
@@ -128,15 +128,20 @@
 #define COMPILING_DATE __DATE__
 #define COMPILING_TIME __TIME__
 
+#ifdef C_LANGUAGE
+#define using(name) typedef name ALIAS_ ## name
+#endif // C_LANGUAGE
+
 #ifdef CXX_LANGUAGE
 #define interface struct
 #endif // CXX_LANGUAGE
 
-#ifdef CXX_98
+#if defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
+#define constexpr
 #define override
 #define final
-#define noexcept
-#endif // CXX_98
+#define noexcept throw()
+#endif // defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
 
 #ifdef CXX_LANGUAGE
 #define EXTERN_C extern "C"
@@ -147,6 +152,10 @@
 #define EXTERN_C_START
 #define EXTERN_C_END
 #endif // CXX_LANGUAGE
+
+#if defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
+#warning The C++ standard is too old. May not be compatible.
+#endif // defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
 
 #if defined(WINDOWS_OS) /* Windows OS */ && defined(ENHANCED_CORE_DYNAMIC_LIBRARY) /* Dynamic library */
 #ifdef ENHANCED_CORE_EXPORTS // Export

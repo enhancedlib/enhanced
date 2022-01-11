@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -44,6 +44,6 @@ void arraySet(void *const array, const Size count, void *const address, const Si
     }
 }
 
-void arrayCopy(void *const tarArray, void *const srcArray, const Size count, const Size sizeOfType) {
-    memoryCopy(tarArray, srcArray, count * sizeOfType);
+void arrayCopy(void *const destArray, void *const srcArray, const Size count, const Size sizeOfType) {
+    memoryCopy(destArray, srcArray, count * sizeOfType);
 }

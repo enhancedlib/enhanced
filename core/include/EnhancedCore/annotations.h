@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao. All rights reserved.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -34,21 +34,21 @@
  *
  *     $Unsupported()        Indicates an environment not supported by the API.
  *
+ *     $Optional             Indicates the argument is optional.
+ *
  *     $Out                  Sets the argument inside the function and pass it out
  *                           The argument must be a pointer or reference.
  *
  *     $InOut                Passes a argument and
  *                           sets the argument inside the function and pass it out.
  *
- *     $Requires             Indicates passed the pointer argument
- *                           should not be null.
- *
- *     $OutNotIgnored        Sets the argument inside the function and pass it out.
- *                           Passed data should not ignore.
- *
- *     $InOutNotIgnored      Passes a argument and
  *                           sets the argument inside the function and pass it out.
- *                           Passed data should not ignore.
+ *     $OutNotIgnored        Sets the argument inside the function and pass it out.
+ *                           Passed any should not ignore.
+ *
+ *     $InOutRequired        Passes a argument and
+ *                           sets the argument inside the function and pass it out.
+ *                           Passed any should not ignore.
  *
  *     $NotNull              Indicates the pointer cannot be null.
  *
@@ -103,14 +103,14 @@
 #define $Out _Out_opt_
 #define $InOut _Inout_opt_
 #define $OutNotIgnored _Out_
-#define $InRequiredOutNotIgnored _Inout_
+#define $InOutRequired  _Inout_
 #define $NotNull _Notnull_
 #else
 #define $Optional
 #define $Out
 #define $InOut
 #define $OutNotIgnored
-#define $InRequiredOutNotIgnored
+#define $InOutRequired
 #define $NotNull
 #endif // COMPILER_MSVC
 
