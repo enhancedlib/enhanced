@@ -18,40 +18,47 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#ifndef ENHANCED_BASIC_CORE_INTEGER_H
-#define ENHANCED_BASIC_CORE_INTEGER_H
+#ifndef ENHANCED_BASIC_ITERATOR_H
+#define ENHANCED_BASIC_ITERATOR_H
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 
-#include "EnhancedBasic/defines.h"
-
-#if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
-
-EXTERN_C_START
-
-struct EnhancedBasic$Core$Integer {
-    int value;
-};
-
-#define ALIAS_EnhancedBasic$Core$Integer Integer
-
-EXTERN_C_END
-
-#else // C++ language
+#ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
     namespace Core {
-        class ENHANCED_BASIC_API Integer {
-            private:
-                int value;
+        template <typename Type>
+        interface Iterator {
+        #ifdef CXX_11_OR_MORE
 
-            public:
-                Integer();
+            virtual ~Iterator() noexcept = default;
+
+        #else // below C++11
+
+            virtual ~Iterator() {}
+
+        #endif // CXX_11_OR_MORE
+
+            $RetNotIgnored()
+            virtual bool hasNext() const = 0;
+
+            virtual const Iterator<Type> *next() const = 0;
+
+            $RetNotIgnored()
+            virtual bool each() const = 0;
+
+            $RetNotIgnored()
+            virtual Type &get() const = 0;
+
+            virtual void reset() const = 0;
+
+            $RetNotIgnored()
+            virtual Size count() const = 0;
         };
     } // namespace Core
 } // namespace EnhancedBasic
 
-#endif // defined(C_LANGUAGE) || defined(ENHANCED_BASIC_C_MODE)
+#endif // CXX_LANGUAGE
 
-#endif // !ENHANCED_BASIC_CORE_INTEGER_H
+#endif // !ENHANCED_BASIC_ITERATOR_H

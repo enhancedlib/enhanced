@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -27,7 +27,7 @@
 
 #include "EnhancedBasic/defines.h"
 
-#include "EnhancedContainer/collection/List.h"
+#include "EnhancedBasic/collection/List.h"
 
 #if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
 
@@ -54,11 +54,7 @@ typedef struct EnhancedBasic$Core$String {
     struct EnhancedBasic$Core$String (*add)(struct EnhancedBasic$Core$String *self,
                                             struct EnhancedBasic$Core$String str);
 } EnhancedBasic$Core$String;
-
-#ifndef DEFINED_IDENTIFIER_STRING
-#define DEFINED_IDENTIFIER_STRING
-typedef EnhancedBasic$Core$String String;
-#endif // !DEFINED_IDENTIFIER_STRING
+#define ALIAS_EnhancedBasic$Core$String String
 
 ENHANCED_BASIC_API EnhancedBasic$Core$String newEmptyString();
 
@@ -90,7 +86,7 @@ namespace EnhancedBasic {
              */
             Size length;
 
-            bool isConst;
+            bool isStaticString;
 
         public:
             String(const char *value = "");
@@ -116,13 +112,13 @@ namespace EnhancedBasic {
             Size indexOf(const String &string, Size getN = 0) const;
 
             $RetRequiresRelease()
-            EnhancedContainer::Collection::List<Size> *indexOfAll(char ch) const;
+            Collection::List<Size> *indexOfAll(char ch) const;
 
             $RetRequiresRelease()
-            EnhancedContainer::Collection::List<Size> *indexOfAll(const String &string) const;
+            Collection::List<Size> *indexOfAll(const String &string) const;
 
             $RetNotIgnored()
-            char *toStdString() const;
+            char *getCharacters() const;
 
             char &operator[](Size index) const;
 

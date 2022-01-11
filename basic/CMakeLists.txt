@@ -1,28 +1,10 @@
-## Copyright (C) 2021 Liu Baihao. All rights reserved.
-## This product is licensed under Enhanced License.
-##
-## This copyright disclaimer is subject to change without notice.
-##
-## This software is a free software,
-## everyone can change, copy, publication, demonstrate, use, etc.
-##
-## If you change and publication this software,
-## must credit the original software source and author's name,
-## and include this copyright disclaimer and
-## the license of this software in your software.
-##
-## This software and documentation may provide
-## third-party content, product and other information.
-## I am not responsible for any loss or damage caused
-## by your access to or use of third-party content, products, etc.
-
 cmake_minimum_required(VERSION 3.0)
 
 set(MODULE_NAME basic)
 set(MODULE_FULL_NAME EnhancedBasic)
 set(PROMPT "[Module: ${MODULE_NAME} (${MODULE_FULL_NAME})]")
 
-set(REQUIRES_MODULES "EnhancedCore" "EnhancedContainer")
+set(REQUIRES_MODULES "EnhancedCore")
 set(INCLUDE_DIRECTORIES "include")
 
 set(
@@ -37,17 +19,49 @@ set(
     sources/math/LargeInteger.cpp
     sources/math/Math.c
     sources/math/Math.cpp
+    sources/collection/ArrayList.cpp
+    sources/collection/LinkedList.cpp
+    sources/collection/Vector.cpp
+    sources/collection/mixed/MixedArrayList.cpp
+    sources/collection/mixed/MixedLinkedList.cpp
+    sources/collection/referenced/ReferencedArrayList.cpp
+    sources/collection/referenced/ReferencedLinkedList.cpp
 )
 
 set(
     HEADERS
     include/EnhancedBasic/defines.h
+    include/EnhancedBasic/core/Any.h
+    include/EnhancedBasic/core/Iterable.h
+    include/EnhancedBasic/core/Iterator.h
     include/EnhancedBasic/core/Integer.h
     include/EnhancedBasic/core/String.h
     include/EnhancedBasic/core/exception/Exception.h
     include/EnhancedBasic/math/LargeInteger.h
     include/EnhancedBasic/math/Math.h
-)
+    include/EnhancedBasic/collection/ArrayDeque.h
+    include/EnhancedBasic/collection/ArrayList.h
+    include/EnhancedBasic/collection/Collection.h
+    include/EnhancedBasic/collection/Deque.h
+    include/EnhancedBasic/collection/LinkedList.h
+    include/EnhancedBasic/collection/LinkedQueue.h
+    include/EnhancedBasic/collection/List.h
+    include/EnhancedBasic/collection/PriorityQueue.h
+    include/EnhancedBasic/collection/Queue.h
+    include/EnhancedBasic/collection/Tuple.h
+    include/EnhancedBasic/collection/mixed/MixedArrayList.h
+    include/EnhancedBasic/collection/mixed/MixedDeque.h
+    include/EnhancedBasic/collection/mixed/MixedLinkedList.h
+    include/EnhancedBasic/collection/mixed/MixedList.h
+    include/EnhancedBasic/collection/mixed/MixedQueue.h
+    include/EnhancedBasic/collection/referenced/ReferencedArrayList.h
+    include/EnhancedBasic/collection/referenced/ReferencedDeque.h
+    include/EnhancedBasic/collection/referenced/ReferencedLinkedList.h
+    include/EnhancedBasic/collection/referenced/ReferencedList.h
+    include/EnhancedBasic/collection/referenced/ReferencedQueue.h
+    include/EnhancedBasic/pointer/SharedPointer.h
+    include/EnhancedBasic/collection/RandomAccess.h
+    include/EnhancedBasic/generics/Generics.h)
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")
 message("${PROMPT} Module path: \"${CMAKE_CURRENT_SOURCE_DIR}\"")

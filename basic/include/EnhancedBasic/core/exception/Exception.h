@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -44,6 +44,7 @@ typedef enum EnhancedBasic$Core$Exception$TRY_BLOCK_STATUS {
     TRY_BLOCK_BREAK,
     TRY_BLOCK_FUNCTION_RETURN
 } EnhancedBasic$Core$Exception$TRY_BLOCK_STATUS;
+#define ALIAS_EnhancedBasic$Core$Exception$TRY_BLOCK_STATUS TRY_BLOCK_STATUS
 
 typedef struct EnhancedBasic$Core$Exception$Exception {
     const char *message;
@@ -52,6 +53,7 @@ typedef struct EnhancedBasic$Core$Exception$Exception {
 
     char *(*traceback)(struct EnhancedBasic$Core$Exception$Exception *self);
 } EnhancedBasic$Core$Exception$Exception;
+#define ALIAS_EnhancedBasic$Core$Exception$Exception Exception
 
 typedef struct EnhancedBasic$Core$Exception$ExceptionContextBlock {
     EnhancedBasic$Core$Exception$Exception *exception;
@@ -60,21 +62,7 @@ typedef struct EnhancedBasic$Core$Exception$ExceptionContextBlock {
 
     struct EnhancedBasic$Core$Exception$ExceptionContextBlock *link;
 } EnhancedBasic$Core$Exception$ExceptionContextBlock;
-
-#ifndef DEFINED_IDENTIFIER_TRY_BLOCK_STATUS
-#define DEFINED_IDENTIFIER_TRY_BLOCK_STATUS
-typedef EnhancedBasic$Core$Exception$TRY_BLOCK_STATUS TRY_BLOCK_STATUS;
-#endif // !DEFINED_IDENTIFIER_TRY_BLOCK_STATUS
-
-#ifndef DEFINED_IDENTIFIER_EXCEPTION
-#define DEFINED_IDENTIFIER_EXCEPTION
-typedef struct EnhancedBasic$Core$Exception$Exception Exception;
-#endif // !DEFINED_IDENTIFIER_EXCEPTION
-
-#ifndef DEFINED_IDENTIFIER_EXCEPTION0CONTEXT0BLOCK
-#define DEFINED_IDENTIFIER_EXCEPTION0CONTEXT0BLOCK
-typedef EnhancedBasic$Core$Exception$ExceptionContextBlock ExceptionContextBlock;
-#endif // !DEFINED_IDENTIFIER_EXCEPTION0CONTEXT0BLOCK
+#define ALIAS_EnhancedBasic$Core$Exception$ExceptionContextBlock ExceptionContextBlock
 
 ENHANCED_BASIC_API void exceptionContextBlockStackPush(
     EnhancedBasic$Core$Exception$ExceptionContextBlock *exceptionContextBlock);

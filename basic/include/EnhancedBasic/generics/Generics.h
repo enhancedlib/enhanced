@@ -18,3 +18,7 @@
  * by your access to or use of third-party content, products, etc.
  */
 
+#ifndef ENHANCED_BASIC_GENERICS_GENERICS_H
+#define ENHANCED_BASIC_GENERICS_GENERICS_H
+
+#endif // !ENHANCED_BASIC_GENERICS_GENERICS_H

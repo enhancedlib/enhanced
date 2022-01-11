@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -25,10 +25,12 @@
 #include "EnhancedCore/memory.h"
 #include "EnhancedCore/string.h"
 
+using(EnhancedBasic$Core$String);
+
 /*!
  * This function is internal to this file and should not be called from outside.
  *
- * Creates data of type String.
+ * Creates any of type String.
  *
  * @param value
  * @param length

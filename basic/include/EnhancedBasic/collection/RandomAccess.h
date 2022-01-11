@@ -18,37 +18,21 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include "EnhancedBasic/core/exception/Exception.h"
+#ifndef ENHANCED_BASIC_RANDOM0ACCESS_H
+#define ENHANCED_BASIC_RANDOM0ACCESS_H
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
-#include "EnhancedBasic/core/String.h"
-
-using EnhancedBasic::Core::Exception::Exception;
-using EnhancedBasic::Core::String;
-
-bool Exception::enableExceptions = true;
-bool Exception::enableExceptionsTraceback = true;
-
-Exception::Exception(const String &message) noexcept:
-    message(message), cause(null) {
+namespace EnhancedBasic {
+    namespace Collection {
+        template <typename Type>
+        class RandomAccess {
+            $RetNotIgnored()
+            virtual Type &operator[](Size index) const = 0;
+        };
+    }
 }
 
-Exception::Exception(const Exception *cause) noexcept:
-    message(""), cause(cause) {
-}
-
-Exception::Exception(const String &message, const Exception *cause) noexcept:
-    message(message), cause(cause) {
-}
-
-Exception::~Exception() noexcept = default;
-
-const Exception *Exception::getCause() noexcept {
-    return this->cause;
-}
-
-const String &Exception::getMessage() noexcept {
-    return this->message;
-}
+#endif // !ENHANCED_BASIC_RANDOM0ACCESS_H

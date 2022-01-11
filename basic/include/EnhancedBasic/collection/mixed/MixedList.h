@@ -18,37 +18,31 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include "EnhancedBasic/core/exception/Exception.h"
+#ifndef ENHANCED_BASIC_COLLECTION_MIXED_MIXED0LIST_H
+#define ENHANCED_BASIC_COLLECTION_MIXED_MIXED0LIST_H
 
 #include "EnhancedCore/defines.h"
+#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
 
-#include "EnhancedBasic/core/String.h"
+#include "EnhancedBasic/collection/Collection.h"
+#include "EnhancedBasic/collection/List.h"
 
-using EnhancedBasic::Core::Exception::Exception;
-using EnhancedBasic::Core::String;
+#ifdef CXX_LANGUAGE // C++ language
 
-bool Exception::enableExceptions = true;
-bool Exception::enableExceptionsTraceback = true;
+namespace EnhancedBasic {
+    namespace Collection {
+        namespace Mixed {
+            template <typename Type>
+            interface MixedList : public List<Type> {
+                virtual MixedList<Type> *copy() const = 0;
 
-Exception::Exception(const String &message) noexcept:
-    message(message), cause(null) {
-}
+                virtual void addReferenced(const Type &element) = 0;
+            };
+        } // namespace Mixed
+    } // namespace Collection
+} // namespace EnhancedBasic
 
-Exception::Exception(const Exception *cause) noexcept:
-    message(""), cause(cause) {
-}
+#endif // CXX_LANGUAGE
 
-Exception::Exception(const String &message, const Exception *cause) noexcept:
-    message(message), cause(cause) {
-}
-
-Exception::~Exception() noexcept = default;
-
-const Exception *Exception::getCause() noexcept {
-    return this->cause;
-}
-
-const String &Exception::getMessage() noexcept {
-    return this->message;
-}
+#endif // !ENHANCED_BASIC_COLLECTION_MIXED_MIXED0LIST_H

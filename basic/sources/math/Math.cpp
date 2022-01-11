@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -22,19 +22,9 @@
 
 using EnhancedBasic::Math::Math;
 
-#ifdef CXX_11_OR_MORE
-
 Math::Math() = default;
 
 Math::~Math() = default;
-
-#else
-
-Math::Math() {}
-
-Math::~Math() {}
-
-#endif // CXX_11_OR_MORE
 
 uint8 Math::abs(int8 number) {
     return (number < 0) ? -number : number;

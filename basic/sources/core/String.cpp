@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -27,25 +27,25 @@
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/string.h"
 
-#include "EnhancedContainer/collection/LinkedList.h"
+#include "EnhancedBasic/collection/LinkedList.h"
 
 using EnhancedBasic::Core::String;
-using EnhancedContainer::Collection::List;
-using EnhancedContainer::Collection::LinkedList;
+using EnhancedBasic::Collection::List;
+using EnhancedBasic::Collection::LinkedList;
 
 String::String(const char *const value) : value(const_cast<char *>(value)), length(stringLength(value)),
-                                          isConst(true) {}
+                                          isStaticString(true) {}
 
 String::String(char *const value) : value(stringCopy(value)), length(stringLength(value)),
-                                    isConst(false) {}
+                                    isStaticString(false) {}
 
-String::String(const Size length) : value(stringNew(length)), length(length), isConst(false) {}
+String::String(const Size length) : value(stringNew(length)), length(length), isStaticString(false) {}
 
 String::String(const String &originalCopy) : value(stringCopy(originalCopy)), length(originalCopy.length),
-                                             isConst(false) {}
+                                             isStaticString(false) {}
 
 String::~String() {
-    if (!this->isConst) {
+    if (!this->isStaticString) {
         delete this->value;
     }
 }
@@ -131,7 +131,7 @@ List<Size> *String::indexOfAll(const String &string) const {
 }
 
 $RetNotIgnored()
-char *String::toStdString() const {
+char *String::getCharacters() const {
     return this->value;
 }
 
@@ -155,10 +155,6 @@ String String::operator+(const String &string) const {
 }
 
 String String::append(const String &string) {
-    if (this->isConst) {
-        this->isConst = false;
-    }
-
     if (string.length < 1) {
         return *this;
     }
@@ -174,6 +170,12 @@ String String::append(const String &string) {
         charArray[index] = string.value[index - this->length];
     }
 
+    if (this->isStaticString) {
+        this->isStaticString = false;
+    } else {
+        delete this->value;
+    }
+
     this->length = newLength;
     this->value = charArray;
 
@@ -181,34 +183,18 @@ String String::append(const String &string) {
 }
 
 String String::replace(const char oldChar, const char newChar) {
-    if (this->isConst) {
-        this->isConst = false;
-    }
-
     return *this;
 }
 
 String String::replace(const String &oldSubstring, const String &newSubstring) {
-    if (this->isConst) {
-        this->isConst = false;
-    }
-
     return *this;
 }
 
 String String::replace(char oldChar, const String &newSubstring) {
-    if (this->isConst) {
-        this->isConst = false;
-    }
-
     return *this;
 }
 
 String String::replace(const String &oldSubstring, char newChar) {
-    if (this->isConst) {
-        this->isConst = false;
-    }
-
     return *this;
 }
 
@@ -217,5 +203,5 @@ String String::operator+=(const String &string) {
 }
 
 String::operator char *() const {
-    return this->toStdString();
+    return this->getCharacters();
 }

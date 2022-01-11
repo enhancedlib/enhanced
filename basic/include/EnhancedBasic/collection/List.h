@@ -18,37 +18,36 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include "EnhancedBasic/core/exception/Exception.h"
+
+#ifndef ENHANCED_BASIC_COLLECTION_LIST_H
+#define ENHANCED_BASIC_COLLECTION_LIST_H
 
 #include "EnhancedCore/defines.h"
+#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
 
-#include "EnhancedBasic/core/String.h"
+#include "EnhancedBasic/collection/Collection.h"
 
-using EnhancedBasic::Core::Exception::Exception;
-using EnhancedBasic::Core::String;
+#ifdef CXX_LANGUAGE // C++ language
 
-bool Exception::enableExceptions = true;
-bool Exception::enableExceptionsTraceback = true;
+namespace EnhancedBasic {
+    namespace Collection {
+        template <typename Type>
+        interface List : public Collection<Type> {
+            virtual Type &get(Size index) const = 0;
 
-Exception::Exception(const String &message) noexcept:
-    message(message), cause(null) {
-}
+            virtual Type &operator[](Size index) const = 0;
 
-Exception::Exception(const Exception *cause) noexcept:
-    message(""), cause(cause) {
-}
+            $RetRequiresRelease()
+            virtual List<Type> *copy() const = 0;
 
-Exception::Exception(const String &message, const Exception *cause) noexcept:
-    message(message), cause(cause) {
-}
+            virtual void add(const Type &element) = 0;
 
-Exception::~Exception() noexcept = default;
+            virtual Type remove() = 0;
+        };
+    } // namespace Collection
+} // namespace EnhancedBasic
 
-const Exception *Exception::getCause() noexcept {
-    return this->cause;
-}
+#endif // CXX_LANGUAGE
 
-const String &Exception::getMessage() noexcept {
-    return this->message;
-}
+#endif // !ENHANCED_BASIC_COLLECTION_LIST_H

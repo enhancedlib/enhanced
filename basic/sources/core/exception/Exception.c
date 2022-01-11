@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -26,9 +26,13 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/jump.h"
 
+using(EnhancedBasic$Core$Exception$Exception);
+using(EnhancedBasic$Core$Exception$ExceptionContextBlock);
+
 static ExceptionContextBlock *exceptionContextBlockStack = null;
 
 static char *traceback(Exception *self) {
+    return "";
 }
 
 void exceptionContextBlockStackPush(ExceptionContextBlock *exceptionContextBlock) {
