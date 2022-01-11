@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 3.0)
 
 set(PROMPT "[Module: test]")
 
-set(REQUIRES_MODULES "EnhancedCore" "EnhancedBasic" "EnhancedContainer")
+set(REQUIRES_MODULES "EnhancedCore" "EnhancedBasic")
 
 message("${PROMPT} Module path: \"${CMAKE_CURRENT_SOURCE_DIR}\"")
 

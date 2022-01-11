@@ -2,7 +2,7 @@
     "configurations": [
         {
             "name": "MinGW-x64-Debug",
-            "generator": "MinGW Makefiles",
+            "generator": "Ninja",
             "configurationType": "Debug",
             "buildRoot": "${projectDir}/build/${name}",
             "installRoot": "${projectDir}/debug/${name}",
@@ -14,11 +14,11 @@
             ],
             "environments": [
                 {
-                    "BIN_ROOT": "${env.MINGW64_ROOT}/bin",
+                    "BIN_ROOT": "${env.MINGW64_HOME}/bin",
                     "FLAVOR": "x86_64-w64-mingw32",
                     "TOOLSET_VERSION": "${env.GCC_VERSION}",
                     "PATH": "${env.BIN_ROOT};${env.PATH}",
-                    "INCLUDE": "${env.MINGW64_ROOT}/include/c++/${env.TOOLSET_VERSION};${env.MINGW64_ROOT}/include/c++/${env.TOOLSET_VERSION}/${env.FLAVOR};${env.MINGW64_ROOT}/${env.FLAVOR}/include",
+                    "INCLUDE": "${env.MINGW64_HOME}/include/c++/${env.TOOLSET_VERSION};${env.MINGW64_HOME}/include/c++/${env.TOOLSET_VERSION}/${env.FLAVOR};${env.MINGW64_HOME}/${env.FLAVOR}/include",
                     "environment": "mingw_64"
                 }
             ],
@@ -39,7 +39,7 @@
         },
         {
             "name": "MinGW-x64-Release",
-            "generator": "MinGW Makefiles",
+            "generator": "Ninja",
             "configurationType": "Release",
             "buildRoot": "${projectDir}/build/${name}",
             "installRoot": "${projectDir}/release/${name}",
@@ -51,11 +51,11 @@
             ],
             "environments": [
                 {
-                    "BIN_ROOT": "${env.MINGW64_ROOT}/bin",
+                    "BIN_ROOT": "${env.MINGW64_HOME}/bin",
                     "FLAVOR": "x86_64-w64-mingw32",
                     "TOOLSET_VERSION": "${env.GCC_VERSION}",
                     "PATH": "${env.BIN_ROOT};${env.PATH}",
-                    "INCLUDE": "${env.MINGW64_ROOT}/include/c++/${env.TOOLSET_VERSION};${env.MINGW64_ROOT}/include/c++/${env.TOOLSET_VERSION}/${env.FLAVOR};${env.MINGW64_ROOT}/${env.FLAVOR}/include",
+                    "INCLUDE": "${env.MINGW64_HOME}/include/c++/${env.TOOLSET_VERSION};${env.MINGW64_HOME}/include/c++/${env.TOOLSET_VERSION}/${env.FLAVOR};${env.MINGW64_HOME}/${env.FLAVOR}/include",
                     "environment": "mingw_64"
                 }
             ],
@@ -76,7 +76,7 @@
         },
         {
             "name": "MinGW-x86-Debug",
-            "generator": "MinGW Makefiles",
+            "generator": "Ninja",
             "configurationType": "Debug",
             "buildRoot": "${projectDir}/build/${name}",
             "installRoot": "${projectDir}/debug/${name}",
@@ -88,11 +88,11 @@
             ],
             "environments": [
                 {
-                    "BIN_ROOT": "${env.MINGW32_ROOT}/bin",
+                    "BIN_ROOT": "${env.MINGW32_HOME}/bin",
                     "FLAVOR": "i686-w64-mingw32",
                     "TOOLSET_VERSION": "${env.GCC_VERSION}",
                     "PATH": "${env.BIN_ROOT};${env.PATH}",
-                    "INCLUDE": "${env.MINGW32_ROOT}/include/c++/${env.TOOLSET_VERSION};${env.MINGW32_ROOT}/include/c++/${env.TOOLSET_VERSION}/${env.FLAVOR};${env.MINGW32_ROOT}/${env.FLAVOR}/include",
+                    "INCLUDE": "${env.MINGW32_HOME}/include/c++/${env.TOOLSET_VERSION};${env.MINGW32_HOME}/include/c++/${env.TOOLSET_VERSION}/${env.FLAVOR};${env.MINGW32_HOME}/${env.FLAVOR}/include",
                     "environment": "mingw_64"
                 }
             ],
@@ -113,7 +113,7 @@
         },
         {
             "name": "MinGW-x86-Release",
-            "generator": "MinGW Makefiles",
+            "generator": "Ninja",
             "configurationType": "Release",
             "buildRoot": "${projectDir}/build/${name}",
             "installRoot": "${projectDir}/release/${name}",
@@ -125,11 +125,11 @@
             ],
             "environments": [
                 {
-                    "BIN_ROOT": "${env.MINGW32_ROOT}/bin",
+                    "BIN_ROOT": "${env.MINGW32_HOME}/bin",
                     "FLAVOR": "i686-w64-mingw32",
                     "TOOLSET_VERSION": "${env.GCC_VERSION}",
                     "PATH": "${env.BIN_ROOT};${env.PATH}",
-                    "INCLUDE": "${env.MINGW32_ROOT}/${env.FLAVOR}/include;${env.MINGW32_ROOT}/include/c++/${env.TOOLSET_VERSION};${env.MINGW32_ROOT}/include/c++/${env.TOOLSET_VERSION}/${env.FLAVOR}",
+                    "INCLUDE": "${env.MINGW32_HOME}/${env.FLAVOR}/include;${env.MINGW32_HOME}/include/c++/${env.TOOLSET_VERSION};${env.MINGW32_HOME}/include/c++/${env.TOOLSET_VERSION}/${env.FLAVOR}",
                     "environment": "mingw_64"
                 }
             ],
@@ -150,7 +150,7 @@
         },
         {
             "name": "MSVC-x64-Debug",
-            "generator": "Visual Studio 17 2022",
+            "generator": "Ninja",
             "configurationType": "Debug",
             "buildRoot": "${projectDir}/build/${name}",
             "installRoot": "${projectDir}/debug/${name}",
@@ -165,7 +165,7 @@
         },
         {
             "name": "MSVC-x64-Release",
-            "generator": "Visual Studio 17 2022",
+            "generator": "Ninja",
             "configurationType": "Release",
             "buildRoot": "${projectDir}/build/${name}",
             "installRoot": "${projectDir}/release/${name}",
@@ -180,7 +180,7 @@
         },
         {
             "name": "MSVC-x86-Debug",
-            "generator": "Visual Studio 17 2022",
+            "generator": "Ninja",
             "configurationType": "Debug",
             "buildRoot": "${projectDir}/build/${name}",
             "installRoot": "${projectDir}/debug/${name}",
@@ -195,7 +195,7 @@
         },
         {
             "name": "MSVC-x86-Release",
-            "generator": "Visual Studio 17 2022",
+            "generator": "Ninja",
             "configurationType": "Release",
             "buildRoot": "${projectDir}/build/${name}",
             "installRoot": "${projectDir}/release/${name}",
