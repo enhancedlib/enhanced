@@ -22,33 +22,3 @@
  * This file is used to test function and debug code of this library.
  * This file will only be compiled in configuration "Debug".
  */
-
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/array.h"
-
-#include "EnhancedBasic/core/exception/Exception.h"
-
-int main() {
-    char *str = "Hello!\n";
-    printf(str);
-
-    TRY {
-        RAISE(1, "error!\n");
-        str = "Hi!\n";
-    } CATCH (1, exception) {
-        printf(exception->message);
-        RETURN_IN_TRY(1);
-    } PASS {
-        printf("pass!\n");
-    } FINALLY {
-        printf("finally!\n");
-    } END_TRY;
-
-    printf(str);
-
-    return 0;
-}
