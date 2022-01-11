@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -41,6 +41,7 @@ int main() {
         str = "Hi!\n";
     } CATCH (1, exception) {
         printf(exception->message);
+        RETURN_IN_TRY(1);
     } PASS {
         printf("pass!\n");
     } FINALLY {

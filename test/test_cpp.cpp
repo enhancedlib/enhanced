@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Liu Baihao.
+ * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This product is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
@@ -34,52 +34,62 @@
 
 #include "EnhancedBasic/core/String.h"
 
-#include "EnhancedContainer/collection/ArrayList.h"
-#include "EnhancedContainer/collection/LinkedList.h"
+#include "EnhancedBasic/collection/Vector.h"
+#include "EnhancedBasic/collection/ArrayList.h"
+#include "EnhancedBasic/collection/LinkedList.h"
 
-#include "EnhancedContainer/collection/referenced/ReferencedArrayList.h"
-#include "EnhancedContainer/collection/referenced/ReferencedLinkedList.h"
+#include "EnhancedBasic/collection/referenced/ReferencedArrayList.h"
+#include "EnhancedBasic/collection/referenced/ReferencedLinkedList.h"
 
-#include "EnhancedContainer/collection/mixed/MixedArrayList.h"
-#include "EnhancedContainer/collection/mixed/MixedLinkedList.h"
+#include "EnhancedBasic/collection/mixed/MixedArrayList.h"
+#include "EnhancedBasic/collection/mixed/MixedLinkedList.h"
+
+#include "EnhancedBasic/core/Any.h"
 
 using EnhancedBasic::Core::String;
 
-using EnhancedContainer::Collection::List;
-using EnhancedContainer::Collection::Deque;
-using EnhancedContainer::Collection::ArrayList;
-using EnhancedContainer::Collection::LinkedList;
+using EnhancedBasic::Collection::List;
+using EnhancedBasic::Collection::Deque;
+using EnhancedBasic::Collection::Vector;
+using EnhancedBasic::Collection::ArrayList;
+using EnhancedBasic::Collection::LinkedList;
 
-using EnhancedContainer::Collection::Referenced::ReferencedList;
-using EnhancedContainer::Collection::Referenced::ReferencedDeque;
-using EnhancedContainer::Collection::Referenced::ReferencedArrayList;
-using EnhancedContainer::Collection::Referenced::ReferencedLinkedList;
+using EnhancedBasic::Collection::Referenced::ReferencedList;
+using EnhancedBasic::Collection::Referenced::ReferencedDeque;
+using EnhancedBasic::Collection::Referenced::ReferencedArrayList;
+using EnhancedBasic::Collection::Referenced::ReferencedLinkedList;
 
-using EnhancedContainer::Collection::Mixed::MixedList;
-using EnhancedContainer::Collection::Mixed::MixedDeque;
-using EnhancedContainer::Collection::Mixed::MixedArrayList;
-using EnhancedContainer::Collection::Mixed::MixedLinkedList;
+using EnhancedBasic::Collection::Mixed::MixedList;
+using EnhancedBasic::Collection::Mixed::MixedDeque;
+using EnhancedBasic::Collection::Mixed::MixedArrayList;
+using EnhancedBasic::Collection::Mixed::MixedLinkedList;
+
+using EnhancedBasic::Core::Any;
 
 int main() {
-    List<String> *list = new ReferencedArrayList<String>();
+    List<String> *list = new Vector<String>();
 
     String a = "world!\n";
 
     list->add("Hello, ");
     list->add(a);
 
+    std::cout << "[1]" << std::endl;
     for (Size index = 0; index < list->getLength(); ++ index) {
         std::cout << list->get(index);
     }
 
-    for (auto item : *list) {
+    std::cout << "[2]" << std::endl;
+    for (const auto &item : *list) {
         std::cout << item;
     }
 
+    std::cout << "[3]" << std::endl;
     for (auto it = list->iterator(); it->hasNext(); it->next()) {
         std::cout << it->get();
     }
 
+    std::cout << "[4]" << std::endl;
     {
         auto it = list->iterator();
         while (it->hasNext()) {
@@ -88,6 +98,7 @@ int main() {
         }
     }
 
+    std::cout << "[5]" << std::endl;
     {
         auto it = list->iterator();
         while (it->each()) {
@@ -96,9 +107,7 @@ int main() {
     }
 
     std::cout << list->contain("world!\n") << std::endl;
-
     a = "C++!\n";
-
     std::cout << list->remove();
 
     delete list;
