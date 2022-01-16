@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -21,12 +21,12 @@
 #include "EnhancedBasic/collection/mixed/MixedArrayList.h"
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/assert.h"
 
-using EnhancedBasic::Collection::Mixed::MixedArrayList0;
+using EnhancedBasic::collection::mixed::MixedArrayList0;
 
 MixedArrayList0::MixedArrayListIterator0::MixedArrayListIterator0(const MixedArrayList0 *mixedArrayList) :
     mixedArrayList(mixedArrayList), indexer(mixedArrayList->elements), isFirst(true),
@@ -95,7 +95,7 @@ void *MixedArrayList0::get0(const Size index) const {
 
 bool MixedArrayList0::contain0(const void *const value) const {
     for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericsOperator.genericsEquals(this->elements[index].value, const_cast<void *&>(value))) {
+        if (this->genericsOperator.equals(this->elements[index].value, const_cast<void *&>(value))) {
             return true;
         }
     }
@@ -113,7 +113,7 @@ void MixedArrayList0::add0(const void *const element) {
     }
 
     this->elements[this->length] =
-        {this->genericsOperator.genericsNew(const_cast<void *&>(element)), true};
+        {this->genericsOperator.allocate(const_cast<void *&>(element)), true};
     ++ this->length;
 }
 
@@ -132,7 +132,7 @@ void MixedArrayList0::addReferenced0(const void *const element) {
 
 void MixedArrayList0::remove0() {
     if (this->elements[-- this->length].requiresRelease) {
-        this->genericsOperator.genericsDelete(this->elements[this->length].value);
+        this->genericsOperator.destroy(this->elements[this->length].value);
     }
 }
 

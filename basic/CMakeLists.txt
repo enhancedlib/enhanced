@@ -19,6 +19,7 @@ set(
     sources/math/LargeInteger.cpp
     sources/math/Math.c
     sources/math/Math.cpp
+    sources/generic/Allocator.cpp
     sources/collection/ArrayList.cpp
     sources/collection/LinkedList.cpp
     sources/collection/Vector.cpp
@@ -30,8 +31,7 @@ set(
 
 set(
     HEADERS
-    include/EnhancedBasic/defines.h
-    include/EnhancedBasic/core/Any.h
+    include/EnhancedBasic/export.h
     include/EnhancedBasic/core/Iterable.h
     include/EnhancedBasic/core/Iterator.h
     include/EnhancedBasic/core/Integer.h
@@ -39,8 +39,13 @@ set(
     include/EnhancedBasic/core/exception/Exception.h
     include/EnhancedBasic/math/LargeInteger.h
     include/EnhancedBasic/math/Math.h
+    include/EnhancedBasic/generic/Any.h
+    include/EnhancedBasic/generic/AnyArray.h
+    include/EnhancedBasic/generic/Allocator.h
+    include/EnhancedBasic/generic/Generic.h
     include/EnhancedBasic/collection/ArrayDeque.h
     include/EnhancedBasic/collection/ArrayList.h
+    include/EnhancedBasic/collection/ArrayList.tcc
     include/EnhancedBasic/collection/Collection.h
     include/EnhancedBasic/collection/Deque.h
     include/EnhancedBasic/collection/LinkedList.h
@@ -55,13 +60,15 @@ set(
     include/EnhancedBasic/collection/mixed/MixedList.h
     include/EnhancedBasic/collection/mixed/MixedQueue.h
     include/EnhancedBasic/collection/referenced/ReferencedArrayList.h
+    include/EnhancedBasic/collection/referenced/ReferencedArrayList.tcc
     include/EnhancedBasic/collection/referenced/ReferencedDeque.h
     include/EnhancedBasic/collection/referenced/ReferencedLinkedList.h
+    include/EnhancedBasic/collection/referenced/ReferencedLinkedList.tcc
     include/EnhancedBasic/collection/referenced/ReferencedList.h
     include/EnhancedBasic/collection/referenced/ReferencedQueue.h
-    include/EnhancedBasic/pointer/SharedPointer.h
     include/EnhancedBasic/collection/RandomAccess.h
-    include/EnhancedBasic/generics/Generics.h)
+    include/EnhancedBasic/pointer/SharedPointer.h
+    include/EnhancedBasic/collection/LinkedList.tcc)
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")
 message("${PROMPT} Module path: \"${CMAKE_CURRENT_SOURCE_DIR}\"")
@@ -90,45 +97,56 @@ else ()
 endif ()
 message("${PROMPT} Included directories: ${INCLUDE_DIRECTORIES}")
 
-add_library(${MODULE_FULL_NAME}-StaticLibrary STATIC ${SOURCES} ${HEADERS})
-message("${PROMPT} Adds target (static library) \"${MODULE_FULL_NAME}-StaticLibrary\"")
+install(DIRECTORY "include" DESTINATION "${CMAKE_INSTALL_PREFIX}")
+message("${PROMPT} Installs directory \"include\" to ${CMAKE_INSTALL_PREFIX}")
+
+string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
+string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE_UPPER)
+
+add_library(${MODULE_FULL_NAME}-Static STATIC ${SOURCES} ${HEADERS})
+message("${PROMPT} Adds target (static library) \"${MODULE_FULL_NAME}-Static\"")
+
+target_compile_definitions(${MODULE_FULL_NAME}-Static PUBLIC ${BUILD_TYPE_UPPER})
+target_include_directories(${MODULE_FULL_NAME}-Static PRIVATE ${INCLUDE_DIRECTORIES})
+
+set_target_properties(${MODULE_FULL_NAME}-Static PROPERTIES OUTPUT_NAME ${MODULE_FULL_NAME})
+if (WIN32)
+    set_target_properties(${MODULE_FULL_NAME}-Static PROPERTIES PREFIX "lib")
+endif ()
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set_target_properties(${MODULE_FULL_NAME}-Static PROPERTIES POSTFIX "_d")
+endif ()
+
+foreach (REQUIRES_MODULE_FULL_NAME IN ITEMS ${REQUIRES_MODULES})
+    target_link_libraries(${MODULE_FULL_NAME}-Static PRIVATE ${REQUIRES_MODULE_FULL_NAME}-Static)
+    message("${PROMPT} The target \"${MODULE_FULL_NAME}\" links library \"${REQUIRES_MODULE_FULL_NAME}\"")
+endforeach ()
+
+install(TARGETS ${MODULE_FULL_NAME}-Static)
+message("${PROMPT} Installs target \"${MODULE_FULL_NAME}-Static\"")
+
 add_library(${MODULE_FULL_NAME} SHARED ${SOURCES} ${HEADERS})
 message("${PROMPT} Adds target (dynamic library) \"${MODULE_FULL_NAME}\"")
 
-string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
-target_compile_definitions(${MODULE_FULL_NAME} PUBLIC ENHANCED_${MODULE_NAME_UPPER}_DYNAMIC_LIBRARY)
 target_compile_definitions(${MODULE_FULL_NAME} PRIVATE ENHANCED_${MODULE_NAME_UPPER}_EXPORTS)
-
-string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE_UPPER)
-target_compile_definitions(${MODULE_FULL_NAME}-StaticLibrary PUBLIC ${BUILD_TYPE_UPPER})
+target_compile_definitions(${MODULE_FULL_NAME} PUBLIC ENHANCED_${MODULE_NAME_UPPER}_DYNAMIC_LIBRARY)
 target_compile_definitions(${MODULE_FULL_NAME} PUBLIC ${BUILD_TYPE_UPPER})
-
-target_include_directories(${MODULE_FULL_NAME}-StaticLibrary PRIVATE ${INCLUDE_DIRECTORIES})
 target_include_directories(${MODULE_FULL_NAME} PRIVATE ${INCLUDE_DIRECTORIES})
+
+set_target_properties(${MODULE_FULL_NAME} PROPERTIES OUTPUT_NAME ${MODULE_FULL_NAME})
+if (WIN32)
+    set_target_properties(${MODULE_FULL_NAME} PROPERTIES PREFIX "")
+endif ()
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set_target_properties(${MODULE_FULL_NAME} PROPERTIES POSTFIX "_d")
+endif ()
 
 foreach (REQUIRES_MODULE_FULL_NAME IN ITEMS ${REQUIRES_MODULES})
     target_link_libraries(${MODULE_FULL_NAME} PRIVATE ${REQUIRES_MODULE_FULL_NAME})
     message("${PROMPT} The target \"${MODULE_FULL_NAME}\" links library \"${REQUIRES_MODULE_FULL_NAME}\"")
 endforeach ()
 
-set_target_properties(${MODULE_FULL_NAME}-StaticLibrary PROPERTIES OUTPUT_NAME ${MODULE_FULL_NAME})
-set_target_properties(${MODULE_FULL_NAME} PROPERTIES OUTPUT_NAME ${MODULE_FULL_NAME})
-
-if (WIN32)
-    set_target_properties(${MODULE_FULL_NAME}-StaticLibrary PROPERTIES PREFIX "lib")
-    set_target_properties(${MODULE_FULL_NAME} PROPERTIES PREFIX "")
-endif ()
-
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    install(DIRECTORY "include" DESTINATION "${CMAKE_INSTALL_PREFIX}")
-    message("${PROMPT} Installs directory \"include\" to ${CMAKE_INSTALL_PREFIX}")
-    install(TARGETS ${MODULE_FULL_NAME}-StaticLibrary)
-    message("${PROMPT} Installs target \"${MODULE_FULL_NAME}-StaticLibrary\"")
-    install(TARGETS ${MODULE_FULL_NAME})
-    message("${PROMPT} Installs target \"${MODULE_FULL_NAME}\"")
-else ()
-    install(TARGETS ${MODULE_FULL_NAME} DESTINATION "${CMAKE_INSTALL_PREFIX}")
-    message("${PROMPT} Installs target \"${MODULE_FULL_NAME}\" to \"${CMAKE_INSTALL_PREFIX}\"")
-endif ()
+install(TARGETS ${MODULE_FULL_NAME})
+message("${PROMPT} Installs target \"${MODULE_FULL_NAME}\"")
 
 message("${PROMPT} Module configuring done")

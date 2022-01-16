@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -115,6 +115,8 @@ typedef int NullType;
 typedef void *NullType;
 #endif // CXX_LANGUAGE
 
+typedef Byte InvalidType;
+
 #ifndef SUPPRESS_DEFINE_UPPERCASE_TYPES
 
 #ifdef NULL
@@ -178,6 +180,8 @@ typedef bool BOOL;
 
 #define NULL null
 typedef NullType NULL_TYPE;
+
+typedef InvalidType INVALID_TYPE;
 
 #endif // !SUPPRESS_DEFINE_UPPERCASE_TYPES
 
@@ -559,5 +563,11 @@ typedef NullType NULL_TYPE;
 #define INFINITY POSITIVE_INFINITY // Infinity: inf
 #define NAN (0.0 / 0.0) // Not-a-Number: nan
 #endif // COMPILER_MSVC
+
+#ifdef INVALID_VALUE
+#undef INVALID_VALUE
+#endif // INVALID_VALUE
+
+#define INVALID_VALUE 0
 
 #endif // !ENHANCED_CORE_TYPES_H

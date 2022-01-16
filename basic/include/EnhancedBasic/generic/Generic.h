@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -18,7 +18,20 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-/*!
- * This file is used to test function and debug code of this library.
- * This file will only be compiled in configuration "Debug".
- */
+#ifndef ENHANCED_BASIC_GENERIC_GENERIC_H
+#define ENHANCED_BASIC_GENERIC_GENERIC_H
+
+#include "EnhancedCore/defines.h"
+#include "EnhancedCore/types.h"
+
+#ifdef CXX_LANGUAGE
+
+typedef void *Generic;
+typedef void *GenericPointer;
+typedef Generic &GenericReference;
+
+#define generic_cast(pointer) *reinterpret_cast<Generic *>(pointer)
+
+#endif // CXX_LANGUAGE
+
+#endif // !ENHANCED_BASIC_GENERIC_GENERIC_H

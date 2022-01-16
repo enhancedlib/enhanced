@@ -42,8 +42,8 @@ else ()
 endif ()
 message("${PROMPT} Included directories: ${INCLUDE_DIRECTORIES}")
 
-add_library(${MODULE_FULL_NAME}-StaticLibrary STATIC ${SOURCES} ${HEADERS})
-message("${PROMPT} Adds target (static library) \"${MODULE_FULL_NAME}-StaticLibrary\"")
+add_library(${MODULE_FULL_NAME}-Static STATIC ${SOURCES} ${HEADERS})
+message("${PROMPT} Adds target (static library) \"${MODULE_FULL_NAME}-Static\"")
 add_library(${MODULE_FULL_NAME} SHARED ${SOURCES} ${HEADERS})
 message("${PROMPT} Adds target (dynamic library) \"${MODULE_FULL_NAME}\"")
 
@@ -51,10 +51,10 @@ target_compile_definitions(${MODULE_FULL_NAME} PUBLIC __ENHANCED_DYNAMIC_LIBRARY
 target_compile_definitions(${MODULE_FULL_NAME} PRIVATE __ENHANCED_EXPORTS__)
 
 string(TOUPPER ${BUILD_TYPE} BUILD_TYPE_UPPER)
-target_compile_definitions(${MODULE_FULL_NAME}-StaticLibrary PUBLIC __${BUILD_TYPE_UPPER}__)
+target_compile_definitions(${MODULE_FULL_NAME}-Static PUBLIC __${BUILD_TYPE_UPPER}__)
 target_compile_definitions(${MODULE_FULL_NAME} PUBLIC __${BUILD_TYPE_UPPER}__)
 
-target_include_directories(${MODULE_FULL_NAME}-StaticLibrary PRIVATE ${INCLUDE_DIRECTORIES})
+target_include_directories(${MODULE_FULL_NAME}-Static PRIVATE ${INCLUDE_DIRECTORIES})
 target_include_directories(${MODULE_FULL_NAME} PRIVATE ${INCLUDE_DIRECTORIES})
 
 foreach (REQUIRES_MODULE_FULL_NAME IN ITEMS ${REQUIRES_MODULES})
@@ -62,19 +62,19 @@ foreach (REQUIRES_MODULE_FULL_NAME IN ITEMS ${REQUIRES_MODULES})
     message("${PROMPT} The target \"${MODULE_FULL_NAME}\" links library \"${REQUIRES_MODULE_FULL_NAME}\"")
 endforeach ()
 
-set_target_properties(${MODULE_FULL_NAME}-StaticLibrary PROPERTIES OUTPUT_NAME ${MODULE_FULL_NAME})
+set_target_properties(${MODULE_FULL_NAME}-Static PROPERTIES OUTPUT_NAME ${MODULE_FULL_NAME})
 set_target_properties(${MODULE_FULL_NAME} PROPERTIES OUTPUT_NAME ${MODULE_FULL_NAME})
 
 if (WIN32)
-    set_target_properties(${MODULE_FULL_NAME}-StaticLibrary PROPERTIES PREFIX "lib")
+    set_target_properties(${MODULE_FULL_NAME}-Static PROPERTIES PREFIX "lib")
     set_target_properties(${MODULE_FULL_NAME} PROPERTIES PREFIX "")
 endif ()
 
 if (${BUILD_TYPE} STREQUAL "Release")
     install(DIRECTORY "include" DESTINATION "${CMAKE_INSTALL_PREFIX}")
     message("${PROMPT} Installs directory \"include\" to ${CMAKE_INSTALL_PREFIX}")
-    install(TARGETS ${MODULE_FULL_NAME}-StaticLibrary)
-    message("${PROMPT} Installs target \"${MODULE_FULL_NAME}-StaticLibrary\"")
+    install(TARGETS ${MODULE_FULL_NAME}-Static)
+    message("${PROMPT} Installs target \"${MODULE_FULL_NAME}-Static\"")
     install(TARGETS ${MODULE_FULL_NAME})
     message("${PROMPT} Installs target \"${MODULE_FULL_NAME}\"")
 else ()

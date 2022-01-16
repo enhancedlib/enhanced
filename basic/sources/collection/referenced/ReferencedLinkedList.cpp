@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -23,11 +23,12 @@
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
+#include "EnhancedCore/assert.h"
 
-using EnhancedBasic::Collection::Referenced::ReferencedLinkedList0;
+using EnhancedBasic::collection::referenced::ReferencedLinkedList0;
 
 ReferencedLinkedList0::ReferencedLinkedListIterator0::
-ReferencedLinkedListIterator0(const ReferencedLinkedList0 *referencedLinkedList) :
+ReferencedLinkedListIterator0(const ReferencedLinkedList0 *const referencedLinkedList) :
     referencedLinkedList(referencedLinkedList), isFirst(true) {
     this->referencedLinkedList->indexer = this->referencedLinkedList->first;
 }
@@ -45,7 +46,7 @@ bool ReferencedLinkedList0::ReferencedLinkedListIterator0::hasNext0() const {
 }
 
 void ReferencedLinkedList0::ReferencedLinkedListIterator0::next0() const {
-    nextNode(this->referencedLinkedList->indexer);
+    ReferencedLinkedList0::nextNode(this->referencedLinkedList->indexer);
 }
 
 $RetNotIgnored()
@@ -60,8 +61,8 @@ bool ReferencedLinkedList0::ReferencedLinkedListIterator0::each0() const {
 }
 
 $RetNotIgnored()
-void *ReferencedLinkedList0::ReferencedLinkedListIterator0::get0() const {
-    return this->referencedLinkedList->indexer->value;
+GenericReference ReferencedLinkedList0::ReferencedLinkedListIterator0::get0() const {
+    return generic_cast(this->referencedLinkedList->indexer->value);
 }
 
 void ReferencedLinkedList0::ReferencedLinkedListIterator0::reset0() const {
@@ -86,30 +87,31 @@ ReferencedLinkedList0::ReferencedLinkedList0(const GenericsOperator genericsOper
     first(null), last(null), indexer(null), length(0),
     genericsOperator(genericsOperator), iterator(null) {}
 
-ReferencedLinkedList0::ReferencedLinkedList0(const ReferencedLinkedList0 &originalCopy) :
+ReferencedLinkedList0::ReferencedLinkedList0(const ReferencedLinkedList0 &copy) :
     first(null), last(null), indexer(null), length(0),
-    genericsOperator(originalCopy.genericsOperator), iterator(null) {
-    this->indexer = originalCopy.first;
-    for (Size count = 0; count < originalCopy.length; ++ count) {
-        this->addFirst0((const void *) this->indexer->value);
-        nextNode(this->indexer);
+    genericsOperator(copy.genericsOperator), iterator(null) {
+    this->indexer = copy.first;
+    for (Size count = 0; count < copy.length; ++ count) {
+        this->addFirst0(this->indexer->value);
+        ReferencedLinkedList0::nextNode(this->indexer);
     }
 }
 
 ReferencedLinkedList0::~ReferencedLinkedList0() noexcept {
     for (Size count = 1; count < this->length; ++ count) {
-        backNode(this->last);
+        ReferencedLinkedList0::backNode(this->last);
         delete this->last->next;
     }
+
     delete this->last;
     delete this->iterator;
 }
 
 $RetNotIgnored()
-bool ReferencedLinkedList0::contain0(const void *const value) const {
+bool ReferencedLinkedList0::contain0(GenericReference value) const {
     this->indexer = this->first;
     for (Size count = 0; count < this->length; ++ count) {
-        if (this->genericsOperator.genericsEquals(this->indexer->value, const_cast<void *&>(value))) {
+        if (this->genericsOperator.equals(generic_cast(this->indexer->value), value)) {
             return true;
         }
         this->indexer = this->indexer->next;
@@ -129,69 +131,86 @@ bool ReferencedLinkedList0::isEmpty0() const {
 }
 
 $RetNotIgnored()
-void *ReferencedLinkedList0::getFirst0() const {
-    return this->first->value;
+GenericReference ReferencedLinkedList0::getLast0() const {
+    return generic_cast(this->last->value);
 }
 
 $RetNotIgnored()
-void *ReferencedLinkedList0::getLast0() const {
-    return this->last->value;
+GenericReference ReferencedLinkedList0::getFirst0() const {
+    return generic_cast(this->first->value);
 }
 
 $RetNotIgnored()
-void *ReferencedLinkedList0::get0(const Size index) const {
+GenericReference ReferencedLinkedList0::get0(const Size index) const {
     if (index < this->length >> 1) {
         this->indexer = this->first;
         for (Size count = 0; count < index; ++ count) {
-            nextNode(this->indexer);
+            ReferencedLinkedList0::nextNode(this->indexer);
         }
     } else {
         this->indexer = this->last;
-        for (Size count = 0; count < this->length - index - 1; ++ count) {
-            backNode(this->indexer);
+        for (Size count = this->length - 1; count > index; -- count) {
+            ReferencedLinkedList0::backNode(this->indexer);
         }
     }
-    return this->indexer->value;
+
+    return generic_cast(this->indexer->value);
 }
 
-void ReferencedLinkedList0::addLast0(const void *const element) {
+void ReferencedLinkedList0::addLast0(GenericReference element) {
     if (this->isEmpty0()) {
         this->last = new Node();
-        this->last->value = const_cast<void *>(element);
+        this->last->value = &element;
         this->first = this->last;
     } else {
         this->last->next = new Node();
-        this->last->next->value = const_cast<void *>(element);
+        this->last->next->value = &element;
         this->last->next->back = this->last;
-        nextNode(this->last);
+        ReferencedLinkedList0::nextNode(this->last);
     }
-    ++ this->length;
-}
 
-void ReferencedLinkedList0::addFirst0(const void *const element) {
-    if (this->isEmpty0()) {
-        this->first = new Node();
-        this->first->value = const_cast<void *>(element);
-        this->last = this->first;
-    } else {
-        this->first->back = new Node();
-        this->first->back->value = const_cast<void *>(element);
-        this->first->back->next = this->first;
-        backNode(this->first);
-    }
     ++ this->length;
 }
 
 void ReferencedLinkedList0::removeLast0() {
-    backNode(this->last);
+    assert(!this->isEmpty0());
+    
+    if (this->length > 1) {
+        ReferencedLinkedList0::backNode(this->last);
+        delete this->last->next;
+    } else {
+        delete this->last;
+        this->last = this->first = null;
+    }
 
-    delete this->last->next;
     -- this->length;
 }
 
-void ReferencedLinkedList0::removeFirst0() {
-    nextNode(this->first);
+void ReferencedLinkedList0::addFirst0(GenericReference element) {
+    if (this->isEmpty0()) {
+        this->first = new Node();
+        this->first->value = &element;
+        this->last = this->first;
+    } else {
+        this->first->back = new Node();
+        this->first->back->value = &element;
+        this->first->back->next = this->first;
+        ReferencedLinkedList0::backNode(this->first);
+    }
 
-    delete this->first->back;
+    ++ this->length;
+}
+
+void ReferencedLinkedList0::removeFirst0() {
+    assert(!this->isEmpty0());
+
+    if (this->length > 1) {
+        ReferencedLinkedList0::nextNode(this->first);
+        delete this->first->back;
+    } else {
+        delete this->first;
+        this->first = this->last = null;
+    }
+
     -- this->length;
 }

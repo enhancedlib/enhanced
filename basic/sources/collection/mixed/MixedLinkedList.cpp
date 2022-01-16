@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -24,7 +24,7 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
 
-using EnhancedBasic::Collection::Mixed::MixedLinkedList0;
+using EnhancedBasic::collection::mixed::MixedLinkedList0;
 
 MixedLinkedList0::MixedLinkedListIterator0::
 MixedLinkedListIterator0(const MixedLinkedList0 *mixedLinkedList) :
@@ -86,11 +86,11 @@ MixedLinkedList0::MixedLinkedList0(const GenericsOperator genericsOperator) :
     first(null), last(null), indexer(null), length(0),
     genericsOperator(genericsOperator), iterator(null) {}
 
-MixedLinkedList0::MixedLinkedList0(const MixedLinkedList0 &originalCopy) :
+MixedLinkedList0::MixedLinkedList0(const MixedLinkedList0 &copy) :
     first(null), last(null), indexer(null), length(0),
-    genericsOperator(originalCopy.genericsOperator), iterator(null) {
-    this->indexer = originalCopy.first;
-    for (Size count = 0; count < originalCopy.length; ++ count) {
+    genericsOperator(copy.genericsOperator), iterator(null) {
+    this->indexer = copy.first;
+    for (Size count = 0; count < copy.length; ++ count) {
         this->addFirst0((const void *) this->indexer->value);
         nextNode(this->indexer);
     }
@@ -101,13 +101,13 @@ MixedLinkedList0::~MixedLinkedList0() noexcept {
         backNode(this->last);
 
         if (this->last->next->requiresRelease) {
-            this->genericsOperator.genericsDelete(this->last->next->value);
+            this->genericsOperator.destroy(this->last->next->value);
         }
         delete this->last->next;
     }
 
     if (this->last->requiresRelease) {
-        this->genericsOperator.genericsDelete(this->last->value);
+        this->genericsOperator.destroy(this->last->value);
     }
     delete this->last;
     delete this->iterator;
@@ -117,7 +117,7 @@ $RetNotIgnored()
 bool MixedLinkedList0::contain0(const void *const value) const {
     this->indexer = this->first;
     for (Size count = 0; count < this->length; ++ count) {
-        if (this->genericsOperator.genericsEquals(this->indexer->value, const_cast<void *&>(value))) {
+        if (this->genericsOperator.equals(this->indexer->value, const_cast<void *&>(value))) {
             return true;
         }
         this->indexer = this->indexer->next;
@@ -166,12 +166,12 @@ void MixedLinkedList0::addLast0(const void *const element) {
     if (this->isEmpty0()) {
         this->last = new MixedLinkedList0::Node();
         this->last->requiresRelease = true;
-        this->last->value = this->genericsOperator.genericsNew(const_cast<void *&>(element));
+        this->last->value = this->genericsOperator.allocate(const_cast<void *&>(element));
         this->first = this->last;
     } else {
         this->last->next = new MixedLinkedList0::Node();
         this->last->next->requiresRelease = true;
-        this->last->next->value = this->genericsOperator.genericsNew(const_cast<void *&>(element));
+        this->last->next->value = this->genericsOperator.allocate(const_cast<void *&>(element));
         this->last->next->back = this->last;
         nextNode(this->last);
     }
@@ -196,12 +196,12 @@ void MixedLinkedList0::addFirst0(const void *const element) {
     if (this->isEmpty0()) {
         this->first = new MixedLinkedList0::Node();
         this->first->requiresRelease = true;
-        this->first->value = this->genericsOperator.genericsNew(const_cast<void *&>(element));
+        this->first->value = this->genericsOperator.allocate(const_cast<void *&>(element));
         this->last = this->first;
     } else {
         this->first->back = new MixedLinkedList0::Node();
         this->first->back->requiresRelease = true;
-        this->first->back->value = this->genericsOperator.genericsNew(const_cast<void *&>(element));
+        this->first->back->value = this->genericsOperator.allocate(const_cast<void *&>(element));
         this->first->back->next = this->first;
         backNode(this->first);
     }
@@ -226,7 +226,7 @@ void MixedLinkedList0::removeLast0() {
     backNode(this->last);
 
     if (this->last->next->requiresRelease) {
-        this->genericsOperator.genericsDelete(this->last->next->value);
+        this->genericsOperator.destroy(this->last->next->value);
     }
 
     delete this->last->next;
@@ -237,7 +237,7 @@ void MixedLinkedList0::removeFirst0() {
     nextNode(this->first);
 
     if (this->first->back->requiresRelease) {
-        this->genericsOperator.genericsDelete(this->first->back->value);
+        this->genericsOperator.destroy(this->first->back->value);
     }
 
     delete this->first->back;

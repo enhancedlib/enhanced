@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -18,7 +18,19 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-/*!
- * This file is used to test function and debug code of this library.
- * This file will only be compiled in configuration "Debug".
- */
+#ifndef ENHANCED_BASIC_DEFINES_H
+#define ENHANCED_BASIC_DEFINES_H
+
+#include "EnhancedCore/defines.h"
+
+#if defined(WINDOWS_OS) /* Windows OS */ && defined(ENHANCED_BASIC_DYNAMIC_LIBRARY) /* Dynamic library */
+#ifdef ENHANCED_BASIC_EXPORTS // Export
+#define ENHANCED_BASIC_API __declspec(dllexport)
+#else // Import
+#define ENHANCED_BASIC_API __declspec(dllimport)
+#endif // ENHANCED_BASIC_EXPORTS
+#else // Static library or other operating system.
+#define ENHANCED_BASIC_API
+#endif // defined(WINDOWS_OS) && defined(ENHANCED_CORE_DYNAMIC_LIBRARY)
+
+#endif // !ENHANCED_BASIC_DEFINES_H

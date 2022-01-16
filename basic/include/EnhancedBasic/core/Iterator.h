@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -27,17 +27,13 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Core {
+    namespace core {
         template <typename Type>
-        interface Iterator {
+        struct Iterator {
         #ifdef CXX_11_OR_MORE
-
             virtual ~Iterator() noexcept = default;
-
         #else // below C++11
-
             virtual ~Iterator() {}
-
         #endif // CXX_11_OR_MORE
 
             $RetNotIgnored()
@@ -56,7 +52,7 @@ namespace EnhancedBasic {
             $RetNotIgnored()
             virtual Size count() const = 0;
         };
-    } // namespace Core
+    } // namespace core
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE

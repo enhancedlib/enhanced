@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -22,11 +22,15 @@
 #define ENHANCED_BASIC_COLLECTION_LINKED0LIST_H
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
-#include "EnhancedBasic/defines.h"
+#include "EnhancedBasic/export.h"
+
+#include "EnhancedBasic/core/Iterable.h"
 #include "EnhancedBasic/core/Iterator.h"
+
+#include "EnhancedBasic/generic/Generic.h"
 
 #include "EnhancedBasic/collection/List.h"
 #include "EnhancedBasic/collection/Deque.h"
@@ -34,29 +38,11 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Collection {
-        /*!
-         * This class is the universal implementation class for
-         * the template class "LinkedList\<Type\>".
-         *
-         * @note You should not extend this class from another class.
-         *       And you should not instantiate this class directly.
-         *       The correct approach is to instantiate the
-         *       template class "LinkedList\<Type\>" (with "Type" as a type).
-         *       Because this class has no public methods.
-         *
-         * <p>The meaning of this class is to separate the actual
-         * implementation of the functions in the template class
-         * "LinkedList\<Type\>" from the definition of
-         * the template class "LinkedList\<Type\>".</p>
-         *
-         * <p>Methods in the template class "LinkedList\<Type\>" Type "only cast.</p>
-         * <p>You'll see similar code in other classes in this module.</p>
-         */
+    namespace collection {
         class ENHANCED_BASIC_API LinkedList0 {
         private:
             struct Node {
-                void *value;
+                GenericPointer value;
 
                 Node *next;
 
@@ -77,14 +63,16 @@ namespace EnhancedBasic {
 
         protected:
             struct GenericsOperator {
-                void *(*genericsNew)(void *const &);
+                GenericPointer (*allocate)(GenericReference);
 
-                void (*genericsDelete)(void *const &);
+                void (*destroy)(GenericPointer);
 
-                bool (*genericsEquals)(void *const &, void *const &);
+                bool (*equals)(GenericReference, GenericReference);
             };
 
             class ENHANCED_BASIC_API LinkedListIterator0 {
+                friend class LinkedList0;
+
             private:
                 const LinkedList0 *linkedList;
 
@@ -92,6 +80,8 @@ namespace EnhancedBasic {
 
             protected:
                 explicit LinkedListIterator0(const LinkedList0 *linkedList);
+
+                virtual ~LinkedListIterator0() noexcept;
 
                 $RetNotIgnored()
                 bool hasNext0() const;
@@ -102,15 +92,12 @@ namespace EnhancedBasic {
                 bool each0() const;
 
                 $RetNotIgnored()
-                void *get0() const;
+                GenericReference get0() const;
 
                 void reset0() const;
 
                 $RetNotIgnored()
                 Size count0() const;
-
-            public:
-                virtual ~LinkedListIterator0() noexcept;
             };
 
             GenericsOperator genericsOperator;
@@ -119,7 +106,7 @@ namespace EnhancedBasic {
 
             explicit LinkedList0(GenericsOperator genericsOperator);
 
-            LinkedList0(const LinkedList0 &originalCopy);
+            LinkedList0(const LinkedList0 &copy);
 
             virtual ~LinkedList0() noexcept;
 
@@ -130,35 +117,35 @@ namespace EnhancedBasic {
             bool isEmpty0() const;
 
             $RetNotIgnored()
-            bool contain0(const void *value) const;
+            bool contain0(GenericReference value) const;
 
             $RetNotIgnored()
-            void *getLast0() const;
+            GenericReference getLast0() const;
 
             $RetNotIgnored()
-            void *getFirst0() const;
+            GenericReference getFirst0() const;
 
             $RetNotIgnored()
-            void *get0(Size index) const;
+            GenericReference get0(Size index) const;
 
-            void addLast0(const void *element);
+            void addLast0(GenericReference element);
 
             void removeLast0();
 
-            void addFirst0(const void *element);
+            void addFirst0(GenericReference element);
 
             void removeFirst0();
         };
 
     /*
      * When you build project with Microsoft Visual C++ compiler,
-     * If you don't explicitly explicit extend the "Collection" class, you will see an error in compiling.
+     * If you don't explicitly extend the "Collection" class, you will see an error in compiling.
      * The compiler thinks the return type of virtual function 'copy' isn't
      * covariant with the return type the super method.
      * So the class must explicitly extend the "Collection" class.
      *
      * But when the class explicitly extend the "Collection" class,
-     * The compiler show a warning (C4584), it thinks the class already extend "Collection" class.
+     * The compiler show a warning (C4584), it thinks the class already extended "Collection" class.
      * So I use "#pragma warning(disable: 4584)" to disable the warning.
      */
     #ifdef COMPILER_MSVC
@@ -172,159 +159,94 @@ namespace EnhancedBasic {
         class LinkedList : public List<Type>, public Deque<Type>, private LinkedList0 {
     #endif // COMPILER_MSVC
         private:
-            class LinkedListIterator : public Core::Iterator<Type>, private LinkedListIterator0 {
-                friend class LinkedList<Type>;
+            class LinkedListIterator : public core::Iterator<Type>, private LinkedListIterator0 {
+                friend struct core::Iterable<Type>;
 
             public:
-                inline explicit LinkedListIterator(const LinkedList<Type> *linkedList) :
-                    LinkedListIterator0(linkedList) {}
+                explicit inline LinkedListIterator(const LinkedList<Type> *linkedList);
 
                 $RetNotIgnored()
-                inline bool hasNext() const override {
-                    return LinkedListIterator0::hasNext0();
-                }
+                inline bool hasNext() const override;
 
-                inline const Core::Iterator<Type> *next() const override {
-                    LinkedListIterator0::next0();
-                    return this;
-                }
+                inline const core::Iterator<Type> *next() const override;
 
                 $RetNotIgnored()
-                inline bool each() const override {
-                    return LinkedListIterator0::each0();
-                }
+                inline bool each() const override;
 
                 $RetNotIgnored()
-                inline Type &get() const override {
-                    return *reinterpret_cast<Type *>(LinkedListIterator0::get0());
-                }
+                inline Type &get() const override;
 
-                inline void reset() const override {
-                    LinkedListIterator0::reset0();
-                }
+                inline void reset() const override;
 
                 $RetNotIgnored()
-                inline Size count() const override {
-                    return LinkedListIterator0::count0();
-                }
+                inline Size count() const override;
             };
 
-            static void *genericsNew(void *const &element) {
-                return reinterpret_cast<void *>(new Type(*reinterpret_cast<Type *>(element)));
-            }
+            static GenericPointer allocate(GenericReference element);
 
-            static void genericsDelete(void *const &element) {
-                delete reinterpret_cast<Type *>(element);
-            }
+            static void destroy(GenericPointer element);
 
-            static bool genericsEquals(void *const &element, void *const &value) {
-                return *reinterpret_cast<Type *>(element) == *reinterpret_cast<Type *>(value);
-            }
+            static bool equals(GenericReference element, GenericReference value);
 
         public:
-            inline explicit LinkedList() : LinkedList0({genericsNew, genericsDelete, genericsEquals}) {}
+            explicit inline LinkedList();
 
-            inline LinkedList(const LinkedList<Type> &originalCopy) : LinkedList0(originalCopy) {}
-
-            $RetNotIgnored()
-            inline Size getLength() const override {
-                return LinkedList0::getLength0();
-            }
+            inline LinkedList(const LinkedList<Type> &copy) : LinkedList0(copy) {}
 
             $RetNotIgnored()
-            inline bool isEmpty() const override {
-                return LinkedList0::isEmpty0();
-            }
+            inline Size getLength() const override;
 
             $RetNotIgnored()
-            inline bool contain(const Type &value) const override {
-                return LinkedList0::contain0(&value);
-            }
+            inline bool isEmpty() const override;
+
+            $RetNotIgnored()
+            inline bool contain(const Type &value) const override;
 
             $RetRequiresRelease()
-            inline LinkedList<Type> *copy() const override {
-                return new LinkedList<Type>(*this);
-            }
+            inline LinkedList<Type> *copy() const override;
 
             $RetNotIgnored()
-            inline Type &getLast() const override {
-                return *reinterpret_cast<Type *>(LinkedList0::getLast0());
-            }
+            inline Type &getLast() const override;
 
             $RetNotIgnored()
-            inline Type &getFirst() const override {
-                return *reinterpret_cast<Type *>(LinkedList0::getFirst0());
-            }
+            inline Type &getFirst() const override;
 
             $RetNotIgnored()
-            inline Type &get(Size index) const override {
-                return *reinterpret_cast<Type *>(LinkedList0::get0(index));
-            }
+            inline Type &get(Size index) const override;
 
             $RetNotIgnored()
-            inline Type &operator[](Size index) const override {
-                return *reinterpret_cast<Type *>(LinkedList0::get0(index));
-            }
+            inline Type &operator[](Size index) const override;
 
             $RetNotIgnored()
-            inline Core::Iterator<Type> *iterator() const override {
-                if (LinkedList0::iterator == null) {
-                    LinkedList0::iterator = new LinkedListIterator(this);
-                } else {
-                    static_cast<LinkedListIterator *>(LinkedList0::iterator)->reset();
-                }
-                return static_cast<LinkedListIterator *>(LinkedList0::iterator);
-            }
+            inline core::Iterator<Type> *iterator() const override;
 
             $RetNotIgnored()
-            inline typename Core::Iterable<Type>::ForeachIterator begin() const override {
-                return List<Type>::begin();
-            }
+            inline typename core::Iterable<Type>::ForeachIterator begin() const override;
 
             $RetNotIgnored()
-            inline void *end() const override {
-                return List<Type>::end();
-            }
+            inline constexpr InvalidType end() const override;
 
-            inline void addLast(const Type &element) override {
-                LinkedList0::addLast0(&element);
-            }
+            inline void addLast(const Type &element) override;
 
-            inline Type removeLast() override {
-                Type value = this->getLast();
-                LinkedList0::removeFirst0();
-                return value;
-            }
+            inline Type removeLast() override;
 
-            inline void addFirst(const Type &element) override {
-                LinkedList0::addFirst0(&element);
-            }
+            inline void addFirst(const Type &element) override;
 
-            inline Type removeFirst() override {
-                Type value = this->getFirst();
-                LinkedList0::removeFirst0();
-                return value;
-            }
+            inline Type removeFirst() override;
 
-            inline void add(const Type &element) override {
-                this->addLast(element);
-            }
+            inline void add(const Type &element) override;
 
-            inline Type remove() override {
-                return this->removeLast();
-            }
+            inline Type remove() override;
 
-            inline void push(const Type &element) override {
-                this->addFirst(element);
-            }
+            inline void push(const Type &element) override;
 
-            inline Type popup() override {
-                return this->removeFirst();
-            }
+            inline Type popup() override;
         };
-    } // namespace Collection
+    } // namespace collection
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE
+
+#include "EnhancedBasic/collection/LinkedList.tcc"
 
 #endif // !ENHANCED_BASIC_COLLECTION_LINKED0LIST_H

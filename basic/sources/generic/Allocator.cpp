@@ -18,31 +18,31 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#ifndef ENHANCED_BASIC_COLLECTION_MIXED_MIXED0LIST_H
-#define ENHANCED_BASIC_COLLECTION_MIXED_MIXED0LIST_H
+#include "EnhancedBasic/generic/Allocator.h"
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
-#include "EnhancedCore/annotations.h"
+#include "EnhancedCore/memory.h"
 
-#include "EnhancedBasic/collection/Collection.h"
-#include "EnhancedBasic/collection/List.h"
+using EnhancedBasic::generic::Allocator0;
 
-#ifdef CXX_LANGUAGE // C++ language
+Size Allocator0::getSize0() const {
+    return this->size;
+}
 
-namespace EnhancedBasic {
-    namespace collection {
-        namespace mixed {
-            template <typename Type>
-            struct MixedList : public List<Type> {
-                virtual MixedList<Type> *copy() const = 0;
+void Allocator0::allocate0(Size newSize, Size sizeOfType) {
+    this->size = newSize;
+    this->space = memoryAlloc(newSize * sizeOfType);
+}
 
-                virtual void addReferenced(const Type &element) = 0;
-            };
-        } // namespace mixed
-    } // namespace collection
-} // namespace EnhancedBasic
+void Allocator0::destroy0() {
+    memoryFree(this->space);
+}
 
-#endif // CXX_LANGUAGE
-
-#endif // !ENHANCED_BASIC_COLLECTION_MIXED_MIXED0LIST_H
+void Allocator0::resize0(Size resize, Size sizeOfType) {
+    this->size = resize;
+    void *copy = memoryAlloc(resize * sizeOfType);
+    memoryCopy(copy, this->space, this->size);
+    memoryFree(this->space);
+    this->space = copy;
+}

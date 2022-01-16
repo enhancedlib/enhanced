@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -22,17 +22,17 @@
 #define ENHANCED_BASIC_COLLECTION_DEQUE_H
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
 #include "EnhancedBasic/collection/Queue.h"
 
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Collection {
+    namespace collection {
         template <typename Type>
-        interface Deque : public Queue<Type> {
+        struct Deque : public Queue<Type> {
             virtual Type &getFirst() const = 0;
 
             virtual Type &getLast() const = 0;
@@ -56,7 +56,7 @@ namespace EnhancedBasic {
 
             virtual Type popup() = 0;
         };
-    } // namespace Collection
+    } // namespace collection
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE

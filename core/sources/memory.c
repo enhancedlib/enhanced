@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -29,9 +29,8 @@
 
 $RetRequiresRelease()
 void *memoryAlloc(const Size size) {
-    if (size < 1) {
-        return null;
-    }
+    assert(size > 0);
+
     return malloc(size);
 }
 

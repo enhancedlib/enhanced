@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -22,10 +22,12 @@
 #define ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCED0ARRAY0LIST_H
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
-#include "EnhancedBasic/defines.h"
+#include "EnhancedBasic/export.h"
+
+#include "EnhancedBasic/generic/Generic.h"
 
 #include "EnhancedBasic/collection/RandomAccess.h"
 #include "EnhancedBasic/collection/referenced/ReferencedList.h"
@@ -33,51 +35,37 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Collection {
-        namespace Referenced {
-            /*!
-             * This class is the universal implementation class for
-             * the template class "ReferencedArrayList\<Type\>".
-             *
-             * @note You should not extend this class from another class.
-             *       And you should not instantiate this class directly.
-             *       The correct approach is to instantiate the
-             *       template class "ReferencedArrayList\<Type\>" (with "Type" as a type).
-             *       Because this class has no public methods.
-             *
-             * <p>The meaning of this class is to separate the actual
-             * implementation of the functions in the template class
-             * "ReferencedArrayList\<Type\>" from the definition of
-             * the template class "ReferencedArrayList\<Type\>".</p>
-             *
-             * <p>Methods in the template class "ReferencedArrayList\<Type\>" Type "only cast.</p>
-             * <p>You'll see similar code in other classes in this module.</p>
-             */
+    namespace collection {
+        namespace referenced {
             class ENHANCED_BASIC_API ReferencedArrayList0 {
             private:
                 Size maxCount;
 
-                void **elements;
+                GenericPointer *elements;
 
                 Size length;
 
             protected:
                 struct GenericsOperator {
-                    bool (*genericsEquals)(void *const &, void *const &);
+                    bool (*equals)(GenericReference, GenericReference);
                 };
 
                 class ENHANCED_BASIC_API ReferencedArrayListIterator0 {
+                    friend class ReferencedArrayList0;
+
                 private:
                     const ReferencedArrayList0 *referenceArrayList;
 
-                    mutable void **indexer;
+                    mutable GenericPointer *indexer;
 
                     mutable bool isFirst;
 
-                    const void **end;
+                    const GenericPointer *end;
 
                 protected:
                     explicit ReferencedArrayListIterator0(const ReferencedArrayList0 *referenceArrayList);
+
+                    virtual ~ReferencedArrayListIterator0() noexcept;
 
                     $RetNotIgnored()
                     bool hasNext0() const;
@@ -88,15 +76,12 @@ namespace EnhancedBasic {
                     bool each0() const;
 
                     $RetNotIgnored()
-                    void *get0() const;
+                    GenericReference get0() const;
 
                     void reset0() const;
 
                     $RetNotIgnored()
                     Size count0() const;
-
-                public:
-                    virtual ~ReferencedArrayListIterator0() noexcept;
                 };
 
                 GenericsOperator genericsOperator;
@@ -104,6 +89,8 @@ namespace EnhancedBasic {
                 mutable ReferencedArrayListIterator0 *iterator;
 
                 ReferencedArrayList0(Size length, GenericsOperator genericsOperator);
+
+                ReferencedArrayList0(const ReferencedArrayList0 &copy);
 
                 virtual ~ReferencedArrayList0() noexcept;
 
@@ -114,12 +101,12 @@ namespace EnhancedBasic {
                 bool isEmpty0() const;
 
                 $RetNotIgnored()
-                void *get0(Size index) const;
+                GenericReference get0(Size index) const;
 
                 $RetNotIgnored()
-                bool contain0(const void *value) const;
+                bool contain0(GenericReference value) const;
 
-                void add0(const void *element);
+                void add0(GenericReference element);
 
                 void remove0();
 
@@ -132,110 +119,70 @@ namespace EnhancedBasic {
             class ReferencedArrayList final : public ReferencedList<Type>, public RandomAccess<Type>,
                                               private ReferencedArrayList0 {
             private:
-                class ReferencedArrayListIterator : public Core::Iterator<Type>,
+                class ReferencedArrayListIterator : public core::Iterator<Type>,
                                                     private ReferencedArrayListIterator0 {
-                    friend class ReferencedArrayList<Type>;
+                    friend struct core::Iterable<Type>;
 
                 public:
-                    inline explicit ReferencedArrayListIterator(const ReferencedArrayList<Type> *arrayList) :
-                        ReferencedArrayListIterator0(arrayList) {}
+                    explicit inline ReferencedArrayListIterator(const ReferencedArrayList<Type> *referencedArrayList);
 
                     $RetNotIgnored()
-                    inline bool hasNext() const override {
-                        return ReferencedArrayListIterator0::hasNext0();
-                    }
+                    inline bool hasNext() const override;
 
-                    inline const Core::Iterator<Type> *next() const override {
-                        ReferencedArrayListIterator0::next0();
-                        return this;
-                    }
+                    inline const core::Iterator<Type> *next() const override;
 
                     $RetNotIgnored()
-                    inline bool each() const override {
-                        return ReferencedArrayListIterator0::each0();
-                    }
+                    inline bool each() const override;
 
                     $RetNotIgnored()
-                    inline Type &get() const override {
-                        return *reinterpret_cast<Type *>(ReferencedArrayListIterator0::get0());
-                    }
+                    inline Type &get() const override;
 
-                    inline void reset() const override {
-                        ReferencedArrayListIterator0::reset0();
-                    }
+                    inline void reset() const override;
 
                     $RetNotIgnored()
-                    inline Size count() const override {
-                        return ReferencedArrayListIterator0::count0();
-                    }
+                    inline Size count() const override;
                 };
 
-                static bool genericsEquals(void *const &element, void *const &value) {
-                    return *reinterpret_cast<Type *>(element) == *reinterpret_cast<Type *>(value);
-                }
+                static bool equals(GenericReference element, GenericReference value);
 
             public:
-                inline explicit ReferencedArrayList() : ReferencedArrayList0(UINT8_MAX, {genericsEquals}) {}
+                explicit inline ReferencedArrayList();
 
-                inline explicit ReferencedArrayList(Size maxCount) : ReferencedArrayList0(maxCount, {genericsEquals}) {}
+                explicit inline ReferencedArrayList(Size maxCount);
 
-                inline ReferencedArrayList(const ReferencedArrayList<Type> &originalCopy) :
-                    ReferencedArrayList0(originalCopy) {}
-
-                $RetNotIgnored()
-                inline Size getLength() const override {
-                    return ReferencedArrayList0::getLength0();
-                }
+                inline ReferencedArrayList(const ReferencedArrayList<Type> &copy);
 
                 $RetNotIgnored()
-                inline bool isEmpty() const override {
-                    return ReferencedArrayList0::isEmpty0();
-                }
+                inline Size getLength() const override;
 
                 $RetNotIgnored()
-                inline Type &get(Size index) const override {
-                    return *reinterpret_cast<Type *>(ReferencedArrayList0::get0(index));
-                }
+                inline bool isEmpty() const override;
 
                 $RetNotIgnored()
-                inline Type &operator[](Size index) const override {
-                    return *reinterpret_cast<Type *>(ReferencedArrayList0::get0(index));
-                }
+                inline Type &get(Size index) const override;
 
                 $RetNotIgnored()
-                inline Core::Iterator<Type> *iterator() const override {
-                    if (ReferencedArrayList0::iterator == null) {
-                        ReferencedArrayList0::iterator = new ReferencedArrayListIterator(this);
-                    } else {
-                        static_cast<ReferencedArrayListIterator *>(ReferencedArrayList0::iterator)->reset();
-                    }
-                    return static_cast<ReferencedArrayListIterator *>(ReferencedArrayList0::iterator);
-                }
+                inline Type &operator[](Size index) const override;
 
                 $RetNotIgnored()
-                inline bool contain(const Type &value) const override {
-                    return ReferencedArrayList0::contain0(&value);
-                }
+                inline core::Iterator<Type> *iterator() const override;
+
+                $RetNotIgnored()
+                inline bool contain(const Type &value) const override;
 
                 $RetRequiresRelease()
-                inline ReferencedArrayList<Type> *copy() const override {
-                    return new ReferencedArrayList<Type>(*this);
-                }
+                inline ReferencedArrayList<Type> *copy() const override;
 
-                inline void add(const Type &element) override {
-                    ReferencedArrayList0::add0(&element);
-                }
+                inline void add(const Type &element) override;
 
-                inline Type remove() override {
-                    Type value = this->get(this->getLength() - 1);
-                    ReferencedArrayList0::remove0();
-                    return value;
-                }
+                inline Type remove() override;
             };
         } // namespace Reference
-    } // namespace Collection
+    } // namespace collection
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE
+
+#include "EnhancedBasic/collection/referenced/ReferencedArrayList.tcc"
 
 #endif // !ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCED0ARRAY0LIST_H

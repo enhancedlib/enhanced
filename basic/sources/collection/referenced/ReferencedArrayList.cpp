@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -21,17 +21,17 @@
 #include "EnhancedBasic/collection/referenced/ReferencedArrayList.h"
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/assert.h"
 
-using EnhancedBasic::Collection::Referenced::ReferencedArrayList0;
+using EnhancedBasic::collection::referenced::ReferencedArrayList0;
 
 ReferencedArrayList0::ReferencedArrayListIterator0::
-ReferencedArrayListIterator0(const ReferencedArrayList0 *referenceArrayList) :
+ReferencedArrayListIterator0(const ReferencedArrayList0 *const referenceArrayList) :
     referenceArrayList(referenceArrayList), indexer(referenceArrayList->elements), isFirst(true),
-    end((const void **) referenceArrayList->elements + referenceArrayList->getLength0()) {}
+    end(referenceArrayList->elements + referenceArrayList->getLength0()) {}
 
 ReferencedArrayList0::ReferencedArrayListIterator0::~ReferencedArrayListIterator0() noexcept = default;
 
@@ -56,8 +56,8 @@ bool ReferencedArrayList0::ReferencedArrayListIterator0::each0() const {
 }
 
 $RetNotIgnored()
-void *ReferencedArrayList0::ReferencedArrayListIterator0::get0() const {
-    return *this->indexer;
+GenericReference ReferencedArrayList0::ReferencedArrayListIterator0::get0() const {
+    return generic_cast(*this->indexer);
 }
 
 void ReferencedArrayList0::ReferencedArrayListIterator0::reset0() const {
@@ -71,8 +71,16 @@ Size ReferencedArrayList0::ReferencedArrayListIterator0::count0() const {
 }
 
 ReferencedArrayList0::ReferencedArrayList0(const Size maxCount, const GenericsOperator genericsOperator) :
-    maxCount(maxCount), length(0), elements(new void *[maxCount]),
+    maxCount(maxCount), length(0), elements(new GenericPointer[maxCount]),
     genericsOperator(genericsOperator), iterator(null) {}
+
+ReferencedArrayList0::ReferencedArrayList0(const ReferencedArrayList0 &copy) :
+    maxCount(copy.maxCount), length(copy.length), elements(new GenericPointer[maxCount]),
+    genericsOperator(copy.genericsOperator), iterator(null) {
+    for (Size index = 0; index < copy.length; ++ index) {
+        this->elements[index] = copy.elements[index];
+    }
+}
 
 ReferencedArrayList0::~ReferencedArrayList0() noexcept {
     delete[] this->elements;
@@ -86,13 +94,13 @@ bool ReferencedArrayList0::isEmpty0() const {
     return this->length == 0;
 }
 
-void *ReferencedArrayList0::get0(const Size index) const {
-    return this->elements[index];
+GenericReference ReferencedArrayList0::get0(const Size index) const {
+    return generic_cast(this->elements[index]);
 }
 
-bool ReferencedArrayList0::contain0(const void *const value) const {
+bool ReferencedArrayList0::contain0(GenericReference value) const {
     for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericsOperator.genericsEquals(this->elements[index], const_cast<void *&>(value))) {
+        if (this->genericsOperator.equals(generic_cast(this->elements[index]), value)) {
             return true;
         }
     }
@@ -100,7 +108,7 @@ bool ReferencedArrayList0::contain0(const void *const value) const {
     return false;
 }
 
-void ReferencedArrayList0::add0(const void *const element) {
+void ReferencedArrayList0::add0(GenericReference element) {
     if (this->length == this->maxCount) {
         if (this->maxCount == 1) {
             this->expand0(1);
@@ -109,7 +117,7 @@ void ReferencedArrayList0::add0(const void *const element) {
         }
     }
 
-    this->elements[this->length] = const_cast<void *>(element);
+    this->elements[this->length] = &element;
     ++ this->length;
 }
 
@@ -119,9 +127,9 @@ void ReferencedArrayList0::remove0() {
 
 void ReferencedArrayList0::expand0(const Size size) {
     Size count = this->maxCount + size;
-    void **array = new void *[count];
+    GenericPointer *array = new GenericPointer[count];
 
-    arrayCopy(array, this->elements, count, sizeof(void *));
+    arrayCopy(array, this->elements, count, sizeof(GenericPointer));
     delete[] this->elements;
 
     this->elements = array;
@@ -132,9 +140,9 @@ void ReferencedArrayList0::shrink0(const Size size) {
     Size count = this->maxCount - size;
     assert(count > this->length);
 
-    void **array = new void *[count];
+    GenericPointer *array = new GenericPointer[count];
 
-    arrayCopy(array, this->elements, count, sizeof(void *));
+    arrayCopy(array, this->elements, count, sizeof(GenericPointer));
     delete[] this->elements;
 
     this->elements = array;

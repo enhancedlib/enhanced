@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -25,7 +25,7 @@
 #include "EnhancedCore/memory.h"
 #include "EnhancedCore/string.h"
 
-using(EnhancedBasic$Core$String);
+using(EnhancedBasic$core$String);
 
 /*!
  * This function is internal to this file and should not be called from outside.

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -22,10 +22,10 @@
 #define ENHANCED_BASIC_CORE_STRING_H
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
-#include "EnhancedBasic/defines.h"
+#include "EnhancedBasic/export.h"
 
 #include "EnhancedBasic/collection/List.h"
 
@@ -33,7 +33,7 @@
 
 EXTERN_C_START
 
-typedef struct EnhancedBasic$Core$String {
+typedef struct EnhancedBasic$core$String {
     /*!
      * This variable is used to hold the original string.
      */
@@ -51,29 +51,29 @@ typedef struct EnhancedBasic$Core$String {
      * @param str
      * @return String
      */
-    struct EnhancedBasic$Core$String (*add)(struct EnhancedBasic$Core$String *self,
-                                            struct EnhancedBasic$Core$String str);
-} EnhancedBasic$Core$String;
-#define ALIAS_EnhancedBasic$Core$String String
+    struct EnhancedBasic$core$String (*add)(struct EnhancedBasic$core$String *self,
+                                            struct EnhancedBasic$core$String str);
+} EnhancedBasic$core$String;
+#define ALIAS_EnhancedBasic$core$String String
 
-ENHANCED_BASIC_API EnhancedBasic$Core$String newEmptyString();
+ENHANCED_BASIC_API EnhancedBasic$core$String newEmptyString();
 
-ENHANCED_BASIC_API EnhancedBasic$Core$String *newEmptyStringPointer();
+ENHANCED_BASIC_API EnhancedBasic$core$String *newEmptyStringPointer();
 
-ENHANCED_BASIC_API EnhancedBasic$Core$String toString(char *value);
+ENHANCED_BASIC_API EnhancedBasic$core$String toString(char *value);
 
-ENHANCED_BASIC_API EnhancedBasic$Core$String *toStringPointer(char *value);
+ENHANCED_BASIC_API EnhancedBasic$core$String *toStringPointer(char *value);
 
-ENHANCED_BASIC_API EnhancedBasic$Core$String newString(Size length);
+ENHANCED_BASIC_API EnhancedBasic$core$String newString(Size length);
 
-ENHANCED_BASIC_API EnhancedBasic$Core$String *newStringPointer(Size length);
+ENHANCED_BASIC_API EnhancedBasic$core$String *newStringPointer(Size length);
 
 EXTERN_C_END
 
 #else // C++ language
 
 namespace EnhancedBasic {
-    namespace Core {
+    namespace core {
         class ENHANCED_BASIC_API String {
         private:
             /*!
@@ -95,7 +95,7 @@ namespace EnhancedBasic {
 
             explicit String(Size count);
 
-            String(const String &originalCopy);
+            String(const String &copy);
 
             ~String();
 
@@ -112,10 +112,10 @@ namespace EnhancedBasic {
             Size indexOf(const String &string, Size getN = 0) const;
 
             $RetRequiresRelease()
-            Collection::List<Size> *indexOfAll(char ch) const;
+            collection::List<Size> *indexOfAll(char ch) const;
 
             $RetRequiresRelease()
-            Collection::List<Size> *indexOfAll(const String &string) const;
+            collection::List<Size> *indexOfAll(const String &string) const;
 
             $RetNotIgnored()
             char *getCharacters() const;
@@ -140,7 +140,7 @@ namespace EnhancedBasic {
 
             String operator+=(const String &string);
         };
-    } // namespace Core
+    } // namespace core
 } // namespace EnhancedBasic
 
 #endif // defined(C_LANGUAGE) || defined(ENHANCED_BASIC_C_MODE)

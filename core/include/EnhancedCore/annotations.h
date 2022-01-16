@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -19,12 +19,13 @@
  */
 
 /*!
- * This file provides annotations for APIs.
+ * This file provides annotations for APIs.\n
+ * \n
  * Restrictive annotations don't affect compilation,
- * they don't have practical significance.
+ * they don't have practical significance.\n
  * Attribute annotations may affect compilation.
  *
- * <p>* I will join more annotations at future.</p>
+ * <p>* I will join more annotations in the future.</p>
  *
  * @note The annotation with round brackets has arguments.
  *
@@ -42,7 +43,6 @@
  *     $InOut                Passes a argument and
  *                           sets the argument inside the function and pass it out.
  *
- *                           sets the argument inside the function and pass it out.
  *     $OutNotIgnored        Sets the argument inside the function and pass it out.
  *                           Passed any should not ignore.
  *
@@ -53,6 +53,9 @@
  *     $NotNull              Indicates the pointer cannot be null.
  *
  *     $Unused               Unused argument.
+ *
+ *     $RetReferenced        Indicates the return value should be treated
+ *                           as a reference.
  *
  *     $RetNotIgnored()      The return value cannot be ignored.
  *
@@ -95,23 +98,25 @@
 #define $Unsupported(options)
 
 #ifdef COMPILER_MSVC
-#include <sal.h>
-#endif // COMPILER_MSVC
 
-#ifdef COMPILER_MSVC
+#include <sal.h>
+
 #define $Optional _In_opt_
 #define $Out _Out_opt_
 #define $InOut _Inout_opt_
 #define $OutNotIgnored _Out_
 #define $InOutRequired  _Inout_
 #define $NotNull _Notnull_
+
 #else
+
 #define $Optional
 #define $Out
 #define $InOut
 #define $OutNotIgnored
 #define $InOutRequired
 #define $NotNull
+
 #endif // COMPILER_MSVC
 
 #define $Unused [[maybe_unused]]
@@ -125,6 +130,8 @@
 #else
 #define $RetNotIgnored(options)
 #endif // CXX_20_OR_MORE
+
+#define $RetReferenced
 
 #define $RequiresRelease
 

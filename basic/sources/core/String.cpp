@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -21,17 +21,17 @@
 #include "EnhancedBasic/core/String.h"
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/memory.h"
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/string.h"
 
 #include "EnhancedBasic/collection/LinkedList.h"
 
-using EnhancedBasic::Core::String;
-using EnhancedBasic::Collection::List;
-using EnhancedBasic::Collection::LinkedList;
+using EnhancedBasic::core::String;
+using EnhancedBasic::collection::List;
+using EnhancedBasic::collection::LinkedList;
 
 String::String(const char *const value) : value(const_cast<char *>(value)), length(stringLength(value)),
                                           isStaticString(true) {}
@@ -41,7 +41,7 @@ String::String(char *const value) : value(stringCopy(value)), length(stringLengt
 
 String::String(const Size length) : value(stringNew(length)), length(length), isStaticString(false) {}
 
-String::String(const String &originalCopy) : value(stringCopy(originalCopy)), length(originalCopy.length),
+String::String(const String &copy) : value(stringCopy(copy)), length(copy.length),
                                              isStaticString(false) {}
 
 String::~String() {

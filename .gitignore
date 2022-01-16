@@ -1,3 +1,27 @@
-build/*
-debug/*
-release/*
+# -*- Git Ignore File -*-
+
+# Ignore the build folder.
+build/
+
+# Ignore the release folder.
+release/
+
+# Ignore all files in test except cmakelist.txt.
+test/*
+!test/CMakeLists.txt
+
+# Ignore log files.
+*.log
+
+# Ignore Visual Studio CMakeSettings.json file.
+CMakeSettings.json
+
+# Ignore the Visual Studio cache folder.
+.vs
+
+# Ignore CLion local configurations.
+.idea/shelf/
+.idea/httpRequests/
+.idea/dataSources/
+.idea/workspace.xml
+.idea/dataSources.local.xml

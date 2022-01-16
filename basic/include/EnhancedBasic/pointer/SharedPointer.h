@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -28,7 +28,69 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Pointer {
+    namespace pointer {
+        class SharedPointer0 {
+        private:
+            void *ptr;
+
+            Size *referenceCount;
+
+        protected:
+            struct GenericsOperator {
+                void (*destroy(void *ptr));
+            };
+
+            GenericsOperator genericsOperator;
+
+            SharedPointer0(void *ptr = null) : ptr(ptr), referenceCount(new Size(1)) {}
+
+            ~SharedPointer0() noexcept {
+                this->release();
+            }
+
+            void release() noexcept {
+                if ((-- (*this->referenceCount)) == 0) {
+                    if (this->ptr != null) {
+                        this->genericsOperator.destroy(this->ptr);
+                        this->ptr = null;
+                    }
+                    delete this->referenceCount;
+                }
+            }
+
+            void **operator&() const noexcept {
+                return const_cast<void **>(&this->ptr);
+            }
+
+            void *operator->() const noexcept {
+                return this->ptr;
+            }
+
+            SharedPointer0 &operator=(const SharedPointer0 &self) noexcept {
+                this->release();
+                this->ptr = self.ptr;
+                this->referenceCount = self.referenceCount;
+                ++ (*this->referenceCount);
+
+                return *this;
+            }
+
+            operator void *() const noexcept {
+                return this->ptr;
+            }
+        };
+
+        template <typename Type>
+        class SharedPointer final {
+        private:
+            static void destroy(void *ptr) {
+                delete[] static_cast<Type *>(ptr);
+            }
+
+        public:
+        };
+
+/*
         template <typename Type>
         class SharedPointer final {
         private:
@@ -39,8 +101,8 @@ namespace EnhancedBasic {
         public:
             SharedPointer(Type *ptr = null) : ptr(ptr), referenceCount(new Size(1)) {}
 
-            SharedPointer(const SharedPointer<Type> &originalCopy) :
-                ptr(originalCopy.ptr), referenceCount(originalCopy.referenceCount) {}
+            SharedPointer(const SharedPointer<Type> &copy) :
+                ptr(copy.ptr), referenceCount(copy.referenceCount) {}
 
             ~SharedPointer() noexcept {
                 this->release();
@@ -116,8 +178,8 @@ namespace EnhancedBasic {
             operator Type *() const noexcept {
                 return this->ptr;
             }
-        };
-    } // namespace Pointer
+        };*/
+    } // namespace pointer
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE

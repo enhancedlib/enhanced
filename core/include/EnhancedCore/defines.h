@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -132,10 +132,6 @@
 #define using(name) typedef name ALIAS_ ## name
 #endif // C_LANGUAGE
 
-#ifdef CXX_LANGUAGE
-#define interface struct
-#endif // CXX_LANGUAGE
-
 #if defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
 #define constexpr
 #define override
@@ -156,15 +152,5 @@
 #if defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
 #warning The C++ standard is too old. May not be compatible.
 #endif // defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
-
-#if defined(WINDOWS_OS) /* Windows OS */ && defined(ENHANCED_CORE_DYNAMIC_LIBRARY) /* Dynamic library */
-#ifdef ENHANCED_CORE_EXPORTS // Export
-#define ENHANCED_CORE_API __declspec(dllexport)
-#else // Import
-#define ENHANCED_CORE_API __declspec(dllimport)
-#endif // ENHANCED_CORE_EXPORTS
-#else // Static library or other operating system.
-#define ENHANCED_CORE_API
-#endif // defined(WINDOWS_OS) && defined(ENHANCED_CORE_DYNAMIC_LIBRARY)
 
 #endif // !ENHANCED_CORE_DEFINES_H

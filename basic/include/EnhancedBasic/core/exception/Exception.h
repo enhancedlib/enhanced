@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -28,7 +28,7 @@
 #include "EnhancedCore/jump.h"
 #include "EnhancedCore/memory.h"
 
-#include "EnhancedBasic/defines.h"
+#include "EnhancedBasic/export.h"
 
 #include "EnhancedBasic/core/String.h"
 
@@ -36,36 +36,36 @@
 
 EXTERN_C_START
 
-typedef enum EnhancedBasic$Core$Exception$TRY_BLOCK_STATUS {
+typedef enum EnhancedBasic$core$exception$TRY_BLOCK_STATUS {
     TRY_BLOCK_INTO,
     TRY_BLOCK_NO_EXCEPTION_OCCURRED,
     TRY_BLOCK_EXCEPTION_OCCURRED,
     TRY_BLOCK_EXCEPTION_CAPTURE,
     TRY_BLOCK_BREAK,
     TRY_BLOCK_FUNCTION_RETURN
-} EnhancedBasic$Core$Exception$TRY_BLOCK_STATUS;
-#define ALIAS_EnhancedBasic$Core$Exception$TRY_BLOCK_STATUS TRY_BLOCK_STATUS
+} EnhancedBasic$core$exception$TRY_BLOCK_STATUS;
+#define ALIAS_EnhancedBasic$core$exception$TRY_BLOCK_STATUS TRY_BLOCK_STATUS
 
-typedef struct EnhancedBasic$Core$Exception$Exception {
+typedef struct EnhancedBasic$core$exception$Exception {
     const char *message;
 
     unsigned int code;
 
-    char *(*traceback)(struct EnhancedBasic$Core$Exception$Exception *self);
-} EnhancedBasic$Core$Exception$Exception;
-#define ALIAS_EnhancedBasic$Core$Exception$Exception Exception
+    char *(*traceback)(struct EnhancedBasic$core$exception$Exception *self);
+} EnhancedBasic$core$exception$Exception;
+#define ALIAS_EnhancedBasic$core$exception$Exception Exception
 
-typedef struct EnhancedBasic$Core$Exception$ExceptionContextBlock {
-    EnhancedBasic$Core$Exception$Exception *exception;
+typedef struct EnhancedBasic$core$exception$ExceptionContextBlock {
+    EnhancedBasic$core$exception$Exception *exception;
 
     JumpBuffer jumpBuffer;
 
-    struct EnhancedBasic$Core$Exception$ExceptionContextBlock *link;
-} EnhancedBasic$Core$Exception$ExceptionContextBlock;
-#define ALIAS_EnhancedBasic$Core$Exception$ExceptionContextBlock ExceptionContextBlock
+    struct EnhancedBasic$core$exception$ExceptionContextBlock *link;
+} EnhancedBasic$core$exception$ExceptionContextBlock;
+#define ALIAS_EnhancedBasic$core$exception$ExceptionContextBlock ExceptionContextBlock
 
 ENHANCED_BASIC_API void exceptionContextBlockStackPush(
-    EnhancedBasic$Core$Exception$ExceptionContextBlock *exceptionContextBlock);
+    EnhancedBasic$core$exception$ExceptionContextBlock *exceptionContextBlock);
 
 ENHANCED_BASIC_API void exceptionContextBlockStackPopup();
 
@@ -75,17 +75,17 @@ ENHANCED_BASIC_API void exceptionRaise(unsigned int exceptionCode, const char *e
 
 #define TRY \
     { \
-        EnhancedBasic$Core$Exception$ExceptionContextBlock _CONTEXT_BLOCK; \
+        EnhancedBasic$core$exception$ExceptionContextBlock _CONTEXT_BLOCK; \
         bool _IN_FINALLY = false; \
         exceptionContextBlockStackPush(&_CONTEXT_BLOCK); \
-        EnhancedBasic$Core$Exception$TRY_BLOCK_STATUS _STATUS = jumpSet(_CONTEXT_BLOCK.jumpBuffer); \
+        EnhancedBasic$core$exception$TRY_BLOCK_STATUS _STATUS = jumpSet(_CONTEXT_BLOCK.jumpBuffer); \
         if (_STATUS == TRY_BLOCK_INTO) { \
             _STATUS = TRY_BLOCK_NO_EXCEPTION_OCCURRED;
 
 #define CATCH(exceptionCode, variable) \
         } else if (_STATUS == TRY_BLOCK_EXCEPTION_OCCURRED && \
             _CONTEXT_BLOCK.exception->code == (exceptionCode)) { \
-            EnhancedBasic$Core$Exception$Exception *(variable) = _CONTEXT_BLOCK.exception; \
+            EnhancedBasic$core$exception$Exception *(variable) = _CONTEXT_BLOCK.exception; \
             _STATUS = TRY_BLOCK_EXCEPTION_CAPTURE;
 
 #define PASS \
@@ -131,8 +131,8 @@ EXTERN_C_END
 #else // C++ language
 
 namespace EnhancedBasic {
-    namespace Core {
-        namespace Exception {
+    namespace core {
+        namespace exception {
             class ENHANCED_BASIC_API Exception {
             protected:
                 const String message;
@@ -177,8 +177,8 @@ namespace EnhancedBasic {
                 $RetNotIgnored()
                 const String &getMessage() noexcept;
             };
-        } // namespace Exception
-    } // namespace Core
+        } // namespace exception
+    } // namespace core
 } // namespace EnhancedBasic
 
 #endif // defined(C_LANGUAGE) || defined(ENHANCED_BASIC_C_MODE)

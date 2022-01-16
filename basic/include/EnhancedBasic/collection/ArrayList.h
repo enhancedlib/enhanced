@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -22,10 +22,15 @@
 #define ENHANCED_BASIC_COLLECTION_ARRAY0LIST_H
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
-#include "EnhancedBasic/defines.h"
+#include "EnhancedBasic/export.h"
+
+#include "EnhancedBasic/core/Iterable.h"
+#include "EnhancedBasic/core/Iterator.h"
+
+#include "EnhancedBasic/generic/Generic.h"
 
 #include "EnhancedBasic/collection/List.h"
 #include "EnhancedBasic/collection/RandomAccess.h"
@@ -33,54 +38,40 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Collection {
-        /*!
-         * This class is the universal implementation class for
-         * the template class "ArrayList\<Type\>".
-         *
-         * @note You should not extend this class from another class.
-         *       And you should not instantiate this class directly.
-         *       The correct approach is to instantiate the
-         *       template class "ArrayList\<Type\>" (with "Type" as a type).
-         *       Because this class has no public methods.
-         *
-         * <p>The meaning of this class is to separate the actual
-         * implementation of the functions in the template class
-         * "ArrayList\<Type\>" from the definition of
-         * the template class "ArrayList\<Type\>".</p>
-         *
-         * <p>Methods in the template class "ArrayList\<Type\>" Type "only cast.</p>
-         * <p>You'll see similar code in other classes in this module.</p>
-         */
+    namespace collection {
         class ENHANCED_BASIC_API ArrayList0 {
         private:
             Size maxCount;
 
-            void **elements;
+            GenericPointer *elements;
 
             Size length;
 
         protected:
             struct GenericsOperator {
-                void *(*genericsNew)(void *const &);
+                GenericPointer (*allocate)(GenericReference);
 
-                void (*genericsDelete)(void *const &);
+                void (*destroy)(GenericPointer);
 
-                bool (*genericsEquals)(void *const &, void *const &);
+                bool (*equals)(GenericReference, GenericReference);
             };
 
             class ENHANCED_BASIC_API ArrayListIterator0 {
+                friend class ArrayList0;
+
             private:
                 const ArrayList0 *arrayList;
 
-                mutable void **indexer;
+                mutable GenericPointer *indexer;
 
                 mutable bool isFirst;
 
-                const void **end;
+                const GenericPointer *end;
 
             protected:
                 explicit ArrayListIterator0(const ArrayList0 *arrayList);
+
+                virtual ~ArrayListIterator0() noexcept;
 
                 $RetNotIgnored()
                 bool hasNext0() const;
@@ -91,15 +82,12 @@ namespace EnhancedBasic {
                 bool each0() const;
 
                 $RetNotIgnored()
-                void *get0() const;
+                GenericReference get0() const;
 
                 void reset0() const;
 
                 $RetNotIgnored()
                 Size count0() const;
-
-            public:
-                virtual ~ArrayListIterator0() noexcept;
             };
 
             GenericsOperator genericsOperator;
@@ -107,6 +95,8 @@ namespace EnhancedBasic {
             mutable ArrayListIterator0 *iterator;
 
             ArrayList0(Size length, GenericsOperator genericsOperator);
+
+            ArrayList0(const ArrayList0 &copy);
 
             virtual ~ArrayList0() noexcept;
 
@@ -117,12 +107,12 @@ namespace EnhancedBasic {
             bool isEmpty0() const;
 
             $RetNotIgnored()
-            void *get0(Size index) const;
+            GenericReference get0(Size index) const;
 
             $RetNotIgnored()
-            bool contain0(const void *value) const;
+            bool contain0(GenericReference value) const;
 
-            void add0(const void *element);
+            void add0(GenericReference element);
 
             void remove0();
 
@@ -134,115 +124,72 @@ namespace EnhancedBasic {
         template <typename Type>
         class ArrayList final : public List<Type>, public RandomAccess<Type>, private ArrayList0 {
         private:
-            class ArrayListIterator : public Core::Iterator<Type>, private ArrayList0::ArrayListIterator0 {
-                friend class ArrayList<Type>;
+            class ArrayListIterator : public core::Iterator<Type>, private ArrayList0::ArrayListIterator0 {
+                friend struct core::Iterable<Type>;
 
             public:
-                inline explicit ArrayListIterator(const ArrayList<Type> *arrayList) :
-                    ArrayListIterator0(arrayList) {}
+                explicit inline ArrayListIterator(const ArrayList<Type> *arrayList);
 
                 $RetNotIgnored()
-                inline bool hasNext() const override {
-                    return ArrayListIterator0::hasNext0();
-                }
+                inline bool hasNext() const override;
 
-                inline const Core::Iterator<Type> *next() const override {
-                    ArrayListIterator0::next0();
-                    return this;
-                }
+                inline const core::Iterator<Type> *next() const override;
 
                 $RetNotIgnored()
-                inline bool each() const override {
-                    return ArrayListIterator0::each0();
-                }
+                inline bool each() const override;
 
                 $RetNotIgnored()
-                inline Type &get() const override {
-                    return *reinterpret_cast<Type *>(ArrayListIterator0::get0());
-                }
+                inline Type &get() const override;
 
-                inline void reset() const override {
-                    ArrayListIterator0::reset0();
-                }
+                inline void reset() const override;
 
                 $RetNotIgnored()
-                inline Size count() const override {
-                    return ArrayListIterator0::count0();
-                }
+                inline Size count() const override;
             };
 
-            static void *genericsNew(void *const &element) {
-                return new Type(*reinterpret_cast<Type *>(element));
-            }
+            static GenericPointer allocate(GenericReference element);
 
-            static void genericsDelete(void *const &element) {
-                delete reinterpret_cast<Type *>(element);
-            }
+            static void destroy(GenericPointer element);
 
-            static bool genericsEquals(void *const &element, void *const &value) {
-                return *reinterpret_cast<Type *>(element) == *reinterpret_cast<Type *>(value);
-            }
+            static bool equals(GenericReference element, GenericReference value);
 
         public:
-            inline explicit ArrayList() : ArrayList0(UINT8_MAX, {genericsNew, genericsDelete, genericsEquals}) {}
+            explicit inline ArrayList();
 
-            inline explicit ArrayList(Size maxCount) : ArrayList0(maxCount,{genericsNew, genericsDelete, genericsEquals}) {}
+            explicit inline ArrayList(Size maxCount);
 
-            inline ArrayList(const ArrayList<Type> &originalCopy) : ArrayList0(originalCopy) {}
-
-            $RetNotIgnored()
-            inline Size getLength() const override {
-                return ArrayList0::getLength0();
-            }
+            inline ArrayList(const ArrayList<Type> &copy);
 
             $RetNotIgnored()
-            inline bool isEmpty() const override {
-                return ArrayList0::isEmpty0();
-            }
+            inline Size getLength() const override;
 
             $RetNotIgnored()
-            inline Type &get(Size index) const override {
-                return *reinterpret_cast<Type *>(ArrayList0::get0(index));
-            }
+            inline bool isEmpty() const override;
 
             $RetNotIgnored()
-            inline Type &operator[](Size index) const override {
-                return *reinterpret_cast<Type *>(ArrayList0::get0(index));
-            }
+            inline Type &get(Size index) const override;
 
             $RetNotIgnored()
-            inline Core::Iterator<Type> *iterator() const override {
-                if (ArrayList0::iterator == null) {
-                    ArrayList0::iterator = new ArrayListIterator(this);
-                } else {
-                    static_cast<ArrayListIterator *>(ArrayList0::iterator)->reset();
-                }
-                return static_cast<ArrayListIterator *>(ArrayList0::iterator);
-            }
+            inline Type &operator[](Size index) const override;
 
             $RetNotIgnored()
-            inline bool contain(const Type &value) const override {
-                return ArrayList0::contain0(&value);
-            }
+            inline core::Iterator<Type> *iterator() const override;
+
+            $RetNotIgnored()
+            inline bool contain(const Type &value) const override;
 
             $RetRequiresRelease()
-            inline ArrayList<Type> *copy() const override {
-                return new ArrayList<Type>(*this);
-            }
+            inline ArrayList<Type> *copy() const override;
 
-            inline void add(const Type &element) override {
-                ArrayList0::add0(&element);
-            }
+            inline void add(const Type &element) override;
 
-            inline Type remove() override {
-                Type value = this->get(this->getLength() - 1);
-                ArrayList0::remove0();
-                return value;
-            }
+            inline Type remove() override;
         };
-    } // namespace Collection
+    } // namespace collection
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE
+
+#include "EnhancedBasic/collection/ArrayList.tcc"
 
 #endif // !ENHANCED_BASIC_COLLECTION_ARRAY0LIST_H

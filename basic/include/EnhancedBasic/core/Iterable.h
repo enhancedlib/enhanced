@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -24,27 +24,27 @@
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 
-#include "Iterator.h"
+#include "EnhancedBasic/core/Iterator.h"
 
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Core {
+    namespace core {
         template <typename Type>
-        interface Iterable {
+        struct Iterable {
         protected:
             class ForeachIterator final {
             private:
-                Core::Iterator<Type> *iterator;
+                core::Iterator<Type> *iterator;
 
             public:
-                ForeachIterator(Core::Iterator<Type> *iterator) : iterator(iterator) {}
+                ForeachIterator(core::Iterator<Type> *iterator) : iterator(iterator) {}
 
-                bool operator!=($Unused void *unused) {
+                bool operator!=($Unused InvalidType unused) {
                     return this->iterator->hasNext();
                 }
 
-                const Core::Iterator<Type> *operator++() {
+                const core::Iterator<Type> *operator++() {
                     return this->iterator->next();
                 }
 
@@ -53,21 +53,31 @@ namespace EnhancedBasic {
                 }
             };
 
+            template <typename IteratorType, typename SuperType, typename Subclass>
+            inline IteratorType *getIterator(SuperType *&iterator, const Subclass *self) const {
+                if (iterator == null) {
+                    iterator = new IteratorType(self);
+                } else {
+                    static_cast<IteratorType *>(iterator)->reset();
+                }
+                return static_cast<IteratorType *>(iterator);
+            }
+
         public:
             $RetNotIgnored()
-            virtual Iterable<Type>::ForeachIterator begin() const {
+            virtual inline Iterable<Type>::ForeachIterator begin() const {
                 return Iterable<Type>::ForeachIterator(this->iterator());
             }
 
             $RetNotIgnored()
-            virtual void *end() const {
-                return null;
+            virtual inline constexpr InvalidType end() const {
+                return INVALID_VALUE;
             }
 
             $RetNotIgnored()
-            virtual Core::Iterator<Type> *iterator() const = 0;
+            virtual core::Iterator<Type> *iterator() const = 0;
         };
-    } // namespace Core
+    } // namespace core
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE

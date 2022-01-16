@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -21,16 +21,16 @@
 #include "EnhancedBasic/collection/ArrayList.h"
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/assert.h"
 
-using EnhancedBasic::Collection::ArrayList0;
+using EnhancedBasic::collection::ArrayList0;
 
 ArrayList0::ArrayListIterator0::ArrayListIterator0(const ArrayList0 *const arrayList) :
     arrayList(arrayList), indexer(arrayList->elements), isFirst(true),
-    end((const void **) arrayList->elements + arrayList->getLength0()) {}
+    end(arrayList->elements + arrayList->getLength0()) {}
 
 ArrayList0::ArrayListIterator0::~ArrayListIterator0() noexcept = default;
 
@@ -55,8 +55,8 @@ bool ArrayList0::ArrayListIterator0::each0() const {
 }
 
 $RetNotIgnored()
-void *ArrayList0::ArrayListIterator0::get0() const {
-    return *this->indexer;
+GenericReference ArrayList0::ArrayListIterator0::get0() const {
+    return generic_cast(*this->indexer);
 }
 
 void ArrayList0::ArrayListIterator0::reset0() const {
@@ -70,8 +70,16 @@ Size ArrayList0::ArrayListIterator0::count0() const {
 }
 
 ArrayList0::ArrayList0(const Size maxCount, const GenericsOperator genericsOperator) :
-    maxCount(maxCount), length(0), elements(new void *[maxCount]),
+    maxCount(maxCount), length(0), elements(new GenericPointer[maxCount]),
     genericsOperator(genericsOperator), iterator(null) {}
+
+ArrayList0::ArrayList0(const ArrayList0 &copy) :
+    maxCount(copy.maxCount), length(copy.length), elements(new GenericPointer[maxCount]),
+    genericsOperator(copy.genericsOperator), iterator(null) {
+    for (int index = 0; index < copy.length; ++ index) {
+        this->elements[index] = this->genericsOperator.allocate(generic_cast(copy.elements[index]));
+    }
+}
 
 ArrayList0::~ArrayList0() noexcept {
     while (this->length > 0) {
@@ -89,13 +97,13 @@ bool ArrayList0::isEmpty0() const {
     return this->length == 0;
 }
 
-void *ArrayList0::get0(Size index) const {
-    return this->elements[index];
+GenericReference ArrayList0::get0(Size index) const {
+    return generic_cast(this->elements[index]);
 }
 
-bool ArrayList0::contain0(const void *const value) const {
+bool ArrayList0::contain0(GenericReference value) const {
     for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericsOperator.genericsEquals(this->elements[index], const_cast<void *&>(value))) {
+        if (this->genericsOperator.equals(generic_cast(this->elements[index]), value)) {
             return true;
         }
     }
@@ -103,7 +111,7 @@ bool ArrayList0::contain0(const void *const value) const {
     return false;
 }
 
-void ArrayList0::add0(const void *const element) {
+void ArrayList0::add0(GenericReference element) {
     if (this->length == this->maxCount) {
         if (this->maxCount == 1) {
             this->expand0(1);
@@ -112,19 +120,19 @@ void ArrayList0::add0(const void *const element) {
         }
     }
 
-    this->elements[this->length] = this->genericsOperator.genericsNew(const_cast<void *&>(element));
+    this->elements[this->length] = this->genericsOperator.allocate(element);
     ++ this->length;
 }
 
 void ArrayList0::remove0() {
-    this->genericsOperator.genericsDelete(this->elements[-- this->length]);
+    this->genericsOperator.destroy(this->elements[-- this->length]);
 }
 
 void ArrayList0::expand0(const Size size) {
     Size count = this->maxCount + size;
-    void **array = new void *[count];
+    GenericPointer *array = new GenericPointer[count];
 
-    arrayCopy(array, this->elements, count, sizeof(void *));
+    arrayCopy(array, this->elements, count, sizeof(GenericPointer));
     delete[] this->elements;
 
     this->elements = array;
@@ -135,9 +143,9 @@ void ArrayList0::shrink0(const Size size) {
     Size count = this->maxCount - size;
     assert(count > this->length);
 
-    void **array = new void *[count];
+    GenericPointer *array = new GenericPointer[count];
 
-    arrayCopy(array, this->elements, count, sizeof(void *));
+    arrayCopy(array, this->elements, count, sizeof(GenericPointer));
     delete[] this->elements;
 
     this->elements = array;

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -22,10 +22,10 @@
 #define ENHANCED_BASIC_COLLECTION_MIXED_MIXED0LINKED0LIST_H
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
-#include "EnhancedBasic/defines.h"
+#include "EnhancedBasic/export.h"
 #include "EnhancedBasic/core/Iterator.h"
 
 #include "EnhancedBasic/collection/mixed/MixedList.h"
@@ -34,28 +34,8 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Collection {
-        namespace Mixed {
-            /*!
-             * This class is the universal implementation class for
-             * the template class "MixedLinkedList\<Type\>".
-             *
-             * @note You should not extend this class from another class.
-             *       And you should not instantiate this class directly.
-             *       The correct approach is to instantiate the
-             *       template class "MixedLinkedList\<Type\>" (with "Type" as a type).
-             *       Because this class has no public methods.
-             *       And its methods have no type checking
-             *       (they use "void *" as the generic type).
-             *
-             * <p>The meaning of this class is to separate the actual
-             * implementation of the functions in the template class
-             * "MixedLinkedList\<Type\>" from the definition of
-             * the template class "MixedLinkedList\<Type\>".</p>
-             *
-             * <p>Methods in the template class "MixedLinkedList\<Type\>" Type "only cast.</p>
-             * <p>You'll see similar code in other classes in this module.</p>
-             */
+    namespace collection {
+        namespace mixed {
             class ENHANCED_BASIC_API MixedLinkedList0 {
             private:
                 struct Node {
@@ -82,14 +62,16 @@ namespace EnhancedBasic {
 
             protected:
                 struct GenericsOperator {
-                    void *(*genericsNew)(void *const &);
+                    void *(*allocate)(void *const &);
 
-                    void (*genericsDelete)(void *const &);
+                    void (*destroy)(void *const &);
 
-                    bool (*genericsEquals)(void *const &, void *const &);
+                    bool (*equals)(void *const &, void *const &);
                 };
 
                 class ENHANCED_BASIC_API MixedLinkedListIterator0 {
+                    friend class MixedLinkedList0;
+
                 private:
                     const MixedLinkedList0 *mixedLinkedList;
 
@@ -97,6 +79,8 @@ namespace EnhancedBasic {
 
                 protected:
                     explicit MixedLinkedListIterator0(const MixedLinkedList0 *mixedLinkedList);
+
+                    virtual ~MixedLinkedListIterator0() noexcept;
 
                     $RetNotIgnored()
                     bool hasNext0() const;
@@ -112,9 +96,6 @@ namespace EnhancedBasic {
                     void reset0() const;
 
                     Size count0() const;
-
-                public:
-                    virtual ~MixedLinkedListIterator0() noexcept;
                 };
 
                 GenericsOperator genericsOperator;
@@ -125,7 +106,7 @@ namespace EnhancedBasic {
 
                 virtual ~MixedLinkedList0() noexcept;
 
-                MixedLinkedList0(const MixedLinkedList0 &originalCopy);
+                MixedLinkedList0(const MixedLinkedList0 &copy);
 
                 Size getLength0() const;
 
@@ -156,13 +137,13 @@ namespace EnhancedBasic {
 
         /*
          * When you build project with Microsoft Visual C++ compiler,
-         * If you don't explicitly explicit extend the "Collection" class, you will see an error in compiling.
+         * If you don't explicitly extend the "Collection" class, you will see an error in compiling.
          * The compiler thinks the return type of virtual function 'copy' isn't
          * covariant with the return type the super method.
          * So the class must explicitly extend the "Collection" class.
          *
          * But when the class explicitly extend the "Collection" class,
-         * The compiler show a warning (C4584), it thinks the class already extend "Collection" class.
+         * The compiler show a warning (C4584), it thinks the class already extended "Collection" class.
          * So I use "#pragma warning(disable: 4584)" to disable the warning.
          */
         #ifdef COMPILER_MSVC
@@ -177,18 +158,18 @@ namespace EnhancedBasic {
             class MixedLinkedList final : public MixedList<Type>, public MixedDeque<Type>, private MixedLinkedList0 {
         #endif // COMPILER_MSVC
             private:
-                class MixedLinkedListIterator : public Core::Iterator<Type>, private MixedLinkedListIterator0 {
+                class MixedLinkedListIterator : public core::Iterator<Type>, private MixedLinkedListIterator0 {
                     friend class MixedLinkedList<Type>;
 
                 public:
-                    inline explicit MixedLinkedListIterator(const MixedLinkedList<Type> *mixedLinkedList) :
+                    explicit inline MixedLinkedListIterator(const MixedLinkedList<Type> *mixedLinkedList) :
                         MixedLinkedListIterator0(mixedLinkedList) {}
 
                     inline bool hasNext() const override {
                         return MixedLinkedListIterator0::hasNext0();
                     }
 
-                    inline const Core::Iterator<Type> *next() const override {
+                    inline const core::Iterator<Type> *next() const override {
                         MixedLinkedListIterator0::next0();
                         return this;
                     }
@@ -210,23 +191,23 @@ namespace EnhancedBasic {
                     }
                 };
 
-                static void *genericsNew(void *const &element) {
+                static void *allocate(void *const &element) {
                     return reinterpret_cast<void *>(new Type(*reinterpret_cast<Type *>(element)));
                 }
 
-                static void genericsDelete(void *const &element) {
+                static void destroy(void *const &element) {
                     delete reinterpret_cast<Type *>(element);
                 }
 
-                static bool genericsEquals(void *const &element, void *const &value) {
+                static bool equals(void *const &element, void *const &value) {
                     return *reinterpret_cast<Type *>(element) == *reinterpret_cast<Type *>(value);
                 }
 
             public:
-                inline MixedLinkedList() : MixedLinkedList0({genericsNew, genericsDelete, genericsEquals}) {}
+                inline MixedLinkedList() : MixedLinkedList0({allocate, destroy, equals}) {}
 
-                inline MixedLinkedList(const MixedLinkedList<Type> &originalCopy) :
-                    MixedLinkedList0(originalCopy) {}
+                inline MixedLinkedList(const MixedLinkedList<Type> &copy) :
+                    MixedLinkedList0(copy) {}
 
                 inline Size getLength() const override {
                     return MixedLinkedList0::getLength0();
@@ -264,7 +245,7 @@ namespace EnhancedBasic {
                     return *reinterpret_cast<Type *>(MixedLinkedList0::get0(index));
                 }
 
-                inline Core::Iterator<Type> *iterator() const override {
+                inline core::Iterator<Type> *iterator() const override {
                     if (MixedLinkedList0::iterator == null) {
                         MixedLinkedList0::iterator = new MixedLinkedListIterator(this);
                     } else {
@@ -274,12 +255,12 @@ namespace EnhancedBasic {
                 }
 
                 $RetNotIgnored()
-                inline typename Core::Iterable<Type>::ForeachIterator begin() const override {
+                inline typename core::Iterable<Type>::ForeachIterator begin() const override {
                     return MixedList<Type>::begin();
                 }
 
                 $RetNotIgnored()
-                inline void *end() const override {
+                inline constexpr InvalidType end() const override {
                     return MixedList<Type>::end();
                 }
 
@@ -335,8 +316,8 @@ namespace EnhancedBasic {
                     return this->removeFirst();
                 }
             };
-        } // namespace Mixed
-    } // namespace Collection
+        } // namespace mixed
+    } // namespace collection
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE

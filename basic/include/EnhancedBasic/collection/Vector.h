@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -23,10 +23,10 @@
 #define ENHANCED_BASIC_COLLECTION_VECTOR_H
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
-#include "EnhancedBasic/defines.h"
+#include "EnhancedBasic/export.h"
 
 #include "EnhancedBasic/collection/List.h"
 #include "EnhancedBasic/collection/RandomAccess.h"
@@ -34,25 +34,7 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Collection {
-        /*!
-         * This class is the universal implementation class for
-         * the template class "Vector".
-         * \n
-         * Separate the implementation of Vector from the template
-         * by type erasure (pseudo-generic). \n
-         * \n
-         * Methods in the template class "Vector" do only
-         * type erasure. \n
-         * \n
-         * You'll see similar code in other classes in this module.
-         *
-         * @note You should not extend this class from another class.
-         *       And you should not instantiate this class directly.
-         *       The correct approach is to instantiate the
-         *       template class "Vector" (with "Type" as a type).
-         *       Because this class has no public methods.
-         */
+    namespace collection {
         class ENHANCED_BASIC_API Vector0 {
         private:
             Size maxCount;
@@ -63,20 +45,22 @@ namespace EnhancedBasic {
 
         protected:
             struct GenericsOperator {
-                void *(*genericsArrayNew)(const Size &size);
+                void *(*allocateArray)(const Size &size);
 
-                void (*genericsArrayDelete)(void *const &elements);
+                void (*destroyArray)(void *const &elements);
 
-                void (*genericsArrayCopy)(void *const &destination, void *const &source, const Size &size);
+                void (*copyArray)(void *const &destination, void *const &source, const Size &size);
 
-                void *(*genericsArrayIndex)(void *const &elements, const Size &index);
+                void *(*indexArray)(void *const &elements, const Size &index);
 
-                void (*genericsArraySetElement)(void *const &elements, const Size &index, void *const &value);
+                void (*setElement)(void *const &elements, const Size &index, void *const &value);
 
-                bool (*genericsEquals)(void *const &element, void *const &value);
+                bool (*equals)(void *const &element, void *const &value);
             };
 
             class ENHANCED_BASIC_API VectorIterator0 {
+                friend class Vector0;
+
             private:
                 const Vector0 *vector;
 
@@ -88,6 +72,8 @@ namespace EnhancedBasic {
 
             protected:
                 explicit VectorIterator0(const Vector0 *vector);
+
+                virtual ~VectorIterator0() noexcept;
 
                 $RetNotIgnored()
                 bool hasNext0() const;
@@ -104,9 +90,6 @@ namespace EnhancedBasic {
 
                 $RetNotIgnored()
                 Size count0() const;
-
-            public:
-                virtual ~VectorIterator0() noexcept;
             };
 
             GenericsOperator genericsOperator;
@@ -141,11 +124,11 @@ namespace EnhancedBasic {
         template <typename Type>
         class Vector final : public List<Type>, public RandomAccess<Type>, private Vector0 {
         private:
-            class VectorIterator : public Core::Iterator<Type>, private Vector0::VectorIterator0 {
+            class VectorIterator : public core::Iterator<Type>, private Vector0::VectorIterator0 {
                 friend class Vector<Type>;
 
             public:
-                inline explicit VectorIterator(const Vector<Type> *vector) :
+                explicit inline VectorIterator(const Vector<Type> *vector) :
                     VectorIterator0(vector) {}
 
                 $RetNotIgnored()
@@ -153,7 +136,7 @@ namespace EnhancedBasic {
                     return VectorIterator0::hasNext0();
                 }
 
-                inline const Core::Iterator<Type> *next() const override {
+                inline const core::Iterator<Type> *next() const override {
                     VectorIterator0::next0();
                     return this;
                 }
@@ -178,69 +161,63 @@ namespace EnhancedBasic {
                 }
             };
 
-            static void *genericsArrayNew(const Size &size) {
+            static void *allocateArray(const Size &size) {
                 return new Type[size];
             }
 
-            static void genericsArrayDelete(void *const &elements) {
+            static void destroyArray(void *const &elements) {
                 delete[] static_cast<Type *>(elements);
             }
 
-            static void genericsArrayCopy(void *const &destination, void *const &source, const Size &size) {
+            static void copyArray(void *const &destination, void *const &source, const Size &size) {
                 for (Size index = 0; index < size; ++ index) {
                     static_cast<Type *>(destination)[index] = static_cast<Type *>(source)[index];
                 }
             }
 
-            static void *genericsArrayIndex(void *const &elements, const Size &index) {
+            static void *indexArray(void *const &elements, const Size &index) {
                 return static_cast<Type *>(elements) + index;
             }
 
-            static void genericsArraySetElement(void *const &elements, const Size &index, void *const &value) {
+            static void setElement(void *const &elements, const Size &index, void *const &value) {
                 static_cast<Type *>(elements)[index] = *static_cast<Type *>(value);
             }
 
-            static bool genericsEquals(void *const &element, void *const &value) {
+            static bool equals(void *const &element, void *const &value) {
                 return *reinterpret_cast<Type *>(element) == *reinterpret_cast<Type *>(value);
             }
 
         public:
-            inline explicit Vector() : Vector0(UINT8_MAX, {
-                genericsArrayNew, genericsArrayDelete, genericsArrayCopy,
-                genericsArrayIndex, genericsArraySetElement, genericsEquals
+            explicit inline Vector() : Vector0(UINT8_MAX, {
+                allocateArray, destroyArray, copyArray, indexArray, setElement, equals
             }) {}
 
-            inline explicit Vector(Size maxCount) : Vector0(maxCount, {
-                genericsArrayNew, genericsArrayDelete, genericsArrayCopy,
-                genericsArrayIndex, genericsArraySetElement, genericsEquals
+            explicit inline Vector(Size maxCount) : Vector0(maxCount, {
+                allocateArray, destroyArray, copyArray, indexArray, setElement, equals
             }) {}
 
-            inline Vector(const Vector<Type> &originalCopy) : Vector0(originalCopy) {}
+            inline Vector(const Vector<Type> &copy) : Vector0(copy) {}
 
-            inline Vector(void *(*genericsArrayNew)(const Size &size),
-                          bool (*genericsEquals)(void *const &element, void *const &value) = Vector::genericsEquals) :
+            inline Vector(void *(*allocateArray)(const Size &size),
+                          bool (*equals)(void *const &element, void *const &value) = Vector::equals) :
                 Vector0(UINT8_MAX, {
-                    genericsArrayNew, genericsArrayDelete, genericsArrayCopy,
-                    genericsArrayIndex, genericsArraySetElement, genericsEquals
+                    allocateArray, destroyArray, copyArray, indexArray, setElement, equals
                 }) {}
 
-            inline Vector(Size maxCount, void *(*genericsArrayNew)(const Size &size),
-                          bool (*genericsEquals)(void *const &element, void *const &value) = Vector::genericsEquals) :
+            inline Vector(Size maxCount, void *(*allocateArray)(const Size &size),
+                          bool (*equals)(void *const &element, void *const &value) = Vector::equals) :
                 Vector0(maxCount, {
-                    genericsArrayNew, genericsArrayDelete, genericsArrayCopy,
-                    genericsArrayIndex, genericsArraySetElement, genericsEquals
+                    allocateArray, destroyArray, copyArray, indexArray, setElement, equals
                 }) {}
 
-            inline Vector(bool (*genericsEquals)(void *const &element, void *const &value)) :
+            inline Vector(bool (*equals)(void *const &element, void *const &value)) :
                 Vector0(UINT8_MAX, {
-                    genericsArrayNew, genericsArrayDelete, genericsArrayCopy,
-                    genericsArrayIndex, genericsArraySetElement, genericsEquals
+                    allocateArray, destroyArray, copyArray, indexArray, setElement, equals
                 }) {}
 
-            inline Vector(Size maxCount, bool (*genericsEquals)(void *const &element, void *const &value)) :
+            inline Vector(Size maxCount, bool (*equals)(void *const &element, void *const &value)) :
                 Vector0(maxCount, {
-                    genericsArrayNew, genericsArrayDelete, genericsArrayCopy,
-                    genericsArrayIndex, genericsArraySetElement, genericsEquals
+                    allocateArray, destroyArray, copyArray, indexArray, setElement, equals
                 }) {}
 
             $RetNotIgnored()
@@ -264,7 +241,7 @@ namespace EnhancedBasic {
             }
 
             $RetNotIgnored()
-            inline Core::Iterator<Type> *iterator() const override {
+            inline core::Iterator<Type> *iterator() const override {
                 if (Vector0::iterator == null) {
                     Vector0::iterator = new VectorIterator(this);
                 } else {
@@ -293,12 +270,12 @@ namespace EnhancedBasic {
                 return value;
             }
         };
-    } // namespace Collection
+    } // namespace collection
 } // namespace EnhancedBasic
 
-#define VECTOR_GENERICS_ALLOCATOR(type, args) \
+#define VECTOR_GENERICS_ARRAY_ALLOCATOR(type, args) \
     [](const Size &size) { \
-        type *array = static_cast<type *>(operator new(size * sizeof(type))); /* NOLINT(bugprone-macro-parentheses) */ \
+        type *array = static_cast<type *>(operator new(size * sizeof(type))); \
         for (Size index = 0; index < size; ++ index) { \
             array[index] = type args; \
         } \

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -21,15 +21,15 @@
 #include "EnhancedBasic/collection/Vector.h"
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/assert.h"
 
-using EnhancedBasic::Collection::Vector0;
+using EnhancedBasic::collection::Vector0;
 
 Vector0::VectorIterator0::VectorIterator0(const Vector0 *const vector) :
     vector(vector), indexer(vector->elements), isFirst(true),
-    end(vector->genericsOperator.genericsArrayIndex(vector->elements, vector->getLength0())) {}
+    end(vector->genericsOperator.indexArray(vector->elements, vector->getLength0())) {}
 
 Vector0::VectorIterator0::~VectorIterator0() noexcept = default;
 
@@ -39,7 +39,7 @@ bool Vector0::VectorIterator0::hasNext0() const {
 }
 
 void Vector0::VectorIterator0::next0() const {
-    this->indexer = this->vector->genericsOperator.genericsArrayIndex(this->indexer, 1);
+    this->indexer = this->vector->genericsOperator.indexArray(this->indexer, 1);
 }
 
 $RetNotIgnored()
@@ -69,11 +69,11 @@ Size Vector0::VectorIterator0::count0() const {
 }
 
 Vector0::Vector0(const Size maxCount, const GenericsOperator genericsOperator) :
-    maxCount(maxCount), length(0), elements(genericsOperator.genericsArrayNew(maxCount)),
+    maxCount(maxCount), length(0), elements(genericsOperator.allocateArray(maxCount)),
     genericsOperator(genericsOperator), iterator(null) {}
 
 Vector0::~Vector0() noexcept {
-    this->genericsOperator.genericsArrayDelete(this->elements);
+    this->genericsOperator.destroyArray(this->elements);
     delete this->iterator;
 }
 
@@ -86,12 +86,12 @@ bool Vector0::isEmpty0() const {
 }
 
 void *Vector0::get0(const Size index) const {
-    return this->genericsOperator.genericsArrayIndex(this->elements, index);
+    return this->genericsOperator.indexArray(this->elements, index);
 }
 
 bool Vector0::contain0(const void *const value) const {
     for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericsOperator.genericsEquals(this->get0(index), const_cast<void *&>(value))) {
+        if (this->genericsOperator.equals(this->get0(index), const_cast<void *&>(value))) {
             return true;
         }
     }
@@ -108,7 +108,7 @@ void Vector0::add0(const void *const element) {
         }
     }
 
-    this->genericsOperator.genericsArraySetElement(this->elements, this->length, const_cast<void *&>(element));
+    this->genericsOperator.setElement(this->elements, this->length, const_cast<void *&>(element));
     ++ this->length;
 }
 
@@ -118,10 +118,10 @@ void Vector0::remove0() {
 
 void Vector0::expand0(const Size size) {
     Size count = this->maxCount + size;
-    void *array = this->genericsOperator.genericsArrayNew(count);
+    void *array = this->genericsOperator.allocateArray(count);
 
-    this->genericsOperator.genericsArrayCopy(array, this->elements, this->length);
-    this->genericsOperator.genericsArrayDelete(this->elements);
+    this->genericsOperator.copyArray(array, this->elements, this->length);
+    this->genericsOperator.destroyArray(this->elements);
 
     this->elements = array;
     this->maxCount = count;
@@ -130,10 +130,10 @@ void Vector0::expand0(const Size size) {
 void Vector0::shrink0(const Size size) {
     Size count = this->maxCount - size;
     assert(count > this->length);
-    void *array = this->genericsOperator.genericsArrayNew(count);
+    void *array = this->genericsOperator.allocateArray(count);
 
-    this->genericsOperator.genericsArrayCopy(array, this->elements, this->length);
-    this->genericsOperator.genericsArrayDelete(this->elements);
+    this->genericsOperator.copyArray(array, this->elements, this->length);
+    this->genericsOperator.destroyArray(this->elements);
 
     this->elements = array;
     this->maxCount = count;

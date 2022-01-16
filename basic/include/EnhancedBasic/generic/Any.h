@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -27,7 +27,7 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Core {
+    namespace generic {
         class Any {
         private:
             void *any;
@@ -39,15 +39,33 @@ namespace EnhancedBasic {
             Any(const Type &value) : any((void *) &value) {}
 
             template <typename Type>
-            Any(const Any &originalCopy) : any(originalCopy.any) {}
+            Any(const Any &copy) : any(copy.any) {}
 
             template <typename Type>
-            bool operator==(const Type &value) {
+            bool operator==(const Type &value) const {
                 return this->cast<Type>() == value;
             }
 
             template <typename Type>
-            Type &cast() {
+            bool operator!=(const Type &value) const {
+                return this->cast<Type>() != value;
+            }
+
+            bool operator==(const Any &value) const {
+                return this == &value;
+            }
+
+            bool operator!=(const Any &value) const {
+                return this != &value;
+            }
+
+            template <typename Type>
+            void copy(Type &destination) const {
+                destination = this->cast<Type>();
+            }
+
+            template <typename Type>
+            Type &cast() const {
                 return *this;
             }
 
@@ -55,9 +73,19 @@ namespace EnhancedBasic {
             operator Type &() const {
                 return *static_cast<Type *>(this->any);
             }
+
+            template <typename Type, typename ...Args>
+            void allocate(Args ...args) {
+                this->any = new Type(args...);
+            }
+
+            template <typename Type>
+            void destroy() const {
+                delete static_cast<Type *>(this->any);
+            }
         };
-    }
-} // EnhancedBasic
+    } // namespace generic
+} // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE
 

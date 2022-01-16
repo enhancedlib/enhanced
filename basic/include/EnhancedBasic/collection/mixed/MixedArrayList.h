@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -22,10 +22,10 @@
 #define ENHANCED_BASIC_COLLECTION_MIXED_MIXED0ARRAY0LIST_H
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
-#include "EnhancedBasic/defines.h"
+#include "EnhancedBasic/export.h"
 
 #include "EnhancedBasic/collection/RandomAccess.h"
 #include "EnhancedBasic/collection/mixed/MixedList.h"
@@ -33,26 +33,8 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Collection {
-        namespace Mixed {
-            /*!
-             * This class is the universal implementation class for
-             * the template class "MixedArrayList\<Type\>".
-             *
-             * @note You should not extend this class from another class.
-             *       And you should not instantiate this class directly.
-             *       The correct approach is to instantiate the
-             *       template class "MixedArrayList\<Type\>" (with "Type" as a type).
-             *       Because this class has no public methods.
-             *
-             * <p>The meaning of this class is to separate the actual
-             * implementation of the functions in the template class
-             * "MixedArrayList\<Type\>" from the definition of
-             * the template class "MixedArrayList\<Type\>".</p>
-             *
-             * <p>Methods in the template class "MixedArrayList\<Type\>" Type "only cast.</p>
-             * <p>You'll see similar code in other classes in this module.</p>
-             */
+    namespace collection {
+        namespace mixed {
             class ENHANCED_BASIC_API MixedArrayList0 {
             private:
                 struct Node {
@@ -69,14 +51,16 @@ namespace EnhancedBasic {
 
             protected:
                 struct GenericsOperator {
-                    void *(*genericsNew)(void *const &);
+                    void *(*allocate)(void *const &);
 
-                    void (*genericsDelete)(void *const &);
+                    void (*destroy)(void *const &);
 
-                    bool (*genericsEquals)(void *const &, void *const &);
+                    bool (*equals)(void *const &, void *const &);
                 };
 
                 class ENHANCED_BASIC_API MixedArrayListIterator0 {
+                    friend class MixedArrayList0;
+
                 private:
                     const MixedArrayList0 *mixedArrayList;
 
@@ -88,6 +72,8 @@ namespace EnhancedBasic {
 
                 protected:
                     explicit MixedArrayListIterator0(const MixedArrayList0 *mixedArrayList);
+
+                    virtual ~MixedArrayListIterator0() noexcept;
 
                     $RetNotIgnored()
                     bool hasNext0() const;
@@ -104,9 +90,6 @@ namespace EnhancedBasic {
 
                     $RetNotIgnored()
                     Size count0() const;
-
-                public:
-                    virtual ~MixedArrayListIterator0() noexcept;
                 };
 
                 GenericsOperator genericsOperator;
@@ -143,11 +126,11 @@ namespace EnhancedBasic {
             template <typename Type>
             class MixedArrayList final : public MixedList<Type>, public RandomAccess<Type>, private MixedArrayList0 {
             private:
-                class MixedArrayListIterator : public MixedArrayListIterator0, public Core::Iterator<Type> {
+                class MixedArrayListIterator : public MixedArrayListIterator0, public core::Iterator<Type> {
                     friend class MixedArrayList<Type>;
 
                 public:
-                    inline explicit MixedArrayListIterator(const MixedArrayList<Type> *arrayList) :
+                    explicit inline MixedArrayListIterator(const MixedArrayList<Type> *arrayList) :
                         MixedArrayListIterator0(arrayList) {}
 
                     $RetNotIgnored()
@@ -155,7 +138,7 @@ namespace EnhancedBasic {
                         return MixedArrayListIterator0::hasNext0();
                     }
 
-                    inline const Core::Iterator<Type> *next() const override {
+                    inline const core::Iterator<Type> *next() const override {
                         MixedArrayListIterator0::next0();
                         return this;
                     }
@@ -180,28 +163,28 @@ namespace EnhancedBasic {
                     }
                 };
 
-                static void *genericsNew(void *const &element) {
+                static void *allocate(void *const &element) {
                     return new Type(*reinterpret_cast<Type *>(element));
                 }
 
-                static void genericsDelete(void *const &element) {
+                static void destroy(void *const &element) {
                     delete reinterpret_cast<Type *>(element);
                 }
 
-                static bool genericsEquals(void *const &element, void *const &value) {
+                static bool equals(void *const &element, void *const &value) {
                     return *reinterpret_cast<Type *>(element) == *reinterpret_cast<Type *>(value);
                 }
 
             public:
-                inline explicit MixedArrayList() : MixedArrayList0(
-                    UINT8_MAX, {genericsNew, genericsDelete, genericsEquals}
+                explicit inline MixedArrayList() : MixedArrayList0(
+                    UINT8_MAX, {allocate, destroy, equals}
                 ) {}
 
-                inline explicit MixedArrayList(Size maxCount) : MixedArrayList0(
-                    maxCount, {genericsNew, genericsDelete, genericsEquals}
+                explicit inline MixedArrayList(Size maxCount) : MixedArrayList0(
+                    maxCount, {allocate, destroy, equals}
                 ) {}
 
-                inline MixedArrayList(const MixedArrayList<Type> &originalCopy) : MixedArrayList0(originalCopy) {}
+                inline MixedArrayList(const MixedArrayList<Type> &copy) : MixedArrayList0(copy) {}
 
                 $RetNotIgnored()
                 inline Size getLength() const override {
@@ -224,7 +207,7 @@ namespace EnhancedBasic {
                 }
 
                 $RetNotIgnored()
-                inline Core::Iterator<Type> *iterator() const override {
+                inline core::Iterator<Type> *iterator() const override {
                     if (MixedArrayList0::iterator == null) {
                         MixedArrayList0::iterator = new MixedArrayListIterator(this);
                     } else {
@@ -258,7 +241,7 @@ namespace EnhancedBasic {
                 }
             };
         } // namespace Reference
-    } // namespace Collection
+    } // namespace collection
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -24,7 +24,7 @@
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 
-#include "EnhancedBasic/defines.h"
+#include "EnhancedBasic/export.h"
 
 #if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
 

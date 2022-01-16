@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -22,8 +22,8 @@
 #define ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCE0LIST_H
 
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
 #include "EnhancedBasic/collection/Collection.h"
 #include "EnhancedBasic/collection/List.h"
@@ -31,14 +31,14 @@
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
-    namespace Collection {
-        namespace Referenced {
+    namespace collection {
+        namespace referenced {
             template <typename Type>
-            interface ReferencedList : public List<Type> {
+            struct ReferencedList : public List<Type> {
                 virtual ReferencedList<Type> *copy() const = 0;
             };
-        } // namespace Referenced
-    } // namespace Collection
+        } // namespace referenced
+    } // namespace collection
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE

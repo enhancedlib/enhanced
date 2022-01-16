@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -25,8 +25,8 @@
 
 #include "EnhancedBasic/core/String.h"
 
-using EnhancedBasic::Core::Exception::Exception;
-using EnhancedBasic::Core::String;
+using EnhancedBasic::core::exception::Exception;
+using EnhancedBasic::core::String;
 
 bool Exception::enableExceptions = true;
 bool Exception::enableExceptionsTraceback = true;
@@ -44,6 +44,10 @@ Exception::Exception(const String &message, const Exception *cause) noexcept:
 }
 
 Exception::~Exception() noexcept = default;
+
+String Exception::traceback() noexcept {
+    return "";
+}
 
 const Exception *Exception::getCause() noexcept {
     return this->cause;

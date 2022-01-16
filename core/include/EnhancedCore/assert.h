@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -22,6 +22,7 @@
 #define ENHANCED_CORE_ASSERT_H
 
 #include "EnhancedCore/defines.h"
+#include "EnhancedCore/export.h"
 #include "EnhancedCore/types.h"
 
 EXTERN_C_START

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
- * This product is licensed under Enhanced License.
+ * This software is licensed under Enhanced License.
  *
  * This copyright disclaimer is subject to change without notice.
  *
@@ -23,8 +23,9 @@
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
+#include "EnhancedCore/assert.h"
 
-using EnhancedBasic::Collection::LinkedList0;
+using EnhancedBasic::collection::LinkedList0;
 
 LinkedList0::LinkedListIterator0::LinkedListIterator0(const LinkedList0 *linkedList) :
     linkedList(linkedList), isFirst(true) {
@@ -44,7 +45,7 @@ bool LinkedList0::LinkedListIterator0::hasNext0() const {
 }
 
 void LinkedList0::LinkedListIterator0::next0() const {
-    nextNode(this->linkedList->indexer);
+    LinkedList0::nextNode(this->linkedList->indexer);
 }
 
 $RetNotIgnored()
@@ -59,8 +60,8 @@ bool LinkedList0::LinkedListIterator0::each0() const {
 }
 
 $RetNotIgnored()
-void *LinkedList0::LinkedListIterator0::get0() const {
-    return this->linkedList->indexer->value;
+GenericReference LinkedList0::LinkedListIterator0::get0() const {
+    return generic_cast(this->linkedList->indexer->value);
 }
 
 void LinkedList0::LinkedListIterator0::reset0() const {
@@ -85,35 +86,38 @@ LinkedList0::LinkedList0(const GenericsOperator genericsOperator) :
     first(null), last(null), indexer(null), length(0),
     genericsOperator(genericsOperator), iterator(null) {}
 
-LinkedList0::LinkedList0(const LinkedList0 &originalCopy) :
+LinkedList0::LinkedList0(const LinkedList0 &copy) :
     first(null), last(null), indexer(null), length(0),
-    genericsOperator(originalCopy.genericsOperator), iterator(null) {
-    this->indexer = originalCopy.first;
-    for (Size count = 0; count < originalCopy.length; ++ count) {
-        this->addFirst0((const void *&) this->indexer->value);
-        nextNode(this->indexer);
+    genericsOperator(copy.genericsOperator), iterator(null) {
+    this->indexer = copy.first;
+    for (Size count = 0; count < copy.length; ++ count) {
+        this->addLast0(generic_cast(this->indexer->value));
+        LinkedList0::nextNode(this->indexer);
     }
 }
 
 LinkedList0::~LinkedList0() noexcept {
     for (Size count = 1; count < this->length; ++ count) {
-        backNode(this->last);
+        LinkedList0::backNode(this->last);
 
-        this->genericsOperator.genericsDelete(this->last->next->value);
+        this->genericsOperator.destroy(this->last->next->value);
         delete this->last->next;
     }
-    this->genericsOperator.genericsDelete(this->last->value);
+    if (!this->isEmpty0()) {
+        this->genericsOperator.destroy(this->last->value);
+    }
+
     delete this->last;
     delete this->iterator;
 }
 
-bool LinkedList0::contain0(const void *const value) const {
+bool LinkedList0::contain0(GenericReference value) const {
     this->indexer = this->first;
     for (Size count = 0; count < this->length; ++ count) {
-        if (this->genericsOperator.genericsEquals(this->indexer->value, const_cast<void *&>(value))) {
+        if (this->genericsOperator.equals(this->indexer->value, const_cast<void *&>(value))) {
             return true;
         }
-        nextNode(this->indexer);
+        LinkedList0::nextNode(this->indexer);
     }
 
     return false;
@@ -130,73 +134,90 @@ bool LinkedList0::isEmpty0() const {
 }
 
 $RetNotIgnored()
-void *LinkedList0::getFirst0() const {
-    return this->first->value;
+GenericReference LinkedList0::getFirst0() const {
+    return generic_cast(this->first->value);
 }
 
 $RetNotIgnored()
-void *LinkedList0::getLast0() const {
-    return this->last->value;
+GenericReference LinkedList0::getLast0() const {
+    return generic_cast(this->last->value);
 }
 
 $RetNotIgnored()
-void *LinkedList0::get0(const Size index) const {
+GenericReference LinkedList0::get0(const Size index) const {
     if (index < this->length >> 1) {
         this->indexer = this->first;
         for (Size count = 0; count < index; ++ count) {
-            nextNode(this->indexer);
+            LinkedList0::nextNode(this->indexer);
         }
     } else {
         this->indexer = this->last;
         for (Size count = 0; count < this->length - index - 1; ++ count) {
-            backNode(this->indexer);
+            LinkedList0::backNode(this->indexer);
         }
     }
-    return this->indexer->value;
+
+    return generic_cast(this->indexer->value);
 }
 
-void LinkedList0::addFirst0(const void *const element) {
-    if (this->isEmpty0()) {
-        this->first = new Node();
-        this->first->value = this->genericsOperator.genericsNew(const_cast<void *&>(element));
-        this->last = this->first;
-    } else {
-        this->first->back = new Node();
-        this->first->back->value = this->genericsOperator.genericsNew(const_cast<void *&>(element));
-        this->first->back->next = this->first;
-        backNode(this->first);
-    }
-    ++ this->length;
-}
-
-void LinkedList0::removeFirst0() {
-    nextNode(this->first);
-
-    this->genericsOperator.genericsDelete(this->first->back->value);
-    delete this->first->back;
-
-    -- this->length;
-}
-
-void LinkedList0::addLast0(const void *const element) {
+void LinkedList0::addLast0(GenericReference element) {
     if (this->isEmpty0()) {
         this->last = new Node();
-        this->last->value = this->genericsOperator.genericsNew(const_cast<void *&>(element));
+        this->last->value = this->genericsOperator.allocate(element);
         this->first = this->last;
     } else {
         this->last->next = new Node();
-        this->last->next->value = this->genericsOperator.genericsNew(const_cast<void *&>(element));
+        this->last->next->value = this->genericsOperator.allocate(element);
         this->last->next->back = this->last;
-        nextNode(this->last);
+        LinkedList0::nextNode(this->last);
     }
+
     ++ this->length;
 }
 
 void LinkedList0::removeLast0() {
-    backNode(this->last);
+    assert(!this->isEmpty0());
 
-    this->genericsOperator.genericsDelete(this->last->next->value);
-    delete this->last->next;
+    if (this->length > 1) {
+        LinkedList0::backNode(this->last);
+        this->genericsOperator.destroy(this->last->next->value);
+        delete this->last->next;
+    } else {
+        this->genericsOperator.destroy(this->last->value);
+        delete this->last;
+        this->last = this->first = null;
+    }
+
+    -- this->length;
+}
+
+void LinkedList0::addFirst0(GenericReference element) {
+    if (this->isEmpty0()) {
+        this->first = new Node();
+        this->first->value = this->genericsOperator.allocate(element);
+        this->last = this->first;
+    } else {
+        this->first->back = new Node();
+        this->first->back->value = this->genericsOperator.allocate(element);
+        this->first->back->next = this->first;
+        LinkedList0::backNode(this->first);
+    }
+
+    ++ this->length;
+}
+
+void LinkedList0::removeFirst0() {
+    assert(!this->isEmpty0());
+
+    if (this->length > 1) {
+        LinkedList0::nextNode(this->first);
+        this->genericsOperator.destroy(this->first->back->value);
+        delete this->first->back;
+    } else {
+        this->genericsOperator.destroy(this->first->value);
+        delete this->first;
+        this->first = this->last = null;
+    }
 
     -- this->length;
 }
