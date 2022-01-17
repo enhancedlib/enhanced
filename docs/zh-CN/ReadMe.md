@@ -7,7 +7,7 @@
 仓库：
 - [GitHub](http://github.com/LiuBaihao-Hello/Enhanced)
 
-[其它语言](../ReadMe.Languages.md) | [网站](http://liubaihao-hello.github.io/enhanced-website) | [自述文件](Readme.md) | [帮助&支持](Help-Support.md) | [关于](About.md)
+[其它语言](../ReadMe.Languages.md) | [网站](http://liubaihao-hello.github.io/enhanced-website) | [自述文件](ReadMe.md) | [帮助&支持](Help-Support.md) | [关于](About.md)
 
 ---
 
