@@ -46,7 +46,7 @@
 
 编译器：
 - [Microsoft Visual C++](http://visualstudio.microsoft.com/vs/features/cplusplus/)
-- [GNU C/C++ Compiler](http://gcc.gnu.org/)
+- [GNU C/C++编译器](http://gcc.gnu.org/)
 - [Clang](http://clang.llvm.org/)
 
 操作系统：
@@ -81,7 +81,7 @@
 
 ## 6.技术
 
-### 关于这个项目中的泛型（模板）。
+### 关于这个项目中的泛型（模板）
 类名后面跟着0的类（以下简称为“实现类”）通常是模板（泛型）类的通用实现类。
 
 它们分离了模板（泛型）类的实现从模板按类型擦除（伪泛型）。
