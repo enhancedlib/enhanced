@@ -117,9 +117,6 @@ namespace EnhancedBasic {
             bool isEmpty0() const;
 
             $RetNotIgnored()
-            bool contain0(GenericReference value) const;
-
-            $RetNotIgnored()
             GenericReference getLast0() const;
 
             $RetNotIgnored()
@@ -127,6 +124,9 @@ namespace EnhancedBasic {
 
             $RetNotIgnored()
             GenericReference get0(Size index) const;
+
+            $RetNotIgnored()
+            bool contain0(GenericReference value) const;
 
             void addLast0(GenericReference element);
 
@@ -182,10 +182,12 @@ namespace EnhancedBasic {
                 inline Size count() const override;
             };
 
+            $RetRequiresRelease()
             static GenericPointer allocate(GenericReference element);
 
             static void destroy(GenericPointer element);
 
+            $RetNotIgnored()
             static bool equals(GenericReference element, GenericReference value);
 
         public:
@@ -198,12 +200,6 @@ namespace EnhancedBasic {
 
             $RetNotIgnored()
             inline bool isEmpty() const override;
-
-            $RetNotIgnored()
-            inline bool contain(const Type &value) const override;
-
-            $RetRequiresRelease()
-            inline LinkedList<Type> *copy() const override;
 
             $RetNotIgnored()
             inline Type &getLast() const override;
@@ -219,6 +215,12 @@ namespace EnhancedBasic {
 
             $RetNotIgnored()
             inline core::Iterator<Type> *iterator() const override;
+
+            $RetNotIgnored()
+            inline bool contain(const Type &value) const override;
+
+            $RetRequiresRelease()
+            inline LinkedList<Type> *copy() const override;
 
             $RetNotIgnored()
             inline typename core::Iterable<Type>::ForeachIterator begin() const override;
@@ -245,8 +247,8 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#endif // CXX_LANGUAGE
-
 #include "EnhancedBasic/collection/LinkedList.tcc"
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_COLLECTION_LINKED0LIST_H

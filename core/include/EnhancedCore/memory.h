@@ -68,7 +68,7 @@ ENHANCED_CORE_API void memorySet(void *ptr, Byte byte, Size size);
  * @param source        A source pointer.
  * @param size          The byte size of the source pointer. (generally: "<count> * sizeof(<pointer type>)").
  */
-ENHANCED_CORE_API void memoryCopy(void *destination, void *source, Size size);
+ENHANCED_CORE_API void memoryCopy(void *destination, const void *source, Size size);
 
 EXTERN_C_END
 

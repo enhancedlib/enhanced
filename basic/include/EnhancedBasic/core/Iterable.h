@@ -18,11 +18,12 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#ifndef ENHANCED_BASIC_ITERABLE_H
-#define ENHANCED_BASIC_ITERABLE_H
+#ifndef ENHANCED_BASIC_CORE_ITERABLE_H
+#define ENHANCED_BASIC_CORE_ITERABLE_H
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
 #include "EnhancedBasic/core/Iterator.h"
 
@@ -38,48 +39,32 @@ namespace EnhancedBasic {
                 core::Iterator<Type> *iterator;
 
             public:
-                ForeachIterator(core::Iterator<Type> *iterator) : iterator(iterator) {}
+                ForeachIterator(core::Iterator<Type> *iterator);
 
-                bool operator!=($Unused InvalidType unused) {
-                    return this->iterator->hasNext();
-                }
+                bool operator!=($Unused InvalidType unused);
 
-                const core::Iterator<Type> *operator++() {
-                    return this->iterator->next();
-                }
+                const core::Iterator<Type> *operator++();
 
-                Type &operator*() {
-                    return this->iterator->get();
-                }
+                Type &operator*();
             };
 
             template <typename IteratorType, typename SuperType, typename Subclass>
-            inline IteratorType *getIterator(SuperType *&iterator, const Subclass *self) const {
-                if (iterator == null) {
-                    iterator = new IteratorType(self);
-                } else {
-                    static_cast<IteratorType *>(iterator)->reset();
-                }
-                return static_cast<IteratorType *>(iterator);
-            }
+            inline IteratorType *getIterator(SuperType *&iterator, const Subclass *self) const;
 
         public:
             $RetNotIgnored()
-            virtual inline Iterable<Type>::ForeachIterator begin() const {
-                return Iterable<Type>::ForeachIterator(this->iterator());
-            }
+            virtual inline Iterable<Type>::ForeachIterator begin() const;
 
             $RetNotIgnored()
-            virtual inline constexpr InvalidType end() const {
-                return INVALID_VALUE;
-            }
+            virtual inline constexpr InvalidType end() const;
 
-            $RetNotIgnored()
             virtual core::Iterator<Type> *iterator() const = 0;
         };
     } // namespace core
 } // namespace EnhancedBasic
 
+#include "EnhancedBasic/core/Iterable.tcc"
+
 #endif // CXX_LANGUAGE
 
-#endif // !ENHANCED_BASIC_ITERABLE_H
+#endif // !ENHANCED_BASIC_CORE_ITERABLE_H

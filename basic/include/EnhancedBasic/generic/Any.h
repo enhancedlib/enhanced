@@ -23,6 +23,9 @@
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
+
+#include "EnhancedBasic/generic/Generic.h"
 
 #ifdef CXX_LANGUAGE // C++ language
 
@@ -30,62 +33,52 @@ namespace EnhancedBasic {
     namespace generic {
         class Any {
         private:
-            void *any;
+            GenericPointer any;
 
         public:
-            Any() : any(null) {}
+            Any();
 
             template <typename Type>
-            Any(const Type &value) : any((void *) &value) {}
+            Any(const Type &value);
 
             template <typename Type>
-            Any(const Any &copy) : any(copy.any) {}
+            Any(const Any &copy);
 
             template <typename Type>
-            bool operator==(const Type &value) const {
-                return this->cast<Type>() == value;
-            }
+            $RetNotIgnored()
+            bool operator==(const Type &value) const;
 
             template <typename Type>
-            bool operator!=(const Type &value) const {
-                return this->cast<Type>() != value;
-            }
+            $RetNotIgnored()
+            bool operator!=(const Type &value) const;
 
-            bool operator==(const Any &value) const {
-                return this == &value;
-            }
+            $RetNotIgnored()
+            bool operator==(const Any &value) const;
 
-            bool operator!=(const Any &value) const {
-                return this != &value;
-            }
+            $RetNotIgnored()
+            bool operator!=(const Any &value) const;
 
             template <typename Type>
-            void copy(Type &destination) const {
-                destination = this->cast<Type>();
-            }
+            void copy(Type &destination) const;
 
             template <typename Type>
-            Type &cast() const {
-                return *this;
-            }
+            $RetNotIgnored()
+            Type &cast() const;
 
             template <typename Type>
-            operator Type &() const {
-                return *static_cast<Type *>(this->any);
-            }
+            $RetNotIgnored()
+            operator Type &() const;
 
             template <typename Type, typename ...Args>
-            void allocate(Args ...args) {
-                this->any = new Type(args...);
-            }
+            void allocate(Args ...args);
 
             template <typename Type>
-            void destroy() const {
-                delete static_cast<Type *>(this->any);
-            }
+            void destroy() const;
         };
     } // namespace generic
 } // namespace EnhancedBasic
+
+#include "EnhancedBasic/generic/Any.tcc"
 
 #endif // CXX_LANGUAGE
 

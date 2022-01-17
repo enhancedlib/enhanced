@@ -17,6 +17,7 @@ set(
 
 set(
     HEADERS
+    include/EnhancedCore/module-info.h
     include/EnhancedCore/annotations.h
     include/EnhancedCore/array.h
     include/EnhancedCore/assert.h

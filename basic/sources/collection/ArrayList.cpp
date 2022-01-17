@@ -26,6 +26,8 @@
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/assert.h"
 
+#include "EnhancedBasic/generic/Generic.h"
+
 using EnhancedBasic::collection::ArrayList0;
 
 ArrayList0::ArrayListIterator0::ArrayListIterator0(const ArrayList0 *const arrayList) :
@@ -70,11 +72,11 @@ Size ArrayList0::ArrayListIterator0::count0() const {
 }
 
 ArrayList0::ArrayList0(const Size maxCount, const GenericsOperator genericsOperator) :
-    maxCount(maxCount), length(0), elements(new GenericPointer[maxCount]),
+    length(0), elements(new GenericPointer[maxCount]), maxCount(maxCount),
     genericsOperator(genericsOperator), iterator(null) {}
 
 ArrayList0::ArrayList0(const ArrayList0 &copy) :
-    maxCount(copy.maxCount), length(copy.length), elements(new GenericPointer[maxCount]),
+    length(copy.length), elements(new GenericPointer[copy.maxCount]), maxCount(copy.maxCount),
     genericsOperator(copy.genericsOperator), iterator(null) {
     for (int index = 0; index < copy.length; ++ index) {
         this->elements[index] = this->genericsOperator.allocate(generic_cast(copy.elements[index]));
@@ -89,18 +91,22 @@ ArrayList0::~ArrayList0() noexcept {
     delete this->iterator;
 }
 
+$RetNotIgnored()
 Size ArrayList0::getLength0() const {
     return this->length;
 }
 
+$RetNotIgnored()
 bool ArrayList0::isEmpty0() const {
     return this->length == 0;
 }
 
+$RetNotIgnored()
 GenericReference ArrayList0::get0(Size index) const {
     return generic_cast(this->elements[index]);
 }
 
+$RetNotIgnored()
 bool ArrayList0::contain0(GenericReference value) const {
     for (Size index = 0; index < this->length; ++ index) {
         if (this->genericsOperator.equals(generic_cast(this->elements[index]), value)) {
@@ -113,11 +119,7 @@ bool ArrayList0::contain0(GenericReference value) const {
 
 void ArrayList0::add0(GenericReference element) {
     if (this->length == this->maxCount) {
-        if (this->maxCount == 1) {
-            this->expand0(1);
-        } else {
-            this->expand0(this->maxCount >> 1);
-        }
+        this->expand0((this->maxCount == 1) ? 1 : this->maxCount >> 1);
     }
 
     this->elements[this->length] = this->genericsOperator.allocate(element);

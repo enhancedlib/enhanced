@@ -26,6 +26,8 @@
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/assert.h"
 
+#include "EnhancedBasic/generic/Generic.h"
+
 using EnhancedBasic::collection::mixed::MixedArrayList0;
 
 MixedArrayList0::MixedArrayListIterator0::MixedArrayListIterator0(const MixedArrayList0 *mixedArrayList) :
@@ -55,8 +57,8 @@ bool MixedArrayList0::MixedArrayListIterator0::each0() const {
 }
 
 $RetNotIgnored()
-void *MixedArrayList0::MixedArrayListIterator0::get0() const {
-    return (*this->indexer).value;
+GenericReference MixedArrayList0::MixedArrayListIterator0::get0() const {
+    return generic_cast((*this->indexer).value);
 }
 
 void MixedArrayList0::MixedArrayListIterator0::reset0() const {
@@ -70,32 +72,49 @@ Size MixedArrayList0::MixedArrayListIterator0::count0() const {
 }
 
 MixedArrayList0::MixedArrayList0(const Size maxCount, const GenericsOperator genericsOperator) :
-    maxCount(maxCount), length(0), elements(new Node[maxCount]),
+    length(0), elements(new Node[maxCount]), maxCount(maxCount),
     genericsOperator(genericsOperator), iterator(null) {}
+
+MixedArrayList0::MixedArrayList0(const MixedArrayList0 &copy) :
+    length(copy.length), elements(new Node[copy.maxCount]), maxCount(copy.maxCount),
+    genericsOperator(copy.genericsOperator), iterator(null) {
+    for (Size index = 0; index < copy.length; ++ index) {
+        if (copy.elements[index].dynamic) {
+            this->elements[index].value = this->genericsOperator.allocate(generic_cast(copy.elements[index].value));
+        } else {
+            this->elements[index] = copy.elements[index];
+        }
+    }
+}
 
 MixedArrayList0::~MixedArrayList0() noexcept {
     while (this->length > 0) {
         this->remove0();
     }
+
     delete[] this->elements;
     delete this->iterator;
 }
 
+$RetNotIgnored()
 Size MixedArrayList0::getLength0() const {
     return this->length;
 }
 
+$RetNotIgnored()
 bool MixedArrayList0::isEmpty0() const {
     return this->length == 0;
 }
 
-void *MixedArrayList0::get0(const Size index) const {
-    return this->elements[index].value;
+$RetNotIgnored()
+GenericReference MixedArrayList0::get0(const Size index) const {
+    return generic_cast(this->elements[index].value);
 }
 
-bool MixedArrayList0::contain0(const void *const value) const {
+$RetNotIgnored()
+bool MixedArrayList0::contain0(GenericReference value) const {
     for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericsOperator.equals(this->elements[index].value, const_cast<void *&>(value))) {
+        if (this->genericsOperator.equals(generic_cast(this->elements[index].value), value)) {
             return true;
         }
     }
@@ -103,21 +122,16 @@ bool MixedArrayList0::contain0(const void *const value) const {
     return false;
 }
 
-void MixedArrayList0::add0(const void *const element) {
+void MixedArrayList0::add0(GenericReference element) {
     if (this->length == this->maxCount) {
-        if (this->maxCount == 1) {
-            this->expand0(1);
-        } else {
-            this->expand0(this->maxCount >> 1);
-        }
+        this->expand0(this->maxCount);
     }
 
-    this->elements[this->length] =
-        {this->genericsOperator.allocate(const_cast<void *&>(element)), true};
+    this->elements[this->length] = {this->genericsOperator.allocate(element), true};
     ++ this->length;
 }
 
-void MixedArrayList0::addReferenced0(const void *const element) {
+void MixedArrayList0::addReferenced0(GenericReference element) {
     if (this->length == this->maxCount) {
         if (this->maxCount == 1) {
             this->expand0(1);
@@ -126,12 +140,12 @@ void MixedArrayList0::addReferenced0(const void *const element) {
         }
     }
 
-    this->elements[this->length] = {const_cast<void *>(element), false};
+    this->elements[this->length] = {&element, false};
     ++ this->length;
 }
 
 void MixedArrayList0::remove0() {
-    if (this->elements[-- this->length].requiresRelease) {
+    if (this->elements[-- this->length].dynamic) {
         this->genericsOperator.destroy(this->elements[this->length].value);
     }
 }

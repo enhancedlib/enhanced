@@ -9,12 +9,6 @@ set(INCLUDE_DIRECTORIES "include")
 
 set(
     SOURCES
-    sources/core/Integer.c
-    sources/core/Integer.cpp
-    sources/core/String.c
-    sources/core/String.cpp
-    sources/core/exception/Exception.c
-    sources/core/exception/Exception.cpp
     sources/math/LargeInteger.c
     sources/math/LargeInteger.cpp
     sources/math/Math.c
@@ -27,36 +21,36 @@ set(
     sources/collection/mixed/MixedLinkedList.cpp
     sources/collection/referenced/ReferencedArrayList.cpp
     sources/collection/referenced/ReferencedLinkedList.cpp
+    sources/core/Integer.c
+    sources/core/Integer.cpp
+    sources/core/String.c
+    sources/core/String.cpp
+    sources/core/exception/Exception.c
+    sources/core/exception/Exception.cpp
 )
 
 set(
     HEADERS
+    include/EnhancedBasic/module-info.h
     include/EnhancedBasic/export.h
-    include/EnhancedBasic/core/Iterable.h
-    include/EnhancedBasic/core/Iterator.h
-    include/EnhancedBasic/core/Integer.h
-    include/EnhancedBasic/core/String.h
-    include/EnhancedBasic/core/exception/Exception.h
-    include/EnhancedBasic/math/LargeInteger.h
-    include/EnhancedBasic/math/Math.h
-    include/EnhancedBasic/generic/Any.h
-    include/EnhancedBasic/generic/AnyArray.h
-    include/EnhancedBasic/generic/Allocator.h
-    include/EnhancedBasic/generic/Generic.h
+    include/EnhancedBasic/collection/Vector.tcc
     include/EnhancedBasic/collection/ArrayDeque.h
     include/EnhancedBasic/collection/ArrayList.h
     include/EnhancedBasic/collection/ArrayList.tcc
     include/EnhancedBasic/collection/Collection.h
     include/EnhancedBasic/collection/Deque.h
     include/EnhancedBasic/collection/LinkedList.h
+    include/EnhancedBasic/collection/LinkedList.tcc
     include/EnhancedBasic/collection/LinkedQueue.h
     include/EnhancedBasic/collection/List.h
     include/EnhancedBasic/collection/PriorityQueue.h
     include/EnhancedBasic/collection/Queue.h
     include/EnhancedBasic/collection/Tuple.h
     include/EnhancedBasic/collection/mixed/MixedArrayList.h
+    include/EnhancedBasic/collection/mixed/MixedArrayList.tcc
     include/EnhancedBasic/collection/mixed/MixedDeque.h
     include/EnhancedBasic/collection/mixed/MixedLinkedList.h
+    include/EnhancedBasic/collection/mixed/MixedLinkedList.tcc
     include/EnhancedBasic/collection/mixed/MixedList.h
     include/EnhancedBasic/collection/mixed/MixedQueue.h
     include/EnhancedBasic/collection/referenced/ReferencedArrayList.h
@@ -67,8 +61,23 @@ set(
     include/EnhancedBasic/collection/referenced/ReferencedList.h
     include/EnhancedBasic/collection/referenced/ReferencedQueue.h
     include/EnhancedBasic/collection/RandomAccess.h
+    include/EnhancedBasic/core/Integer.h
+    include/EnhancedBasic/core/Iterable.h
+    include/EnhancedBasic/core/Iterable.tcc
+    include/EnhancedBasic/core/Iterator.h
+    include/EnhancedBasic/core/String.h
+    include/EnhancedBasic/core/exception/Exception.h
+    include/EnhancedBasic/math/LargeInteger.h
+    include/EnhancedBasic/math/Math.h
+    include/EnhancedBasic/generic/Allocator.h
+    include/EnhancedBasic/generic/Allocator.tcc
+    include/EnhancedBasic/generic/Any.h
+    include/EnhancedBasic/generic/Any.tcc
+    include/EnhancedBasic/generic/AnyArray.h
+    include/EnhancedBasic/generic/AnyArray.tcc
+    include/EnhancedBasic/generic/Generic.h
     include/EnhancedBasic/pointer/SharedPointer.h
-    include/EnhancedBasic/collection/LinkedList.tcc)
+)
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")
 message("${PROMPT} Module path: \"${CMAKE_CURRENT_SOURCE_DIR}\"")

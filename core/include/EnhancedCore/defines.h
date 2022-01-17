@@ -21,7 +21,7 @@
 #ifndef ENHANCED_CORE_DEFINES_H
 #define ENHANCED_CORE_DEFINES_H
 
-// Detects current using which compiler to compile.
+// Detect current using which compiler to compile.
 #if defined(__GNUC__) // GNU C/C++ Compiler
 #define COMPILER_GCC
 #elif defined(__clang__) // Clang
@@ -32,7 +32,7 @@
 #define COMPILER_UNKNOWN
 #endif // defined(__GNUC__)
 
-// Detects the architecture for the current platform
+// Detect the architecture for the current platform
 #if defined(_M_IX86) || defined(__i386__) // 32-bit
 #define ARCH_32_BIT
 #elif defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64__) // 64-bit
@@ -41,7 +41,7 @@
 #define ARCH_UNKNOWN
 #endif // defined(_M_IX86) || defined(__i386__)
 
-// Detects current operating system.
+// Detect current operating system.
 #if defined(_WIN32) || defined(_WIN64) // Microsoft Windows Operating System
 #define WINDOWS_OS
 #elif defined(__linux__) || defined(__linux) // Linux (GNU/Linux)
@@ -50,12 +50,12 @@
 #define UNKNOWN_OS
 #endif // defined(_WIN32)
 
-// Detects the current language and its standard.
+// Detect the current language and its standard.
 #ifdef __cplusplus // C++ language
 
 #ifdef COMPILER_MSVC // Microsoft Visual C++
 #define CXX_LANGUAGE _MSVC_LANG
-#else // Other compiler
+#else // Non Microsoft Visual C++ compiler
 #define CXX_LANGUAGE __cplusplus
 #endif // COMPILER_MSVC
 
@@ -152,5 +152,36 @@
 #if defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
 #warning The C++ standard is too old. May not be compatible.
 #endif // defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
+
+typedef const char *ModuleFullName;
+typedef const struct {
+    int major;
+    int minor;
+    int patch;
+    double build;
+    const char *releaseLevel;
+    int serial;
+} ModuleVersion;
+typedef const char *ModuleAuthor;
+typedef const char *ModuleAbout;
+enum MODULE_RELATIONS {
+    MODULE_RELATION_REQUIRES_MODULE, MODULE_RELATION_EXPORTS_PACKAGE
+};
+typedef const struct {
+    enum MODULE_RELATIONS relation;
+    const char *content;
+} ModuleRelations[];
+
+#define MODULE_INFO_START
+#define MODULE_INFO_END
+#define MODULE(name)
+#define MODULE_FULL_NAME(name, fullName) ModuleFullName name ## FullName = (fullName);
+#define MODULE_VERSION(name, major, minor, patch, build, releaseLevel, serial) \
+    ModuleVersion name ## Version = {major, minor, patch, build, releaseLevel, serial};
+#define MODULE_AUTHOR(name, author) ModuleAuthor name ## Author = (author);
+#define MODULE_ABOUT(name, about) ModuleAbout name ## About = (about);
+#define MODULE_RELATIONS(name, ...) ModuleRelations name ## Relations = {__VA_ARGS__};
+#define REQUIRES_MODULE(module) {MODULE_RELATION_REQUIRES_MODULE, module}
+#define EXPORTS_PACKAGE(package) {MODULE_RELATION_EXPORTS_PACKAGE, package}
 
 #endif // !ENHANCED_CORE_DEFINES_H

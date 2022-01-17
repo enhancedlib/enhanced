@@ -25,6 +25,8 @@
 #include "EnhancedCore/annotations.h"
 #include "EnhancedCore/assert.h"
 
+#include "EnhancedBasic/generic/Generic.h"
+
 using EnhancedBasic::collection::LinkedList0;
 
 LinkedList0::LinkedListIterator0::LinkedListIterator0(const LinkedList0 *linkedList) :
@@ -103,24 +105,13 @@ LinkedList0::~LinkedList0() noexcept {
         this->genericsOperator.destroy(this->last->next->value);
         delete this->last->next;
     }
+
     if (!this->isEmpty0()) {
         this->genericsOperator.destroy(this->last->value);
     }
 
     delete this->last;
     delete this->iterator;
-}
-
-bool LinkedList0::contain0(GenericReference value) const {
-    this->indexer = this->first;
-    for (Size count = 0; count < this->length; ++ count) {
-        if (this->genericsOperator.equals(this->indexer->value, const_cast<void *&>(value))) {
-            return true;
-        }
-        LinkedList0::nextNode(this->indexer);
-    }
-
-    return false;
 }
 
 $RetNotIgnored()
@@ -152,12 +143,25 @@ GenericReference LinkedList0::get0(const Size index) const {
         }
     } else {
         this->indexer = this->last;
-        for (Size count = 0; count < this->length - index - 1; ++ count) {
+        for (Size count = this->length - 1; count > index; -- count) {
             LinkedList0::backNode(this->indexer);
         }
     }
 
     return generic_cast(this->indexer->value);
+}
+
+$RetNotIgnored()
+bool LinkedList0::contain0(GenericReference value) const {
+    this->indexer = this->first;
+    for (Size count = 0; count < this->length; ++ count) {
+        if (this->genericsOperator.equals(this->indexer->value, const_cast<void *&>(value))) {
+            return true;
+        }
+        LinkedList0::nextNode(this->indexer);
+    }
+
+    return false;
 }
 
 void LinkedList0::addLast0(GenericReference element) {

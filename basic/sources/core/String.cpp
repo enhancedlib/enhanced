@@ -34,18 +34,17 @@ using EnhancedBasic::collection::List;
 using EnhancedBasic::collection::LinkedList;
 
 String::String(const char *const value) : value(const_cast<char *>(value)), length(stringLength(value)),
-                                          isStaticString(true) {}
+                                          dynamic(false) {}
 
-String::String(char *const value) : value(stringCopy(value)), length(stringLength(value)),
-                                    isStaticString(false) {}
+String::String(char *const value) : value(value), length(stringLength(value)), dynamic(false) {}
 
-String::String(const Size length) : value(stringNew(length)), length(length), isStaticString(false) {}
+String::String(const Size length) : value(stringNew(length)), length(length), dynamic(true) {}
 
 String::String(const String &copy) : value(stringCopy(copy)), length(copy.length),
-                                             isStaticString(false) {}
+                                     dynamic(true) {}
 
 String::~String() {
-    if (!this->isStaticString) {
+    if (this->dynamic) {
         delete this->value;
     }
 }
@@ -170,10 +169,10 @@ String String::append(const String &string) {
         charArray[index] = string.value[index - this->length];
     }
 
-    if (this->isStaticString) {
-        this->isStaticString = false;
-    } else {
+    if (this->dynamic) {
         delete this->value;
+    } else {
+        this->dynamic = true;
     }
 
     this->length = newLength;

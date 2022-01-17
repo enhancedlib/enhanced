@@ -41,11 +41,11 @@ namespace EnhancedBasic {
     namespace collection {
         class ENHANCED_BASIC_API ArrayList0 {
         private:
-            Size maxCount;
-
             GenericPointer *elements;
 
             Size length;
+
+            Size maxCount;
 
         protected:
             struct GenericsOperator {
@@ -147,10 +147,12 @@ namespace EnhancedBasic {
                 inline Size count() const override;
             };
 
+            $RetRequiresRelease()
             static GenericPointer allocate(GenericReference element);
 
             static void destroy(GenericPointer element);
 
+            $RetNotIgnored()
             static bool equals(GenericReference element, GenericReference value);
 
         public:
@@ -188,8 +190,8 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#endif // CXX_LANGUAGE
-
 #include "EnhancedBasic/collection/ArrayList.tcc"
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_COLLECTION_ARRAY0LIST_H

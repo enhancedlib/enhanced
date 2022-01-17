@@ -18,29 +18,25 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include "EnhancedBasic/math/Math.h"
-
 #include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
 
-using EnhancedBasic::Math::Math;
+MODULE_INFO_START // Start defining module information.
 
-Math::Math() = default;
+#define MODULE_CORE
 
-Math::~Math() = default;
+/*!
+ * This module is the core module of Enhanced.
+ * It includes based function.
+ */
+MODULE(core)
 
-uint8 Math::abs(int8 number) {
-    return (number < 0) ? -number : number;
-}
+MODULE_FULL_NAME(core, "Enhanced Core")
+MODULE_VERSION(core, 0, 1, 0, 0.1, "dev", 1)
+MODULE_AUTHOR(core, "Liu Baihao")
+MODULE_ABOUT(core, "The core module of Enhanced.")
 
-uint16 Math::abs(int16 number) {
-    return (number < 0) ? -number : number;
-}
+MODULE_RELATIONS(core,
+    EXPORTS_PACKAGE("EnhancedCore")
+)
 
-uint32 Math::abs(int32 number) {
-    return (number < 0) ? -number : number;
-}
-
-uint64 Math::abs(int64 number) {
-    return (number < 0) ? -number : number;
-}
+MODULE_INFO_END // End defining module information.

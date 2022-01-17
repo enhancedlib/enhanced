@@ -26,6 +26,8 @@
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/assert.h"
 
+#include "EnhancedBasic/generic/Generic.h"
+
 using EnhancedBasic::collection::referenced::ReferencedArrayList0;
 
 ReferencedArrayList0::ReferencedArrayListIterator0::
@@ -71,11 +73,11 @@ Size ReferencedArrayList0::ReferencedArrayListIterator0::count0() const {
 }
 
 ReferencedArrayList0::ReferencedArrayList0(const Size maxCount, const GenericsOperator genericsOperator) :
-    maxCount(maxCount), length(0), elements(new GenericPointer[maxCount]),
+    length(0), elements(new GenericPointer[maxCount]), maxCount(maxCount),
     genericsOperator(genericsOperator), iterator(null) {}
 
 ReferencedArrayList0::ReferencedArrayList0(const ReferencedArrayList0 &copy) :
-    maxCount(copy.maxCount), length(copy.length), elements(new GenericPointer[maxCount]),
+    length(copy.length), elements(new GenericPointer[copy.maxCount]), maxCount(copy.maxCount),
     genericsOperator(copy.genericsOperator), iterator(null) {
     for (Size index = 0; index < copy.length; ++ index) {
         this->elements[index] = copy.elements[index];
@@ -86,18 +88,22 @@ ReferencedArrayList0::~ReferencedArrayList0() noexcept {
     delete[] this->elements;
 }
 
+$RetNotIgnored()
 Size ReferencedArrayList0::getLength0() const {
     return this->length;
 }
 
+$RetNotIgnored()
 bool ReferencedArrayList0::isEmpty0() const {
     return this->length == 0;
 }
 
+$RetNotIgnored()
 GenericReference ReferencedArrayList0::get0(const Size index) const {
     return generic_cast(this->elements[index]);
 }
 
+$RetNotIgnored()
 bool ReferencedArrayList0::contain0(GenericReference value) const {
     for (Size index = 0; index < this->length; ++ index) {
         if (this->genericsOperator.equals(generic_cast(this->elements[index]), value)) {
@@ -110,11 +116,7 @@ bool ReferencedArrayList0::contain0(GenericReference value) const {
 
 void ReferencedArrayList0::add0(GenericReference element) {
     if (this->length == this->maxCount) {
-        if (this->maxCount == 1) {
-            this->expand0(1);
-        } else {
-            this->expand0(this->maxCount >> 1);
-        }
+        this->expand0(this->maxCount);
     }
 
     this->elements[this->length] = &element;

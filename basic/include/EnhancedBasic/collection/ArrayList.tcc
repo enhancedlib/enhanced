@@ -27,6 +27,7 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
 
+#include "EnhancedBasic/core/Iterable.h"
 #include "EnhancedBasic/core/Iterator.h"
 
 #include "EnhancedBasic/generic/Generic.h"
@@ -38,6 +39,7 @@ namespace EnhancedBasic {
             ArrayListIterator0(arrayList) {}
 
         template <typename Type>
+        $RetNotIgnored()
         bool ArrayList<Type>::ArrayListIterator::hasNext() const {
             return ArrayListIterator0::hasNext0();
         }
@@ -49,11 +51,13 @@ namespace EnhancedBasic {
         }
 
         template <typename Type>
+        $RetNotIgnored()
         bool ArrayList<Type>::ArrayListIterator::each() const {
             return ArrayListIterator0::each0();
         }
 
         template <typename Type>
+        $RetNotIgnored()
         Type &ArrayList<Type>::ArrayListIterator::get() const {
             return reinterpret_cast<Type &>(ArrayListIterator0::get0());
         }
@@ -64,11 +68,13 @@ namespace EnhancedBasic {
         }
 
         template <typename Type>
+        $RetNotIgnored()
         Size ArrayList<Type>::ArrayListIterator::count() const {
             return ArrayListIterator0::count0();
         }
 
         template <typename Type>
+        $RetRequiresRelease()
         GenericPointer ArrayList<Type>::allocate(GenericReference element) {
             return new Type(reinterpret_cast<Type &>(element));
         }
@@ -79,6 +85,7 @@ namespace EnhancedBasic {
         }
 
         template <typename Type>
+        $RetNotIgnored()
         bool ArrayList<Type>::equals(GenericReference element, GenericReference value) {
             return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
         }
@@ -93,6 +100,7 @@ namespace EnhancedBasic {
         ArrayList<Type>::ArrayList(const ArrayList<Type> &copy) : ArrayList0(copy) {}
 
         template <typename Type>
+        $RetNotIgnored()
         Size ArrayList<Type>::getLength() const {
             return ArrayList0::getLength0();
         }

@@ -27,6 +27,7 @@
 
 #include "EnhancedBasic/export.h"
 
+#include "EnhancedBasic/core/Iterable.h"
 #include "EnhancedBasic/core/Iterator.h"
 
 #include "EnhancedBasic/generic/Generic.h"
@@ -113,9 +114,6 @@ namespace EnhancedBasic {
                 bool isEmpty0() const;
 
                 $RetNotIgnored()
-                bool contain0(GenericReference value) const;
-
-                $RetNotIgnored()
                 GenericReference getLast0() const;
 
                 $RetNotIgnored()
@@ -123,6 +121,9 @@ namespace EnhancedBasic {
 
                 $RetNotIgnored()
                 GenericReference get0(Size index) const;
+
+                $RetNotIgnored()
+                bool contain0(GenericReference value) const;
 
                 void addLast0(GenericReference element);
 
@@ -178,6 +179,7 @@ namespace EnhancedBasic {
                     inline Size count() const override;
                 };
 
+                $RetNotIgnored()
                 static bool equals(GenericReference element, GenericReference value);
 
             public:
@@ -192,12 +194,6 @@ namespace EnhancedBasic {
                 inline bool isEmpty() const override;
 
                 $RetNotIgnored()
-                inline bool contain(const Type &value) const override;
-
-                $RetRequiresRelease()
-                inline ReferencedLinkedList<Type> *copy() const override;
-
-                $RetNotIgnored()
                 inline Type &getLast() const override;
 
                 $RetNotIgnored()
@@ -209,8 +205,13 @@ namespace EnhancedBasic {
                 $RetNotIgnored()
                 inline Type &operator[](Size index) const override;
 
-                $RetNotIgnored()
                 inline core::Iterator<Type> *iterator() const override;
+
+                $RetNotIgnored()
+                inline bool contain(const Type &value) const override;
+
+                $RetRequiresRelease()
+                inline ReferencedLinkedList<Type> *copy() const override;
 
                 $RetNotIgnored()
                 inline typename core::Iterable<Type>::ForeachIterator begin() const override;
@@ -238,8 +239,8 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#endif // CXX_LANGUAGE
-
 #include "EnhancedBasic/collection/referenced/ReferencedLinkedList.tcc"
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCE0LINKED0LIST_H

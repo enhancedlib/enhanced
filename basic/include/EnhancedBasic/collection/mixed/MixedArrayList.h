@@ -27,6 +27,11 @@
 
 #include "EnhancedBasic/export.h"
 
+#include "EnhancedBasic/core/Iterable.h"
+#include "EnhancedBasic/core/Iterator.h"
+
+#include "EnhancedBasic/generic/Generic.h"
+
 #include "EnhancedBasic/collection/RandomAccess.h"
 #include "EnhancedBasic/collection/mixed/MixedList.h"
 
@@ -38,24 +43,24 @@ namespace EnhancedBasic {
             class ENHANCED_BASIC_API MixedArrayList0 {
             private:
                 struct Node {
-                    void *value;
+                    GenericPointer value;
 
-                    bool requiresRelease;
+                    bool dynamic;
                 };
-
-                Size maxCount;
 
                 Node *elements;
 
                 Size length;
 
+                Size maxCount;
+
             protected:
                 struct GenericsOperator {
-                    void *(*allocate)(void *const &);
+                    GenericPointer (*allocate)(GenericReference);
 
-                    void (*destroy)(void *const &);
+                    void (*destroy)(GenericPointer);
 
-                    bool (*equals)(void *const &, void *const &);
+                    bool (*equals)(GenericReference, GenericReference);
                 };
 
                 class ENHANCED_BASIC_API MixedArrayListIterator0 {
@@ -84,7 +89,7 @@ namespace EnhancedBasic {
                     bool each0() const;
 
                     $RetNotIgnored()
-                    void *get0() const;
+                    GenericReference get0() const;
 
                     void reset0() const;
 
@@ -97,6 +102,8 @@ namespace EnhancedBasic {
                 mutable MixedArrayListIterator0 *iterator;
 
                 MixedArrayList0(Size length, GenericsOperator genericsOperator);
+                
+                MixedArrayList0(const MixedArrayList0 &copy);
 
                 virtual ~MixedArrayList0() noexcept;
 
@@ -107,14 +114,14 @@ namespace EnhancedBasic {
                 bool isEmpty0() const;
 
                 $RetNotIgnored()
-                void *get0(Size index) const;
+                GenericReference get0(Size index) const;
 
                 $RetNotIgnored()
-                bool contain0(const void *value) const;
+                bool contain0(GenericReference value) const;
 
-                void add0(const void *element);
+                void add0(GenericReference element);
 
-                void addReferenced0(const void *element);
+                void addReferenced0(GenericReference element);
 
                 void remove0();
 
@@ -127,122 +134,74 @@ namespace EnhancedBasic {
             class MixedArrayList final : public MixedList<Type>, public RandomAccess<Type>, private MixedArrayList0 {
             private:
                 class MixedArrayListIterator : public MixedArrayListIterator0, public core::Iterator<Type> {
-                    friend class MixedArrayList<Type>;
+                    friend struct core::Iterable<Type>;
 
                 public:
-                    explicit inline MixedArrayListIterator(const MixedArrayList<Type> *arrayList) :
-                        MixedArrayListIterator0(arrayList) {}
+                    explicit inline MixedArrayListIterator(const MixedArrayList<Type> *arrayList);
 
                     $RetNotIgnored()
-                    inline bool hasNext() const override {
-                        return MixedArrayListIterator0::hasNext0();
-                    }
+                    inline bool hasNext() const override;
 
-                    inline const core::Iterator<Type> *next() const override {
-                        MixedArrayListIterator0::next0();
-                        return this;
-                    }
+                    inline const core::Iterator<Type> *next() const override;
 
                     $RetNotIgnored()
-                    inline bool each() const override {
-                        return MixedArrayListIterator0::each0();
-                    }
+                    inline bool each() const override;
 
                     $RetNotIgnored()
-                    inline Type &get() const override {
-                        return *reinterpret_cast<Type *>(MixedArrayListIterator0::get0());
-                    }
+                    inline Type &get() const override;
 
-                    inline void reset() const override {
-                        MixedArrayListIterator0::reset0();
-                    }
+                    inline void reset() const override;
 
                     $RetNotIgnored()
-                    inline Size count() const override {
-                        return MixedArrayListIterator0::count0();
-                    }
+                    inline Size count() const override;
                 };
 
-                static void *allocate(void *const &element) {
-                    return new Type(*reinterpret_cast<Type *>(element));
-                }
+                $RetRequiresRelease()
+                static GenericPointer allocate(GenericReference element);
 
-                static void destroy(void *const &element) {
-                    delete reinterpret_cast<Type *>(element);
-                }
+                static void destroy(GenericPointer element);
 
-                static bool equals(void *const &element, void *const &value) {
-                    return *reinterpret_cast<Type *>(element) == *reinterpret_cast<Type *>(value);
-                }
+                $RetNotIgnored()
+                static bool equals(GenericReference element, GenericReference value);
 
             public:
-                explicit inline MixedArrayList() : MixedArrayList0(
-                    UINT8_MAX, {allocate, destroy, equals}
-                ) {}
+                explicit inline MixedArrayList();
 
-                explicit inline MixedArrayList(Size maxCount) : MixedArrayList0(
-                    maxCount, {allocate, destroy, equals}
-                ) {}
+                explicit inline MixedArrayList(Size maxCount);
 
-                inline MixedArrayList(const MixedArrayList<Type> &copy) : MixedArrayList0(copy) {}
+                inline MixedArrayList(const MixedArrayList<Type> &copy);
 
                 $RetNotIgnored()
-                inline Size getLength() const override {
-                    return MixedArrayList0::getLength0();
-                }
+                inline Size getLength() const override;
 
                 $RetNotIgnored()
-                inline bool isEmpty() const override {
-                    return MixedArrayList0::isEmpty0();
-                }
+                inline bool isEmpty() const override;
 
                 $RetNotIgnored()
-                inline Type &get(Size index) const override {
-                    return *reinterpret_cast<Type *>(MixedArrayList0::get0(index));
-                }
+                inline Type &get(Size index) const override;
 
                 $RetNotIgnored()
-                inline Type &operator[](Size index) const override {
-                    return *reinterpret_cast<Type *>(MixedArrayList0::get0(index));
-                }
+                inline Type &operator[](Size index) const override;
+
+                inline core::Iterator<Type> *iterator() const override;
 
                 $RetNotIgnored()
-                inline core::Iterator<Type> *iterator() const override {
-                    if (MixedArrayList0::iterator == null) {
-                        MixedArrayList0::iterator = new MixedArrayListIterator(this);
-                    } else {
-                        static_cast<MixedArrayListIterator *>(MixedArrayList0::iterator)->reset();
-                    }
-                    return static_cast<MixedArrayListIterator *>(MixedArrayList0::iterator);
-                }
-
-                $RetNotIgnored()
-                inline bool contain(const Type &value) const override {
-                    return MixedArrayList0::contain0(&value);
-                }
+                inline bool contain(const Type &value) const override;
 
                 $RetRequiresRelease()
-                inline MixedArrayList<Type> *copy() const override {
-                    return new MixedArrayList<Type>(*this);
-                }
+                inline MixedArrayList<Type> *copy() const override;
 
-                inline void add(const Type &element) override {
-                    MixedArrayList0::add0(&element);
-                }
+                inline void add(const Type &element) override;
 
-                inline void addReferenced(const Type &element) override {
-                    MixedArrayList0::addReferenced0(&element);
-                }
+                inline void addReferenced(const Type &element) override;
 
-                inline Type remove() override {
-                    Type value = this->get(this->getLength() - 1);
-                    MixedArrayList0::remove0();
-                    return value;
-                }
+                inline Type remove() override;
             };
         } // namespace Reference
     } // namespace collection
 } // namespace EnhancedBasic
+
+#include "EnhancedBasic/collection/mixed/MixedArrayList.tcc"
 
 #endif // CXX_LANGUAGE
 

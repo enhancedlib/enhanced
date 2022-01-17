@@ -121,7 +121,8 @@
 
 #define $Unused [[maybe_unused]]
 
-#ifdef CXX_20_OR_MORE
+
+#if defined(CXX_20_OR_MORE)
 #define $RetNotIgnored(options) [[nodiscard options]]
 #elif defined(CXX_17_OR_MORE) // C++17 or more
 #define $RetNotIgnored(options) [[nodiscard]]

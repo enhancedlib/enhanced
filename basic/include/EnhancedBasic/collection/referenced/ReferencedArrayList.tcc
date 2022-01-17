@@ -27,6 +27,9 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
 
+#include "EnhancedBasic/core/Iterable.h"
+#include "EnhancedBasic/core/Iterator.h"
+
 #include "EnhancedBasic/generic/Generic.h"
 
 #ifdef CXX_LANGUAGE // C++ language
@@ -75,6 +78,7 @@ namespace EnhancedBasic {
             }
 
             template <typename Type>
+            $RetNotIgnored()
             bool ReferencedArrayList<Type>::equals(GenericReference element, GenericReference value) {
                 return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
             }
@@ -114,10 +118,9 @@ namespace EnhancedBasic {
             }
 
             template <typename Type>
-            $RetNotIgnored()
             core::Iterator <Type> *ReferencedArrayList<Type>::iterator() const {
-                return core::Iterable<Type>::template
-                    getIterator<ReferencedArrayListIterator>(ReferencedArrayList0::iterator, this);
+                return core::Iterable<Type>::
+                    template getIterator<ReferencedArrayListIterator>(ReferencedArrayList0::iterator, this);
             }
 
             template <typename Type>

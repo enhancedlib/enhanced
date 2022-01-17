@@ -49,7 +49,7 @@ foreach (MODULE_NAME IN ITEMS ${MODULES})
     add_subdirectory(${MODULE_NAME})
 endforeach ()
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Debug" AND EXISTS "test")
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     add_subdirectory("test")
 endif ()
 

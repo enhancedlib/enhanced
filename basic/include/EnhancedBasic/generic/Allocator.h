@@ -23,12 +23,13 @@
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
-#include "EnhancedCore/assert.h"
 #include "EnhancedCore/annotations.h"
 
 #include "EnhancedBasic/export.h"
 
 #include "EnhancedBasic/generic/Generic.h"
+
+#ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
     namespace generic {
@@ -52,59 +53,43 @@ namespace EnhancedBasic {
         template <typename Type>
         class Allocator : private Allocator0 {
         public:
-        #ifdef CXX_11_OR_MORE
+            #ifdef CXX_11_OR_MORE
             Allocator() = default;
-        #else
+            #else
             Allocator() {}
-        #endif // CXX_11_OR_MORE
+            #endif // CXX_11_OR_MORE
 
             $RetNotIgnored()
-            Size getSize() const {
-                return Allocator0::getSize0();
-            }
+            Size getSize() const;
 
             $RetNotIgnored()
-            Type &get(Size index) const {
-                return reinterpret_cast<Type *>(Allocator0::space)[index];
-            }
+            Type &get(Size index) const;
 
-            void allocate(Size newSize) {
-                Allocator0::allocate0(newSize, sizeof(Type));
-            }
+            void allocate(Size newSize);
 
-            void destroy() {
-                Allocator0::destroy0();
-            }
+            void destroy();
 
-            $RetReferenced
             template <typename ...Args>
-            Type &construct(Size index, Args ...args) {
-                return this->get(index) = Type(args...);
-            }
-
-            void destruct(Size index) {
-                this->get(index).~Type();
-            }
-
             $RetReferenced
+            $RetNotIgnored()
+            Type &construct(Size index, Args ...args);
+
+            void destruct(Size index);
+
             template <typename ...Args>
-            Type *constructAll(Args ...args) {
-                for (Size index = 0; index < this->getSize(); ++ index) {
-                    this->get(index) = Type(args...);
-                }
-            }
+            $RetReferenced
+            $RetNotIgnored()
+            Type *constructAll(Args ...args);
 
-            void destructAll() {
-                for (Size index = 0; index < this->getSize(); ++ index) {
-                    this->get(index).~Type();
-                }
-            }
+            void destructAll();
 
-            void resize(Size newSize) {
-                Allocator0::resize0(newSize, sizeof(Type));
-            }
+            void resize(Size newSize);
         };
     } // namespace core
 } // namespace EnhancedBasic
+
+#include "EnhancedBasic/generic/Allocator.tcc"
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_GENERICS_ALLOCATOR_H

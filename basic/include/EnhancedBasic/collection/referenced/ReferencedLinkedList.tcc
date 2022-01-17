@@ -40,6 +40,7 @@ namespace EnhancedBasic {
                 ReferencedLinkedListIterator0(referenceLinkedList) {}
 
             template <typename Type>
+            $RetNotIgnored()
             bool ReferencedLinkedList<Type>::ReferencedLinkedListIterator::hasNext() const {
                 return ReferencedLinkedListIterator0::hasNext0();
             }
@@ -51,11 +52,13 @@ namespace EnhancedBasic {
             }
 
             template <typename Type>
+            $RetNotIgnored()
             bool ReferencedLinkedList<Type>::ReferencedLinkedListIterator::each() const {
                 return ReferencedLinkedListIterator0::each0();
             }
 
             template <typename Type>
+            $RetNotIgnored()
             Type &ReferencedLinkedList<Type>::ReferencedLinkedListIterator::get() const {
                 return reinterpret_cast<Type &>(ReferencedLinkedListIterator0::get0());
             }
@@ -66,11 +69,13 @@ namespace EnhancedBasic {
             }
 
             template <typename Type>
+            $RetNotIgnored()
             Size ReferencedLinkedList<Type>::ReferencedLinkedListIterator::count() const {
                 return ReferencedLinkedListIterator0::count0();
             }
 
             template <typename Type>
+            $RetNotIgnored()
             bool ReferencedLinkedList<Type>::equals(GenericReference element, GenericReference value) {
                 return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
             }
@@ -80,16 +85,49 @@ namespace EnhancedBasic {
                 ReferencedLinkedList0(copy) {}
 
             template <typename Type>
+            $RetNotIgnored()
             Size ReferencedLinkedList<Type>::getLength() const {
                 return ReferencedLinkedList0::getLength0();
             }
 
             template <typename Type>
+            $RetNotIgnored()
             bool ReferencedLinkedList<Type>::isEmpty() const {
                 return ReferencedLinkedList0::isEmpty0();
             }
 
             template <typename Type>
+            $RetNotIgnored()
+            Type &ReferencedLinkedList<Type>::getLast() const {
+                return reinterpret_cast<Type &>(ReferencedLinkedList0::getLast0());
+            }
+
+            template <typename Type>
+            $RetNotIgnored()
+            Type &ReferencedLinkedList<Type>::getFirst() const {
+                return reinterpret_cast<Type &>(ReferencedLinkedList0::getFirst0());
+            }
+
+            template <typename Type>
+            $RetNotIgnored()
+            Type &ReferencedLinkedList<Type>::get(Size index) const {
+                return reinterpret_cast<Type &>(ReferencedLinkedList0::get0(index));
+            }
+
+            template <typename Type>
+            $RetNotIgnored()
+            Type &ReferencedLinkedList<Type>::operator[](Size index) const {
+                return reinterpret_cast<Type &>(ReferencedLinkedList0::get0(index));
+            }
+
+            template <typename Type>
+            core::Iterator<Type> *ReferencedLinkedList<Type>::iterator() const {
+                return List<Type>::template getIterator<ReferencedLinkedListIterator>
+                    (ReferencedLinkedList0::iterator, this);
+            }
+
+            template <typename Type>
+            $RetNotIgnored()
             bool ReferencedLinkedList<Type>::contain(const Type &value) const {
                 return ReferencedLinkedList0::contain0((GenericReference) value);
             }
@@ -100,37 +138,13 @@ namespace EnhancedBasic {
             }
 
             template <typename Type>
-            Type &ReferencedLinkedList<Type>::getLast() const {
-                return reinterpret_cast<Type &>(ReferencedLinkedList0::getLast0());
-            }
-
-            template <typename Type>
-            Type &ReferencedLinkedList<Type>::getFirst() const {
-                return reinterpret_cast<Type &>(ReferencedLinkedList0::getFirst0());
-            }
-
-            template <typename Type>
-            Type &ReferencedLinkedList<Type>::get(Size index) const {
-                return reinterpret_cast<Type &>(ReferencedLinkedList0::get0(index));
-            }
-
-            template <typename Type>
-            Type &ReferencedLinkedList<Type>::operator[](Size index) const {
-                return reinterpret_cast<Type &>(ReferencedLinkedList0::get0(index));
-            }
-
-            template <typename Type>
-            core::Iterator<Type> *ReferencedLinkedList<Type>::iterator() const {
-                return List<Type>::template
-                getIterator<ReferencedLinkedListIterator>(ReferencedLinkedList0::iterator, this);
-            }
-
-            template <typename Type>
+            $RetNotIgnored()
             typename core::Iterable<Type>::ForeachIterator ReferencedLinkedList<Type>::begin() const {
                 return List<Type>::begin();
             }
 
             template <typename Type>
+            $RetNotIgnored()
             constexpr InvalidType ReferencedLinkedList<Type>::end() const {
                 return List<Type>::end();
             }

@@ -76,6 +76,8 @@ char *stringCopy(const char *const string) {
         return null;
     }
 
+    memoryCopy(copy, string, length);
+
     for (Size index = 0; index < length; ++ index) {
         copy[index] = string[index];
     }

@@ -25,11 +25,13 @@
 #include "EnhancedCore/annotations.h"
 #include "EnhancedCore/assert.h"
 
+#include "EnhancedBasic/generic/Generic.h"
+
 using EnhancedBasic::collection::Vector0;
 
 Vector0::VectorIterator0::VectorIterator0(const Vector0 *const vector) :
     vector(vector), indexer(vector->elements), isFirst(true),
-    end(vector->genericsOperator.indexArray(vector->elements, vector->getLength0())) {}
+    end(vector->genericsOperator.index(vector->elements, vector->getLength0())) {}
 
 Vector0::VectorIterator0::~VectorIterator0() noexcept = default;
 
@@ -39,7 +41,7 @@ bool Vector0::VectorIterator0::hasNext0() const {
 }
 
 void Vector0::VectorIterator0::next0() const {
-    this->indexer = this->vector->genericsOperator.indexArray(this->indexer, 1);
+    this->indexer = this->vector->genericsOperator.index(this->indexer, 1);
 }
 
 $RetNotIgnored()
@@ -54,8 +56,8 @@ bool Vector0::VectorIterator0::each0() const {
 }
 
 $RetNotIgnored()
-void *Vector0::VectorIterator0::get0() const {
-    return this->indexer;
+GenericReference Vector0::VectorIterator0::get0() const {
+    return generic_cast(this->indexer);
 }
 
 void Vector0::VectorIterator0::reset0() const {
@@ -72,26 +74,39 @@ Vector0::Vector0(const Size maxCount, const GenericsOperator genericsOperator) :
     maxCount(maxCount), length(0), elements(genericsOperator.allocateArray(maxCount)),
     genericsOperator(genericsOperator), iterator(null) {}
 
+Vector0::Vector0(const Vector0 &copy) :
+    maxCount(copy.maxCount), length(copy.length), elements(copy.genericsOperator.allocateArray(copy.maxCount)),
+    genericsOperator(copy.genericsOperator), iterator(null) {
+    for (Size index = 0; index < copy.length; ++ index) {
+        this->genericsOperator.setElement(this->elements, index,
+            this->genericsOperator.getElement(copy.elements, index));
+    }
+}
+
 Vector0::~Vector0() noexcept {
-    this->genericsOperator.destroyArray(this->elements);
+    this->genericsOperator.destroyArray(this->elements, this->length);
     delete this->iterator;
 }
 
+$RetNotIgnored()
 Size Vector0::getLength0() const {
     return this->length;
 }
 
+$RetNotIgnored()
 bool Vector0::isEmpty0() const {
     return this->length == 0;
 }
 
-void *Vector0::get0(const Size index) const {
-    return this->genericsOperator.indexArray(this->elements, index);
+$RetNotIgnored()
+GenericReference Vector0::get0(const Size index) const {
+    return this->genericsOperator.getElement(this->elements, index);
 }
 
-bool Vector0::contain0(const void *const value) const {
+$RetNotIgnored()
+bool Vector0::contain0(GenericReference value) const {
     for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericsOperator.equals(this->get0(index), const_cast<void *&>(value))) {
+        if (this->genericsOperator.equals(this->get0(index), value)) {
             return true;
         }
     }
@@ -99,16 +114,12 @@ bool Vector0::contain0(const void *const value) const {
     return false;
 }
 
-void Vector0::add0(const void *const element) {
+void Vector0::add0(GenericReference element) {
     if (this->length == this->maxCount) {
-        if (this->maxCount == 1) {
-            this->expand0(1);
-        } else {
-            this->expand0(this->maxCount >> 1);
-        }
+        this->expand0(this->maxCount);
     }
 
-    this->genericsOperator.setElement(this->elements, this->length, const_cast<void *&>(element));
+    this->genericsOperator.setElement(this->elements, this->length, element);
     ++ this->length;
 }
 
@@ -118,10 +129,10 @@ void Vector0::remove0() {
 
 void Vector0::expand0(const Size size) {
     Size count = this->maxCount + size;
-    void *array = this->genericsOperator.allocateArray(count);
+    GenericPointer array = this->genericsOperator.allocateArray(count);
 
     this->genericsOperator.copyArray(array, this->elements, this->length);
-    this->genericsOperator.destroyArray(this->elements);
+    this->genericsOperator.destroyArray(this->elements, this->length);
 
     this->elements = array;
     this->maxCount = count;
@@ -130,10 +141,11 @@ void Vector0::expand0(const Size size) {
 void Vector0::shrink0(const Size size) {
     Size count = this->maxCount - size;
     assert(count > this->length);
-    void *array = this->genericsOperator.allocateArray(count);
+
+    GenericPointer array = this->genericsOperator.allocateArray(count);
 
     this->genericsOperator.copyArray(array, this->elements, this->length);
-    this->genericsOperator.destroyArray(this->elements);
+    this->genericsOperator.destroyArray(this->elements, this->length);
 
     this->elements = array;
     this->maxCount = count;

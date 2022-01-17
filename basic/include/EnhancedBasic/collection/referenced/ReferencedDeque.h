@@ -55,20 +55,20 @@ namespace EnhancedBasic {
             struct ReferencedDeque : public Deque<Type>, public ReferencedQueue<Type> {
         #endif // COMPILER_MSVC
                 $RetNotIgnored()
-                Size getLength() const = 0;
+                virtual Size getLength() const = 0;
 
                 $RetNotIgnored()
-                bool isEmpty() const = 0;
+                virtual bool isEmpty() const = 0;
 
                 virtual Type &getFirst() const = 0;
 
                 virtual Type &getLast() const = 0;
 
-                Type &get(Size index) const = 0;
+                virtual Type &get(Size index) const = 0;
 
-                Type &operator[](Size index) const = 0;
+                virtual Type &operator[](Size index) const = 0;
 
-                bool contain(const Type &value) const = 0;
+                virtual bool contain(const Type &value) const = 0;
 
                 $RetNotIgnored()
                 typename core::Iterable<Type>::ForeachIterator begin() const override {
@@ -80,7 +80,7 @@ namespace EnhancedBasic {
                     return Deque<Type>::end();
                 }
 
-                core::Iterator<Type> *iterator() const = 0;
+                virtual core::Iterator<Type> *iterator() const = 0;
 
                 $RetRequiresRelease()
                 virtual ReferencedDeque<Type> *copy() const = 0;

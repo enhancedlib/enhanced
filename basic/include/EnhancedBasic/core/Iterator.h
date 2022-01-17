@@ -18,8 +18,8 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#ifndef ENHANCED_BASIC_ITERATOR_H
-#define ENHANCED_BASIC_ITERATOR_H
+#ifndef ENHANCED_BASIC_CORE_ITERATOR_H
+#define ENHANCED_BASIC_CORE_ITERATOR_H
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
@@ -57,4 +57,4 @@ namespace EnhancedBasic {
 
 #endif // CXX_LANGUAGE
 
-#endif // !ENHANCED_BASIC_ITERATOR_H
+#endif // !ENHANCED_BASIC_CORE_ITERATOR_H

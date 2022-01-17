@@ -41,6 +41,7 @@ namespace EnhancedBasic {
             LinkedListIterator0(linkedList) {}
 
         template <typename Type>
+        $RetNotIgnored()
         bool LinkedList<Type>::LinkedListIterator::hasNext() const {
             return LinkedListIterator0::hasNext0();
         }
@@ -52,11 +53,13 @@ namespace EnhancedBasic {
         }
 
         template <typename Type>
+        $RetNotIgnored()
         bool LinkedList<Type>::LinkedListIterator::each() const {
             return LinkedListIterator0::each0();
         }
 
         template <typename Type>
+        $RetNotIgnored()
         Type &LinkedList<Type>::LinkedListIterator::get() const {
             return reinterpret_cast<Type &>(LinkedListIterator0::get0());
         }
@@ -67,11 +70,13 @@ namespace EnhancedBasic {
         }
 
         template <typename Type>
+        $RetNotIgnored()
         Size LinkedList<Type>::LinkedListIterator::count() const {
             return LinkedListIterator0::count0();
         }
 
         template <typename Type>
+        $RetRequiresRelease()
         GenericPointer LinkedList<Type>::allocate(Generic &element) {
             return new Type(reinterpret_cast<Type &>(element));
         }
@@ -82,6 +87,7 @@ namespace EnhancedBasic {
         }
 
         template <typename Type>
+        $RetNotIgnored()
         bool LinkedList<Type>::equals(Generic &element, Generic &value) {
             return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
         }
@@ -90,56 +96,67 @@ namespace EnhancedBasic {
         LinkedList<Type>::LinkedList() : LinkedList0({allocate, destroy, equals}) {}
 
         template <typename Type>
+        $RetNotIgnored()
         Size LinkedList<Type>::getLength() const {
             return LinkedList0::getLength0();
         }
 
         template <typename Type>
+        $RetNotIgnored()
         bool LinkedList<Type>::isEmpty() const {
             return LinkedList0::isEmpty0();
         }
 
         template <typename Type>
-        bool LinkedList<Type>::contain(const Type &value) const {
-            return LinkedList0::contain0((GenericReference) value);
-        }
-
-        template <typename Type>
-        LinkedList<Type> *LinkedList<Type>::copy() const {
-            return new LinkedList<Type>(*this);
-        }
-
-        template <typename Type>
+        $RetNotIgnored()
         Type &LinkedList<Type>::getLast() const {
             return reinterpret_cast<Type &>(LinkedList0::getLast0());
         }
 
         template <typename Type>
+        $RetNotIgnored()
         Type &LinkedList<Type>::getFirst() const {
             return reinterpret_cast<Type &>(LinkedList0::getFirst0());
         }
 
         template <typename Type>
+        $RetNotIgnored()
         Type &LinkedList<Type>::get(Size index) const {
             return reinterpret_cast<Type &>(LinkedList0::get0(index));
         }
 
         template <typename Type>
+        $RetNotIgnored()
         Type &LinkedList<Type>::operator[](Size index) const {
             return reinterpret_cast<Type &>(LinkedList0::get0(index));
         }
 
         template <typename Type>
+        $RetNotIgnored()
         core::Iterator<Type> *LinkedList<Type>::iterator() const {
             return List<Type>::template getIterator<LinkedListIterator>(LinkedList0::iterator, this);
         }
 
         template <typename Type>
+        $RetNotIgnored()
+        bool LinkedList<Type>::contain(const Type &value) const {
+            return LinkedList0::contain0((GenericReference) value);
+        }
+
+        template <typename Type>
+        $RetRequiresRelease()
+        LinkedList<Type> *LinkedList<Type>::copy() const {
+            return new LinkedList<Type>(*this);
+        }
+
+        template <typename Type>
+        $RetNotIgnored()
         typename core::Iterable<Type>::ForeachIterator LinkedList<Type>::begin() const {
             return List<Type>::begin();
         }
 
         template <typename Type>
+        $RetNotIgnored()
         constexpr InvalidType LinkedList<Type>::end() const {
             return List<Type>::end();
         }

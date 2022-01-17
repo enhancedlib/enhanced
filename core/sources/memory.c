@@ -48,7 +48,7 @@ void memorySet(void *ptr, const Byte byte, const Size size) {
     }
 }
 
-void memoryCopy(void *destination, void *const source, const Size size) {
+void memoryCopy(void *destination, const void *const source, const Size size) {
     assert(destination != null), assert(source != null), assert(size > 0);
 
     Size countBlock = size / sizeof(qword);

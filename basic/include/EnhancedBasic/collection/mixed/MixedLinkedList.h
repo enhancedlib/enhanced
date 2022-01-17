@@ -26,7 +26,11 @@
 #include "EnhancedCore/annotations.h"
 
 #include "EnhancedBasic/export.h"
+
+#include "EnhancedBasic/core/Iterable.h"
 #include "EnhancedBasic/core/Iterator.h"
+
+#include "EnhancedBasic/generic/Generic.h"
 
 #include "EnhancedBasic/collection/mixed/MixedList.h"
 #include "EnhancedBasic/collection/mixed/MixedDeque.h"
@@ -39,9 +43,9 @@ namespace EnhancedBasic {
             class ENHANCED_BASIC_API MixedLinkedList0 {
             private:
                 struct Node {
-                    void *value;
+                    GenericPointer value;
 
-                    bool requiresRelease;
+                    bool dynamic;
 
                     Node *next;
 
@@ -62,11 +66,11 @@ namespace EnhancedBasic {
 
             protected:
                 struct GenericsOperator {
-                    void *(*allocate)(void *const &);
+                    GenericPointer (*allocate)(GenericReference);
 
-                    void (*destroy)(void *const &);
+                    void (*destroy)(GenericPointer);
 
-                    bool (*equals)(void *const &, void *const &);
+                    bool (*equals)(GenericReference, GenericReference);
                 };
 
                 class ENHANCED_BASIC_API MixedLinkedListIterator0 {
@@ -91,7 +95,7 @@ namespace EnhancedBasic {
                     bool each0() const;
 
                     $RetNotIgnored()
-                    void *get0() const;
+                    GenericReference get0() const;
 
                     void reset0() const;
 
@@ -113,24 +117,24 @@ namespace EnhancedBasic {
                 $RetNotIgnored()
                 bool isEmpty0() const;
 
+                GenericReference getLast0() const;
+
+                GenericReference getFirst0() const;
+
+                GenericReference get0(Size index) const;
+
                 $RetNotIgnored()
-                bool contain0(const void *value) const;
+                bool contain0(GenericReference value) const;
 
-                void *getLast0() const;
+                void addLast0(GenericReference element);
 
-                void *getFirst0() const;
-
-                void *get0(Size index) const;
-
-                void addLast0(const void *element);
-
-                void addLastReferenced0(const void *element);
+                void addLastReferenced0(GenericReference element);
 
                 void removeLast0();
 
-                void addFirst0(const void *element);
+                void addFirst0(GenericReference element);
 
-                void addFirstReferenced0(const void *element);
+                void addFirstReferenced0(GenericReference element);
 
                 void removeFirst0();
             };
@@ -159,166 +163,102 @@ namespace EnhancedBasic {
         #endif // COMPILER_MSVC
             private:
                 class MixedLinkedListIterator : public core::Iterator<Type>, private MixedLinkedListIterator0 {
-                    friend class MixedLinkedList<Type>;
+                    friend struct core::Iterable<Type>;
 
                 public:
-                    explicit inline MixedLinkedListIterator(const MixedLinkedList<Type> *mixedLinkedList) :
-                        MixedLinkedListIterator0(mixedLinkedList) {}
+                    explicit inline MixedLinkedListIterator(const MixedLinkedList<Type> *mixedLinkedList);
 
-                    inline bool hasNext() const override {
-                        return MixedLinkedListIterator0::hasNext0();
-                    }
+                    $RetNotIgnored()
+                    inline bool hasNext() const override;
 
-                    inline const core::Iterator<Type> *next() const override {
-                        MixedLinkedListIterator0::next0();
-                        return this;
-                    }
+                    inline const core::Iterator<Type> *next() const override;
 
-                    inline bool each() const override {
-                        return MixedLinkedListIterator0::each0();
-                    }
+                    $RetNotIgnored()
+                    inline bool each() const override;
 
-                    inline Type &get() const override {
-                        return *reinterpret_cast<Type *>(MixedLinkedListIterator0::get0());
-                    }
+                    $RetNotIgnored()
+                    inline Type &get() const override;
 
-                    inline void reset() const override {
-                        MixedLinkedListIterator0::reset0();
-                    }
+                    inline void reset() const override;
 
-                    inline Size count() const override {
-                        return MixedLinkedListIterator0::count0();
-                    }
+                    $RetNotIgnored()
+                    inline Size count() const override;
                 };
 
-                static void *allocate(void *const &element) {
-                    return reinterpret_cast<void *>(new Type(*reinterpret_cast<Type *>(element)));
-                }
+                $RetRequiresRelease()
+                static GenericPointer allocate(GenericReference element);
 
-                static void destroy(void *const &element) {
-                    delete reinterpret_cast<Type *>(element);
-                }
+                static void destroy(GenericPointer element);
 
-                static bool equals(void *const &element, void *const &value) {
-                    return *reinterpret_cast<Type *>(element) == *reinterpret_cast<Type *>(value);
-                }
+                $RetNotIgnored()
+                static bool equals(GenericReference element, GenericReference value);
 
             public:
-                inline MixedLinkedList() : MixedLinkedList0({allocate, destroy, equals}) {}
+                inline MixedLinkedList();
 
-                inline MixedLinkedList(const MixedLinkedList<Type> &copy) :
-                    MixedLinkedList0(copy) {}
-
-                inline Size getLength() const override {
-                    return MixedLinkedList0::getLength0();
-                }
-
-                inline bool isEmpty() const override {
-                    return MixedLinkedList0::isEmpty0();
-                }
+                inline MixedLinkedList(const MixedLinkedList<Type> &copy);
 
                 $RetNotIgnored()
-                inline bool contain(const Type &value) const override {
-                    return MixedLinkedList0::contain0(&value);
-                }
+                inline Size getLength() const override;
+
+                $RetNotIgnored()
+                inline bool isEmpty() const override;
+
+                $RetNotIgnored()
+                inline Type &getLast() const override;
+
+                $RetNotIgnored()
+                inline Type &getFirst() const override;
+
+                $RetNotIgnored()
+                inline Type &get(Size index) const override;
+
+                $RetNotIgnored()
+                inline Type &operator[](Size index) const override;
+
+                inline core::Iterator<Type> *iterator() const override;
+
+                $RetNotIgnored()
+                inline bool contain(const Type &value) const override;
 
                 $RetRequiresRelease()
-                inline MixedLinkedList<Type> *copy() const override {
-                    return new MixedLinkedList<Type>(*this);
-                }
-
-                inline Type &getLast() const override {
-                    return *reinterpret_cast<Type *>(MixedLinkedList0::getLast0());
-                }
-
-                inline Type &getFirst() const override {
-                    return *reinterpret_cast<Type *>(MixedLinkedList0::getFirst0());
-                }
+                inline MixedLinkedList<Type> *copy() const override;
 
                 $RetNotIgnored()
-                inline Type &get(Size index) const override {
-                    return *reinterpret_cast<Type *>(MixedLinkedList0::get0(index));
-                }
+                inline typename core::Iterable<Type>::ForeachIterator begin() const override;
 
                 $RetNotIgnored()
-                inline Type &operator[](Size index) const override {
-                    return *reinterpret_cast<Type *>(MixedLinkedList0::get0(index));
-                }
+                inline constexpr InvalidType end() const override;
 
-                inline core::Iterator<Type> *iterator() const override {
-                    if (MixedLinkedList0::iterator == null) {
-                        MixedLinkedList0::iterator = new MixedLinkedListIterator(this);
-                    } else {
-                        static_cast<MixedLinkedListIterator *>(MixedLinkedList0::iterator)->reset();
-                    }
-                    return static_cast<MixedLinkedListIterator *>(MixedLinkedList0::iterator);
-                }
+                inline void addLast(const Type &element) override;
 
-                $RetNotIgnored()
-                inline typename core::Iterable<Type>::ForeachIterator begin() const override {
-                    return MixedList<Type>::begin();
-                }
+                inline void addLastReferenced(const Type &element) override;
 
-                $RetNotIgnored()
-                inline constexpr InvalidType end() const override {
-                    return MixedList<Type>::end();
-                }
+                inline Type removeLast() override;
 
-                inline void addLast(const Type &element) override {
-                    MixedLinkedList0::addLast0(&element);
-                }
+                inline void addFirst(const Type &element) override;
 
-                inline void addLastReferenced(const Type &element) override {
-                    MixedLinkedList0::addLastReferenced0(&element);
-                }
+                inline void addFirstReferenced(const Type &element) override;
 
-                inline Type removeLast() override {
-                    Type value = this->getLast();
-                    MixedLinkedList0::removeFirst0();
-                    return value;
-                }
+                inline Type removeFirst() override;
 
-                inline void addFirst(const Type &element) override {
-                    MixedLinkedList0::addFirst0(&element);
-                }
+                inline void add(const Type &element) override;
 
-                inline void addFirstReferenced(const Type &element) override {
-                    MixedLinkedList0::addFirstReferenced0(&element);
-                }
+                inline void addReferenced(const Type &element) override;
 
-                inline Type removeFirst() override {
-                    Type value = this->getFirst();
-                    MixedLinkedList0::removeFirst0();
-                    return value;
-                }
+                inline Type remove() override;
 
-                inline void add(const Type &element) override {
-                    this->addLast(element);
-                }
+                inline void push(const Type &element) override;
 
-                inline void addReferenced(const Type &element) override {
-                    this->addLastReferenced(element);
-                }
+                inline void pushReferenced(const Type &element) override;
 
-                inline Type remove() override {
-                    return this->removeLast();
-                }
-
-                inline void push(const Type &element) override {
-                    this->addFirst(element);
-                }
-
-                inline void pushReferenced(const Type &element) override {
-                    this->addFirstReferenced(element);
-                }
-
-                inline Type popup() override {
-                    return this->removeFirst();
-                }
+                inline Type popup() override;
             };
         } // namespace mixed
     } // namespace collection
 } // namespace EnhancedBasic
+
+#include "EnhancedBasic/collection/mixed/MixedLinkedList.tcc"
 
 #endif // CXX_LANGUAGE
 

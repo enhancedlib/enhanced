@@ -27,6 +27,9 @@
 
 #include "EnhancedBasic/export.h"
 
+#include "EnhancedBasic/core/Iterable.h"
+#include "EnhancedBasic/core/Iterator.h"
+
 #include "EnhancedBasic/generic/Generic.h"
 
 #include "EnhancedBasic/collection/RandomAccess.h"
@@ -39,11 +42,11 @@ namespace EnhancedBasic {
         namespace referenced {
             class ENHANCED_BASIC_API ReferencedArrayList0 {
             private:
-                Size maxCount;
-
                 GenericPointer *elements;
 
                 Size length;
+
+                Size maxCount;
 
             protected:
                 struct GenericsOperator {
@@ -143,6 +146,7 @@ namespace EnhancedBasic {
                     inline Size count() const override;
                 };
 
+                $RetNotIgnored()
                 static bool equals(GenericReference element, GenericReference value);
 
             public:
@@ -164,7 +168,6 @@ namespace EnhancedBasic {
                 $RetNotIgnored()
                 inline Type &operator[](Size index) const override;
 
-                $RetNotIgnored()
                 inline core::Iterator<Type> *iterator() const override;
 
                 $RetNotIgnored()
@@ -181,8 +184,8 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#endif // CXX_LANGUAGE
-
 #include "EnhancedBasic/collection/referenced/ReferencedArrayList.tcc"
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCED0ARRAY0LIST_H

@@ -18,7 +18,6 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-
 #ifndef ENHANCED_BASIC_COLLECTION_VECTOR_H
 #define ENHANCED_BASIC_COLLECTION_VECTOR_H
 
@@ -27,6 +26,11 @@
 #include "EnhancedCore/annotations.h"
 
 #include "EnhancedBasic/export.h"
+
+#include "EnhancedBasic/core/Iterable.h"
+#include "EnhancedBasic/core/Iterator.h"
+
+#include "EnhancedBasic/generic/Generic.h"
 
 #include "EnhancedBasic/collection/List.h"
 #include "EnhancedBasic/collection/RandomAccess.h"
@@ -39,23 +43,25 @@ namespace EnhancedBasic {
         private:
             Size maxCount;
 
-            void *elements;
+            GenericPointer elements;
 
             Size length;
 
         protected:
             struct GenericsOperator {
-                void *(*allocateArray)(const Size &size);
+                GenericPointer (*allocateArray)(const Size size);
 
-                void (*destroyArray)(void *const &elements);
+                void (*destroyArray)(GenericPointer elements, Size length);
 
-                void (*copyArray)(void *const &destination, void *const &source, const Size &size);
+                void (*copyArray)(GenericPointer destination, GenericPointer source, const Size size);
 
-                void *(*indexArray)(void *const &elements, const Size &index);
+                GenericPointer (*index)(GenericPointer elements, const Size index);
 
-                void (*setElement)(void *const &elements, const Size &index, void *const &value);
+                GenericReference (*getElement)(GenericPointer elements, const Size index);
 
-                bool (*equals)(void *const &element, void *const &value);
+                void (*setElement)(GenericPointer elements, const Size index, GenericReference value);
+
+                bool (*equals)(GenericReference element, GenericReference value);
             };
 
             class ENHANCED_BASIC_API VectorIterator0 {
@@ -64,11 +70,11 @@ namespace EnhancedBasic {
             private:
                 const Vector0 *vector;
 
-                mutable void *indexer;
+                mutable GenericPointer indexer;
 
                 mutable bool isFirst;
 
-                const void *end;
+                GenericPointer end;
 
             protected:
                 explicit VectorIterator0(const Vector0 *vector);
@@ -84,7 +90,7 @@ namespace EnhancedBasic {
                 bool each0() const;
 
                 $RetNotIgnored()
-                void *get0() const;
+                GenericReference get0() const;
 
                 void reset0() const;
 
@@ -98,6 +104,8 @@ namespace EnhancedBasic {
 
             Vector0(Size length, GenericsOperator genericsOperator);
 
+            Vector0(const Vector0 &copy);
+
             virtual ~Vector0() noexcept;
 
             $RetNotIgnored()
@@ -107,12 +115,12 @@ namespace EnhancedBasic {
             bool isEmpty0() const;
 
             $RetNotIgnored()
-            void *get0(Size index) const;
+            GenericReference get0(Size index) const;
 
             $RetNotIgnored()
-            bool contain0(const void *value) const;
+            bool contain0(GenericReference value) const;
 
-            void add0(const void *element);
+            void add0(GenericReference element);
 
             void remove0();
 
@@ -125,162 +133,80 @@ namespace EnhancedBasic {
         class Vector final : public List<Type>, public RandomAccess<Type>, private Vector0 {
         private:
             class VectorIterator : public core::Iterator<Type>, private Vector0::VectorIterator0 {
-                friend class Vector<Type>;
+                friend struct core::Iterable<Type>;
 
             public:
-                explicit inline VectorIterator(const Vector<Type> *vector) :
-                    VectorIterator0(vector) {}
+                explicit inline VectorIterator(const Vector<Type> *vector);
 
                 $RetNotIgnored()
-                inline bool hasNext() const override {
-                    return VectorIterator0::hasNext0();
-                }
+                inline bool hasNext() const override;
 
-                inline const core::Iterator<Type> *next() const override {
-                    VectorIterator0::next0();
-                    return this;
-                }
+                inline const core::Iterator<Type> *next() const override;
 
                 $RetNotIgnored()
-                inline bool each() const override {
-                    return VectorIterator0::each0();
-                }
+                inline bool each() const override;
 
                 $RetNotIgnored()
-                inline Type &get() const override {
-                    return *reinterpret_cast<Type *>(VectorIterator0::get0());
-                }
+                inline Type &get() const override;
 
-                inline void reset() const override {
-                    VectorIterator0::reset0();
-                }
+                inline void reset() const override;
 
                 $RetNotIgnored()
-                inline Size count() const override {
-                    return VectorIterator0::count0();
-                }
+                inline Size count() const override;
             };
 
-            static void *allocateArray(const Size &size) {
-                return new Type[size];
-            }
+            $RetRequiresRelease()
+            static GenericPointer allocateArray(Size size);
 
-            static void destroyArray(void *const &elements) {
-                delete[] static_cast<Type *>(elements);
-            }
+            static void destroyArray(GenericPointer elements, Size length);
 
-            static void copyArray(void *const &destination, void *const &source, const Size &size) {
-                for (Size index = 0; index < size; ++ index) {
-                    static_cast<Type *>(destination)[index] = static_cast<Type *>(source)[index];
-                }
-            }
+            static void copyArray(GenericPointer destination, GenericPointer source, Size size);
 
-            static void *indexArray(void *const &elements, const Size &index) {
-                return static_cast<Type *>(elements) + index;
-            }
+            static GenericReference getElement(GenericPointer elements, Size index);
 
-            static void setElement(void *const &elements, const Size &index, void *const &value) {
-                static_cast<Type *>(elements)[index] = *static_cast<Type *>(value);
-            }
+            static GenericPointer index(GenericPointer elements, Size index);
 
-            static bool equals(void *const &element, void *const &value) {
-                return *reinterpret_cast<Type *>(element) == *reinterpret_cast<Type *>(value);
-            }
+            static void setElement(GenericPointer elements, Size index, GenericReference value);
+
+            $RetNotIgnored()
+            static bool equals(GenericReference element, GenericReference value);
 
         public:
-            explicit inline Vector() : Vector0(UINT8_MAX, {
-                allocateArray, destroyArray, copyArray, indexArray, setElement, equals
-            }) {}
+            explicit inline Vector();
 
-            explicit inline Vector(Size maxCount) : Vector0(maxCount, {
-                allocateArray, destroyArray, copyArray, indexArray, setElement, equals
-            }) {}
+            explicit inline Vector(Size maxCount);
 
-            inline Vector(const Vector<Type> &copy) : Vector0(copy) {}
-
-            inline Vector(void *(*allocateArray)(const Size &size),
-                          bool (*equals)(void *const &element, void *const &value) = Vector::equals) :
-                Vector0(UINT8_MAX, {
-                    allocateArray, destroyArray, copyArray, indexArray, setElement, equals
-                }) {}
-
-            inline Vector(Size maxCount, void *(*allocateArray)(const Size &size),
-                          bool (*equals)(void *const &element, void *const &value) = Vector::equals) :
-                Vector0(maxCount, {
-                    allocateArray, destroyArray, copyArray, indexArray, setElement, equals
-                }) {}
-
-            inline Vector(bool (*equals)(void *const &element, void *const &value)) :
-                Vector0(UINT8_MAX, {
-                    allocateArray, destroyArray, copyArray, indexArray, setElement, equals
-                }) {}
-
-            inline Vector(Size maxCount, bool (*equals)(void *const &element, void *const &value)) :
-                Vector0(maxCount, {
-                    allocateArray, destroyArray, copyArray, indexArray, setElement, equals
-                }) {}
+            inline Vector(const Vector<Type> &copy);
 
             $RetNotIgnored()
-            inline Size getLength() const override {
-                return Vector0::getLength0();
-            }
+            inline Size getLength() const override;
 
             $RetNotIgnored()
-            inline bool isEmpty() const override {
-                return Vector0::isEmpty0();
-            }
+            inline bool isEmpty() const override;
 
             $RetNotIgnored()
-            inline Type &get(Size index) const override {
-                return *reinterpret_cast<Type *>(Vector0::get0(index));
-            }
+            inline Type &get(Size index) const override;
 
             $RetNotIgnored()
-            inline Type &operator[](Size index) const override {
-                return *reinterpret_cast<Type *>(Vector0::get0(index));
-            }
+            inline Type &operator[](Size index) const override;
 
             $RetNotIgnored()
-            inline core::Iterator<Type> *iterator() const override {
-                if (Vector0::iterator == null) {
-                    Vector0::iterator = new VectorIterator(this);
-                } else {
-                    static_cast<VectorIterator *>(Vector0::iterator)->reset();
-                }
-                return static_cast<VectorIterator *>(Vector0::iterator);
-            }
+            inline core::Iterator<Type> *iterator() const override;
 
             $RetNotIgnored()
-            inline bool contain(const Type &value) const override {
-                return Vector0::contain0(&value);
-            }
+            inline bool contain(const Type &value) const override;
 
             $RetRequiresRelease()
-            inline Vector<Type> *copy() const override {
-                return new Vector<Type>(*this);
-            }
+            inline Vector<Type> *copy() const override;
 
-            inline void add(const Type &element) override {
-                Vector0::add0(&element);
-            }
+            inline void add(const Type &element) override;
 
-            inline Type remove() override {
-                Type value = this->get(this->getLength() - 1);
-                Vector0::remove0();
-                return value;
-            }
+            inline Type remove() override;
         };
     } // namespace collection
 } // namespace EnhancedBasic
 
-#define VECTOR_GENERICS_ARRAY_ALLOCATOR(type, args) \
-    [](const Size &size) { \
-        type *array = static_cast<type *>(operator new(size * sizeof(type))); \
-        for (Size index = 0; index < size; ++ index) { \
-            array[index] = type args; \
-        } \
-        return (void *) array; \
-    }
+#include "EnhancedBasic/collection/Vector.tcc"
 
 #endif // CXX_LANGUAGE
 

@@ -34,50 +34,33 @@ namespace EnhancedBasic {
             void *anyArray;
 
         public:
-            AnyArray() : anyArray(null) {}
+            AnyArray();
 
             template <typename Type>
-            AnyArray(const Type *value) : anyArray((void *) value) {}
+            AnyArray(const Type *value);
 
             template <typename Type>
-            AnyArray(const AnyArray &copy) : anyArray(copy) {}
+            AnyArray(const AnyArray &copy);
 
             template <typename Type>
-            Type *cast() const {
-                return *this;
-            }
+            Type *cast() const;
 
             template <typename Type>
-            operator Type *() const {
-                return static_cast<Type *>(this->anyArray);
-            }
+            operator Type *() const;
 
             template <typename Type>
-            void copy(Type *destination, const Size count) const {
-                assert(count > 0);
-
-                for (Size index = 0; index < count; ++ index) {
-                    destination[index] = this->cast<Type *>()[index];
-                }
-            }
+            void copy(Type *destination, Size count) const;
 
             template <typename Type, typename ...Args>
-            void allocate(const Size count, Args ...args) {
-                assert(count > 0);
-
-                Type *array = static_cast<Type *>(operator new(count));
-                for (Size index = 0; index < count; ++ index) {
-                    array[index] = new Type(args...);
-                }
-            }
+            void allocate(Size count, Args ...args);
 
             template <typename Type>
-            void destroy() {
-                delete[] static_cast<Type *>(this->anyArray);
-            }
+            void destroy();
         };
     } // namespace generic
 } // namespace EnhancedBasic
+
+#include "EnhancedBasic/generic/AnyArray.tcc"
 
 #endif // CXX_LANGUAGE
 

@@ -86,7 +86,7 @@ namespace EnhancedBasic {
              */
             Size length;
 
-            bool isStaticString;
+            bool dynamic;
 
         public:
             String(const char *value = "");
