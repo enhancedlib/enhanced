@@ -32,6 +32,8 @@
 
 #include "EnhancedBasic/generic/Generic.h"
 
+#ifdef CXX_LANGUAGE
+
 namespace EnhancedBasic {
     namespace collection {
         template <typename Type>
@@ -148,5 +150,7 @@ namespace EnhancedBasic {
         }
     }
 }
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_COLLECTION_ARRAY0LIST_TCC
