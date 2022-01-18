@@ -29,6 +29,8 @@
 
 #include "EnhancedBasic/core/Iterator.h"
 
+#ifdef CXX_LANGUAGE
+
 namespace EnhancedBasic {
     namespace collection {
         namespace mixed {
@@ -228,5 +230,7 @@ namespace EnhancedBasic {
         }
     }
 }
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_COLLECTION_MIXED_MIXED0LINKED0LIST_TCC
