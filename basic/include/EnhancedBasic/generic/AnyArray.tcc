@@ -27,6 +27,8 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
 
+#ifdef CXX_LANGUAGE
+
 namespace EnhancedBasic {
     namespace generic {
         AnyArray::AnyArray() : anyArray(null) {}
@@ -72,5 +74,7 @@ namespace EnhancedBasic {
         }
     }
 }
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_GENERIC_ANY0ARRAY_TCC
