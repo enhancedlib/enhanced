@@ -90,6 +90,6 @@ namespace EnhancedBasic {
     }
 }
 
-#endif CXX_LANGUAGE
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_CORE_ANY_TCC
