@@ -27,6 +27,8 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
 
+#ifdef CXX_LANGUAGE
+
 namespace EnhancedBasic {
     namespace generic {
         Any::Any() : any(null) {}
@@ -87,5 +89,7 @@ namespace EnhancedBasic {
         }
     }
 }
+
+#endif CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_CORE_ANY_TCC
