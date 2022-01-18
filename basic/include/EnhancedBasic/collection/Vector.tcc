@@ -28,6 +28,8 @@
 #include "EnhancedCore/annotations.h"
 #include "EnhancedCore/memory.h"
 
+#ifdef CXX_LANGUAGE
+
 namespace EnhancedBasic {
     namespace collection {
         template <typename Type>
@@ -178,5 +180,7 @@ namespace EnhancedBasic {
         }
     }
 }
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_CORE_VECTOR_TCC
