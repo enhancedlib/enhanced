@@ -36,15 +36,15 @@ MODULE_ABOUT(basic, "The basic module of Enhanced.")
 
 MODULE_RELATIONS(basic,
     REQUIRES_MODULE("Enhanced Core"),
-    EXPORTS_PACKAGE("EnhancedBasic/collection"),
-    EXPORTS_PACKAGE("EnhancedBasic/collection/referenced"),
-    EXPORTS_PACKAGE("EnhancedBasic/collection/mixed"),
-    EXPORTS_PACKAGE("EnhancedBasic/core"),
-    EXPORTS_PACKAGE("EnhancedBasic/core/exception"),
-    EXPORTS_PACKAGE("EnhancedBasic/generic"),
-    EXPORTS_PACKAGE("EnhancedBasic/map"),
-    EXPORTS_PACKAGE("EnhancedBasic/math"),
-    EXPORTS_PACKAGE("EnhancedBasic/pointer")
+    EXPORTS_PACKAGE("EnhancedBasic.collection"),
+    EXPORTS_PACKAGE("EnhancedBasic.collection.referenced"),
+    EXPORTS_PACKAGE("EnhancedBasic.collection.mixed"),
+    EXPORTS_PACKAGE("EnhancedBasic.core"),
+    EXPORTS_PACKAGE("EnhancedBasic.core.exception"),
+    EXPORTS_PACKAGE("EnhancedBasic.generic"),
+    EXPORTS_PACKAGE("EnhancedBasic.map"),
+    EXPORTS_PACKAGE("EnhancedBasic.math"),
+    EXPORTS_PACKAGE("EnhancedBasic.pointer")
 )
 
 MODULE_INFO_END // End defining module information.
