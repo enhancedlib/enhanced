@@ -31,6 +31,8 @@
 
 #include "EnhancedBasic/generic/Generic.h"
 
+#ifdef CXX_LANGUAGE
+
 namespace EnhancedBasic {
     namespace collection{
         namespace referenced {
@@ -195,5 +197,7 @@ namespace EnhancedBasic {
         }
     }
 }
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_COLLECTION_REFERENCED_REFERENCED0LINKED0LIST_TCC
