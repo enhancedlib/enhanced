@@ -26,7 +26,7 @@
 typedef char int8;
 typedef short int16;
 typedef int int32;
-#if defined(WINDOWS_OS) /* Windows OS */ || defined(ARCH_32_BIT) /* 32-bit */
+#if defined(WINDOWS_OS) /* Windows OS */ || defined(X86_PROCESSOR) /* 32-bit */
 typedef long long int64;
 #elif defined(LINUX_OS) // Linux OS
 typedef long int64;
@@ -35,20 +35,20 @@ typedef long int64;
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned int uint32;
-#if defined(WINDOWS_OS) /* Windows OS */ || defined(ARCH_32_BIT) /* 32-bit */
+#if defined(WINDOWS_OS) /* Windows OS */ || defined(X86_PROCESSOR) /* 32-bit */
 typedef unsigned long long uint64;
 #elif defined(LINUX_OS) // Linux OS
 typedef unsigned long uint64;
-#endif // defined(WINDOWS_OS) || defined(ARCH_32_BIT)
+#endif // defined(WINDOWS_OS) || defined(X86_PROCESSOR)
 
 typedef float float32;
 typedef double float64;
 #ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 typedef long double float96;
-#elif defined(ARCH_64_BIT) // 64-bit
+#elif defined(X64_PROCESSOR) // 64-bit
 typedef long double float128;
-#endif // defined(ARCH_32_BIT)
+#endif // defined(X86_PROCESSOR)
 #endif // !COMPILER_MSVC
 
 typedef int64 llong;
@@ -56,32 +56,32 @@ typedef int64 llong;
 typedef uint8 uchar;
 typedef uint16 ushort;
 typedef uint32 uint;
-#if defined(WINDOWS_OS) /* Windows OS */ || defined(ARCH_32_BIT) /* 32-bit */
+#if defined(WINDOWS_OS) /* Windows OS */ || defined(X86_PROCESSOR) /* 32-bit */
 typedef uint32 ulong;
 #elif defined(LINUX_OS) // Linux OS
 typedef uint64 ulong;
-#endif // defined(WINDOWS_OS) || defined(ARCH_32_BIT)
+#endif // defined(WINDOWS_OS) || defined(X86_PROCESSOR)
 typedef uint64 ullong;
 
 #ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 typedef float96 ldouble;
-#elif defined(ARCH_64_BIT) // 64-bit
+#elif defined(X64_PROCESSOR) // 64-bit
 typedef float128 ldouble;
-#endif // defined(ARCH_32_BIT)
+#endif // defined(X86_PROCESSOR)
 #else
 typedef float64 ldouble;
 #endif // !COMPILER_MSVC
 
 typedef uint8 Byte;
 typedef uint16 WChar;
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 typedef uint32 Size;
-#elif defined(ARCH_64_BIT) // 64-bit
+#elif defined(X64_PROCESSOR) // 64-bit
 typedef uint64 Size;
 #else // Unknown
 typedef uint32 Size;
-#endif // defined(ARCH_32_BIT)
+#endif // defined(X86_PROCESSOR)
 
 typedef uint8 byte;
 typedef uint16 word;
@@ -107,8 +107,13 @@ typedef int bool;
 #define null nullptr
 typedef decltype(null) NullType;
 #else // below C++11
+#if defined(WINDOWS_OS) && defined(X64_PROCESSOR)
+#define null 0LL
+typedef llong NullType;
+#else
 #define null 0
 typedef int NullType;
+#endif // defined(WINDOWS_OS) && defined(X64_PROCESSOR)
 #endif // CXX_11_OR_MORE
 #else // C language
 #define null ((void *) 0)
@@ -142,11 +147,11 @@ typedef uint64 UINT64;
 typedef float32 FLOAT32;
 typedef float64 FLOAT64;
 #ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 typedef float96 FLOAT96;
-#elif defined(ARCH_64_BIT) // 64-bit
+#elif defined(X64_PROCESSOR) // 64-bit
 typedef float128 FLOAT128;
-#endif // defined(ARCH_32_BIT)
+#endif // defined(X86_PROCESSOR)
 #endif // !COMPILER_MSVC
 
 typedef char CHAR;
@@ -299,38 +304,38 @@ typedef InvalidType INVALID_TYPE;
 #define UINT32_MIN ((uint32) 0x0) // 0
 #define UINT64_MIN ((uint64) 0x0) // 0
 
-#define FLOAT32_MIN ((float32) 1.17549435082228750796873653722224568e-38)
-#define FLOAT64_MIN ((float64) 2.22507385850720138309023271733240406e-308)
+#define FLOAT32_MIN ((float32) 1.17549435082228750796873653722224568E-38)
+#define FLOAT64_MIN ((float64) 2.22507385850720138309023271733240406E-308)
 #ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 #define FLOAT96_MIN 0.0 // Unknown
-#elif defined(ARCH_64_BIT) // 64-bit
-#define FLOAT128_MIN ((float128) 3.36210314311209350626267781732175260e-4932)
-#endif // defined(ARCH_32_BIT)
+#elif defined(X64_PROCESSOR) // 64-bit
+#define FLOAT128_MIN ((float128) 3.36210314311209350626267781732175260E-4932)
+#endif // defined(X86_PROCESSOR)
 #endif // !COMPILER_MSVC
 
 #define CHAR_MIN INT8_MIN
 #define SHORT_MIN INT16_MIN
 #define INT_MIN INT32_MIN
-#if defined(WINDOWS_OS) /* Windows OS */ || defined(ARCH_32_BIT) /* 32-bit */
+#if defined(WINDOWS_OS) /* Windows OS */ || defined(X86_PROCESSOR) /* 32-bit */
 #define LONG_MIN INT32_MIN
 #elif defined(LINUX_OS) // Linux OS
 #define LONG_MIN INT64_MIN
 #else // Unknown
 #define LONG_MIN INT64_MIN
-#endif // defined(WINDOWS_OS) || defined(ARCH_32_BIT)
+#endif // defined(WINDOWS_OS) || defined(X86_PROCESSOR)
 #define LLONG_MIN INT64_MIN
 
 #define UCHAR_MIN UINT8_MIN;
 #define USHORT_MIN UINT16_MIN;
 #define UINT_MIN UINT32_MIN;
-#if defined(WINDOWS_OS) /* Windows OS */ || defined(ARCH_32_BIT) /* 32-bit */
+#if defined(WINDOWS_OS) /* Windows OS */ || defined(X86_PROCESSOR) /* 32-bit */
 #define ULONG_MIN UINT32_MIN
 #elif defined(LINUX_OS) // Linux OS
 #define ULONG_MIN UINT64_MIN
 #else // Unknown
 #define ULONG_MIN UINT64_MIN
-#endif // defined(WINDOWS_OS) || defined(ARCH_32_BIT)
+#endif // defined(WINDOWS_OS) || defined(X86_PROCESSOR)
 #define ULLONG_MIN UINT64_MIN
 
 #define FLOAT_MIN FLOAT32_MIN
@@ -338,24 +343,24 @@ typedef InvalidType INVALID_TYPE;
 #ifdef COMPILER_MSVC // Microsoft Visual C++
 #define LDOUBLE_MIN FLOAT32_MIN
 #else // Another compiler
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 #define LDOUBLE_MIN FLOAT96_MIN
-#elif defined(ARCH_64_BIT) // 64-bit
+#elif defined(X64_PROCESSOR) // 64-bit
 #define LDOUBLE_MIN FLOAT128_MIN
 #else // Unknown
 #define LDOUBLE_MIN FLOAT32_MIN
-#endif // defined(ARCH_32_BIT)
+#endif // defined(X86_PROCESSOR)
 #endif // COMPILER_MSVC
 
 #define BYTE_TYPE_MIN UINT8_MIN
 #define WCHAR_TYPE_MIN UINT16_MIN
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 #define SIZE_TYPE_MIN UINT32_MIN
-#elif defined(ARCH_64_BIT) // 64-bit
+#elif defined(X64_PROCESSOR) // 64-bit
 #define SIZE_TYPE_MIN UINT64_MIN
 #else // Unknown
 #define SIZE_TYPE_MIN UINT32_MIN
-#endif // ARCH_64_BIT
+#endif // X64_PROCESSOR
 
 #define BYTE_MIN UINT8_MIN
 #define WORD_MIN UINT16_MIN
@@ -476,38 +481,38 @@ typedef InvalidType INVALID_TYPE;
 #define UINT32_MAX ((uint32) 0xffffffff) // 4294967295
 #define UINT64_MAX ((uint64) 0xffffffffffffffff) // 18446744073709551615
 
-#define FLOAT32_MAX ((float32) 3.40282346638528859811704183484516925e+38)
-#define FLOAT64_MAX ((float64) 1.79769313486231570814527423731704357e+308)
+#define FLOAT32_MAX ((float32) 3.40282346638528859811704183484516925E+38)
+#define FLOAT64_MAX ((float64) 1.79769313486231570814527423731704357E+308)
 #ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 #define FLOAT96_MAX 0.0 // Unknown
-#elif defined(ARCH_64_BIT) // 64-bit
-#define FLOAT128_MAX ((float128) 1.18973149535723176502126385303097021e+4932)
-#endif // defined(ARCH_32_BIT)
+#elif defined(X64_PROCESSOR) // 64-bit
+#define FLOAT128_MAX ((float128) 1.18973149535723176502126385303097021E+4932)
+#endif // defined(X86_PROCESSOR)
 #endif // !COMPILER_MSVC
 
 #define CHAR_MAX INT8_MAX
 #define SHORT_MAX INT16_MAX
 #define INT_MAX INT32_MAX
-#if defined(WINDOWS_OS) /* Windows OS */ || defined(ARCH_32_BIT) /* 32-bit */
+#if defined(WINDOWS_OS) /* Windows OS */ || defined(X86_PROCESSOR) /* 32-bit */
 #define LONG_MAX INT32_MAX
 #elif defined(LINUX_OS) // Linux OS
 #define LONG_MAX INT64_MAX
 #else // Unknown
 #define LONG_MAX INT64_MAX
-#endif // defined(WINDOWS_OS) || defined(ARCH_32_BIT)
+#endif // defined(WINDOWS_OS) || defined(X86_PROCESSOR)
 #define LLONG_MAX INT64_MAX
 
 #define UCHAR_MAX UINT8_MAX
 #define USHORT_MAX UINT16_MAX
 #define UINT_MAX UINT32_MAX
-#if defined(WINDOWS_OS) /* Windows OS */ || defined(ARCH_32_BIT) /* 32-bit */
+#if defined(WINDOWS_OS) /* Windows OS */ || defined(X86_PROCESSOR) /* 32-bit */
 #define ULONG_MAX UINT32_MAX
 #elif defined(LINUX_OS) // Linux OS
 #define ULONG_MAX UINT64_MAX
 #else // Unknown
 #define ULONG_MAX UINT64_MAX
-#endif // defined(WINDOWS_OS) || defined(ARCH_32_BIT)
+#endif // defined(WINDOWS_OS) || defined(X86_PROCESSOR)
 #define ULLONG_MAX UINT64_MAX
 
 #define FLOAT_MAX FLOAT32_MAX
@@ -515,24 +520,24 @@ typedef InvalidType INVALID_TYPE;
 #ifdef COMPILER_MSVC // Microsoft Visual C++
 #define LDOUBLE_MAX FLOAT32_MAX
 #else // Another compiler
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 #define LDOUBLE_MAX FLOAT96_MAX
-#elif defined(ARCH_64_BIT) // 64-bit
+#elif defined(X64_PROCESSOR) // 64-bit
 #define LDOUBLE_MAX FLOAT128_MAX
 #else // Unknown
 #define LDOUBLE_MAX FLOAT32_MAX
-#endif // defined(ARCH_32_BIT)
+#endif // defined(X86_PROCESSOR)
 #endif // COMPILER_MSVC
 
 #define BYTE_TYPE_MAX UINT8_MAX
 #define WCHAR_TYPE_MAX UINT16_MAX
-#if defined(ARCH_32_BIT) // 32-bit
+#if defined(X86_PROCESSOR) // 32-bit
 #define SIZE_TYPE_MAX UINT32_MAX
-#elif defined(ARCH_64_BIT) // 64-bit
+#elif defined(X64_PROCESSOR) // 64-bit
 #define SIZE_TYPE_MAX UINT64_MAX
 #else // Unknown
 #define SIZE_TYPE_MAX UINT32_MAX
-#endif // ARCH_64_BIT
+#endif // X64_PROCESSOR
 
 #define BYTE_MAX UINT8_MAX
 #define WORD_MAX UINT16_MAX

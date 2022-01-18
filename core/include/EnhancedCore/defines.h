@@ -34,11 +34,11 @@
 
 // Detect the architecture for the current platform
 #if defined(_M_IX86) || defined(__i386__) // 32-bit
-#define ARCH_32_BIT
+#define X86_PROCESSOR
 #elif defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64__) // 64-bit
-#define ARCH_64_BIT
+#define X64_PROCESSOR
 #else // Unknown
-#define ARCH_UNKNOWN
+#define UNKNOWN_PROCESSOR
 #endif // defined(_M_IX86) || defined(__i386__)
 
 // Detect current operating system.
