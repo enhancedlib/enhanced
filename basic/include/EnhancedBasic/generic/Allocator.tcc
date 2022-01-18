@@ -27,6 +27,8 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
 
+#ifdef CXX_LANGUAGE
+
 namespace EnhancedBasic {
     namespace generic {
         template <typename Type>
@@ -82,5 +84,7 @@ namespace EnhancedBasic {
         }
     }
 }
+
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_BASIC_GENERIC_ALLOCATOR_TCC
