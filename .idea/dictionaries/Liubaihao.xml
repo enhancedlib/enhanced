@@ -2,6 +2,11 @@
   <dictionary name="Liubaihao">
     <words>
       <w>baihao</w>
+      <w>ldouble</w>
+      <w>llong</w>
+      <w>qword</w>
+      <w>ullong</w>
+      <w>ulong</w>
     </words>
   </dictionary>
 </component>
