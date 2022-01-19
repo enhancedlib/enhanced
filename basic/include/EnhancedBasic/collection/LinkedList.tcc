@@ -61,7 +61,7 @@ namespace EnhancedBasic {
         template <typename Type>
         $RetNotIgnored()
         Type &LinkedList<Type>::LinkedListIterator::get() const {
-            return reinterpret_cast<Type &>(LinkedListIterator0::get0());
+            return (Type &) LinkedListIterator0::get0();
         }
 
         template <typename Type>
@@ -77,19 +77,19 @@ namespace EnhancedBasic {
 
         template <typename Type>
         $RetRequiresRelease()
-        GenericPointer LinkedList<Type>::allocate(Generic &element) {
-            return new Type(reinterpret_cast<Type &>(element));
+        void *LinkedList<Type>::allocate(Generic &element) {
+            return new Type((Type &) element);
         }
 
         template <typename Type>
-        void LinkedList<Type>::destroy(GenericPointer element) {
-            delete reinterpret_cast<Type *>(element);
+        void LinkedList<Type>::destroy(void *element) {
+            delete (Type *) element;
         }
 
         template <typename Type>
         $RetNotIgnored()
         bool LinkedList<Type>::equals(Generic &element, Generic &value) {
-            return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
+            return ((Type &) element) == ((Type &) value);
         }
 
         template <typename Type>
@@ -116,7 +116,7 @@ namespace EnhancedBasic {
         template <typename Type>
         $RetNotIgnored()
         Type &LinkedList<Type>::getFirst() const {
-            return reinterpret_cast<Type &>(LinkedList0::getFirst0());
+            return (Type &) LinkedList0::getFirst0();
         }
 
         template <typename Type>
@@ -128,7 +128,7 @@ namespace EnhancedBasic {
         template <typename Type>
         $RetNotIgnored()
         Type &LinkedList<Type>::operator[](Size index) const {
-            return reinterpret_cast<Type &>(LinkedList0::get0(index));
+            return (Type &) LinkedList0::get0(index);
         }
 
         template <typename Type>
@@ -169,7 +169,7 @@ namespace EnhancedBasic {
         template <typename Type>
         Type LinkedList<Type>::removeLast() {
             Type value = this->getLast();
-            LinkedList0::removeFirst0();
+            LinkedList0::removeLast0();
             return value;
         }
 

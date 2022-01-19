@@ -27,8 +27,6 @@
 
 #include "EnhancedBasic/export.h"
 
-#include "EnhancedBasic/generic/Generic.h"
-
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
@@ -38,7 +36,7 @@ namespace EnhancedBasic {
             Size size = 0;
 
         protected:
-            GenericPointer space = null;
+            void *space = null;
 
             $RetNotIgnored()
             Size getSize0() const;
@@ -53,12 +51,6 @@ namespace EnhancedBasic {
         template <typename Type>
         class Allocator : private Allocator0 {
         public:
-            #ifdef CXX_11_OR_MORE
-            Allocator() = default;
-            #else
-            Allocator() {}
-            #endif // CXX_11_OR_MORE
-
             $RetNotIgnored()
             Size getSize() const;
 

@@ -31,16 +31,14 @@ namespace EnhancedBasic {
     namespace generic {
         class AnyArray {
         private:
-            void *anyArray;
+            void *anyArray = null;
 
         public:
-            AnyArray();
-
             template <typename Type>
             AnyArray(const Type *value);
 
             template <typename Type>
-            AnyArray(const AnyArray &copy);
+            AnyArray(const AnyArray &other);
 
             template <typename Type>
             Type *cast() const;

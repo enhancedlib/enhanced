@@ -61,7 +61,7 @@ namespace EnhancedBasic {
         template <typename Type>
         $RetNotIgnored()
         Type &ArrayList<Type>::ArrayListIterator::get() const {
-            return reinterpret_cast<Type &>(ArrayListIterator0::get0());
+            return (Type &) ArrayListIterator0::get0();
         }
 
         template <typename Type>
@@ -77,19 +77,19 @@ namespace EnhancedBasic {
 
         template <typename Type>
         $RetRequiresRelease()
-        GenericPointer ArrayList<Type>::allocate(GenericReference element) {
-            return new Type(reinterpret_cast<Type &>(element));
+        void *ArrayList<Type>::allocate(GenericReference element) {
+            return new Type((Type &) element);
         }
 
         template <typename Type>
-        void ArrayList<Type>::destroy(GenericPointer element) {
-            delete reinterpret_cast<Type *>(element);
+        void ArrayList<Type>::destroy(void *element) {
+            delete (Type *) element;
         }
 
         template <typename Type>
         $RetNotIgnored()
         bool ArrayList<Type>::equals(GenericReference element, GenericReference value) {
-            return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
+            return ((Type &) element) == ((Type &) value);
         }
 
         template <typename Type>
@@ -99,7 +99,7 @@ namespace EnhancedBasic {
         ArrayList<Type>::ArrayList(Size maxCount) : ArrayList0(maxCount, {allocate, destroy, equals}) {}
 
         template <typename Type>
-        ArrayList<Type>::ArrayList(const ArrayList<Type> &copy) : ArrayList0(copy) {}
+        ArrayList<Type>::ArrayList(const ArrayList<Type> &other) : ArrayList0(other) {}
 
         template <typename Type>
         $RetNotIgnored()
@@ -114,12 +114,12 @@ namespace EnhancedBasic {
 
         template <typename Type>
         Type &ArrayList<Type>::get(Size index) const {
-            return reinterpret_cast<Type &>(ArrayList0::get0(index));
+            return (Type &) ArrayList0::get0(index);
         }
 
         template <typename Type>
         Type &ArrayList<Type>::operator[](Size index) const {
-            return reinterpret_cast<Type &>(ArrayList0::get0(index));
+            return (Type &) ArrayList0::get0(index);
         }
 
         template <typename Type>

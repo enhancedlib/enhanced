@@ -75,14 +75,14 @@ MixedArrayList0::MixedArrayList0(const Size maxCount, const GenericsOperator gen
     length(0), elements(new Node[maxCount]), maxCount(maxCount),
     genericsOperator(genericsOperator), iterator(null) {}
 
-MixedArrayList0::MixedArrayList0(const MixedArrayList0 &copy) :
-    length(copy.length), elements(new Node[copy.maxCount]), maxCount(copy.maxCount),
-    genericsOperator(copy.genericsOperator), iterator(null) {
-    for (Size index = 0; index < copy.length; ++ index) {
-        if (copy.elements[index].dynamic) {
-            this->elements[index].value = this->genericsOperator.allocate(generic_cast(copy.elements[index].value));
+MixedArrayList0::MixedArrayList0(const MixedArrayList0 &other) :
+    length(other.length), elements(new Node[other.maxCount]), maxCount(other.maxCount),
+    genericsOperator(other.genericsOperator), iterator(null) {
+    for (Size index = 0; index < other.length; ++ index) {
+        if (other.elements[index].dynamic) {
+            this->elements[index].value = this->genericsOperator.allocate(generic_cast(other.elements[index].value));
         } else {
-            this->elements[index] = copy.elements[index];
+            this->elements[index] = other.elements[index];
         }
     }
 }

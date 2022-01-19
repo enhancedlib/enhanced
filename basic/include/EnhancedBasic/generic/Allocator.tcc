@@ -39,7 +39,7 @@ namespace EnhancedBasic {
 
         template <typename Type>
         Type &Allocator<Type>::get(Size index) const {
-            return reinterpret_cast<Type *>(Allocator0::space)[index];
+            return ((Type *) Allocator0::space)[index];
         }
 
         template <typename Type>

@@ -73,14 +73,14 @@ Size ReferencedArrayList0::ReferencedArrayListIterator0::count0() const {
 }
 
 ReferencedArrayList0::ReferencedArrayList0(const Size maxCount, const GenericsOperator genericsOperator) :
-    length(0), elements(new GenericPointer[maxCount]), maxCount(maxCount),
+    length(0), elements(new void *[maxCount]), maxCount(maxCount),
     genericsOperator(genericsOperator), iterator(null) {}
 
-ReferencedArrayList0::ReferencedArrayList0(const ReferencedArrayList0 &copy) :
-    length(copy.length), elements(new GenericPointer[copy.maxCount]), maxCount(copy.maxCount),
-    genericsOperator(copy.genericsOperator), iterator(null) {
-    for (Size index = 0; index < copy.length; ++ index) {
-        this->elements[index] = copy.elements[index];
+ReferencedArrayList0::ReferencedArrayList0(const ReferencedArrayList0 &other) :
+    length(other.length), elements(new void *[other.maxCount]), maxCount(other.maxCount),
+    genericsOperator(other.genericsOperator), iterator(null) {
+    for (Size index = 0; index < other.length; ++ index) {
+        this->elements[index] = other.elements[index];
     }
 }
 
@@ -129,9 +129,9 @@ void ReferencedArrayList0::remove0() {
 
 void ReferencedArrayList0::expand0(const Size size) {
     Size count = this->maxCount + size;
-    GenericPointer *array = new GenericPointer[count];
+    void **array = new void *[count];
 
-    arrayCopy(array, this->elements, count, sizeof(GenericPointer));
+    arrayCopy(array, this->elements, count, sizeof(void *));
     delete[] this->elements;
 
     this->elements = array;
@@ -142,9 +142,9 @@ void ReferencedArrayList0::shrink0(const Size size) {
     Size count = this->maxCount - size;
     assert(count > this->length);
 
-    GenericPointer *array = new GenericPointer[count];
+    void **array = new void *[count];
 
-    arrayCopy(array, this->elements, count, sizeof(GenericPointer));
+    arrayCopy(array, this->elements, count, sizeof(void *));
     delete[] this->elements;
 
     this->elements = array;

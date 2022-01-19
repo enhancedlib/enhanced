@@ -43,7 +43,7 @@ namespace EnhancedBasic {
             class ENHANCED_BASIC_API ReferencedLinkedList0 {
             private:
                 struct Node {
-                    GenericPointer value;
+                    void *value;
 
                     Node *next;
 
@@ -103,7 +103,7 @@ namespace EnhancedBasic {
 
                 explicit ReferencedLinkedList0(GenericsOperator genericsOperator);
 
-                ReferencedLinkedList0(const ReferencedLinkedList0 &copy);
+                ReferencedLinkedList0(const ReferencedLinkedList0 &other);
 
                 virtual ~ReferencedLinkedList0() noexcept;
 
@@ -185,7 +185,7 @@ namespace EnhancedBasic {
             public:
                 inline ReferencedLinkedList() : ReferencedLinkedList0({equals}) {}
 
-                ReferencedLinkedList(const ReferencedLinkedList<Type> &copy);
+                ReferencedLinkedList(const ReferencedLinkedList<Type> &other);
 
                 $RetNotIgnored()
                 inline Size getLength() const override;

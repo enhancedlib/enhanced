@@ -41,7 +41,7 @@ namespace EnhancedBasic {
     namespace collection {
         class ENHANCED_BASIC_API ArrayList0 {
         private:
-            GenericPointer *elements;
+            void **elements;
 
             Size length;
 
@@ -49,9 +49,9 @@ namespace EnhancedBasic {
 
         protected:
             struct GenericsOperator {
-                GenericPointer (*allocate)(GenericReference);
+                void *(*allocate)(GenericReference);
 
-                void (*destroy)(GenericPointer);
+                void (*destroy)(void *);
 
                 bool (*equals)(GenericReference, GenericReference);
             };
@@ -62,11 +62,11 @@ namespace EnhancedBasic {
             private:
                 const ArrayList0 *arrayList;
 
-                mutable GenericPointer *indexer;
+                mutable void **indexer;
 
                 mutable bool isFirst;
 
-                const GenericPointer *end;
+                void **end;
 
             protected:
                 explicit ArrayListIterator0(const ArrayList0 *arrayList);
@@ -96,7 +96,7 @@ namespace EnhancedBasic {
 
             ArrayList0(Size length, GenericsOperator genericsOperator);
 
-            ArrayList0(const ArrayList0 &copy);
+            ArrayList0(const ArrayList0 &other);
 
             virtual ~ArrayList0() noexcept;
 
@@ -148,9 +148,9 @@ namespace EnhancedBasic {
             };
 
             $RetRequiresRelease()
-            static GenericPointer allocate(GenericReference element);
+            static void *allocate(GenericReference element);
 
-            static void destroy(GenericPointer element);
+            static void destroy(void *element);
 
             $RetNotIgnored()
             static bool equals(GenericReference element, GenericReference value);
@@ -160,7 +160,7 @@ namespace EnhancedBasic {
 
             explicit inline ArrayList(Size maxCount);
 
-            inline ArrayList(const ArrayList<Type> &copy);
+            inline ArrayList(const ArrayList<Type> &other);
 
             $RetNotIgnored()
             inline Size getLength() const override;

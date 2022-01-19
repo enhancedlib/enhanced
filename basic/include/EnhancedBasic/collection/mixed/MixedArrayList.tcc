@@ -62,7 +62,7 @@ namespace EnhancedBasic {
             template <typename Type>
             $RetNotIgnored()
             Type &MixedArrayList<Type>::MixedArrayListIterator::get() const {
-                return reinterpret_cast<Type &>(MixedArrayListIterator0::get0());
+                return (Type &) MixedArrayListIterator0::get0();
             }
 
             template <typename Type>
@@ -78,19 +78,19 @@ namespace EnhancedBasic {
 
             template <typename Type>
             $RetRequiresRelease()
-            GenericPointer MixedArrayList<Type>::allocate(GenericReference element) {
+            void *MixedArrayList<Type>::allocate(GenericReference element) {
                 return new Type(reinterpret_cast<Type &>(element));
             }
 
             template <typename Type>
-            void MixedArrayList<Type>::destroy(GenericPointer element) {
-                delete reinterpret_cast<Type *>(element);
+            void MixedArrayList<Type>::destroy(void *element) {
+                delete (Type *) element;
             }
 
             template <typename Type>
             $RetNotIgnored()
             bool MixedArrayList<Type>::equals(GenericReference element, GenericReference value) {
-                return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
+                return ((Type &) element) == ((Type &) (value));
             }
 
             template <typename Type>
@@ -104,7 +104,7 @@ namespace EnhancedBasic {
             ) {}
 
             template <typename Type>
-            MixedArrayList<Type>::MixedArrayList(const MixedArrayList<Type> &copy) : MixedArrayList0(copy) {}
+            MixedArrayList<Type>::MixedArrayList(const MixedArrayList<Type> &other) : MixedArrayList0(other) {}
 
             template <typename Type>
             $RetNotIgnored()
@@ -121,7 +121,7 @@ namespace EnhancedBasic {
             template <typename Type>
             $RetNotIgnored()
             Type &MixedArrayList<Type>::get(Size index) const {
-                return reinterpret_cast<Type &>(MixedArrayList0::get0(index));
+                return ((Type &) MixedArrayList0::get0(index));
             }
 
             template <typename Type>

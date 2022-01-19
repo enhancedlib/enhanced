@@ -60,7 +60,7 @@ namespace EnhancedBasic {
             template <typename Type>
             $RetNotIgnored()
             Type &MixedLinkedList<Type>::MixedLinkedListIterator::get() const {
-                return reinterpret_cast<Type &>(MixedLinkedListIterator0::get0());
+                return (Type &) MixedLinkedListIterator0::get0();
             }
 
             template <typename Type>
@@ -76,27 +76,27 @@ namespace EnhancedBasic {
 
             template <typename Type>
             $RetRequiresRelease()
-            GenericPointer MixedLinkedList<Type>::allocate(GenericReference element) {
+            void *MixedLinkedList<Type>::allocate(GenericReference element) {
                 return new Type(reinterpret_cast<Type &>(element));
             }
 
             template <typename Type>
-            void MixedLinkedList<Type>::destroy(GenericPointer element) {
-                delete reinterpret_cast<Type &>(element);
+            void MixedLinkedList<Type>::destroy(void *element) {
+                delete (Type &) element;
             }
 
             template <typename Type>
             $RetNotIgnored()
             bool MixedLinkedList<Type>::equals(GenericReference element, GenericReference value) {
-                return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
+                return ((Type &) element) == ((Type &) (value));
             }
 
             template <typename Type>
             MixedLinkedList<Type>::MixedLinkedList() : MixedLinkedList0({allocate, destroy, equals}) {}
 
             template <typename Type>
-            MixedLinkedList<Type>::MixedLinkedList(const MixedLinkedList <Type> &copy) :
-                MixedLinkedList0(copy) {}
+            MixedLinkedList<Type>::MixedLinkedList(const MixedLinkedList <Type> &other) :
+                MixedLinkedList0(other) {}
 
             template <typename Type>
             $RetNotIgnored()
@@ -125,13 +125,13 @@ namespace EnhancedBasic {
             template <typename Type>
             $RetNotIgnored()
             Type &MixedLinkedList<Type>::getLast() const {
-                return reinterpret_cast<Type &>(MixedLinkedList0::getLast0());
+                return (Type &) MixedLinkedList0::getLast0();
             }
 
             template <typename Type>
             $RetNotIgnored()
             Type &MixedLinkedList<Type>::getFirst() const {
-                return reinterpret_cast<Type &>(MixedLinkedList0::getFirst0());
+                return (Type &) MixedLinkedList0::getFirst0();
             }
 
             template <typename Type>
@@ -143,7 +143,7 @@ namespace EnhancedBasic {
             template <typename Type>
             $RetNotIgnored()
             Type &MixedLinkedList<Type>::operator[](Size index) const {
-                return reinterpret_cast<Type &>(MixedLinkedList0::get0(index));
+                return (Type &) MixedLinkedList0::get0(index);
             }
 
             template <typename Type>

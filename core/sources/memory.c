@@ -34,9 +34,9 @@ void *memoryAlloc(const Size size) {
     return malloc(size);
 }
 
-void memoryFree(void *const ptr) {
-    if (ptr != null) {
-        free(ptr);
+void memoryFree(void *const pointer) {
+    if (pointer != null) {
+        free(pointer);
     }
 }
 

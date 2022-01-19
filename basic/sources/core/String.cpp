@@ -40,8 +40,7 @@ String::String(char *const value) : value(value), length(stringLength(value)), d
 
 String::String(const Size length) : value(stringNew(length)), length(length), dynamic(true) {}
 
-String::String(const String &copy) : value(stringCopy(copy)), length(copy.length),
-                                     dynamic(true) {}
+String::String(const String &other) : value(stringCopy(other)), length(other.length), dynamic(true) {}
 
 String::~String() {
     if (this->dynamic) {

@@ -89,11 +89,11 @@ MixedLinkedList0::MixedLinkedList0(const GenericsOperator genericsOperator) :
     first(null), last(null), indexer(null), length(0),
     genericsOperator(genericsOperator), iterator(null) {}
 
-MixedLinkedList0::MixedLinkedList0(const MixedLinkedList0 &copy) :
+MixedLinkedList0::MixedLinkedList0(const MixedLinkedList0 &other) :
     first(null), last(null), indexer(null), length(0),
-    genericsOperator(copy.genericsOperator), iterator(null) {
-    this->indexer = copy.first;
-    for (Size count = 0; count < copy.length; ++ count) {
+    genericsOperator(other.genericsOperator), iterator(null) {
+    this->indexer = other.first;
+    for (Size count = 0; count < other.length; ++ count) {
         if (this->indexer->dynamic) {
             this->addLast0(generic_cast(this->indexer->value));
         } else {

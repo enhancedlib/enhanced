@@ -89,11 +89,11 @@ ReferencedLinkedList0::ReferencedLinkedList0(const GenericsOperator genericsOper
     first(null), last(null), indexer(null), length(0),
     genericsOperator(genericsOperator), iterator(null) {}
 
-ReferencedLinkedList0::ReferencedLinkedList0(const ReferencedLinkedList0 &copy) :
+ReferencedLinkedList0::ReferencedLinkedList0(const ReferencedLinkedList0 &other) :
     first(null), last(null), indexer(null), length(0),
-    genericsOperator(copy.genericsOperator), iterator(null) {
-    this->indexer = copy.first;
-    for (Size count = 0; count < copy.length; ++ count) {
+    genericsOperator(other.genericsOperator), iterator(null) {
+    this->indexer = other.first;
+    for (Size count = 0; count < other.length; ++ count) {
         this->addLast0(generic_cast(this->indexer->value));
         ReferencedLinkedList0::nextNode(this->indexer);
     }

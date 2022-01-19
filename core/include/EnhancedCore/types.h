@@ -122,7 +122,7 @@ typedef void *NullType;
 
 typedef Byte InvalidType;
 
-#ifndef SUPPRESS_DEFINE_UPPERCASE_TYPES
+#ifndef SUPPRESS_DEFINES_UPPERCASE_TYPES
 
 #ifdef NULL
 #undef NULL
@@ -188,7 +188,7 @@ typedef NullType NULL_TYPE;
 
 typedef InvalidType INVALID_TYPE;
 
-#endif // !SUPPRESS_DEFINE_UPPERCASE_TYPES
+#endif // !SUPPRESS_DEFINES_UPPERCASE_TYPES
 
 #ifdef INT8_MIN
 #undef INT8_MIN

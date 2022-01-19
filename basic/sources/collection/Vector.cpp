@@ -74,17 +74,17 @@ Vector0::Vector0(const Size maxCount, const GenericsOperator genericsOperator) :
     maxCount(maxCount), length(0), elements(genericsOperator.allocateArray(maxCount)),
     genericsOperator(genericsOperator), iterator(null) {}
 
-Vector0::Vector0(const Vector0 &copy) :
-    maxCount(copy.maxCount), length(copy.length), elements(copy.genericsOperator.allocateArray(copy.maxCount)),
-    genericsOperator(copy.genericsOperator), iterator(null) {
-    for (Size index = 0; index < copy.length; ++ index) {
+Vector0::Vector0(const Vector0 &other) :
+    maxCount(other.maxCount), length(other.length), elements(other.genericsOperator.allocateArray(other.maxCount)),
+    genericsOperator(other.genericsOperator), iterator(null) {
+    for (Size index = 0; index < other.length; ++ index) {
         this->genericsOperator.setElement(this->elements, index,
-            this->genericsOperator.getElement(copy.elements, index));
+            this->genericsOperator.getElement(other.elements, index));
     }
 }
 
 Vector0::~Vector0() noexcept {
-    this->genericsOperator.destroyArray(this->elements, this->length);
+    operator delete(this->elements);
     delete this->iterator;
 }
 
@@ -129,10 +129,10 @@ void Vector0::remove0() {
 
 void Vector0::expand0(const Size size) {
     Size count = this->maxCount + size;
-    GenericPointer array = this->genericsOperator.allocateArray(count);
+    void *array = this->genericsOperator.allocateArray(count);
 
     this->genericsOperator.copyArray(array, this->elements, this->length);
-    this->genericsOperator.destroyArray(this->elements, this->length);
+    operator delete(this->elements);
 
     this->elements = array;
     this->maxCount = count;
@@ -142,10 +142,10 @@ void Vector0::shrink0(const Size size) {
     Size count = this->maxCount - size;
     assert(count > this->length);
 
-    GenericPointer array = this->genericsOperator.allocateArray(count);
+    void *array = this->genericsOperator.allocateArray(count);
 
     this->genericsOperator.copyArray(array, this->elements, this->length);
-    this->genericsOperator.destroyArray(this->elements, this->length);
+    operator delete(this->elements);
 
     this->elements = array;
     this->maxCount = count;

@@ -43,23 +43,21 @@ namespace EnhancedBasic {
         private:
             Size maxCount;
 
-            GenericPointer elements;
+            void *elements;
 
             Size length;
 
         protected:
             struct GenericsOperator {
-                GenericPointer (*allocateArray)(const Size size);
+                void *(*allocateArray)(const Size size);
 
-                void (*destroyArray)(GenericPointer elements, Size length);
+                void (*copyArray)(void *destination, void *source, const Size size);
 
-                void (*copyArray)(GenericPointer destination, GenericPointer source, const Size size);
+                void *(*index)(void *elements, const Size index);
 
-                GenericPointer (*index)(GenericPointer elements, const Size index);
+                GenericReference (*getElement)(void *elements, const Size index);
 
-                GenericReference (*getElement)(GenericPointer elements, const Size index);
-
-                void (*setElement)(GenericPointer elements, const Size index, GenericReference value);
+                void (*setElement)(void *elements, const Size index, GenericReference value);
 
                 bool (*equals)(GenericReference element, GenericReference value);
             };
@@ -70,11 +68,11 @@ namespace EnhancedBasic {
             private:
                 const Vector0 *vector;
 
-                mutable GenericPointer indexer;
+                mutable void *indexer;
 
                 mutable bool isFirst;
 
-                GenericPointer end;
+                void *end;
 
             protected:
                 explicit VectorIterator0(const Vector0 *vector);
@@ -104,7 +102,7 @@ namespace EnhancedBasic {
 
             Vector0(Size length, GenericsOperator genericsOperator);
 
-            Vector0(const Vector0 &copy);
+            Vector0(const Vector0 &other);
 
             virtual ~Vector0() noexcept;
 
@@ -156,17 +154,15 @@ namespace EnhancedBasic {
             };
 
             $RetRequiresRelease()
-            static GenericPointer allocateArray(Size size);
+            static void *allocateArray(Size size);
 
-            static void destroyArray(GenericPointer elements, Size length);
+            static void copyArray(void *destination, void *source, Size size);
 
-            static void copyArray(GenericPointer destination, GenericPointer source, Size size);
+            static GenericReference getElement(void *elements, Size index);
 
-            static GenericReference getElement(GenericPointer elements, Size index);
+            static void *index(void *elements, Size index);
 
-            static GenericPointer index(GenericPointer elements, Size index);
-
-            static void setElement(GenericPointer elements, Size index, GenericReference value);
+            static void setElement(void *elements, Size index, GenericReference value);
 
             $RetNotIgnored()
             static bool equals(GenericReference element, GenericReference value);
@@ -176,7 +172,7 @@ namespace EnhancedBasic {
 
             explicit inline Vector(Size maxCount);
 
-            inline Vector(const Vector<Type> &copy);
+            inline Vector(const Vector<Type> &other);
 
             $RetNotIgnored()
             inline Size getLength() const override;

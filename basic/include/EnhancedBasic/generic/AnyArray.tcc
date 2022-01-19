@@ -31,8 +31,6 @@
 
 namespace EnhancedBasic {
     namespace generic {
-        AnyArray::AnyArray() : anyArray(null) {}
-
         template <typename Type>
         AnyArray::AnyArray(const Type *value) : anyArray((void *) value) {}
 

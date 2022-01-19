@@ -1,6 +1,7 @@
 <component name="CopyrightManager">
   <copyright>
+    <option name="keyword" />
     <option name="notice" value="Copyright (C) &amp;#36;today.year Liu Baihao. All rights reserved.&#10;This software is licensed under Enhanced License.&#10;&#10;This copyright disclaimer is subject to change without notice.&#10;&#10;This software is a free software,&#10;everyone can change, copy, publication, demonstrate, use, etc.&#10;&#10;If you change and publication this software,&#10;must credit the original software source and author's name,&#10;and include this copyright disclaimer and&#10;the license of this software in your software.&#10;&#10;This software and documentation may provide&#10;third-party content, product and other information.&#10;I am not responsible for any loss or damage caused&#10;by your access to or use of third-party content, products, etc." />
-    <option name="myName" value="Copyright" />
+    <option name="myName" value="Liu Baihao" />
   </copyright>
 </component>

@@ -57,7 +57,7 @@ namespace EnhancedBasic {
         template <typename Type>
         $RetNotIgnored()
         Type &Vector<Type>::VectorIterator::get() const {
-            return reinterpret_cast<Type &>(VectorIterator0::get0());
+            return (Type &) VectorIterator0::get0();
         }
 
         template <typename Type>
@@ -73,58 +73,50 @@ namespace EnhancedBasic {
 
         template <typename Type>
         $RetRequiresRelease()
-        GenericPointer Vector<Type>::allocateArray(const Size size) {
+        void *Vector<Type>::allocateArray(const Size size) {
             return operator new(size * sizeof(Type));
         }
 
         template <typename Type>
-        void Vector<Type>::destroyArray(GenericPointer elements, Size length) {
-            for (Size index = 0; index < length; ++ index) {
-                static_cast<Type *>(elements)[index].~Type();
-            }
-            operator delete(elements);
-        }
-
-        template <typename Type>
-        void Vector<Type>::copyArray(GenericPointer destination, GenericPointer source, const Size size) {
+        void Vector<Type>::copyArray(void *destination, void *source, const Size size) {
             for (Size index = 0; index < size; ++ index) {
-                static_cast<Type *>(destination)[index] = reinterpret_cast<Type *>(source)[index];
+                static_cast<Type *>(destination)[index] = ((Type *) (source))[index];
             }
         }
 
         template <typename Type>
-        GenericPointer Vector<Type>::index(GenericPointer elements, const Size index) {
-            return static_cast<GenericPointer>((static_cast<Type *>(elements) + index));
+        void *Vector<Type>::index(void *elements, const Size index) {
+            return static_cast<void *>((static_cast<Type *>(elements) + index));
         }
 
         template <typename Type>
-        GenericReference Vector<Type>::getElement(GenericPointer elements, const Size index) {
+        GenericReference Vector<Type>::getElement(void *elements, const Size index) {
             return (GenericReference) static_cast<Type *>(elements)[index];
         }
 
         template <typename Type>
-        void Vector<Type>::setElement(GenericPointer elements, const Size index, GenericReference value) {
+        void Vector<Type>::setElement(void *elements, const Size index, GenericReference value) {
             memoryCopy(&static_cast<Type *>(elements)[index],
-                &reinterpret_cast<Type &>(value), sizeof(Type));
+                &((Type &) (value)), sizeof(Type));
         }
 
         template <typename Type>
         bool Vector<Type>::equals(GenericReference element, GenericReference value) {
-            return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
+            return ((Type &) (element)) == ((Type &) (value));
         }
 
         template <typename Type>
         Vector<Type>::Vector() : Vector0(UINT8_MAX, {
-            allocateArray, destroyArray, copyArray, index, getElement, setElement, equals
+            allocateArray, copyArray, index, getElement, setElement, equals
         }) {}
 
         template <typename Type>
         Vector<Type>::Vector(Size maxCount) : Vector0(maxCount, {
-            allocateArray, destroyArray, copyArray, index, getElement, setElement, equals
+            allocateArray, copyArray, index, getElement, setElement, equals
         }) {}
 
         template <typename Type>
-        Vector<Type>::Vector(const Vector <Type> &copy) : Vector0(copy) {}
+        Vector<Type>::Vector(const Vector <Type> &other) : Vector0(other) {}
 
         template <typename Type>
         $RetNotIgnored()
@@ -141,13 +133,13 @@ namespace EnhancedBasic {
         template <typename Type>
         $RetNotIgnored()
         Type &Vector<Type>::get(Size index) const {
-            return reinterpret_cast<Type &>(Vector0::get0(index));
+            return (Type &) Vector0::get0(index);
         }
 
         template <typename Type>
         $RetNotIgnored()
         Type &Vector<Type>::operator[](Size index) const {
-            return reinterpret_cast<Type &>(Vector0::get0(index));
+            return (Type &) (Vector0::get0(index));
         }
 
         template <typename Type>

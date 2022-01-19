@@ -95,7 +95,7 @@ namespace EnhancedBasic {
 
             explicit String(Size count);
 
-            String(const String &copy);
+            String(const String &other);
 
             ~String();
 

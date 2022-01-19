@@ -42,7 +42,7 @@ namespace EnhancedBasic {
         class ENHANCED_BASIC_API LinkedList0 {
         private:
             struct Node {
-                GenericPointer value;
+                void *value;
 
                 Node *next;
 
@@ -63,9 +63,9 @@ namespace EnhancedBasic {
 
         protected:
             struct GenericsOperator {
-                GenericPointer (*allocate)(GenericReference);
+                void *(*allocate)(GenericReference);
 
-                void (*destroy)(GenericPointer);
+                void (*destroy)(void *);
 
                 bool (*equals)(GenericReference, GenericReference);
             };
@@ -106,7 +106,7 @@ namespace EnhancedBasic {
 
             explicit LinkedList0(GenericsOperator genericsOperator);
 
-            LinkedList0(const LinkedList0 &copy);
+            LinkedList0(const LinkedList0 &other);
 
             virtual ~LinkedList0() noexcept;
 
@@ -183,9 +183,9 @@ namespace EnhancedBasic {
             };
 
             $RetRequiresRelease()
-            static GenericPointer allocate(GenericReference element);
+            static void *allocate(GenericReference element);
 
-            static void destroy(GenericPointer element);
+            static void destroy(void *element);
 
             $RetNotIgnored()
             static bool equals(GenericReference element, GenericReference value);
@@ -193,7 +193,7 @@ namespace EnhancedBasic {
         public:
             explicit inline LinkedList();
 
-            inline LinkedList(const LinkedList<Type> &copy) : LinkedList0(copy) {}
+            inline LinkedList(const LinkedList<Type> &other) : LinkedList0(other) {}
 
             $RetNotIgnored()
             inline Size getLength() const override;

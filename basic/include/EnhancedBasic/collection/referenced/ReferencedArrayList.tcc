@@ -63,7 +63,7 @@ namespace EnhancedBasic {
             template <typename Type>
             $RetNotIgnored()
             Type &ReferencedArrayList<Type>::ReferencedArrayListIterator::get() const {
-                return reinterpret_cast<Type &>(ReferencedArrayListIterator0::get0());
+                return (Type &) ReferencedArrayListIterator0::get0();
             }
 
             template <typename Type>
@@ -80,7 +80,7 @@ namespace EnhancedBasic {
             template <typename Type>
             $RetNotIgnored()
             bool ReferencedArrayList<Type>::equals(GenericReference element, GenericReference value) {
-                return reinterpret_cast<Type &>(element) == reinterpret_cast<Type &>(value);
+                return ((Type &) element) == ((Type &) (value));
             }
 
             template <typename Type>
@@ -90,8 +90,8 @@ namespace EnhancedBasic {
             ReferencedArrayList<Type>::ReferencedArrayList(Size maxCount) : ReferencedArrayList0(maxCount, {equals}) {}
 
             template <typename Type>
-            ReferencedArrayList<Type>::ReferencedArrayList(const ReferencedArrayList<Type> &copy) :
-                ReferencedArrayList0(copy) {}
+            ReferencedArrayList<Type>::ReferencedArrayList(const ReferencedArrayList<Type> &other) :
+                ReferencedArrayList0(other) {}
 
             template <typename Type>
             $RetNotIgnored()
@@ -108,7 +108,7 @@ namespace EnhancedBasic {
             template <typename Type>
             $RetNotIgnored()
             Type &ReferencedArrayList<Type>::get(Size index) const {
-                return reinterpret_cast<Type &>(ReferencedArrayList0::get0(index));
+                return (Type &) ReferencedArrayList0::get0(index);
             }
 
             template <typename Type>

@@ -18,19 +18,20 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#ifndef ENHANCED_BASIC_GENERIC_GENERIC_H
-#define ENHANCED_BASIC_GENERIC_GENERIC_H
+#include "EnhancedBasic/generic/Any.h"
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/annotations.h"
 
-#ifdef CXX_LANGUAGE
+using EnhancedBasic::generic::Any;
 
-typedef void *Generic;
-typedef Generic &GenericReference;
+$RetNotIgnored()
+bool Any::operator==(const Any &value) const {
+    return this == &value;
+}
 
-#define generic_cast(pointer) *reinterpret_cast<Generic *>(pointer)
-
-#endif // CXX_LANGUAGE
-
-#endif // !ENHANCED_BASIC_GENERIC_GENERIC_H
+$RetNotIgnored()
+bool Any::operator!=(const Any &value) const {
+    return this != &value;
+}

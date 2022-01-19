@@ -42,7 +42,7 @@ namespace EnhancedBasic {
         namespace referenced {
             class ENHANCED_BASIC_API ReferencedArrayList0 {
             private:
-                GenericPointer *elements;
+                void **elements;
 
                 Size length;
 
@@ -59,11 +59,11 @@ namespace EnhancedBasic {
                 private:
                     const ReferencedArrayList0 *referenceArrayList;
 
-                    mutable GenericPointer *indexer;
+                    mutable void **indexer;
 
                     mutable bool isFirst;
 
-                    const GenericPointer *end;
+                    void **end;
 
                 protected:
                     explicit ReferencedArrayListIterator0(const ReferencedArrayList0 *referenceArrayList);
@@ -93,7 +93,7 @@ namespace EnhancedBasic {
 
                 ReferencedArrayList0(Size length, GenericsOperator genericsOperator);
 
-                ReferencedArrayList0(const ReferencedArrayList0 &copy);
+                ReferencedArrayList0(const ReferencedArrayList0 &other);
 
                 virtual ~ReferencedArrayList0() noexcept;
 
@@ -154,7 +154,7 @@ namespace EnhancedBasic {
 
                 explicit inline ReferencedArrayList(Size maxCount);
 
-                inline ReferencedArrayList(const ReferencedArrayList<Type> &copy);
+                inline ReferencedArrayList(const ReferencedArrayList<Type> &other);
 
                 $RetNotIgnored()
                 inline Size getLength() const override;

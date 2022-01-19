@@ -42,16 +42,16 @@ ENHANCED_CORE_API void *memoryAlloc(Size size);
 /*!
  * Frees a memory space to which the pointer points.
  *
- * @example memoryFree(ptr)
+ * @example memoryFree(pointer)
  *
- * @param ptr A pointer.
+ * @param pointer A pointer.
  */
-ENHANCED_CORE_API void memoryFree(void *ptr);
+ENHANCED_CORE_API void memoryFree(void *pointer);
 
 /*!
  * Sets a memory space of a pointer to the same value.
  *
- * @example memorySet(ptr, 0, 10 * sizeof(int))
+ * @example memorySet(pointer, 0, 10 * sizeof(int))
  *
  * @param ptr    A pointer.
  * @param byte   A byte (range: 0 ~ 255).

@@ -25,15 +25,13 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
 
-#include "EnhancedBasic/generic/Generic.h"
-
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
     namespace generic {
         class Any {
         private:
-            GenericPointer any;
+            void *any;
 
         public:
             Any();
@@ -42,7 +40,7 @@ namespace EnhancedBasic {
             Any(const Type &value);
 
             template <typename Type>
-            Any(const Any &copy);
+            Any(const Any &other);
 
             template <typename Type>
             $RetNotIgnored()

@@ -31,13 +31,7 @@ message("${PROMPT} Build type: ${CMAKE_BUILD_TYPE}")
 message("${PROMPT} Build platform: ${CMAKE_GENERATOR_PLATFORM}")
 message("${PROMPT} Installation directory: ${CMAKE_INSTALL_PREFIX}")
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    message("${PROMPT} Module \"test\" is enabled")
-    message("${PROMPT} All modules: ${MODULES_FULL_NAME};test")
-else ()
-    message("${PROMPT} Module \"test\" is disabled")
-    message("${PROMPT} All modules: ${MODULES_FULL_NAME}")
-endif ()
+message("${PROMPT} All modules: ${MODULES_FULL_NAME}")
 
 foreach (MODULE_NAME IN ITEMS ${MODULES})
     string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
@@ -49,9 +43,7 @@ foreach (MODULE_NAME IN ITEMS ${MODULES})
     add_subdirectory(${MODULE_NAME})
 endforeach ()
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    add_subdirectory("test")
-endif ()
+add_subdirectory("test")
 
 message("${PROMPT} Configuring modules done")
 

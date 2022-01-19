@@ -43,7 +43,7 @@ namespace EnhancedBasic {
             class ENHANCED_BASIC_API MixedLinkedList0 {
             private:
                 struct Node {
-                    GenericPointer value;
+                    void *value;
 
                     bool dynamic;
 
@@ -66,9 +66,9 @@ namespace EnhancedBasic {
 
             protected:
                 struct GenericsOperator {
-                    GenericPointer (*allocate)(GenericReference);
+                    void *(*allocate)(GenericReference);
 
-                    void (*destroy)(GenericPointer);
+                    void (*destroy)(void *);
 
                     bool (*equals)(GenericReference, GenericReference);
                 };
@@ -110,7 +110,7 @@ namespace EnhancedBasic {
 
                 virtual ~MixedLinkedList0() noexcept;
 
-                MixedLinkedList0(const MixedLinkedList0 &copy);
+                MixedLinkedList0(const MixedLinkedList0 &other);
 
                 Size getLength0() const;
 
@@ -186,9 +186,9 @@ namespace EnhancedBasic {
                 };
 
                 $RetRequiresRelease()
-                static GenericPointer allocate(GenericReference element);
+                static void *allocate(GenericReference element);
 
-                static void destroy(GenericPointer element);
+                static void destroy(void *element);
 
                 $RetNotIgnored()
                 static bool equals(GenericReference element, GenericReference value);
@@ -196,7 +196,7 @@ namespace EnhancedBasic {
             public:
                 inline MixedLinkedList();
 
-                inline MixedLinkedList(const MixedLinkedList<Type> &copy);
+                inline MixedLinkedList(const MixedLinkedList<Type> &other);
 
                 $RetNotIgnored()
                 inline Size getLength() const override;

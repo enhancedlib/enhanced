@@ -34,10 +34,10 @@ namespace EnhancedBasic {
         Any::Any() : any(null) {}
 
         template <typename Type>
-        Any::Any(const Type &value) : any((GenericPointer) &value) {}
+        Any::Any(const Type &value) : any((void *) &value) {}
 
         template <typename Type>
-        Any::Any(const Any &copy) : any(copy.any) {}
+        Any::Any(const Any &other) : any(other.any) {}
 
         template <typename Type>
         $RetNotIgnored()
@@ -49,16 +49,6 @@ namespace EnhancedBasic {
         $RetNotIgnored()
         bool Any::operator!=(const Type &value) const {
             return this->cast<Type>() != value;
-        }
-
-        $RetNotIgnored()
-        bool Any::operator==(const Any &value) const {
-            return this == &value;
-        }
-
-        $RetNotIgnored()
-        bool Any::operator!=(const Any &value) const {
-            return this != &value;
         }
 
         template <typename Type>

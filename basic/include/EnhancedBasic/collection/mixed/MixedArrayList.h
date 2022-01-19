@@ -43,7 +43,7 @@ namespace EnhancedBasic {
             class ENHANCED_BASIC_API MixedArrayList0 {
             private:
                 struct Node {
-                    GenericPointer value;
+                    void *value;
 
                     bool dynamic;
                 };
@@ -56,9 +56,9 @@ namespace EnhancedBasic {
 
             protected:
                 struct GenericsOperator {
-                    GenericPointer (*allocate)(GenericReference);
+                    void *(*allocate)(GenericReference);
 
-                    void (*destroy)(GenericPointer);
+                    void (*destroy)(void *);
 
                     bool (*equals)(GenericReference, GenericReference);
                 };
@@ -103,7 +103,7 @@ namespace EnhancedBasic {
 
                 MixedArrayList0(Size length, GenericsOperator genericsOperator);
                 
-                MixedArrayList0(const MixedArrayList0 &copy);
+                MixedArrayList0(const MixedArrayList0 &other);
 
                 virtual ~MixedArrayList0() noexcept;
 
@@ -157,9 +157,9 @@ namespace EnhancedBasic {
                 };
 
                 $RetRequiresRelease()
-                static GenericPointer allocate(GenericReference element);
+                static void *allocate(GenericReference element);
 
-                static void destroy(GenericPointer element);
+                static void destroy(void *element);
 
                 $RetNotIgnored()
                 static bool equals(GenericReference element, GenericReference value);
@@ -169,7 +169,7 @@ namespace EnhancedBasic {
 
                 explicit inline MixedArrayList(Size maxCount);
 
-                inline MixedArrayList(const MixedArrayList<Type> &copy);
+                inline MixedArrayList(const MixedArrayList<Type> &other);
 
                 $RetNotIgnored()
                 inline Size getLength() const override;
