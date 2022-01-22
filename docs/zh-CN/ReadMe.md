@@ -2,7 +2,7 @@
 
 强大的C/C++开发框架
 
-此软件遵循[Enhanced License](../../licenses/LICENSE)协议。
+此软件遵循[Enhanced License](../../LICENSE)协议。
 
 仓库：
 - [GitHub](http://github.com/LiuBaihao-Hello/Enhanced)

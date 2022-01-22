@@ -2,7 +2,7 @@
 
 A Powerful C/C++ Development Framework
 
-This software is licensed under [Enhanced License](licenses/LICENSE).
+This software is licensed under [Enhanced License](LICENSE).
 
 Repositories:
 - [GitHub](http://github.com/LiuBaihao-Hello/Enhanced)
