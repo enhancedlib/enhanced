@@ -22,37 +22,24 @@
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
+#include "EnhancedCore/assert.h"
 #include "EnhancedCore/memory.h"
 #include "EnhancedCore/string.h"
 
 using(EnhancedBasic$core$String);
 
 /*!
- * This function is internal to this file and should not be called from outside.
+ * Get the length of the string.
  *
- * Creates any of type String.
- *
- * @param value
- * @param length
+ * @param self The string.
  * @return
  */
-static String newString0(char *value, Size length);
-
-/*!
- * This function is internal to this file and should not be called from outside.
- *
- * Creates a pointer of type String.
- *
- * @param value
- * @param length
- * @return
- */
-static String *newStringPointer0(char *value, Size length);
+static Size getLength(const String *self);
 
 /*!
  * To concatenate the current string with another string.
  *
- * @param self
+ * @param self The string.
  * @param str
  * @return String
  */
@@ -61,46 +48,29 @@ static String add(String *self, String str);
 String newEmptyString() {
     char *value = (char *) memoryAlloc(sizeof(char));
     *value = '\0';
-    return newString0(value, 0);
+    return newStringExt(value, 0);
 }
 
-String *newEmptyStringPointer() {
-    char *value = (char *) memoryAlloc(sizeof(char));
-    if (value == null) {
-        return null;
-    }
-    *value = '\0';
-    return newStringPointer0(value, 0);
+String toString(char *const value) {
+    return newStringExt(value, stringLength(value));
 }
 
-String toString(char *value) {
-    return newString0(value, stringLength(value));
+String newString(const Size length) {
+    char *value = (char *) memoryAlloc((length + 1) * sizeof(char));
+    return newStringExt(value, length);
 }
 
-String *toStringPointer(char *value) {
-    if (value == null) {
-        return null;
-    }
-    return newStringPointer0(value, stringLength(value));
+String newStringExt(const char *const value, const Size length) {
+    String string = {(char *) value, length, getLength, add};
+    return string;
 }
 
-String newString(Size length) {
-    char *str = (char *) memoryAlloc((length + 1) * sizeof(char));
-
-    return newString0(str, length);
+Size getLength(const String *self) {
+    return self->length;
 }
 
-String *newStringPointer(Size length) {
-    if (length < 1) {
-        return null;
-    }
-    return newStringPointer0((char *) memoryAlloc((length + 1) * sizeof(char)), length);
-}
-
-static String add(String *self, String str) {
-    if (self == null || str.length < 1) {
-        return str;
-    }
+String add(String *self, String str) {
+    assert(self != null), assert(str.length > 0);
 
     Size new_length = self->length + str.length;
     char *new_str = (char *) memoryAlloc((new_length + 1) * sizeof(char));
@@ -119,27 +89,4 @@ static String add(String *self, String str) {
     self->value = new_str;
 
     return *self;
-}
-
-static String newString0(char *value, Size length) {
-    String self;
-
-    self.value = value;
-    self.length = length;
-    self.add = add;
-
-    return self;
-}
-
-static String *newStringPointer0(char *value, Size length) {
-    String *self = (String *) memoryAlloc(sizeof(String));
-    if (self == null) {
-        return null;
-    }
-
-    self->value = value;
-    self->length = length;
-    self->add = add;
-
-    return self;
 }

@@ -26,9 +26,9 @@
 
 #include <setjmp.h>
 
-typedef jmp_buf JumpBuffer;
+typedef jmp_buf Snapshot;
 
-#define jumpSet setjmp
+#define takeSnapshot setjmp
 #define jumpTo longjmp
 
 #endif // !ENHANCED_CORE_JUMP_H

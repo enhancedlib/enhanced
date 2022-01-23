@@ -31,9 +31,7 @@ using(EnhancedBasic$core$exception$ExceptionContextBlock);
 
 static ExceptionContextBlock *exceptionContextBlockStack = null;
 
-static char *traceback(Exception *self) {
-    return "";
-}
+static char *traceback(Exception *self);
 
 void exceptionContextBlockStackPush(ExceptionContextBlock *exceptionContextBlock) {
     exceptionContextBlock->link = exceptionContextBlockStack;
@@ -48,17 +46,21 @@ bool exceptionContextBlockStackIsEmpty() {
     return exceptionContextBlockStack == null;
 }
 
-void exceptionRaise(unsigned int exceptionCode, const char *exceptionMessage) {
+void exceptionRaise(uint exceptionCode, const char *exceptionMessage) {
     Exception exception = {
-        .message = exceptionMessage,
-        .code = exceptionCode,
-        .traceback = traceback
+        exceptionMessage,
+        exceptionCode,
+        traceback
     };
 
     if (exceptionContextBlockStackIsEmpty()) {
-        abort();
+        terminate();
     } else {
         exceptionContextBlockStack->exception = &exception;
-        jumpTo(exceptionContextBlockStack->jumpBuffer, TRY_BLOCK_EXCEPTION_OCCURRED);
+        jumpTo(exceptionContextBlockStack->snapshot, TRY_BLOCK_EXCEPTION_OCCURRED);
     }
+}
+
+char *traceback(Exception *self) {
+    return "";
 }

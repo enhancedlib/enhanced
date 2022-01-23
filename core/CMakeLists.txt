@@ -12,6 +12,7 @@ set(
     sources/assert.c
     sources/jump.c
     sources/memory.c
+    sources/process.c
     sources/string.c
 )
 
@@ -25,6 +26,7 @@ set(
     include/EnhancedCore/defines.h
     include/EnhancedCore/jump.h
     include/EnhancedCore/memory.h
+    include/EnhancedCore/process.h
     include/EnhancedCore/string.h
     include/EnhancedCore/types.h
 )

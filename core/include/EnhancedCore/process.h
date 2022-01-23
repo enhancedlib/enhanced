@@ -18,18 +18,15 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "EnhancedCore/assert.h"
+#ifndef ENHANCED_CORE_PROCESS_H
+#define ENHANCED_CORE_PROCESS_H
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
-#include "EnhancedCore/string.h"
-#include "EnhancedCore/process.h"
+#include "EnhancedCore/export.h"
 
-void assertFailed(const char *const message, const char *const file, const uint line) {
-    printf("Failed to assert: %s, file \"%s\", line %d",
-             message, file, line);
-    terminate();
-}
+ENHANCED_CORE_API void shutdown(int status);
+
+ENHANCED_CORE_API void terminate();
+
+#endif // !ENHANCED_CORE_PROCESS_H

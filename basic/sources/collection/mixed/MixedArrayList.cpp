@@ -133,11 +133,7 @@ void MixedArrayList0::add0(GenericReference element) {
 
 void MixedArrayList0::addReferenced0(GenericReference element) {
     if (this->length == this->maxCount) {
-        if (this->maxCount == 1) {
-            this->expand0(1);
-        } else {
-            this->expand0(this->maxCount >> 1);
-        }
+        this->expand0(this->maxCount);
     }
 
     this->elements[this->length] = {&element, false};

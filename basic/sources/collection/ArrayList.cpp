@@ -119,7 +119,7 @@ bool ArrayList0::contain0(GenericReference value) const {
 
 void ArrayList0::add0(GenericReference element) {
     if (this->length == this->maxCount) {
-        this->expand0((this->maxCount == 1) ? 1 : this->maxCount >> 1);
+        this->expand0(this->maxCount);
     }
 
     this->elements[this->length] = this->genericsOperator.allocate(element);

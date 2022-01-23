@@ -21,47 +21,47 @@
 #ifndef ENHANCED_BASIC_CORE_EXCEPTION_EXCEPTION_H
 #define ENHANCED_BASIC_CORE_EXCEPTION_EXCEPTION_H
 
-#include <stdlib.h>
-
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/jump.h"
 #include "EnhancedCore/memory.h"
+#include "EnhancedCore/process.h"
 
 #include "EnhancedBasic/export.h"
-
-#include "EnhancedBasic/core/String.h"
 
 #if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
 
 EXTERN_C_START
 
-typedef enum EnhancedBasic$core$exception$TRY_BLOCK_STATUS {
+typedef enum EnhancedBasic$core$exception$TRY_BLOCKTRY_BLOCK_CURRENT_STATUS {
     TRY_BLOCK_INTO,
     TRY_BLOCK_NO_EXCEPTION_OCCURRED,
     TRY_BLOCK_EXCEPTION_OCCURRED,
     TRY_BLOCK_EXCEPTION_CAPTURE,
     TRY_BLOCK_BREAK,
     TRY_BLOCK_FUNCTION_RETURN
-} EnhancedBasic$core$exception$TRY_BLOCK_STATUS;
-#define ALIAS_EnhancedBasic$core$exception$TRY_BLOCK_STATUS TRY_BLOCK_STATUS
+} EnhancedBasic$core$exception$TRY_BLOCKTRY_BLOCK_CURRENT_STATUS;
+
+#define ALIAS_EnhancedBasic$core$exception$TRY_BLOCKTRY_BLOCK_CURRENT_STATUS TRY_BLOCKTRY_BLOCK_CURRENT_STATUS
 
 typedef struct EnhancedBasic$core$exception$Exception {
     const char *message;
 
-    unsigned int code;
+    uint code;
 
     char *(*traceback)(struct EnhancedBasic$core$exception$Exception *self);
 } EnhancedBasic$core$exception$Exception;
+
 #define ALIAS_EnhancedBasic$core$exception$Exception Exception
 
 typedef struct EnhancedBasic$core$exception$ExceptionContextBlock {
     EnhancedBasic$core$exception$Exception *exception;
 
-    JumpBuffer jumpBuffer;
+    Snapshot snapshot;
 
     struct EnhancedBasic$core$exception$ExceptionContextBlock *link;
 } EnhancedBasic$core$exception$ExceptionContextBlock;
+
 #define ALIAS_EnhancedBasic$core$exception$ExceptionContextBlock ExceptionContextBlock
 
 ENHANCED_BASIC_API void exceptionContextBlockStackPush(
@@ -71,26 +71,31 @@ ENHANCED_BASIC_API void exceptionContextBlockStackPopup();
 
 ENHANCED_BASIC_API bool exceptionContextBlockStackIsEmpty();
 
-ENHANCED_BASIC_API void exceptionRaise(unsigned int exceptionCode, const char *exceptionMessage);
+ENHANCED_BASIC_API void exceptionRaise(uint exceptionCode, const char *exceptionMessage);
+
+#ifdef COMPILER_MSVC
+#pragma warning(disable: 4003)
+#endif // COMPILER_MSVC
 
 #define TRY \
     { \
-        EnhancedBasic$core$exception$ExceptionContextBlock _CONTEXT_BLOCK; \
+        EnhancedBasic$core$exception$ExceptionContextBlock CONTEXT_BLOCK; \
+        exceptionContextBlockStackPush(&CONTEXT_BLOCK); \
+        EnhancedBasic$core$exception$TRY_BLOCKTRY_BLOCK_CURRENT_STATUS \
+            TRY_BLOCK_CURRENT_STATUS = takeSnapshot(CONTEXT_BLOCK.snapshot); \
         bool _IN_FINALLY = false; \
-        exceptionContextBlockStackPush(&_CONTEXT_BLOCK); \
-        EnhancedBasic$core$exception$TRY_BLOCK_STATUS _STATUS = jumpSet(_CONTEXT_BLOCK.jumpBuffer); \
-        if (_STATUS == TRY_BLOCK_INTO) { \
-            _STATUS = TRY_BLOCK_NO_EXCEPTION_OCCURRED;
+        if (TRY_BLOCK_CURRENT_STATUS == TRY_BLOCK_INTO) { \
+            TRY_BLOCK_CURRENT_STATUS = TRY_BLOCK_NO_EXCEPTION_OCCURRED;
 
 #define CATCH(exceptionCode, variable) \
-        } else if (_STATUS == TRY_BLOCK_EXCEPTION_OCCURRED && \
-            _CONTEXT_BLOCK.exception->code == (exceptionCode)) { \
-            EnhancedBasic$core$exception$Exception *(variable) = _CONTEXT_BLOCK.exception; \
-            _STATUS = TRY_BLOCK_EXCEPTION_CAPTURE;
+        } else if (TRY_BLOCK_CURRENT_STATUS == TRY_BLOCK_EXCEPTION_OCCURRED && \
+            CONTEXT_BLOCK.exception->code == (exceptionCode)) { \
+            EnhancedBasic$core$exception$Exception *(variable) = CONTEXT_BLOCK.exception; \
+            TRY_BLOCK_CURRENT_STATUS = TRY_BLOCK_EXCEPTION_CAPTURE;
 
 #define PASS \
         } \
-        if (_STATUS == TRY_BLOCK_NO_EXCEPTION_OCCURRED) {
+        if (TRY_BLOCK_CURRENT_STATUS == TRY_BLOCK_NO_EXCEPTION_OCCURRED) {
 
 #define FINALLY \
         } \
@@ -100,12 +105,12 @@ ENHANCED_BASIC_API void exceptionRaise(unsigned int exceptionCode, const char *e
 #define END_TRY \
         } \
         exceptionContextBlockStackPopup(); \
-        if (_STATUS == TRY_BLOCK_BREAK) { \
-            jumpTo(_CONTEXT_BLOCK.jumpBuffer, TRY_BLOCK_FUNCTION_RETURN); \
+        if (TRY_BLOCK_CURRENT_STATUS == TRY_BLOCK_BREAK) { \
+            jumpTo(CONTEXT_BLOCK.snapshot, TRY_BLOCK_FUNCTION_RETURN); \
         } \
-        if (_STATUS == TRY_BLOCK_EXCEPTION_OCCURRED && \
+        if (TRY_BLOCK_CURRENT_STATUS == TRY_BLOCK_EXCEPTION_OCCURRED && \
             exceptionContextBlockStackIsEmpty()) { \
-            abort(); \
+            terminate(); \
         } \
     } (void) 0
 
@@ -115,12 +120,12 @@ ENHANCED_BASIC_API void exceptionRaise(unsigned int exceptionCode, const char *e
             exceptionContextBlockStackPopup(); \
             return value; \
         } \
-        JumpBuffer jumpBuffer; \
-        memoryCopy(jumpBuffer, _CONTEXT_BLOCK.jumpBuffer, sizeof(JumpBuffer)); \
-        if (jumpSet(_CONTEXT_BLOCK.jumpBuffer) == TRY_BLOCK_FUNCTION_RETURN) { \
+        Snapshot snapshot; \
+        memoryCopy(snapshot, CONTEXT_BLOCK.snapshot, sizeof(Snapshot)); \
+        if (takeSnapshot(CONTEXT_BLOCK.snapshot) == TRY_BLOCK_FUNCTION_RETURN) { \
             return value; \
         } else { \
-            jumpTo(jumpBuffer, TRY_BLOCK_BREAK); \
+            jumpTo(snapshot, TRY_BLOCK_BREAK); \
         } \
     } (void) 0
 

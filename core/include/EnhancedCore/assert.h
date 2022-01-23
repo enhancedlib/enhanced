@@ -27,7 +27,7 @@
 
 EXTERN_C_START
 
-ENHANCED_CORE_API void assertFailed(const char *message, const char *file, unsigned int line);
+ENHANCED_CORE_API void assertFailed(const char *message, const char *file, uint line);
 
 #ifdef assert
 #undef assert

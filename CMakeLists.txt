@@ -28,7 +28,6 @@ message("${PROMPT} C++ Compiler path: \"${CMAKE_CXX_COMPILER}\"")
 message("${PROMPT} C standard: ${CMAKE_C_STANDARD}")
 message("${PROMPT} C++ standard: ${CMAKE_CXX_STANDARD}")
 message("${PROMPT} Build type: ${CMAKE_BUILD_TYPE}")
-message("${PROMPT} Build platform: ${CMAKE_GENERATOR_PLATFORM}")
 message("${PROMPT} Installation directory: ${CMAKE_INSTALL_PREFIX}")
 
 message("${PROMPT} All modules: ${MODULES_FULL_NAME}")

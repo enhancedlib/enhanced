@@ -13,6 +13,7 @@ set(
     sources/math/LargeInteger.cpp
     sources/math/Math.c
     sources/math/Math.cpp
+    sources/generic/Any.cpp
     sources/generic/Allocator.cpp
     sources/collection/ArrayList.cpp
     sources/collection/LinkedList.cpp
@@ -27,7 +28,8 @@ set(
     sources/core/String.cpp
     sources/core/exception/Exception.c
     sources/core/exception/Exception.cpp
-    sources/core/pointer/SharedPointer.cpp)
+    sources/core/pointer/SharedPointer.cpp
+)
 
 set(
     HEADERS
@@ -77,7 +79,8 @@ set(
     include/EnhancedBasic/generic/AnyArray.tcc
     include/EnhancedBasic/generic/Generic.h
     include/EnhancedBasic/core/pointer/SharedPointer.h
-    sources/generic/Any.cpp include/EnhancedBasic/core/pointer/SharedPointer.tcc)
+    include/EnhancedBasic/core/pointer/SharedPointer.tcc
+)
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")
 message("${PROMPT} Module path: \"${CMAKE_CURRENT_SOURCE_DIR}\"")

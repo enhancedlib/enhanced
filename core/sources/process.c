@@ -18,18 +18,14 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "EnhancedCore/assert.h"
-
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/string.h"
 #include "EnhancedCore/process.h"
 
-void assertFailed(const char *const message, const char *const file, const uint line) {
-    printf("Failed to assert: %s, file \"%s\", line %d",
-             message, file, line);
-    terminate();
+#include <stdlib.h>
+
+void shutdown(int status) {
+    exit(status);
+}
+
+void terminate() {
+    abort();
 }

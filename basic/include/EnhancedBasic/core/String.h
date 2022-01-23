@@ -44,6 +44,8 @@ typedef struct EnhancedBasic$core$String {
      */
     Size length;
 
+    Size (*getLength)(const struct EnhancedBasic$core$String *self);
+
     /*!
      * To concatenate the current string with another string.
      *
@@ -54,19 +56,16 @@ typedef struct EnhancedBasic$core$String {
     struct EnhancedBasic$core$String (*add)(struct EnhancedBasic$core$String *self,
                                             struct EnhancedBasic$core$String str);
 } EnhancedBasic$core$String;
+
 #define ALIAS_EnhancedBasic$core$String String
 
 ENHANCED_BASIC_API EnhancedBasic$core$String newEmptyString();
 
-ENHANCED_BASIC_API EnhancedBasic$core$String *newEmptyStringPointer();
-
 ENHANCED_BASIC_API EnhancedBasic$core$String toString(char *value);
-
-ENHANCED_BASIC_API EnhancedBasic$core$String *toStringPointer(char *value);
 
 ENHANCED_BASIC_API EnhancedBasic$core$String newString(Size length);
 
-ENHANCED_BASIC_API EnhancedBasic$core$String *newStringPointer(Size length);
+ENHANCED_BASIC_API EnhancedBasic$core$String newStringExt(const char *value, Size length);
 
 EXTERN_C_END
 
