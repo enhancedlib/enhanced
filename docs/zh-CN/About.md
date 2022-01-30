@@ -10,4 +10,4 @@
 ## 关于作者
 - 兴趣：编程
 - 职业：中学生
-- 邮件：<liubaihaohello@outlook.com>
+- 邮箱：<liubaihaohello@outlook.com>
