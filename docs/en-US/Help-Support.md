@@ -1,6 +1,6 @@
 # Help & Support
 
-[Other Languages](../Help-Support.Languages.md) | [Website](http://liubaihao-hello.github.io/enhanced-website) | [Read Me](../../ReadMe.md) | [Help & Support](Help-Support.md) | [About](About.md)
+[Other Languages](../Help-Support.Languages.md) | [Website](http://any-possible.github.io/enhanced-website) | [Read Me](../../README.md) | [Help & Support](Help-Support.md) | [About](About.md)
 
 ## Q: Why is this software named Enhanced?
 A: Because I want this software to make C/C++ development more efficient and easy.

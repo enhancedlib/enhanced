@@ -5,9 +5,9 @@
 此软件遵循[Enhanced License](../../LICENSE)协议。
 
 仓库：
-- [GitHub](http://github.com/LiuBaihao-Hello/Enhanced)
+- [GitHub](http://github.com/any-possible/Enhanced)
 
-[其它语言](../ReadMe.Languages.md) | [网站](http://liubaihao-hello.github.io/enhanced-website) | [自述文件](ReadMe.md) | [帮助&支持](Help-Support.md) | [关于](About.md)
+[其它语言](../README.Languages.md) | [网站](http://any-possible.github.io/enhanced-website) | [自述文件](README.md) | [帮助&支持](Help-Support.md) | [关于](About.md)
 
 ---
 
@@ -34,7 +34,7 @@
 - 8. ……
 
 ## 2.安装/卸载
-目前还没有安装程序，您可以下载源代码，自己构建项目。
+目前还没有安装程序，你可以下载源代码，自己构建项目。
 
 * 安装程序和卸载程序将在未来提供。
 
@@ -70,7 +70,7 @@
 - C++标准: C++11
 - 构建系统: CMake
 
-### 推荐环境
+### 推荐环境：
 - C标准: C11
 - C++标准: C++20
 - 构建系统: CMake与Ninja
