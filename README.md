@@ -5,9 +5,9 @@ A Powerful C/C++ Development Framework
 This software is licensed under [Enhanced License](LICENSE).
 
 Repositories:
-- [GitHub](http://github.com/LiuBaihao-Hello/Enhanced)
+- [GitHub](http://github.com/any-possible/Enhanced)
 
-[Other Languages](docs/ReadMe.Languages.md) | [Website](http://liubaihao-hello.github.io/enhanced-website) | [Read Me](ReadMe.md) | [Help & Support](docs/en-US/Help-Support.md) | [About](docs/en-US/About.md)
+[Other Languages](docs/README.Languages.md) | [Website](http://any-possible.github.io/enhanced-website) | [Read Me](README.md) | [Help & Support](docs/en-US/Help-Support.md) | [About](docs/en-US/About.md)
 
 ---
 
