@@ -89,7 +89,11 @@ typedef uint32 dword;
 typedef uint64 qword;
 
 #ifdef C_LANGUAGE // C language
-typedef int bool;
+#ifdef C_99_OR_MORE
+typedef _Bool bool;
+#else
+typedef uint8 bool;
+#endif // C_99_OR_MORE
 
 #ifdef false
 #undef false
