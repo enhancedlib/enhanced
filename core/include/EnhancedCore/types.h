@@ -89,7 +89,11 @@ typedef uint32 dword;
 typedef uint64 qword;
 
 #ifdef C_LANGUAGE // C language
-typedef int bool;
+#ifdef C_99_OR_MORE
+typedef _Bool bool;
+#else
+typedef uint8 bool;
+#endif // C_99_OR_MORE
 
 #ifdef false
 #undef false
@@ -574,5 +578,19 @@ typedef InvalidType INVALID_TYPE;
 #endif // INVALID_VALUE
 
 #define INVALID_VALUE 0
+
+#ifdef CXX_11_OR_MORE
+template <typename Type>
+inline Type &forceCast(auto &&value) {
+    return *((Type *)(void *) &value);
+}
+#else
+template <typename Type, typename AutoType>
+inline Type &forceCast(const AutoType &value) {
+    return *((Type *)(void *) &value);
+}
+#endif // CXX_11_OR_MORE
+
+#define force_cast forceCast
 
 #endif // !ENHANCED_CORE_TYPES_H

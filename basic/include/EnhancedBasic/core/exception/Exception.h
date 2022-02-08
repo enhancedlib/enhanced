@@ -29,6 +29,8 @@
 
 #include "EnhancedBasic/export.h"
 
+#include "EnhancedBasic/core/String.h"
+
 #if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
 
 EXTERN_C_START
@@ -151,7 +153,7 @@ namespace EnhancedBasic {
                  * true: Enable
                  * false: Disable
                  *
-                 * default elements: true
+                 * Default value: true
                  */
                 static bool enableExceptions;
 
@@ -161,9 +163,11 @@ namespace EnhancedBasic {
                  * true: Enable
                  * false: Disable
                  *
-                 * default elements: true
+                 * Default value: true
                  */
                 static bool enableExceptionsTraceback;
+
+                const uint CODE = 0x00000000;
 
                 explicit Exception(const String &message = "") noexcept;
 
