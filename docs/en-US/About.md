@@ -10,6 +10,6 @@
 
 ## About the Author
 
-- Most interested: programming.
-- Professional: middle school student
-- E-mail: <liubaihaohello@outlook.com>
+- *Most interested*: programming
+- *Job*: middle school student
+- *Email*: <liubaihaohello@outlook.com>
