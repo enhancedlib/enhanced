@@ -18,33 +18,35 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include "EnhancedCore/defines.h"
+#ifndef MODULE_ENHANCED_BASIC
+#define MODULE_ENHANCED_BASIC
+
+#include "EnhancedCore/module.h"
 
 MODULE_INFO_START // Start defining module information.
-
-#define MODULE_BASIC
 
 /*!
  * This module includes basic data types and container.
  */
-MODULE(basic)
+MODULE(Basic)
 
-MODULE_FULL_NAME(basic, "Enhanced Basic")
-MODULE_VERSION(basic, 0, 1, 0, 0.1, "dev", 1)
-MODULE_AUTHOR(basic, "Liu Baihao")
-MODULE_ABOUT(basic, "The basic module of Enhanced.")
+MODULE_VERSION(Basic, 0, 1, 0, 0.1, "dev", 1)
+MODULE_AUTHOR(Basic, "Liu Baihao")
+MODULE_ABOUT(Basic, "The basic module of Enhanced.")
 
-MODULE_RELATIONS(basic,
-    REQUIRES_MODULE("Enhanced Core"),
-    EXPORTS_PACKAGE("EnhancedBasic.collection"),
-    EXPORTS_PACKAGE("EnhancedBasic.collection.referenced"),
-    EXPORTS_PACKAGE("EnhancedBasic.collection.mixed"),
-    EXPORTS_PACKAGE("EnhancedBasic.core"),
-    EXPORTS_PACKAGE("EnhancedBasic.core.exception"),
-    EXPORTS_PACKAGE("EnhancedBasic.generic"),
-    EXPORTS_PACKAGE("EnhancedBasic.map"),
-    EXPORTS_PACKAGE("EnhancedBasic.math"),
-    EXPORTS_PACKAGE("EnhancedBasic.pointer")
+MODULE_RELATIONS(Basic,
+    REQUIRES_MODULE(Core),
+    EXPORTS_PACKAGE(EnhancedBasic::collection),
+    EXPORTS_PACKAGE(EnhancedBasic::collection::referenced),
+    EXPORTS_PACKAGE(EnhancedBasic::collection::mixed),
+    EXPORTS_PACKAGE(EnhancedBasic::core),
+    EXPORTS_PACKAGE(EnhancedBasic::core::exception),
+    EXPORTS_PACKAGE(EnhancedBasic::generic),
+    EXPORTS_PACKAGE(EnhancedBasic::map),
+    EXPORTS_PACKAGE(EnhancedBasic::math),
+    EXPORTS_PACKAGE(EnhancedBasic::pointer)
 )
 
 MODULE_INFO_END // End defining module information.
+
+#endif // !MODULE_ENHANCED_BASIC

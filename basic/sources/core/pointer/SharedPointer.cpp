@@ -24,35 +24,35 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
 
-using EnhancedBasic::core::pointer::SharedPointer0;
+using BasicGenericImpl::core::pointer::SharedPointerImpl;
 
-SharedPointer0::SharedPointer0(void *ptr, SharedPointer0::GenericsOperator genericsOperator) :
-    pointer(ptr), referenceCount(new Size(1)), genericsOperator(genericsOperator) {}
+SharedPointerImpl::SharedPointerImpl(void *ptr, SharedPointerImpl::GenericOperator genericOperator) :
+    pointer(ptr), referenceCount(new Size(1)), genericOperator(genericOperator) {}
 
-SharedPointer0::SharedPointer0(const SharedPointer0 &other) :
-    pointer(other.pointer), referenceCount(other.referenceCount), genericsOperator(other.genericsOperator) {
+SharedPointerImpl::SharedPointerImpl(const SharedPointerImpl &other) :
+    pointer(other.pointer), referenceCount(other.referenceCount), genericOperator(other.genericOperator) {
     ++ (*other.referenceCount);
 }
 
-SharedPointer0::~SharedPointer0() noexcept {
+SharedPointerImpl::~SharedPointerImpl() noexcept {
     this->release0();
 }
 
-void SharedPointer0::release0() noexcept {
+void SharedPointerImpl::release0() noexcept {
     if ((-- (*this->referenceCount)) == 0) {
-        this->genericsOperator.destroy(this->pointer);
+        this->genericOperator.destroy(this->pointer);
         this->pointer = null;
         delete this->referenceCount;
     }
 }
 
-void SharedPointer0::assign0(void *value) noexcept {
+void SharedPointerImpl::assign0(void *value) noexcept {
     this->release0();
     this->referenceCount = new Size(1);
     this->pointer = value;
 }
 
-void SharedPointer0::assign0(const SharedPointer0 &other) noexcept {
+void SharedPointerImpl::assign0(const SharedPointerImpl &other) noexcept {
     this->release0();
     this->pointer = other.pointer;
     this->referenceCount = other.referenceCount;

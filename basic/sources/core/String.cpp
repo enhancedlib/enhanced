@@ -27,11 +27,11 @@
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/string.h"
 
-#include "EnhancedBasic/collection/LinkedList.h"
+#include "EnhancedBasic/collection/ArrayList.h"
 
 using EnhancedBasic::core::String;
 using EnhancedBasic::collection::List;
-using EnhancedBasic::collection::LinkedList;
+using EnhancedBasic::collection::ArrayList;
 
 String::String(const char *const value) : value(const_cast<char *>(value)), length(stringLength(value)),
                                           dynamic(false) {}
@@ -41,6 +41,8 @@ String::String(char *const value) : value(value), length(stringLength(value)), d
 String::String(const Size length) : value(stringNew(length)), length(length), dynamic(true) {}
 
 String::String(const String &other) : value(stringCopy(other)), length(other.length), dynamic(true) {}
+
+String::String(String &&other) noexcept : value(other), length(other.length), dynamic(other.dynamic) {}
 
 String::~String() {
     if (this->dynamic) {
@@ -101,7 +103,7 @@ Size String::indexOf(const String &string, const Size getN) const {
 
 $RetRequiresRelease()
 List<Size> *String::indexOfAll(const char ch) const {
-    List<Size> *allIndexes = new LinkedList<Size>();
+    List<Size> *allIndexes = new ArrayList<Size>();
 
     for (Size index = 0; index < this->length; ++ index) {
         if ((*this)[index] == ch) {
@@ -114,7 +116,7 @@ List<Size> *String::indexOfAll(const char ch) const {
 
 $RetRequiresRelease()
 List<Size> *String::indexOfAll(const String &string) const {
-    List<Size> *allIndexes = new LinkedList<Size>();
+    List<Size> *allIndexes = new ArrayList<Size>();
     Size count = 0;
 
     for (Size index = 0; index < this->length; ++ index) {
@@ -150,6 +152,22 @@ String String::operator+(const String &string) const {
     newString.append(string);
 
     return newString;
+}
+
+String &String::operator=(const String &other) {
+    this->value = stringCopy(other.value);
+    this->length = other.length;
+    this->dynamic = true;
+
+    return *this;
+}
+
+String &String::operator=(String &&other) noexcept {
+    this->value = other.value;
+    this->length = other.length;
+    this->dynamic = other.dynamic;
+
+    return *this;
 }
 
 String String::append(const String &string) {

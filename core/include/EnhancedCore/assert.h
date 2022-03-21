@@ -33,13 +33,15 @@ ENHANCED_CORE_API void assertFailed(const char *message, const char *file, uint 
 #undef assert
 #endif // assert
 
-#define dynamic_assert(exception) \
-    ((exception) || (assertFailed(#exception, __FILE__, __LINE__), 0))
+#define dynamicAssert(expression) \
+    ((expression) || (assertFailed(#expression, __FILE__, __LINE__), 0))
+
+#define dynamic_assert dynamicAssert
 
 #ifdef DEBUG
-#define assert(exception) dynamic_assert(exception)
+#define assert(expression) dynamic_assert(expression)
 #else
-#define assert(exception) (void) 0
+#define assert(expression) (void) 0
 #endif // DEBUG
 
 EXTERN_C_END

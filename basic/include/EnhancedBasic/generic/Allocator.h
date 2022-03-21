@@ -62,15 +62,13 @@ namespace EnhancedBasic {
             void destroy();
 
             template <typename ...Args>
-            $RetReferenced
-            $RetNotIgnored()
+            $RetReferenced $RetNotIgnored()
             Type &construct(Size index, Args ...args);
 
             void destruct(Size index);
 
             template <typename ...Args>
-            $RetReferenced
-            $RetNotIgnored()
+            $RetReferenced $RetNotIgnored()
             Type *constructAll(Args ...args);
 
             void destructAll();
@@ -80,7 +78,7 @@ namespace EnhancedBasic {
     } // namespace core
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/generic/Allocator.tcc"
+#include "EnhancedBasic/generic/Allocator.hpp"
 
 #endif // CXX_LANGUAGE
 

@@ -33,7 +33,7 @@
 
 EXTERN_C_START
 
-typedef struct EnhancedBasic$core$String {
+typedef struct String {
     /*!
      * This variable is used to hold the original string.
      */
@@ -44,7 +44,7 @@ typedef struct EnhancedBasic$core$String {
      */
     Size length;
 
-    Size (*getLength)(const struct EnhancedBasic$core$String *self);
+    Size (*getLength)(const struct String *self);
 
     /*!
      * To concatenate the current string with another string.
@@ -53,19 +53,18 @@ typedef struct EnhancedBasic$core$String {
      * @param str
      * @return String
      */
-    struct EnhancedBasic$core$String (*add)(struct EnhancedBasic$core$String *self,
-                                            struct EnhancedBasic$core$String str);
-} EnhancedBasic$core$String;
+    struct String (*const add)(struct String *self, struct String str);
+} String;
 
-#define ALIAS_EnhancedBasic$core$String String
+#define ALIAS_String String
 
-ENHANCED_BASIC_API EnhancedBasic$core$String newEmptyString();
+ENHANCED_BASIC_API String newEmptyString();
 
-ENHANCED_BASIC_API EnhancedBasic$core$String toString(char *value);
+ENHANCED_BASIC_API String toString(char *value);
 
-ENHANCED_BASIC_API EnhancedBasic$core$String newString(Size length);
+ENHANCED_BASIC_API String newString(Size length);
 
-ENHANCED_BASIC_API EnhancedBasic$core$String newStringExt(const char *value, Size length);
+ENHANCED_BASIC_API String newStringExt(const char *value, Size length);
 
 EXTERN_C_END
 
@@ -95,6 +94,8 @@ namespace EnhancedBasic {
             explicit String(Size count);
 
             String(const String &other);
+
+            String(String &&other) noexcept;
 
             ~String();
 
@@ -126,6 +127,10 @@ namespace EnhancedBasic {
             String operator+(const String &string) const;
 
             operator char *() const;
+
+            String &operator=(const String &other);
+
+            String &operator=(String &&other) noexcept;
 
             String append(const String &string);
 

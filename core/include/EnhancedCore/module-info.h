@@ -18,25 +18,27 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include "EnhancedCore/defines.h"
+#ifndef MODULE_ENHANCED_CORE
+#define MODULE_ENHANCED_CORE
+
+#include "EnhancedCore/module.h"
 
 MODULE_INFO_START // Start defining module information.
-
-#define MODULE_CORE
 
 /*!
  * This module is the core module of Enhanced.
  * It includes based function.
  */
-MODULE(core)
+MODULE(Core)
 
-MODULE_FULL_NAME(core, "Enhanced Core")
-MODULE_VERSION(core, 0, 1, 0, 0.1, "dev", 1)
-MODULE_AUTHOR(core, "Liu Baihao")
-MODULE_ABOUT(core, "The core module of Enhanced.")
+MODULE_VERSION(Core, 0, 1, 0, 0.1, "dev", 1)
+MODULE_AUTHOR(Core, "Liu Baihao")
+MODULE_ABOUT(Core, "The core module of Enhanced.")
 
-MODULE_RELATIONS(core,
-    EXPORTS_PACKAGE("EnhancedCore")
+MODULE_RELATIONS(Core,
+    EXPORTS_PACKAGE(EnhancedCore)
 )
 
 MODULE_INFO_END // End defining module information.
+
+#endif // !MODULE_ENHANCED_CORE

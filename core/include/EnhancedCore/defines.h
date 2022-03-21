@@ -55,7 +55,7 @@
 
 #ifdef COMPILER_MSVC // Microsoft Visual C++
 #define CXX_LANGUAGE _MSVC_LANG
-#else // Non Microsoft Visual C++ compiler
+#else // Non Microsoft Visual C++ Compiler
 #define CXX_LANGUAGE __cplusplus
 #endif // COMPILER_MSVC
 
@@ -128,17 +128,6 @@
 #define COMPILING_DATE __DATE__
 #define COMPILING_TIME __TIME__
 
-#ifdef C_LANGUAGE
-#define using(name) typedef name ALIAS_ ## name
-#endif // C_LANGUAGE
-
-#if defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
-#define constexpr
-#define override
-#define final
-#define noexcept throw()
-#endif // defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
-
 #ifdef CXX_LANGUAGE
 #define EXTERN_C extern "C"
 #define EXTERN_C_START EXTERN_C {
@@ -149,39 +138,12 @@
 #define EXTERN_C_END
 #endif // CXX_LANGUAGE
 
+#if defined(C_LANGUAGE) && !defined(C_99_OR_MORE)
+#warning The C standard is too old. May not be compatible.
+#endif // defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
+
 #if defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
 #warning The C++ standard is too old. May not be compatible.
 #endif // defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
-
-typedef const char *ModuleFullName;
-typedef const struct {
-    int major;
-    int minor;
-    int patch;
-    double build;
-    const char *releaseLevel;
-    int serial;
-} ModuleVersion;
-typedef const char *ModuleAuthor;
-typedef const char *ModuleAbout;
-enum MODULE_RELATIONS {
-    MODULE_RELATION_REQUIRES_MODULE, MODULE_RELATION_EXPORTS_PACKAGE
-};
-typedef const struct {
-    enum MODULE_RELATIONS relation;
-    const char *content;
-} ModuleRelations[];
-
-#define MODULE_INFO_START
-#define MODULE_INFO_END
-#define MODULE(name)
-#define MODULE_FULL_NAME(name, fullName) ModuleFullName name ## FullName = (fullName);
-#define MODULE_VERSION(name, major, minor, patch, build, releaseLevel, serial) \
-    ModuleVersion name ## Version = {major, minor, patch, build, releaseLevel, serial};
-#define MODULE_AUTHOR(name, author) ModuleAuthor name ## Author = (author);
-#define MODULE_ABOUT(name, about) ModuleAbout name ## About = (about);
-#define MODULE_RELATIONS(name, ...) ModuleRelations name ## Relations = {__VA_ARGS__};
-#define REQUIRES_MODULE(module) {MODULE_RELATION_REQUIRES_MODULE, module}
-#define EXPORTS_PACKAGE(package) {MODULE_RELATION_EXPORTS_PACKAGE, package}
 
 #endif // !ENHANCED_CORE_DEFINES_H

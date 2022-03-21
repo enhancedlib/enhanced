@@ -26,8 +26,6 @@
 #include "EnhancedCore/memory.h"
 #include "EnhancedCore/string.h"
 
-using(EnhancedBasic$core$String);
-
 /*!
  * Get the length of the string.
  *
@@ -61,7 +59,12 @@ String newString(const Size length) {
 }
 
 String newStringExt(const char *const value, const Size length) {
-    String string = {(char *) value, length, getLength, add};
+    String string = {
+        .value = (char *) value,
+        .length = length,
+        .getLength = getLength,
+        .add = add
+    };
     return string;
 }
 
@@ -72,21 +75,21 @@ Size getLength(const String *self) {
 String add(String *self, String str) {
     assert(self != null), assert(str.length > 0);
 
-    Size new_length = self->length + str.length;
-    char *new_str = (char *) memoryAlloc((new_length + 1) * sizeof(char));
-    if (new_str == null) {
+    Size newLength = self->length + str.length;
+    char *newString = (char *) memoryAlloc((newLength + 1) * sizeof(char));
+    if (newString == null) {
         return *self;
     }
 
     for (Size index = 0; index < self->length; ++ index) {
-        new_str[index] = self->value[index];
+        newString[index] = self->value[index];
     }
-    for (Size index = self->length; index < new_length; ++ index) {
-        new_str[index] = str.value[index - self->length];
+    for (Size index = self->length; index < newLength; ++ index) {
+        newString[index] = str.value[index - self->length];
     }
 
-    self->length = new_length;
-    self->value = new_str;
+    self->length = newLength;
+    self->value = newString;
 
     return *self;
 }

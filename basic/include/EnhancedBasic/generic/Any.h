@@ -76,7 +76,7 @@ namespace EnhancedBasic {
     } // namespace generic
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/generic/Any.tcc"
+#include "EnhancedBasic/generic/Any.hpp"
 
 #endif // CXX_LANGUAGE
 

@@ -27,38 +27,46 @@
 
 #ifdef CXX_LANGUAGE // C++ language
 
-namespace EnhancedBasic {
+namespace BasicGenericImpl {
     namespace core {
         namespace pointer {
-            class SharedPointer0 {
+            class SharedPointerImpl {
             private:
                 Size *referenceCount;
 
             protected:
                 void *pointer;
 
-                struct GenericsOperator {
+                struct GenericOperator {
                     void (*destroy)(void *ptr);
                 };
 
-                GenericsOperator genericsOperator;
+                GenericOperator genericOperator;
 
-                SharedPointer0(void *ptr, GenericsOperator genericsOperator);
+                SharedPointerImpl(void *ptr, GenericOperator genericOperator);
 
-                SharedPointer0(const SharedPointer0 &other);
+                SharedPointerImpl(const SharedPointerImpl &other);
 
-                virtual ~SharedPointer0() noexcept;
+                virtual ~SharedPointerImpl() noexcept;
 
                 void release0() noexcept;
 
                 void assign0(void *value) noexcept;
 
-                void assign0(const SharedPointer0 &other) noexcept;
+                void assign0(const SharedPointerImpl &other) noexcept;
             };
+        }
+    }
+}
 
+namespace EnhancedBasic {
+    namespace core {
+        namespace pointer {
             template <typename Type>
-            class SharedPointer final : private SharedPointer0 {
+            class SharedPointer final : private BasicGenericImpl::core::pointer::SharedPointerImpl {
             private:
+                using SharedPointerImpl = BasicGenericImpl::core::pointer::SharedPointerImpl;
+
                 static void destroy(void *ptr);
 
             public:
@@ -109,7 +117,7 @@ namespace EnhancedBasic {
     }
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/core/pointer/SharedPointer.tcc"
+#include "EnhancedBasic/core/pointer/SharedPointer.hpp"
 
 #endif // CXX_LANGUAGE
 

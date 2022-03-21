@@ -18,8 +18,8 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#ifndef ENHANCED_BASIC_CORE_ITERABLE_TCC
-#define ENHANCED_BASIC_CORE_ITERABLE_TCC
+#ifndef ENHANCED_BASIC_CORE_ITERABLE_HPP
+#define ENHANCED_BASIC_CORE_ITERABLE_HPP
 
 #include "EnhancedBasic/core/Iterable.h"
 
@@ -33,7 +33,7 @@ namespace EnhancedBasic {
         Iterable<Type>::ForeachIterator::ForeachIterator(Iterator<Type> *iterator) : iterator(iterator) {}
 
         template <typename Type>
-        bool Iterable<Type>::ForeachIterator::operator!=($Unused InvalidType unused) {
+        bool Iterable<Type>::ForeachIterator::operator!=($Unused UnusedType unused) {
             return this->iterator->hasNext();
         }
 
@@ -64,10 +64,10 @@ namespace EnhancedBasic {
         }
 
         template <typename Type>
-        constexpr InvalidType Iterable<Type>::end() const {
-            return INVALID_VALUE;
+        constexpr UnusedType Iterable<Type>::end() const {
+            return UNUSED_VALUE;
         }
     }
 }
 
-#endif // !ENHANCED_BASIC_CORE_ITERABLE_TCC
+#endif // !ENHANCED_BASIC_CORE_ITERABLE_HPP

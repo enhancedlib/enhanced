@@ -21,10 +21,10 @@
 #ifndef ENHANCED_CORE_JUMP_H
 #define ENHANCED_CORE_JUMP_H
 
+#include <setjmp.h>
+
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
-
-#include <setjmp.h>
 
 typedef jmp_buf Snapshot;
 

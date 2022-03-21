@@ -93,40 +93,56 @@
 
 #ifdef COMPILER_MSVC
 #pragma warning(disable: 4003)
+#include <sal.h>
 #endif // COMPILER_MSVC
 
 #define $Unsupported(options)
 
 #ifdef COMPILER_MSVC
 
-#include <sal.h>
-
 #define $Optional _In_opt_
 #define $Out _Out_opt_
 #define $InOut _Inout_opt_
 #define $OutNotIgnored _Out_
 #define $InOutRequired  _Inout_
+
 #define $NotNull _Notnull_
 
+#define $MustInspectResult _Must_inspect_result_
+#define $SuccessWhen(options) _Success_ options
+
+#define $When(options) _When_ options
+
 #else
+
+#define _SuccessWhen(expression)
+
+#define _When(expression, annotations)
 
 #define $Optional
 #define $Out
 #define $InOut
 #define $OutNotIgnored
 #define $InOutRequired
+
 #define $NotNull
+
+#define $NotNull
+
+#define $MustInspectResult
+#define $SuccessWhen(options) _Success options
+
+#define $When(options) _When options
 
 #endif // COMPILER_MSVC
 
 #define $Unused [[maybe_unused]]
 
-
 #if defined(CXX_20_OR_MORE)
 #define $RetNotIgnored(options) [[nodiscard options]]
 #elif defined(CXX_17_OR_MORE) // C++17 or more
 #define $RetNotIgnored(options) [[nodiscard]]
-#elif defined(COMPILER_MSVC) // Microsoft Visual C++ compiler
+#elif defined(COMPILER_MSVC) // Microsoft Visual C++ Compiler
 #define $RetNotIgnored(options) _Check_return_
 #else
 #define $RetNotIgnored(options)

@@ -25,8 +25,8 @@
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/export.h"
 
-ENHANCED_CORE_API void shutdown(int status);
+ENHANCED_CORE_API void processExit(int status);
 
-ENHANCED_CORE_API void terminate();
+ENHANCED_CORE_API void processAbnormalAbort();
 
 #endif // !ENHANCED_CORE_PROCESS_H

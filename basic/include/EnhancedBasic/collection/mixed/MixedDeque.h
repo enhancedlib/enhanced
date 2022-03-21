@@ -34,7 +34,7 @@ namespace EnhancedBasic {
     namespace collection {
         namespace mixed {
         /*
-         * When you build project with Microsoft Visual C++ compiler,
+         * When you build project with Microsoft Visual C++ Compiler,
          * If you don't explicitly extend the "Collection" class, you will see an error in compiling.
          * The compiler thinks the return type of virtual function 'copy' isn't
          * covariant with the return type the super method.

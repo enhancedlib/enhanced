@@ -4,9 +4,9 @@ A Powerful C/C++ Development Framework
 
 This software is licensed under [Enhanced License](LICENSE).
 
-Repositories:
+[Copyright Notice](COPYRIGHT)
 
-- [GitHub](http://github.com/any-possible/Enhanced)
+Repositories: [GitHub](http://github.com/any-possible/Enhanced)
 
 [Other Languages](docs/README.Languages.md) | [Website](http://any-possible.github.io/enhanced-website) | [Read Me](README.md) | [Help & Support](docs/en-US/Help-Support.md) | [About](docs/en-US/About.md)
 
@@ -48,29 +48,15 @@ There is no installer yet, you can download the source code, build the project y
 
 - These are supported environments using this library, not build environments.
 
-Compiler:
+Compiler: [Microsoft Visual C++](http://visualstudio.microsoft.com/vs/features/cplusplus/), [GNU C/C++ Compiler](http://gcc.gnu.org/), [Clang](http://clang.llvm.org/)
 
-- [Microsoft Visual C++](http://visualstudio.microsoft.com/vs/features/cplusplus/)
-- [GNU C/C++ Compiler](http://gcc.gnu.org/)
-- [Clang](http://clang.llvm.org/)
+Operating system: Microsoft Windows Operating System, Linux (GNU/Linux)
 
-Operating system:
+Processor architecture: amd64 (x86_64), x86
 
-- Microsoft Windows Operating System
-- Linux
+Supported C Standard: C99, C11
 
-Processor architecture:
-
-- amd64 (x86_64)
-- x86
-
-Supported C Standard:
-
-- C89, C99, C11
-
-Supported C++ Standard:
-
-- C++98, C++11, C++14, C++17, C++20
+Supported C++ Standard: C++11, C++14, C++17, C++20
 
 ## 4.Build
 
@@ -94,11 +80,12 @@ I hope to use this library to make the C/C++ language software development more 
 
 ### About Generics (Templates) in This Project
 
-A class whose class name is followed by a zero (hereinafter referred to as "the implementation class") is usually a generic implementation class of a template class.
+In this project, a class whose class name is follows "Impl" is a generic implementation class of a generic class.
+Most implementations of generic classes are in the implementation classes (except for a few special generic classes).
 
-They separate the implementation of the template class from the template by type erasure (pseudo-generic).
+They separate the implementation of the generic classes from the generic by type erasure (pseudo-generic).
 
-You should not extend (inherit) the implementation class from another class, and you should not instantiate the implementation class directly.
-The correct approach is to instantiate the template class, because the implementation class has no public methods.
+You should not extend (inherit) the implementation class from another class, and you should not instantiate the implementation classes directly.
+The correct approach is to instantiate the generic classes, because the implementation classes have no public methods.
 
-Also, you shouldn't instantiate a template class with the implementation class as type, because the template class usually privately extends (inherits) the implementation class.
+Also, you shouldn't instantiate a generic class with the implementation class as type, because the generic classes privately extend (inherits) the implementation classes.

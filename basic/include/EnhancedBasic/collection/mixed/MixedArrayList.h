@@ -37,10 +37,10 @@
 
 #ifdef CXX_LANGUAGE // C++ language
 
-namespace EnhancedBasic {
+namespace BasicGenericImpl {
     namespace collection {
         namespace mixed {
-            class ENHANCED_BASIC_API MixedArrayList0 {
+            class ENHANCED_BASIC_API MixedArrayListImpl {
             private:
                 struct Node {
                     void *value;
@@ -55,7 +55,7 @@ namespace EnhancedBasic {
                 Size maxCount;
 
             protected:
-                struct GenericsOperator {
+                struct GenericOperator {
                     void *(*allocate)(GenericReference);
 
                     void (*destroy)(void *);
@@ -63,22 +63,22 @@ namespace EnhancedBasic {
                     bool (*equals)(GenericReference, GenericReference);
                 };
 
-                class ENHANCED_BASIC_API MixedArrayListIterator0 {
-                    friend class MixedArrayList0;
+                class ENHANCED_BASIC_API MixedArrayListIteratorImpl {
+                    friend class MixedArrayListImpl;
 
                 private:
-                    const MixedArrayList0 *mixedArrayList;
+                    const MixedArrayListImpl *mixedArrayList;
 
-                    mutable MixedArrayList0::Node *indexer;
+                    mutable MixedArrayListImpl::Node *indexer;
 
                     mutable bool isFirst;
 
-                    const MixedArrayList0::Node *end;
+                    const MixedArrayListImpl::Node *end;
 
                 protected:
-                    explicit MixedArrayListIterator0(const MixedArrayList0 *mixedArrayList);
+                    explicit MixedArrayListIteratorImpl(const MixedArrayListImpl *mixedArrayList);
 
-                    virtual ~MixedArrayListIterator0() noexcept;
+                    virtual ~MixedArrayListIteratorImpl() noexcept;
 
                     $RetNotIgnored()
                     bool hasNext0() const;
@@ -97,15 +97,15 @@ namespace EnhancedBasic {
                     Size count0() const;
                 };
 
-                GenericsOperator genericsOperator;
+                GenericOperator genericOperator;
 
-                mutable MixedArrayListIterator0 *iterator;
+                mutable MixedArrayListIteratorImpl *iterator;
 
-                MixedArrayList0(Size length, GenericsOperator genericsOperator);
-                
-                MixedArrayList0(const MixedArrayList0 &other);
+                MixedArrayListImpl(Size length, GenericOperator genericOperator);
 
-                virtual ~MixedArrayList0() noexcept;
+                MixedArrayListImpl(const MixedArrayListImpl &other);
+
+                virtual ~MixedArrayListImpl() noexcept;
 
                 $RetNotIgnored()
                 Size getLength0() const;
@@ -129,11 +129,20 @@ namespace EnhancedBasic {
 
                 void shrink0(Size size);
             };
+        }
+    }
+}
 
+namespace EnhancedBasic {
+    namespace collection {
+        namespace mixed {
             template <typename Type>
-            class MixedArrayList final : public MixedList<Type>, public RandomAccess<Type>, private MixedArrayList0 {
+            class MixedArrayList final : public MixedList<Type>, public RandomAccess<Type>,
+                                         private BasicGenericImpl::collection::mixed::MixedArrayListImpl {
             private:
-                class MixedArrayListIterator : public MixedArrayListIterator0, public core::Iterator<Type> {
+                using MixedArrayListImpl = BasicGenericImpl::collection::mixed::MixedArrayListImpl;
+
+                class MixedArrayListIterator : public MixedArrayListImpl::MixedArrayListIteratorImpl, public core::Iterator<Type> {
                     friend struct core::Iterable<Type>;
 
                 public:
@@ -201,7 +210,7 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/collection/mixed/MixedArrayList.tcc"
+#include "EnhancedBasic/collection/mixed/MixedArrayList.hpp"
 
 #endif // CXX_LANGUAGE
 

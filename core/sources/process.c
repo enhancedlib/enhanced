@@ -18,14 +18,14 @@
  * by your access to or use of third-party content, products, etc.
  */
 
+#include <process.h>
+
 #include "EnhancedCore/process.h"
 
-#include <stdlib.h>
-
-void shutdown(int status) {
+void processExit(int status) {
     exit(status);
 }
 
-void terminate() {
+void processAbnormalAbort() {
     abort();
 }

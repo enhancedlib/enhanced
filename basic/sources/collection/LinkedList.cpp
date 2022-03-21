@@ -27,17 +27,17 @@
 
 #include "EnhancedBasic/generic/Generic.h"
 
-using EnhancedBasic::collection::LinkedList0;
+using BasicGenericImpl::collection::LinkedListImpl;
 
-LinkedList0::LinkedListIterator0::LinkedListIterator0(const LinkedList0 *linkedList) :
+LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl *linkedList) :
     linkedList(linkedList), isFirst(true) {
     this->linkedList->indexer = this->linkedList->first;
 }
 
-LinkedList0::LinkedListIterator0::~LinkedListIterator0() noexcept = default;
+LinkedListImpl::LinkedListIteratorImpl::~LinkedListIteratorImpl() noexcept = default;
 
 $RetNotIgnored()
-bool LinkedList0::LinkedListIterator0::hasNext0() const {
+bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
     if (this->isFirst) {
         this->isFirst = false;
         return true;
@@ -46,12 +46,12 @@ bool LinkedList0::LinkedListIterator0::hasNext0() const {
     }
 }
 
-void LinkedList0::LinkedListIterator0::next0() const {
-    LinkedList0::nextNode(this->linkedList->indexer);
+void LinkedListImpl::LinkedListIteratorImpl::next0() const {
+    LinkedListImpl::nextNode(this->linkedList->indexer);
 }
 
 $RetNotIgnored()
-bool LinkedList0::LinkedListIterator0::each0() const {
+bool LinkedListImpl::LinkedListIteratorImpl::each0() const {
     if (this->isFirst) {
         this->isFirst = false;
         return !this->linkedList->isEmpty0();
@@ -62,52 +62,52 @@ bool LinkedList0::LinkedListIterator0::each0() const {
 }
 
 $RetNotIgnored()
-GenericReference LinkedList0::LinkedListIterator0::get0() const {
+GenericReference LinkedListImpl::LinkedListIteratorImpl::get0() const {
     return generic_cast(this->linkedList->indexer->value);
 }
 
-void LinkedList0::LinkedListIterator0::reset0() const {
+void LinkedListImpl::LinkedListIteratorImpl::reset0() const {
     this->isFirst = true;
     this->linkedList->indexer = this->linkedList->first;
 }
 
 $RetNotIgnored()
-Size LinkedList0::LinkedListIterator0::count0() const {
+Size LinkedListImpl::LinkedListIteratorImpl::count0() const {
     return this->linkedList->getLength0();
 }
 
-LinkedList0::Node *&LinkedList0::nextNode(Node *&node) {
+LinkedListImpl::Node *&LinkedListImpl::nextNode(Node *&node) {
     return node = node->next;
 }
 
-LinkedList0::Node *&LinkedList0::backNode(Node *&node) {
+LinkedListImpl::Node *&LinkedListImpl::backNode(Node *&node) {
     return node = node->back;
 }
 
-LinkedList0::LinkedList0(const GenericsOperator genericsOperator) :
+LinkedListImpl::LinkedListImpl(const GenericOperator genericOperator) :
     first(null), last(null), indexer(null), length(0),
-    genericsOperator(genericsOperator), iterator(null) {}
+    genericOperator(genericOperator), iterator(null) {}
 
-LinkedList0::LinkedList0(const LinkedList0 &other) :
+LinkedListImpl::LinkedListImpl(const LinkedListImpl &other) :
     first(null), last(null), indexer(null), length(0),
-    genericsOperator(other.genericsOperator), iterator(null) {
+    genericOperator(other.genericOperator), iterator(null) {
     this->indexer = other.first;
     for (Size count = 0; count < other.length; ++ count) {
         this->addLast0(generic_cast(this->indexer->value));
-        LinkedList0::nextNode(this->indexer);
+        LinkedListImpl::nextNode(this->indexer);
     }
 }
 
-LinkedList0::~LinkedList0() noexcept {
+LinkedListImpl::~LinkedListImpl() noexcept {
     for (Size count = 1; count < this->length; ++ count) {
-        LinkedList0::backNode(this->last);
+        LinkedListImpl::backNode(this->last);
 
-        this->genericsOperator.destroy(this->last->next->value);
+        this->genericOperator.destroy(this->last->next->value);
         delete this->last->next;
     }
 
     if (!this->isEmpty0()) {
-        this->genericsOperator.destroy(this->last->value);
+        this->genericOperator.destroy(this->last->value);
     }
 
     delete this->last;
@@ -115,36 +115,36 @@ LinkedList0::~LinkedList0() noexcept {
 }
 
 $RetNotIgnored()
-Size LinkedList0::getLength0() const {
+Size LinkedListImpl::getLength0() const {
     return this->length;
 }
 
 $RetNotIgnored()
-bool LinkedList0::isEmpty0() const {
+bool LinkedListImpl::isEmpty0() const {
     return this->length == 0;
 }
 
 $RetNotIgnored()
-GenericReference LinkedList0::getFirst0() const {
+GenericReference LinkedListImpl::getFirst0() const {
     return generic_cast(this->first->value);
 }
 
 $RetNotIgnored()
-GenericReference LinkedList0::getLast0() const {
+GenericReference LinkedListImpl::getLast0() const {
     return generic_cast(this->last->value);
 }
 
 $RetNotIgnored()
-GenericReference LinkedList0::get0(const Size index) const {
+GenericReference LinkedListImpl::get0(const Size index) const {
     if (index < this->length >> 1) {
         this->indexer = this->first;
         for (Size count = 0; count < index; ++ count) {
-            LinkedList0::nextNode(this->indexer);
+            LinkedListImpl::nextNode(this->indexer);
         }
     } else {
         this->indexer = this->last;
         for (Size count = this->length - 1; count > index; -- count) {
-            LinkedList0::backNode(this->indexer);
+            LinkedListImpl::backNode(this->indexer);
         }
     }
 
@@ -152,42 +152,42 @@ GenericReference LinkedList0::get0(const Size index) const {
 }
 
 $RetNotIgnored()
-bool LinkedList0::contain0(GenericReference value) const {
+bool LinkedListImpl::contain0(GenericReference value) const {
     this->indexer = this->first;
     for (Size count = 0; count < this->length; ++ count) {
-        if (this->genericsOperator.equals(this->indexer->value, const_cast<void *&>(value))) {
+        if (this->genericOperator.equals(this->indexer->value, const_cast<void *&>(value))) {
             return true;
         }
-        LinkedList0::nextNode(this->indexer);
+        LinkedListImpl::nextNode(this->indexer);
     }
 
     return false;
 }
 
-void LinkedList0::addLast0(GenericReference element) {
+void LinkedListImpl::addLast0(GenericReference element) {
     if (this->isEmpty0()) {
         this->last = new Node();
-        this->last->value = this->genericsOperator.allocate(element);
+        this->last->value = this->genericOperator.allocate(element);
         this->first = this->last;
     } else {
         this->last->next = new Node();
-        this->last->next->value = this->genericsOperator.allocate(element);
+        this->last->next->value = this->genericOperator.allocate(element);
         this->last->next->back = this->last;
-        LinkedList0::nextNode(this->last);
+        LinkedListImpl::nextNode(this->last);
     }
 
     ++ this->length;
 }
 
-void LinkedList0::removeLast0() {
+void LinkedListImpl::removeLast0() {
     assert(!this->isEmpty0());
 
     if (this->length > 1) {
-        LinkedList0::backNode(this->last);
-        this->genericsOperator.destroy(this->last->next->value);
+        LinkedListImpl::backNode(this->last);
+        this->genericOperator.destroy(this->last->next->value);
         delete this->last->next;
     } else {
-        this->genericsOperator.destroy(this->last->value);
+        this->genericOperator.destroy(this->last->value);
         delete this->last;
         this->last = this->first = null;
     }
@@ -195,30 +195,30 @@ void LinkedList0::removeLast0() {
     -- this->length;
 }
 
-void LinkedList0::addFirst0(GenericReference element) {
+void LinkedListImpl::addFirst0(GenericReference element) {
     if (this->isEmpty0()) {
         this->first = new Node();
-        this->first->value = this->genericsOperator.allocate(element);
+        this->first->value = this->genericOperator.allocate(element);
         this->last = this->first;
     } else {
         this->first->back = new Node();
-        this->first->back->value = this->genericsOperator.allocate(element);
+        this->first->back->value = this->genericOperator.allocate(element);
         this->first->back->next = this->first;
-        LinkedList0::backNode(this->first);
+        LinkedListImpl::backNode(this->first);
     }
 
     ++ this->length;
 }
 
-void LinkedList0::removeFirst0() {
+void LinkedListImpl::removeFirst0() {
     assert(!this->isEmpty0());
 
     if (this->length > 1) {
-        LinkedList0::nextNode(this->first);
-        this->genericsOperator.destroy(this->first->back->value);
+        LinkedListImpl::nextNode(this->first);
+        this->genericOperator.destroy(this->first->back->value);
         delete this->first->back;
     } else {
-        this->genericsOperator.destroy(this->first->value);
+        this->genericOperator.destroy(this->first->value);
         delete this->first;
         this->first = this->last = null;
     }

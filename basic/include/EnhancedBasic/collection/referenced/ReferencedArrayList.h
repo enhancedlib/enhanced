@@ -37,10 +37,10 @@
 
 #ifdef CXX_LANGUAGE // C++ language
 
-namespace EnhancedBasic {
+namespace BasicGenericImpl {
     namespace collection {
         namespace referenced {
-            class ENHANCED_BASIC_API ReferencedArrayList0 {
+            class ENHANCED_BASIC_API ReferencedArrayListImpl {
             private:
                 void **elements;
 
@@ -49,15 +49,15 @@ namespace EnhancedBasic {
                 Size maxCount;
 
             protected:
-                struct GenericsOperator {
+                struct GenericOperator {
                     bool (*equals)(GenericReference, GenericReference);
                 };
 
-                class ENHANCED_BASIC_API ReferencedArrayListIterator0 {
-                    friend class ReferencedArrayList0;
+                class ENHANCED_BASIC_API ReferencedArrayListIteratorImpl {
+                    friend class ReferencedArrayListImpl;
 
                 private:
-                    const ReferencedArrayList0 *referenceArrayList;
+                    const ReferencedArrayListImpl *referenceArrayList;
 
                     mutable void **indexer;
 
@@ -66,9 +66,9 @@ namespace EnhancedBasic {
                     void **end;
 
                 protected:
-                    explicit ReferencedArrayListIterator0(const ReferencedArrayList0 *referenceArrayList);
+                    explicit ReferencedArrayListIteratorImpl(const ReferencedArrayListImpl *referenceArrayList);
 
-                    virtual ~ReferencedArrayListIterator0() noexcept;
+                    virtual ~ReferencedArrayListIteratorImpl() noexcept;
 
                     $RetNotIgnored()
                     bool hasNext0() const;
@@ -87,15 +87,15 @@ namespace EnhancedBasic {
                     Size count0() const;
                 };
 
-                GenericsOperator genericsOperator;
+                GenericOperator genericOperator;
 
-                mutable ReferencedArrayListIterator0 *iterator;
+                mutable ReferencedArrayListIteratorImpl *iterator;
 
-                ReferencedArrayList0(Size length, GenericsOperator genericsOperator);
+                ReferencedArrayListImpl(Size length, GenericOperator genericOperator);
 
-                ReferencedArrayList0(const ReferencedArrayList0 &other);
+                ReferencedArrayListImpl(const ReferencedArrayListImpl &other);
 
-                virtual ~ReferencedArrayList0() noexcept;
+                virtual ~ReferencedArrayListImpl() noexcept;
 
                 $RetNotIgnored()
                 Size getLength0() const;
@@ -118,12 +118,21 @@ namespace EnhancedBasic {
                 void shrink0(Size size);
             };
 
+        }
+    }
+}
+
+namespace EnhancedBasic {
+    namespace collection {
+        namespace referenced {
             template <typename Type>
             class ReferencedArrayList final : public ReferencedList<Type>, public RandomAccess<Type>,
-                                              private ReferencedArrayList0 {
+                                              private BasicGenericImpl::collection::referenced::ReferencedArrayListImpl {
             private:
+                using ReferencedArrayListImpl = BasicGenericImpl::collection::referenced::ReferencedArrayListImpl;
+
                 class ReferencedArrayListIterator : public core::Iterator<Type>,
-                                                    private ReferencedArrayListIterator0 {
+                                                    private ReferencedArrayListImpl::ReferencedArrayListIteratorImpl {
                     friend struct core::Iterable<Type>;
 
                 public:
@@ -184,7 +193,7 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/collection/referenced/ReferencedArrayList.tcc"
+#include "EnhancedBasic/collection/referenced/ReferencedArrayList.hpp"
 
 #endif // CXX_LANGUAGE
 

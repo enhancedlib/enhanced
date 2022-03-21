@@ -18,6 +18,8 @@
  * by your access to or use of third-party content, products, etc.
  */
 
+#include <malloc.h>
+
 #include "EnhancedCore/memory.h"
 
 #include "EnhancedCore/defines.h"
@@ -25,9 +27,7 @@
 #include "EnhancedCore/assert.h"
 #include "EnhancedCore/types.h"
 
-#include <malloc.h>
-
-$RetRequiresRelease()
+$MustInspectResult $RetRequiresRelease()
 void *memoryAlloc(const Size size) {
     assert(size > 0);
 

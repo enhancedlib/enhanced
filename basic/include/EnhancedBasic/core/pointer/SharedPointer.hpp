@@ -18,8 +18,8 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#ifndef ENHANCED_BASIC_POINTER_SHARED0POINTER_TCC
-#define ENHANCED_BASIC_POINTER_SHARED0POINTER_TCC
+#ifndef ENHANCED_BASIC_POINTER_SHARED0POINTER_HPP
+#define ENHANCED_BASIC_POINTER_SHARED0POINTER_HPP
 
 #include "EnhancedBasic/core/pointer/SharedPointer.h"
 
@@ -37,50 +37,50 @@ namespace EnhancedBasic {
 
             template <typename Type>
             SharedPointer<Type>::SharedPointer(Type *ptr) :
-                SharedPointer0(static_cast<void *>(ptr), {destroy}) {}
+                SharedPointerImpl(static_cast<void *>(ptr), {destroy}) {}
 
             template <typename Type>
-            SharedPointer<Type>::SharedPointer(const SharedPointer<Type> &other) : SharedPointer0(other) {}
+            SharedPointer<Type>::SharedPointer(const SharedPointer<Type> &other) : SharedPointerImpl(other) {}
 
             template <typename Type>
             void SharedPointer<Type>::release() noexcept {
-                SharedPointer0::release0();
+                SharedPointerImpl::release0();
             }
 
             template <typename Type>
             $RetNotIgnored()
             SharedPointer<Type> SharedPointer<Type>::operator+(Size offset) const noexcept {
-                return static_cast<Type *>(SharedPointer0::pointer) + offset;
+                return static_cast<Type *>(SharedPointerImpl::pointer) + offset;
             }
 
             template <typename Type>
             $RetNotIgnored()
             SharedPointer<Type> SharedPointer<Type>::operator-(Size offset) const noexcept {
-                return static_cast<Type *>(SharedPointer0::pointer) - offset;
+                return static_cast<Type *>(SharedPointerImpl::pointer) - offset;
             }
 
             template <typename Type>
             $RetNotIgnored()
             Type **SharedPointer<Type>::operator&() noexcept {
-                return &static_cast<Type *>(SharedPointer0::pointer);
+                return &static_cast<Type *>(SharedPointerImpl::pointer);
             }
 
             template <typename Type>
             $RetNotIgnored()
             Type *SharedPointer<Type>::operator->() noexcept {
-                return static_cast<Type *>(SharedPointer0::pointer);
+                return static_cast<Type *>(SharedPointerImpl::pointer);
             }
 
             template <typename Type>
             $RetNotIgnored()
             Type &SharedPointer<Type>::operator*() noexcept {
-                return *static_cast<Type *>(SharedPointer0::pointer);
+                return *static_cast<Type *>(SharedPointerImpl::pointer);
             }
 
             template <typename Type>
             $RetNotIgnored()
             Type &SharedPointer<Type>::operator[](Size offset) noexcept {
-                return static_cast<Type *>(SharedPointer0::pointer)[offset];
+                return static_cast<Type *>(SharedPointerImpl::pointer)[offset];
             }
 
             template <typename Type>
@@ -91,51 +91,51 @@ namespace EnhancedBasic {
 
             template <typename Type>
             SharedPointer<Type> &SharedPointer<Type>::operator=(const SharedPointer<Type> &other) noexcept {
-                SharedPointer0::assign0(other);
+                SharedPointerImpl::assign0(other);
                 return *this;
             }
 
             template <typename Type>
             SharedPointer<Type> SharedPointer<Type>::operator+=(Size offset) noexcept {
                 SharedPointer<Type> copy = *this;
-                static_cast<Type *>(copy.SharedPointer0::pointer) += offset;
+                static_cast<Type *>(copy.SharedPointerImpl::pointer) += offset;
                 return copy;
             }
 
             template <typename Type>
             SharedPointer<Type> &SharedPointer<Type>::operator++() noexcept {
-                return ++ static_cast<Type *>(SharedPointer0::pointer);
+                return ++ static_cast<Type *>(SharedPointerImpl::pointer);
             }
 
             template <typename Type>
             const SharedPointer<Type> SharedPointer<Type>::operator++(int) noexcept {
-                return static_cast<Type *>(SharedPointer0::pointer) ++;
+                return static_cast<Type *>(SharedPointerImpl::pointer) ++;
             }
 
             template <typename Type>
             SharedPointer<Type> SharedPointer<Type>::operator-=(Size offset) noexcept {
                 SharedPointer<Type> copy = *this;
-                static_cast<Type *>(copy.SharedPointer0::pointer) -= offset;
+                static_cast<Type *>(copy.SharedPointerImpl::pointer) -= offset;
                 return copy;
             }
 
             template <typename Type>
             SharedPointer<Type> &SharedPointer<Type>::operator--() noexcept {
-                return -- static_cast<Type *>(SharedPointer0::pointer);
+                return -- static_cast<Type *>(SharedPointerImpl::pointer);
             }
 
             template <typename Type>
             const SharedPointer<Type> SharedPointer<Type>::operator--(int) noexcept {
-                return static_cast<Type *>(SharedPointer0::pointer) --;
+                return static_cast<Type *>(SharedPointerImpl::pointer) --;
             }
 
             template <typename Type>
             $RetNotIgnored()
             SharedPointer<Type>::operator Type *() noexcept {
-                return static_cast<Type *>(SharedPointer0::pointer);
+                return static_cast<Type *>(SharedPointerImpl::pointer);
             }
         }
     }
 }
 
-#endif // !ENHANCED_BASIC_POINTER_SHARED0POINTER_TCC
+#endif // !ENHANCED_BASIC_POINTER_SHARED0POINTER_HPP

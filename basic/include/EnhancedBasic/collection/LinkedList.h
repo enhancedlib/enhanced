@@ -37,9 +37,9 @@
 
 #ifdef CXX_LANGUAGE // C++ language
 
-namespace EnhancedBasic {
+namespace BasicGenericImpl {
     namespace collection {
-        class ENHANCED_BASIC_API LinkedList0 {
+        class ENHANCED_BASIC_API LinkedListImpl {
         private:
             struct Node {
                 void *value;
@@ -62,7 +62,7 @@ namespace EnhancedBasic {
             static Node *&backNode(Node *&node);
 
         protected:
-            struct GenericsOperator {
+            struct GenericOperator {
                 void *(*allocate)(GenericReference);
 
                 void (*destroy)(void *);
@@ -70,18 +70,18 @@ namespace EnhancedBasic {
                 bool (*equals)(GenericReference, GenericReference);
             };
 
-            class ENHANCED_BASIC_API LinkedListIterator0 {
-                friend class LinkedList0;
+            class ENHANCED_BASIC_API LinkedListIteratorImpl {
+                friend class LinkedListImpl;
 
             private:
-                const LinkedList0 *linkedList;
+                const LinkedListImpl *linkedList;
 
                 mutable bool isFirst;
 
             protected:
-                explicit LinkedListIterator0(const LinkedList0 *linkedList);
+                explicit LinkedListIteratorImpl(const LinkedListImpl *linkedList);
 
-                virtual ~LinkedListIterator0() noexcept;
+                virtual ~LinkedListIteratorImpl() noexcept;
 
                 $RetNotIgnored()
                 bool hasNext0() const;
@@ -100,15 +100,15 @@ namespace EnhancedBasic {
                 Size count0() const;
             };
 
-            GenericsOperator genericsOperator;
+            GenericOperator genericOperator;
 
-            mutable LinkedListIterator0 *iterator;
+            mutable LinkedListIteratorImpl *iterator;
 
-            explicit LinkedList0(GenericsOperator genericsOperator);
+            explicit LinkedListImpl(GenericOperator genericOperator);
 
-            LinkedList0(const LinkedList0 &other);
+            LinkedListImpl(const LinkedListImpl &other);
 
-            virtual ~LinkedList0() noexcept;
+            virtual ~LinkedListImpl() noexcept;
 
             $RetNotIgnored()
             Size getLength0() const;
@@ -136,9 +136,13 @@ namespace EnhancedBasic {
 
             void removeFirst0();
         };
+    }
+}
 
+namespace EnhancedBasic {
+    namespace collection {
     /*
-     * When you build project with Microsoft Visual C++ compiler,
+     * When you build project with Microsoft Visual C++ Compiler,
      * If you don't explicitly extend the "Collection" class, you will see an error in compiling.
      * The compiler thinks the return type of virtual function 'copy' isn't
      * covariant with the return type the super method.
@@ -152,14 +156,18 @@ namespace EnhancedBasic {
     #pragma warning(push)
     #pragma warning(disable: 4584)
         template <typename Type>
-        class LinkedList final : public Collection<Type>, public List<Type>, public Deque<Type>, public LinkedList0 {
+        class LinkedList final : public Collection<Type>, public List<Type>, public Deque<Type>,
+                                 public BasicGenericImpl::collection::LinkedListImpl {
     #pragma warning(pop)
-    #else // Non Microsoft Visual C++ compiler
+    #else // Non Microsoft Visual C++ Compiler
         template <typename Type>
-        class LinkedList : public List<Type>, public Deque<Type>, private LinkedList0 {
+        class LinkedList : public List<Type>, public Deque<Type>,
+                           private BasicGenericImpl::collection::LinkedListImpl {
     #endif // COMPILER_MSVC
         private:
-            class LinkedListIterator : public core::Iterator<Type>, private LinkedListIterator0 {
+            using LinkedListImpl = BasicGenericImpl::collection::LinkedListImpl;
+
+            class LinkedListIterator : public core::Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
                 friend struct core::Iterable<Type>;
 
             public:
@@ -193,7 +201,7 @@ namespace EnhancedBasic {
         public:
             explicit inline LinkedList();
 
-            inline LinkedList(const LinkedList<Type> &other) : LinkedList0(other) {}
+            inline LinkedList(const LinkedList<Type> &other) : LinkedListImpl(other) {}
 
             $RetNotIgnored()
             inline Size getLength() const override;
@@ -226,7 +234,7 @@ namespace EnhancedBasic {
             inline typename core::Iterable<Type>::ForeachIterator begin() const override;
 
             $RetNotIgnored()
-            inline constexpr InvalidType end() const override;
+            inline constexpr UnusedType end() const override;
 
             inline void addLast(const Type &element) override;
 
@@ -247,7 +255,7 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/collection/LinkedList.tcc"
+#include "EnhancedBasic/collection/LinkedList.hpp"
 
 #endif // CXX_LANGUAGE
 

@@ -29,7 +29,6 @@
 #include "EnhancedCore/process.h"
 
 void assertFailed(const char *const message, const char *const file, const uint line) {
-    printf("Failed to assert: %s, file \"%s\", line %d",
-             message, file, line);
-    terminate();
+    printf("Failed to assert: %s, file \"%s\", line %d", message, file, line);
+    processAbnormalAbort();
 }

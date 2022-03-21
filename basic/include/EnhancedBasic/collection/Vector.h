@@ -37,9 +37,9 @@
 
 #ifdef CXX_LANGUAGE // C++ language
 
-namespace EnhancedBasic {
+namespace BasicGenericImpl {
     namespace collection {
-        class ENHANCED_BASIC_API Vector0 {
+        class ENHANCED_BASIC_API VectorImpl {
         private:
             Size maxCount;
 
@@ -48,10 +48,12 @@ namespace EnhancedBasic {
             Size length;
 
         protected:
-            struct GenericsOperator {
+            struct GenericOperator {
                 void *(*allocateArray)(const Size size);
 
                 void (*copyArray)(void *destination, void *source, const Size size);
+
+                void (*moveArray)(void *destination, void *source, const Size size);
 
                 void *(*index)(void *elements, const Size index);
 
@@ -62,11 +64,11 @@ namespace EnhancedBasic {
                 bool (*equals)(GenericReference element, GenericReference value);
             };
 
-            class ENHANCED_BASIC_API VectorIterator0 {
-                friend class Vector0;
+            class ENHANCED_BASIC_API VectorIteratorImpl {
+                friend class VectorImpl;
 
             private:
-                const Vector0 *vector;
+                const VectorImpl *vector;
 
                 mutable void *indexer;
 
@@ -75,9 +77,9 @@ namespace EnhancedBasic {
                 void *end;
 
             protected:
-                explicit VectorIterator0(const Vector0 *vector);
+                explicit VectorIteratorImpl(const VectorImpl *vector);
 
-                virtual ~VectorIterator0() noexcept;
+                virtual ~VectorIteratorImpl() noexcept;
 
                 $RetNotIgnored()
                 bool hasNext0() const;
@@ -96,15 +98,15 @@ namespace EnhancedBasic {
                 Size count0() const;
             };
 
-            GenericsOperator genericsOperator;
+            GenericOperator genericOperator;
 
-            mutable VectorIterator0 *iterator;
+            mutable VectorIteratorImpl *iterator;
 
-            Vector0(Size length, GenericsOperator genericsOperator);
+            VectorImpl(Size length, GenericOperator genericOperator);
 
-            Vector0(const Vector0 &other);
+            VectorImpl(const VectorImpl &other);
 
-            virtual ~Vector0() noexcept;
+            virtual ~VectorImpl() noexcept;
 
             $RetNotIgnored()
             Size getLength0() const;
@@ -126,11 +128,18 @@ namespace EnhancedBasic {
 
             void shrink0(Size size);
         };
+    }
+}
 
+namespace EnhancedBasic {
+    namespace collection {
         template <typename Type>
-        class Vector final : public List<Type>, public RandomAccess<Type>, private Vector0 {
+        class Vector final : public List<Type>, public RandomAccess<Type>,
+                             private BasicGenericImpl::collection::VectorImpl {
         private:
-            class VectorIterator : public core::Iterator<Type>, private Vector0::VectorIterator0 {
+            using VectorImpl = BasicGenericImpl::collection::VectorImpl;
+
+            class VectorIterator : public core::Iterator<Type>, private VectorImpl::VectorIteratorImpl {
                 friend struct core::Iterable<Type>;
 
             public:
@@ -156,7 +165,9 @@ namespace EnhancedBasic {
             $RetRequiresRelease()
             static void *allocateArray(Size size);
 
-            static void copyArray(void *destination, void *source, Size size);
+            static void copyArray(void *destination, void *source, const Size size);
+
+            static void moveArray(void *destination, void *source, Size size);
 
             static GenericReference getElement(void *elements, Size index);
 
@@ -202,7 +213,7 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/collection/Vector.tcc"
+#include "EnhancedBasic/collection/Vector.hpp"
 
 #endif // CXX_LANGUAGE
 

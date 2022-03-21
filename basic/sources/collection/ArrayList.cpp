@@ -25,28 +25,29 @@
 #include "EnhancedCore/annotations.h"
 #include "EnhancedCore/array.h"
 #include "EnhancedCore/assert.h"
+#include "EnhancedCore/memory.h"
 
 #include "EnhancedBasic/generic/Generic.h"
 
-using EnhancedBasic::collection::ArrayList0;
+using BasicGenericImpl::collection::ArrayListImpl;
 
-ArrayList0::ArrayListIterator0::ArrayListIterator0(const ArrayList0 *const arrayList) :
+ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl *const arrayList) :
     arrayList(arrayList), indexer(arrayList->elements), isFirst(true),
     end(arrayList->elements + arrayList->getLength0()) {}
 
-ArrayList0::ArrayListIterator0::~ArrayListIterator0() noexcept = default;
+ArrayListImpl::ArrayListIteratorImpl::~ArrayListIteratorImpl() noexcept = default;
 
 $RetNotIgnored()
-bool ArrayList0::ArrayListIterator0::hasNext0() const {
+bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
     return this->indexer != this->end;
 }
 
-void ArrayList0::ArrayListIterator0::next0() const {
+void ArrayListImpl::ArrayListIteratorImpl::next0() const {
     ++ this->indexer;
 }
 
 $RetNotIgnored()
-bool ArrayList0::ArrayListIterator0::each0() const {
+bool ArrayListImpl::ArrayListIteratorImpl::each0() const {
     if (this->isFirst) {
         this->isFirst = false;
         return !this->arrayList->isEmpty0();
@@ -57,33 +58,33 @@ bool ArrayList0::ArrayListIterator0::each0() const {
 }
 
 $RetNotIgnored()
-GenericReference ArrayList0::ArrayListIterator0::get0() const {
+GenericReference ArrayListImpl::ArrayListIteratorImpl::get0() const {
     return generic_cast(*this->indexer);
 }
 
-void ArrayList0::ArrayListIterator0::reset0() const {
+void ArrayListImpl::ArrayListIteratorImpl::reset0() const {
     this->isFirst = true;
     this->indexer = this->arrayList->elements;
 }
 
 $RetNotIgnored()
-Size ArrayList0::ArrayListIterator0::count0() const {
+Size ArrayListImpl::ArrayListIteratorImpl::count0() const {
     return this->arrayList->getLength0();
 }
 
-ArrayList0::ArrayList0(const Size maxCount, const GenericsOperator genericsOperator) :
+ArrayListImpl::ArrayListImpl(const Size maxCount, const GenericOperator genericOperator) :
     length(0), elements(new void *[maxCount]), maxCount(maxCount),
-    genericsOperator(genericsOperator), iterator(null) {}
+    genericOperator(genericOperator), iterator(null) {}
 
-ArrayList0::ArrayList0(const ArrayList0 &other) :
+ArrayListImpl::ArrayListImpl(const ArrayListImpl &other) :
     length(other.length), elements(new void *[other.maxCount]), maxCount(other.maxCount),
-    genericsOperator(other.genericsOperator), iterator(null) {
-    for (int index = 0; index < other.length; ++ index) {
-        this->elements[index] = this->genericsOperator.allocate(generic_cast(other.elements[index]));
+    genericOperator(other.genericOperator), iterator(null) {
+    for (Size index = 0; index < other.length; ++ index) {
+        this->elements[index] = this->genericOperator.allocate(generic_cast(other.elements[index]));
     }
 }
 
-ArrayList0::~ArrayList0() noexcept {
+ArrayListImpl::~ArrayListImpl() noexcept {
     while (this->length > 0) {
         this->remove0();
     }
@@ -92,24 +93,24 @@ ArrayList0::~ArrayList0() noexcept {
 }
 
 $RetNotIgnored()
-Size ArrayList0::getLength0() const {
+Size ArrayListImpl::getLength0() const {
     return this->length;
 }
 
 $RetNotIgnored()
-bool ArrayList0::isEmpty0() const {
+bool ArrayListImpl::isEmpty0() const {
     return this->length == 0;
 }
 
 $RetNotIgnored()
-GenericReference ArrayList0::get0(Size index) const {
+GenericReference ArrayListImpl::get0(Size index) const {
     return generic_cast(this->elements[index]);
 }
 
 $RetNotIgnored()
-bool ArrayList0::contain0(GenericReference value) const {
+bool ArrayListImpl::contain0(GenericReference value) const {
     for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericsOperator.equals(generic_cast(this->elements[index]), value)) {
+        if (this->genericOperator.equals(generic_cast(this->elements[index]), value)) {
             return true;
         }
     }
@@ -117,31 +118,31 @@ bool ArrayList0::contain0(GenericReference value) const {
     return false;
 }
 
-void ArrayList0::add0(GenericReference element) {
+void ArrayListImpl::add0(GenericReference element) {
     if (this->length == this->maxCount) {
         this->expand0(this->maxCount);
     }
 
-    this->elements[this->length] = this->genericsOperator.allocate(element);
+    this->elements[this->length] = this->genericOperator.allocate(element);
     ++ this->length;
 }
 
-void ArrayList0::remove0() {
-    this->genericsOperator.destroy(this->elements[-- this->length]);
+void ArrayListImpl::remove0() {
+    this->genericOperator.destroy(this->elements[-- this->length]);
 }
 
-void ArrayList0::expand0(const Size size) {
+void ArrayListImpl::expand0(const Size size) {
     Size count = this->maxCount + size;
     void **array = new void *[count];
 
-    arrayCopy(array, this->elements, count, sizeof(void *));
+    arrayCopy(array, this->elements, this->length, sizeof(void *));
     delete[] this->elements;
 
     this->elements = array;
     this->maxCount = count;
 }
 
-void ArrayList0::shrink0(const Size size) {
+void ArrayListImpl::shrink0(const Size size) {
     Size count = this->maxCount - size;
     assert(count > this->length);
 

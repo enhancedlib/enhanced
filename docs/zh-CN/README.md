@@ -2,11 +2,11 @@
 
 强大的C/C++开发框架
 
-此软件遵循[Enhanced License](../../LICENSE)协议。
+此软件遵循[Enhanced License](../../LICENSE)。
 
-仓库：
+[版权声明](../../COPYRIGHT)
 
-- [GitHub](http://github.com/any-possible/Enhanced)
+仓库：[GitHub](http://github.com/any-possible/Enhanced)
 
 [其它语言](../README.Languages.md) | [网站](http://any-possible.github.io/enhanced-website) | [自述文件](README.md) | [帮助&支持](Help-Support.md) | [关于](About.md)
 
@@ -48,29 +48,15 @@
 
 - 这些是使用此库的所支持环境，而不是构建环境。
 
-编译器：
+编译器：[Microsoft Visual C++](http://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU C/C++ Compiler](http://gcc.gnu.org/)、[Clang](http://clang.llvm.org/)
 
-- [Microsoft Visual C++](http://visualstudio.microsoft.com/vs/features/cplusplus/)
-- [GNU C/C++编译器](http://gcc.gnu.org/)
-- [Clang](http://clang.llvm.org/)
+操作系统：Microsoft Windows操作系统、Linux
 
-操作系统：
+处理器：amd64 (x86_64)、x86
 
-- Microsoft Windows操作系统
-- Linux
+支持的C标准：C99、C11
 
-处理器：
-
-- amd64 (x86_64)
-- x86
-
-支持的C标准：
-
-- C89、C99、C11
-
-支持的C++标准：
-
-- C++98、C++11、C++14、C++17、C++20
+支持的C++标准：C++11、C++14、C++17、C++20
 
 ## 4.构建
 
@@ -94,9 +80,10 @@
 
 ### 关于这个项目中的泛型（模板）
 
-类名后面跟着0的类（以下简称为“实现类”）通常是模板（泛型）类的通用实现类。
+在这个项目中，类名后面带着“Impl”的类是泛型类的通用实现类。
+大部分泛型类的实现都在实现类中（除了少部分特殊的泛型类）
 
-它们分离了模板（泛型）类的实现从模板按类型擦除（伪泛型）。
+它们分离了泛型类的实现从模板按类型擦除（伪泛型）。
 
 您不应该从另一个类继承实现类，也不应该直接实例化实现类。
 正确的方法是实例化模板类，因为实现类没有公共方法。

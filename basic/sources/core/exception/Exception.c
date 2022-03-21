@@ -18,22 +18,28 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include <stdlib.h>
-
 #include "EnhancedBasic/core/exception/Exception.h"
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/jump.h"
-
-using(EnhancedBasic$core$exception$Exception);
-using(EnhancedBasic$core$exception$ExceptionContextBlock);
+#include "EnhancedCore/memory.h"
 
 static ExceptionContextBlock *exceptionContextBlockStack = null;
 
 static char *traceback(Exception *self);
 
+Exception newException(const uint exceptionCode, const char *const exceptionMessage) {
+    Exception exception = {
+        .message = exceptionMessage,
+        .code = exceptionCode,
+        .traceback = traceback
+    };
+    return exception;
+}
+
 void exceptionContextBlockStackPush(ExceptionContextBlock *exceptionContextBlock) {
+    exceptionContextBlock->exception = null;
     exceptionContextBlock->link = exceptionContextBlockStack;
     exceptionContextBlockStack = exceptionContextBlock;
 }
@@ -46,21 +52,15 @@ bool exceptionContextBlockStackIsEmpty() {
     return exceptionContextBlockStack == null;
 }
 
-void exceptionRaise(uint exceptionCode, const char *exceptionMessage) {
-    Exception exception = {
-        exceptionMessage,
-        exceptionCode,
-        traceback
-    };
-
+void exceptionThrow(Exception exception) {
     if (exceptionContextBlockStackIsEmpty()) {
-        terminate();
+        processAbnormalAbort();
     } else {
         exceptionContextBlockStack->exception = &exception;
-        jumpTo(exceptionContextBlockStack->snapshot, TRY_BLOCK_EXCEPTION_OCCURRED);
+        jumpTo(exceptionContextBlockStack->snapshot, TryBlockExceptionOccurred);
     }
 }
 
 char *traceback(Exception *self) {
-    return "";
+    return (char *) self->message;
 }

@@ -18,8 +18,8 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#ifndef ENHANCED_BASIC_COLLECTION_ARRAY0LIST_TCC
-#define ENHANCED_BASIC_COLLECTION_ARRAY0LIST_TCC
+#ifndef ENHANCED_BASIC_COLLECTION_ARRAY0LIST_HPP
+#define ENHANCED_BASIC_COLLECTION_ARRAY0LIST_HPP
 
 #include "EnhancedBasic/collection/ArrayList.h"
 
@@ -38,41 +38,41 @@ namespace EnhancedBasic {
     namespace collection {
         template <typename Type>
         ArrayList<Type>::ArrayListIterator::ArrayListIterator(const ArrayList<Type> *arrayList) :
-            ArrayListIterator0(arrayList) {}
+            ArrayListIteratorImpl(arrayList) {}
 
         template <typename Type>
         $RetNotIgnored()
         bool ArrayList<Type>::ArrayListIterator::hasNext() const {
-            return ArrayListIterator0::hasNext0();
+            return ArrayListIteratorImpl::hasNext0();
         }
 
         template <typename Type>
         const core::Iterator <Type> *ArrayList<Type>::ArrayListIterator::next() const {
-            ArrayListIterator0::next0();
+            ArrayListIteratorImpl::next0();
             return this;
         }
 
         template <typename Type>
         $RetNotIgnored()
         bool ArrayList<Type>::ArrayListIterator::each() const {
-            return ArrayListIterator0::each0();
+            return ArrayListIteratorImpl::each0();
         }
 
         template <typename Type>
         $RetNotIgnored()
         Type &ArrayList<Type>::ArrayListIterator::get() const {
-            return (Type &) ArrayListIterator0::get0();
+            return (Type &) ArrayListIteratorImpl::get0();
         }
 
         template <typename Type>
         void ArrayList<Type>::ArrayListIterator::reset() const {
-            ArrayListIterator0::reset0();
+            ArrayListIteratorImpl::reset0();
         }
 
         template <typename Type>
         $RetNotIgnored()
         Size ArrayList<Type>::ArrayListIterator::count() const {
-            return ArrayListIterator0::count0();
+            return ArrayListIteratorImpl::count0();
         }
 
         template <typename Type>
@@ -93,43 +93,47 @@ namespace EnhancedBasic {
         }
 
         template <typename Type>
-        ArrayList<Type>::ArrayList() : ArrayList0(UINT8_MAX, {allocate, destroy, equals}) {}
+        ArrayList<Type>::ArrayList() : ArrayListImpl(
+            UINT8_MAX, {ArrayList::allocate, ArrayList::destroy, ArrayList::equals}
+        ) {}
 
         template <typename Type>
-        ArrayList<Type>::ArrayList(Size maxCount) : ArrayList0(maxCount, {allocate, destroy, equals}) {}
+        ArrayList<Type>::ArrayList(Size maxCount) : ArrayListImpl(
+            maxCount, {ArrayList::allocate, ArrayList::destroy, ArrayList::equals}
+        ) {}
 
         template <typename Type>
-        ArrayList<Type>::ArrayList(const ArrayList<Type> &other) : ArrayList0(other) {}
+        ArrayList<Type>::ArrayList(const ArrayList<Type> &other) : ArrayListImpl(other) {}
 
         template <typename Type>
         $RetNotIgnored()
         Size ArrayList<Type>::getLength() const {
-            return ArrayList0::getLength0();
+            return ArrayListImpl::getLength0();
         }
 
         template <typename Type>
         bool ArrayList<Type>::isEmpty() const {
-            return ArrayList0::isEmpty0();
+            return ArrayListImpl::isEmpty0();
         }
 
         template <typename Type>
         Type &ArrayList<Type>::get(Size index) const {
-            return (Type &) ArrayList0::get0(index);
+            return (Type &) ArrayListImpl::get0(index);
         }
 
         template <typename Type>
         Type &ArrayList<Type>::operator[](Size index) const {
-            return (Type &) ArrayList0::get0(index);
+            return (Type &) ArrayListImpl::get0(index);
         }
 
         template <typename Type>
         core::Iterator <Type> *ArrayList<Type>::iterator() const {
-            return core::Iterable<Type>::template getIterator<ArrayListIterator>(ArrayList0::iterator, this);
+            return core::Iterable<Type>::template getIterator<ArrayListIterator>(ArrayListImpl::iterator, this);
         }
 
         template <typename Type>
         bool ArrayList<Type>::contain(const Type &value) const {
-            return ArrayList0::contain0((GenericReference) value);
+            return ArrayListImpl::contain0((GenericReference) value);
         }
 
         template <typename Type>
@@ -139,13 +143,13 @@ namespace EnhancedBasic {
 
         template <typename Type>
         void ArrayList<Type>::add(const Type &element) {
-            ArrayList0::add0((GenericReference) element);
+            ArrayListImpl::add0((GenericReference) element);
         }
 
         template <typename Type>
         Type ArrayList<Type>::remove() {
             Type value = this->get(this->getLength() - 1);
-            ArrayList0::remove0();
+            ArrayListImpl::remove0();
             return value;
         }
     }
@@ -153,4 +157,4 @@ namespace EnhancedBasic {
 
 #endif // CXX_LANGUAGE
 
-#endif // !ENHANCED_BASIC_COLLECTION_ARRAY0LIST_TCC
+#endif // !ENHANCED_BASIC_COLLECTION_ARRAY0LIST_HPP

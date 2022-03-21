@@ -17,7 +17,10 @@ test/*
 CMakeSettings.json
 
 # Ignore the Visual Studio cache folder.
-.vs
+.vs/
+
+# Ignore the Visual Studio Code configurations folder.
+.vscode/
 
 # Ignore CLion local configurations.
 .idea/shelf/

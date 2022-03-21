@@ -27,18 +27,18 @@
 
 #include "EnhancedBasic/generic/Generic.h"
 
-using EnhancedBasic::collection::mixed::MixedLinkedList0;
+using BasicGenericImpl::collection::mixed::MixedLinkedListImpl;
 
-MixedLinkedList0::MixedLinkedListIterator0::
-MixedLinkedListIterator0(const MixedLinkedList0 *mixedLinkedList) :
+MixedLinkedListImpl::MixedLinkedListIteratorImpl::
+MixedLinkedListIteratorImpl(const MixedLinkedListImpl *mixedLinkedList) :
     mixedLinkedList(mixedLinkedList), isFirst(true) {
     this->mixedLinkedList->indexer = this->mixedLinkedList->first;
 }
 
-MixedLinkedList0::MixedLinkedListIterator0::~MixedLinkedListIterator0() noexcept = default;
+MixedLinkedListImpl::MixedLinkedListIteratorImpl::~MixedLinkedListIteratorImpl() noexcept = default;
 
 $RetNotIgnored()
-bool MixedLinkedList0::MixedLinkedListIterator0::hasNext0() const {
+bool MixedLinkedListImpl::MixedLinkedListIteratorImpl::hasNext0() const {
     if (this->isFirst) {
         this->isFirst = false;
         return true;
@@ -47,12 +47,12 @@ bool MixedLinkedList0::MixedLinkedListIterator0::hasNext0() const {
     }
 }
 
-void MixedLinkedList0::MixedLinkedListIterator0::next0() const {
-    MixedLinkedList0::nextNode(this->mixedLinkedList->indexer);
+void MixedLinkedListImpl::MixedLinkedListIteratorImpl::next0() const {
+    MixedLinkedListImpl::nextNode(this->mixedLinkedList->indexer);
 }
 
 $RetNotIgnored()
-bool MixedLinkedList0::MixedLinkedListIterator0::each0() const {
+bool MixedLinkedListImpl::MixedLinkedListIteratorImpl::each0() const {
     if (this->isFirst) {
         this->isFirst = false;
         return !this->mixedLinkedList->isEmpty0();
@@ -63,35 +63,35 @@ bool MixedLinkedList0::MixedLinkedListIterator0::each0() const {
 }
 
 $RetNotIgnored()
-GenericReference MixedLinkedList0::MixedLinkedListIterator0::get0() const {
+GenericReference MixedLinkedListImpl::MixedLinkedListIteratorImpl::get0() const {
     return generic_cast(this->mixedLinkedList->indexer->value);
 }
 
-void MixedLinkedList0::MixedLinkedListIterator0::reset0() const {
+void MixedLinkedListImpl::MixedLinkedListIteratorImpl::reset0() const {
     this->isFirst = true;
     this->mixedLinkedList->indexer = this->mixedLinkedList->first;
 }
 
 $RetNotIgnored()
-Size MixedLinkedList0::MixedLinkedListIterator0::count0() const {
+Size MixedLinkedListImpl::MixedLinkedListIteratorImpl::count0() const {
     return this->mixedLinkedList->getLength0();
 }
 
-MixedLinkedList0::Node *&MixedLinkedList0::nextNode(Node *&node) {
+MixedLinkedListImpl::Node *&MixedLinkedListImpl::nextNode(Node *&node) {
     return node = node->next;
 }
 
-MixedLinkedList0::Node *&MixedLinkedList0::backNode(Node *&node) {
+MixedLinkedListImpl::Node *&MixedLinkedListImpl::backNode(Node *&node) {
     return node = node->back;
 }
 
-MixedLinkedList0::MixedLinkedList0(const GenericsOperator genericsOperator) :
+MixedLinkedListImpl::MixedLinkedListImpl(const GenericOperator genericOperator) :
     first(null), last(null), indexer(null), length(0),
-    genericsOperator(genericsOperator), iterator(null) {}
+    genericOperator(genericOperator), iterator(null) {}
 
-MixedLinkedList0::MixedLinkedList0(const MixedLinkedList0 &other) :
+MixedLinkedListImpl::MixedLinkedListImpl(const MixedLinkedListImpl &other) :
     first(null), last(null), indexer(null), length(0),
-    genericsOperator(other.genericsOperator), iterator(null) {
+    genericOperator(other.genericOperator), iterator(null) {
     this->indexer = other.first;
     for (Size count = 0; count < other.length; ++ count) {
         if (this->indexer->dynamic) {
@@ -99,22 +99,22 @@ MixedLinkedList0::MixedLinkedList0(const MixedLinkedList0 &other) :
         } else {
             this->addLastReferenced0(generic_cast(this->indexer->value));
         }
-        MixedLinkedList0::nextNode(this->indexer);
+        MixedLinkedListImpl::nextNode(this->indexer);
     }
 }
 
-MixedLinkedList0::~MixedLinkedList0() noexcept {
+MixedLinkedListImpl::~MixedLinkedListImpl() noexcept {
     for (Size count = 1; count < this->length; ++ count) {
-        MixedLinkedList0::backNode(this->last);
+        MixedLinkedListImpl::backNode(this->last);
 
         if (this->last->next->dynamic) {
-            this->genericsOperator.destroy(this->last->next->value);
+            this->genericOperator.destroy(this->last->next->value);
         }
         delete this->last->next;
     }
 
     if (!this->isEmpty0() && this->last->dynamic) {
-        this->genericsOperator.destroy(this->last->value);
+        this->genericOperator.destroy(this->last->value);
     }
 
     delete this->last;
@@ -122,36 +122,36 @@ MixedLinkedList0::~MixedLinkedList0() noexcept {
 }
 
 $RetNotIgnored()
-Size MixedLinkedList0::getLength0() const {
+Size MixedLinkedListImpl::getLength0() const {
     return this->length;
 }
 
 $RetNotIgnored()
-bool MixedLinkedList0::isEmpty0() const {
+bool MixedLinkedListImpl::isEmpty0() const {
     return this->length == 0;
 }
 
 $RetNotIgnored()
-GenericReference MixedLinkedList0::getFirst0() const {
+GenericReference MixedLinkedListImpl::getFirst0() const {
     return generic_cast(this->first->value);
 }
 
 $RetNotIgnored()
-GenericReference MixedLinkedList0::getLast0() const {
+GenericReference MixedLinkedListImpl::getLast0() const {
     return generic_cast(this->last->value);
 }
 
 $RetNotIgnored()
-GenericReference MixedLinkedList0::get0(const Size index) const {
+GenericReference MixedLinkedListImpl::get0(const Size index) const {
     if (index < this->length >> 1) {
         this->indexer = this->first;
         for (Size count = 0; count < index; ++ count) {
-            MixedLinkedList0::nextNode(this->indexer);
+            MixedLinkedListImpl::nextNode(this->indexer);
         }
     } else {
         this->indexer = this->last;
         for (Size count = this->length - 1; count > index; -- count) {
-            MixedLinkedList0::backNode(this->indexer);
+            MixedLinkedListImpl::backNode(this->indexer);
         }
     }
 
@@ -159,10 +159,10 @@ GenericReference MixedLinkedList0::get0(const Size index) const {
 }
 
 $RetNotIgnored()
-bool MixedLinkedList0::contain0(GenericReference value) const {
+bool MixedLinkedListImpl::contain0(GenericReference value) const {
     this->indexer = this->first;
     for (Size count = 0; count < this->length; ++ count) {
-        if (this->genericsOperator.equals(generic_cast(this->indexer->value), value)) {
+        if (this->genericOperator.equals(generic_cast(this->indexer->value), value)) {
             return true;
         }
         this->indexer = this->indexer->next;
@@ -171,50 +171,50 @@ bool MixedLinkedList0::contain0(GenericReference value) const {
     return false;
 }
 
-void MixedLinkedList0::addLast0(GenericReference element) {
+void MixedLinkedListImpl::addLast0(GenericReference element) {
     if (this->isEmpty0()) {
-        this->last = new MixedLinkedList0::Node();
+        this->last = new MixedLinkedListImpl::Node();
         this->last->dynamic = true;
-        this->last->value = this->genericsOperator.allocate(element);
+        this->last->value = this->genericOperator.allocate(element);
         this->first = this->last;
     } else {
-        this->last->next = new MixedLinkedList0::Node();
+        this->last->next = new MixedLinkedListImpl::Node();
         this->last->next->dynamic = true;
-        this->last->next->value = this->genericsOperator.allocate(element);
+        this->last->next->value = this->genericOperator.allocate(element);
         this->last->next->back = this->last;
-        MixedLinkedList0::nextNode(this->last);
+        MixedLinkedListImpl::nextNode(this->last);
     }
 
     ++ this->length;
 }
 
-void MixedLinkedList0::addLastReferenced0(GenericReference element) {
+void MixedLinkedListImpl::addLastReferenced0(GenericReference element) {
     if (this->isEmpty0()) {
-        this->last = new MixedLinkedList0::Node();
+        this->last = new MixedLinkedListImpl::Node();
         this->last->value = &element;
         this->first = this->last;
     } else {
-        this->last->next = new MixedLinkedList0::Node();
+        this->last->next = new MixedLinkedListImpl::Node();
         this->last->next->value = &element;
         this->last->next->back = this->last;
-        MixedLinkedList0::nextNode(this->last);
+        MixedLinkedListImpl::nextNode(this->last);
     }
 
     ++ this->length;
 }
 
-void MixedLinkedList0::removeLast0() {
+void MixedLinkedListImpl::removeLast0() {
     assert(!this->isEmpty0());
 
     if (this->length > 1) {
-        MixedLinkedList0::backNode(this->last);
+        MixedLinkedListImpl::backNode(this->last);
         if (this->last->next->dynamic) {
-            this->genericsOperator.destroy(this->last->next->value);
+            this->genericOperator.destroy(this->last->next->value);
         }
         delete this->last->next;
     } else {
         if (this->last->dynamic) {
-            this->genericsOperator.destroy(this->last->value);
+            this->genericOperator.destroy(this->last->value);
         }
         delete this->last;
         this->last = this->first = null;
@@ -223,50 +223,50 @@ void MixedLinkedList0::removeLast0() {
     -- this->length;
 }
 
-void MixedLinkedList0::addFirst0(GenericReference element) {
+void MixedLinkedListImpl::addFirst0(GenericReference element) {
     if (this->isEmpty0()) {
-        this->first = new MixedLinkedList0::Node();
+        this->first = new MixedLinkedListImpl::Node();
         this->first->dynamic = true;
-        this->first->value = this->genericsOperator.allocate(element);
+        this->first->value = this->genericOperator.allocate(element);
         this->last = this->first;
     } else {
-        this->first->back = new MixedLinkedList0::Node();
+        this->first->back = new MixedLinkedListImpl::Node();
         this->first->back->dynamic = true;
-        this->first->back->value = this->genericsOperator.allocate(element);
+        this->first->back->value = this->genericOperator.allocate(element);
         this->first->back->next = this->first;
-        MixedLinkedList0::backNode(this->first);
+        MixedLinkedListImpl::backNode(this->first);
     }
 
     ++ this->length;
 }
 
-void MixedLinkedList0::addFirstReferenced0(GenericReference element) {
+void MixedLinkedListImpl::addFirstReferenced0(GenericReference element) {
     if (this->isEmpty0()) {
-        this->first = new MixedLinkedList0::Node();
+        this->first = new MixedLinkedListImpl::Node();
         this->first->value = &element;
         this->last = this->first;
     } else {
-        this->first->back = new MixedLinkedList0::Node();
+        this->first->back = new MixedLinkedListImpl::Node();
         this->first->back->value = &element;
         this->first->back->next = this->first;
-        MixedLinkedList0::backNode(this->first);
+        MixedLinkedListImpl::backNode(this->first);
     }
 
     ++ this->length;
 }
 
-void MixedLinkedList0::removeFirst0() {
+void MixedLinkedListImpl::removeFirst0() {
     assert(!this->isEmpty0());
 
     if (this->length > 1) {
-        MixedLinkedList0::nextNode(this->first);
+        MixedLinkedListImpl::nextNode(this->first);
         if (this->first->back->dynamic) {
-            this->genericsOperator.destroy(this->first->back->value);
+            this->genericOperator.destroy(this->first->back->value);
         }
         delete this->first->back;
     } else {
         if (this->first->dynamic) {
-            this->genericsOperator.destroy(this->first->value);
+            this->genericOperator.destroy(this->first->value);
         }
         delete this->first;
         this->first = this->last = null;

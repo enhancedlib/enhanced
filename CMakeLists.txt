@@ -47,7 +47,7 @@ add_subdirectory("test")
 message("${PROMPT} Configuring modules done")
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    install(FILES "ReadMe.md" DESTINATION ".")
+    install(FILES "README.md" DESTINATION ".")
     message("${PROMPT} Installs file \"readme\" to ${CMAKE_INSTALL_PREFIX}/.")
     install(DIRECTORY "licenses" DESTINATION ".")
     message("${PROMPT} Installs directory \"licenses\" to ${CMAKE_INSTALL_PREFIX}/.")

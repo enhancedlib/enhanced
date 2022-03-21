@@ -43,7 +43,7 @@ typedef unsigned long uint64;
 
 typedef float float32;
 typedef double float64;
-#ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
+#ifndef COMPILER_MSVC // Non Microsoft Visual C++ Compiler
 #if defined(X86_PROCESSOR) // 32-bit
 typedef long double float96;
 #elif defined(X64_PROCESSOR) // 64-bit
@@ -63,7 +63,7 @@ typedef uint64 ulong;
 #endif // defined(WINDOWS_OS) || defined(X86_PROCESSOR)
 typedef uint64 ullong;
 
-#ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
+#ifndef COMPILER_MSVC // Non Microsoft Visual C++ Compiler
 #if defined(X86_PROCESSOR) // 32-bit
 typedef float96 ldouble;
 #elif defined(X64_PROCESSOR) // 64-bit
@@ -124,7 +124,7 @@ typedef int NullType;
 typedef void *NullType;
 #endif // CXX_LANGUAGE
 
-typedef Byte InvalidType;
+typedef void *UnusedType;
 
 #ifndef SUPPRESS_DEFINES_UPPERCASE_TYPES
 
@@ -150,7 +150,7 @@ typedef uint64 UINT64;
 
 typedef float32 FLOAT32;
 typedef float64 FLOAT64;
-#ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
+#ifndef COMPILER_MSVC // Non Microsoft Visual C++ Compiler
 #if defined(X86_PROCESSOR) // 32-bit
 typedef float96 FLOAT96;
 #elif defined(X64_PROCESSOR) // 64-bit
@@ -190,7 +190,7 @@ typedef bool BOOL;
 #define NULL null
 typedef NullType NULL_TYPE;
 
-typedef InvalidType INVALID_TYPE;
+typedef UnusedType UNUSED_TYPE;
 
 #endif // !SUPPRESS_DEFINES_UPPERCASE_TYPES
 
@@ -310,7 +310,7 @@ typedef InvalidType INVALID_TYPE;
 
 #define FLOAT32_MIN ((float32) 1.17549435082228750796873653722224568E-38)
 #define FLOAT64_MIN ((float64) 2.22507385850720138309023271733240406E-308)
-#ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
+#ifndef COMPILER_MSVC // Non Microsoft Visual C++ Compiler
 #if defined(X86_PROCESSOR) // 32-bit
 #define FLOAT96_MIN 0.0 // Unknown
 #elif defined(X64_PROCESSOR) // 64-bit
@@ -487,7 +487,7 @@ typedef InvalidType INVALID_TYPE;
 
 #define FLOAT32_MAX ((float32) 3.40282346638528859811704183484516925E+38)
 #define FLOAT64_MAX ((float64) 1.79769313486231570814527423731704357E+308)
-#ifndef COMPILER_MSVC // Non Microsoft Visual C++ compiler
+#ifndef COMPILER_MSVC // Non Microsoft Visual C++ Compiler
 #if defined(X86_PROCESSOR) // 32-bit
 #define FLOAT96_MAX 0.0 // Unknown
 #elif defined(X64_PROCESSOR) // 64-bit
@@ -573,23 +573,18 @@ typedef InvalidType INVALID_TYPE;
 #define NAN (0.0 / 0.0) // Not-a-Number: nan
 #endif // COMPILER_MSVC
 
-#ifdef INVALID_VALUE
-#undef INVALID_VALUE
-#endif // INVALID_VALUE
+#ifdef UNUSED_VALUE
+#undef UNUSED_VALUE
+#endif // UNUSED_VALUE
 
-#define INVALID_VALUE 0
+#define UNUSED_VALUE null
 
-#ifdef CXX_11_OR_MORE
-template <typename Type>
-inline Type &forceCast(auto &&value) {
-    return *((Type *)(void *) &value);
+#ifdef CXX_LANGUAGE
+template <typename ConvertType>
+inline ConvertType &forceCast(auto &&value) {
+    return *((ConvertType *)(void *) &value);
 }
-#else
-template <typename Type, typename AutoType>
-inline Type &forceCast(const AutoType &value) {
-    return *((Type *)(void *) &value);
-}
-#endif // CXX_11_OR_MORE
+#endif // CXX_LANGUAGE
 
 #define force_cast forceCast
 

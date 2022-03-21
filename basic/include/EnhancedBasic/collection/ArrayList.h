@@ -37,9 +37,9 @@
 
 #ifdef CXX_LANGUAGE // C++ language
 
-namespace EnhancedBasic {
+namespace BasicGenericImpl {
     namespace collection {
-        class ENHANCED_BASIC_API ArrayList0 {
+        class ENHANCED_BASIC_API ArrayListImpl {
         private:
             void **elements;
 
@@ -48,7 +48,7 @@ namespace EnhancedBasic {
             Size maxCount;
 
         protected:
-            struct GenericsOperator {
+            struct GenericOperator {
                 void *(*allocate)(GenericReference);
 
                 void (*destroy)(void *);
@@ -56,11 +56,11 @@ namespace EnhancedBasic {
                 bool (*equals)(GenericReference, GenericReference);
             };
 
-            class ENHANCED_BASIC_API ArrayListIterator0 {
-                friend class ArrayList0;
+            class ENHANCED_BASIC_API ArrayListIteratorImpl {
+                friend class ArrayListImpl;
 
             private:
-                const ArrayList0 *arrayList;
+                const ArrayListImpl *arrayList;
 
                 mutable void **indexer;
 
@@ -69,9 +69,9 @@ namespace EnhancedBasic {
                 void **end;
 
             protected:
-                explicit ArrayListIterator0(const ArrayList0 *arrayList);
+                explicit ArrayListIteratorImpl(const ArrayListImpl *arrayList);
 
-                virtual ~ArrayListIterator0() noexcept;
+                virtual ~ArrayListIteratorImpl() noexcept;
 
                 $RetNotIgnored()
                 bool hasNext0() const;
@@ -90,15 +90,15 @@ namespace EnhancedBasic {
                 Size count0() const;
             };
 
-            GenericsOperator genericsOperator;
+            GenericOperator genericOperator;
 
-            mutable ArrayListIterator0 *iterator;
+            mutable ArrayListIteratorImpl *iterator;
 
-            ArrayList0(Size length, GenericsOperator genericsOperator);
+            ArrayListImpl(Size length, GenericOperator genericOperator);
 
-            ArrayList0(const ArrayList0 &other);
+            ArrayListImpl(const ArrayListImpl &other);
 
-            virtual ~ArrayList0() noexcept;
+            virtual ~ArrayListImpl() noexcept;
 
             $RetNotIgnored()
             Size getLength0() const;
@@ -120,11 +120,18 @@ namespace EnhancedBasic {
 
             void shrink0(Size size);
         };
+    }
+}
 
+namespace EnhancedBasic {
+    namespace collection {
         template <typename Type>
-        class ArrayList final : public List<Type>, public RandomAccess<Type>, private ArrayList0 {
+        class ArrayList final : public List<Type>, public RandomAccess<Type>,
+                                private BasicGenericImpl::collection::ArrayListImpl {
         private:
-            class ArrayListIterator : public core::Iterator<Type>, private ArrayList0::ArrayListIterator0 {
+            using ArrayListImpl = BasicGenericImpl::collection::ArrayListImpl;
+
+            class ArrayListIterator : public core::Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
                 friend struct core::Iterable<Type>;
 
             public:
@@ -190,7 +197,7 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/collection/ArrayList.tcc"
+#include "EnhancedBasic/collection/ArrayList.hpp"
 
 #endif // CXX_LANGUAGE
 

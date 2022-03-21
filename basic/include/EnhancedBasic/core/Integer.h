@@ -30,11 +30,9 @@
 
 EXTERN_C_START
 
-struct EnhancedBasic$Core$Integer {
+struct Integer {
     int value;
 };
-
-#define ALIAS_EnhancedBasic$Core$Integer Integer
 
 EXTERN_C_END
 
@@ -48,6 +46,8 @@ namespace EnhancedBasic {
 
             public:
                 Integer();
+
+                Integer(int value);
         };
     } // namespace core
 } // namespace EnhancedBasic

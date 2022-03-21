@@ -37,10 +37,10 @@
 
 #ifdef CXX_LANGUAGE // C++ language
 
-namespace EnhancedBasic {
+namespace BasicGenericImpl {
     namespace collection {
         namespace referenced {
-            class ENHANCED_BASIC_API ReferencedLinkedList0 {
+            class ENHANCED_BASIC_API ReferencedLinkedListImpl {
             private:
                 struct Node {
                     void *value;
@@ -63,22 +63,22 @@ namespace EnhancedBasic {
                 static Node *&backNode(Node *&node);
 
             protected:
-                struct GenericsOperator {
+                struct GenericOperator {
                     bool (*equals)(GenericReference, GenericReference);
                 };
 
-                class ENHANCED_BASIC_API ReferencedLinkedListIterator0 {
-                    friend class ReferencedLinkedList0;
+                class ENHANCED_BASIC_API ReferencedLinkedListIteratorImpl {
+                    friend class ReferencedLinkedListImpl;
 
                 private:
-                    const ReferencedLinkedList0 *referencedLinkedList;
+                    const ReferencedLinkedListImpl *referencedLinkedList;
 
                     mutable bool isFirst;
 
                 protected:
-                    explicit ReferencedLinkedListIterator0(const ReferencedLinkedList0 *referencedLinkedList);
+                    explicit ReferencedLinkedListIteratorImpl(const ReferencedLinkedListImpl *referencedLinkedList);
 
-                    virtual ~ReferencedLinkedListIterator0() noexcept;
+                    virtual ~ReferencedLinkedListIteratorImpl() noexcept;
 
                     $RetNotIgnored()
                     bool hasNext0() const;
@@ -97,15 +97,15 @@ namespace EnhancedBasic {
                     Size count0() const;
                 };
 
-                GenericsOperator genericsOperator;
+                GenericOperator genericOperator;
 
-                mutable ReferencedLinkedListIterator0 *iterator;
+                mutable ReferencedLinkedListIteratorImpl *iterator;
 
-                explicit ReferencedLinkedList0(GenericsOperator genericsOperator);
+                explicit ReferencedLinkedListImpl(GenericOperator genericOperator);
 
-                ReferencedLinkedList0(const ReferencedLinkedList0 &other);
+                ReferencedLinkedListImpl(const ReferencedLinkedListImpl &other);
 
-                virtual ~ReferencedLinkedList0() noexcept;
+                virtual ~ReferencedLinkedListImpl() noexcept;
 
                 $RetNotIgnored()
                 Size getLength0() const;
@@ -133,9 +133,15 @@ namespace EnhancedBasic {
 
                 void removeFirst0();
             };
+        }
+    }
+}
 
+namespace EnhancedBasic {
+    namespace collection {
+        namespace referenced {
         /*
-         * When you build project with Microsoft Visual C++ compiler,
+         * When you build project with Microsoft Visual C++ Compiler,
          * If you don't explicitly extend the "Collection" class, you will see an error in compiling.
          * The compiler thinks the return type of virtual function 'copy' isn't
          * covariant with the return type the super method.
@@ -149,17 +155,19 @@ namespace EnhancedBasic {
         #pragma warning(push)
         #pragma warning(disable: 4584)
             template <typename Type>
-            class ReferencedLinkedList final : public Collection<Type>, public ReferencedList<Type>,
-                                               public ReferencedDeque<Type>, private ReferencedLinkedList0 {
+            class ReferencedLinkedList final : public Collection<Type>, public ReferencedList<Type>, public ReferencedDeque<Type>,
+                                               private BasicGenericImpl::collection::referenced::ReferencedLinkedListImpl {
         #pragma warning(pop)
-        #else // Non Microsoft Visual C++ compiler
+        #else // Non Microsoft Visual C++ Compiler
             template <typename Type>
             class ReferencedLinkedList final : public ReferencedList<Type>, public ReferencedDeque<Type>,
-                                               private ReferencedLinkedList0 {
+                                               private BasicGenericImpl::collection::referenced::ReferencedLinkedListImpl {
         #endif // COMPILER_MSVC
             private:
+                using ReferencedLinkedListImpl = BasicGenericImpl::collection::referenced::ReferencedLinkedListImpl;
+
                 class ReferencedLinkedListIterator : public core::Iterator<Type>,
-                                                     private ReferencedLinkedListIterator0 {
+                                                     private ReferencedLinkedListIteratorImpl {
                     friend struct core::Iterable<Type>;
 
                 public:
@@ -183,7 +191,7 @@ namespace EnhancedBasic {
                 static bool equals(GenericReference element, GenericReference value);
 
             public:
-                inline ReferencedLinkedList() : ReferencedLinkedList0({equals}) {}
+                inline ReferencedLinkedList();
 
                 ReferencedLinkedList(const ReferencedLinkedList<Type> &other);
 
@@ -217,7 +225,7 @@ namespace EnhancedBasic {
                 inline typename core::Iterable<Type>::ForeachIterator begin() const override;
 
                 $RetNotIgnored()
-                inline constexpr InvalidType end() const override;
+                inline constexpr UnusedType end() const override;
 
                 inline void addLast(const Type &element) override;
 
@@ -239,7 +247,7 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/collection/referenced/ReferencedLinkedList.tcc"
+#include "EnhancedBasic/collection/referenced/ReferencedLinkedList.hpp"
 
 #endif // CXX_LANGUAGE
 

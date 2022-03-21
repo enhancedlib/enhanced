@@ -35,51 +35,51 @@ set(
     HEADERS
     include/EnhancedBasic/module-info.h
     include/EnhancedBasic/export.h
-    include/EnhancedBasic/collection/Vector.tcc
+    include/EnhancedBasic/collection/Vector.hpp
     include/EnhancedBasic/collection/ArrayDeque.h
     include/EnhancedBasic/collection/ArrayList.h
-    include/EnhancedBasic/collection/ArrayList.tcc
+    include/EnhancedBasic/collection/ArrayList.hpp
     include/EnhancedBasic/collection/Collection.h
     include/EnhancedBasic/collection/Deque.h
     include/EnhancedBasic/collection/LinkedList.h
-    include/EnhancedBasic/collection/LinkedList.tcc
+    include/EnhancedBasic/collection/LinkedList.hpp
     include/EnhancedBasic/collection/LinkedQueue.h
     include/EnhancedBasic/collection/List.h
     include/EnhancedBasic/collection/PriorityQueue.h
     include/EnhancedBasic/collection/Queue.h
     include/EnhancedBasic/collection/Tuple.h
     include/EnhancedBasic/collection/mixed/MixedArrayList.h
-    include/EnhancedBasic/collection/mixed/MixedArrayList.tcc
+    include/EnhancedBasic/collection/mixed/MixedArrayList.hpp
     include/EnhancedBasic/collection/mixed/MixedDeque.h
     include/EnhancedBasic/collection/mixed/MixedLinkedList.h
-    include/EnhancedBasic/collection/mixed/MixedLinkedList.tcc
+    include/EnhancedBasic/collection/mixed/MixedLinkedList.hpp
     include/EnhancedBasic/collection/mixed/MixedList.h
     include/EnhancedBasic/collection/mixed/MixedQueue.h
     include/EnhancedBasic/collection/referenced/ReferencedArrayList.h
-    include/EnhancedBasic/collection/referenced/ReferencedArrayList.tcc
+    include/EnhancedBasic/collection/referenced/ReferencedArrayList.hpp
     include/EnhancedBasic/collection/referenced/ReferencedDeque.h
     include/EnhancedBasic/collection/referenced/ReferencedLinkedList.h
-    include/EnhancedBasic/collection/referenced/ReferencedLinkedList.tcc
+    include/EnhancedBasic/collection/referenced/ReferencedLinkedList.hpp
     include/EnhancedBasic/collection/referenced/ReferencedList.h
     include/EnhancedBasic/collection/referenced/ReferencedQueue.h
     include/EnhancedBasic/collection/RandomAccess.h
     include/EnhancedBasic/core/Integer.h
     include/EnhancedBasic/core/Iterable.h
-    include/EnhancedBasic/core/Iterable.tcc
+    include/EnhancedBasic/core/Iterable.hpp
     include/EnhancedBasic/core/Iterator.h
     include/EnhancedBasic/core/String.h
     include/EnhancedBasic/core/exception/Exception.h
     include/EnhancedBasic/math/LargeInteger.h
     include/EnhancedBasic/math/Math.h
     include/EnhancedBasic/generic/Allocator.h
-    include/EnhancedBasic/generic/Allocator.tcc
+    include/EnhancedBasic/generic/Allocator.hpp
     include/EnhancedBasic/generic/Any.h
-    include/EnhancedBasic/generic/Any.tcc
+    include/EnhancedBasic/generic/Any.hpp
     include/EnhancedBasic/generic/AnyArray.h
-    include/EnhancedBasic/generic/AnyArray.tcc
+    include/EnhancedBasic/generic/AnyArray.hpp
     include/EnhancedBasic/generic/Generic.h
     include/EnhancedBasic/core/pointer/SharedPointer.h
-    include/EnhancedBasic/core/pointer/SharedPointer.tcc
+    include/EnhancedBasic/core/pointer/SharedPointer.hpp
 )
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")

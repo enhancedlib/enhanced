@@ -41,7 +41,7 @@ namespace EnhancedBasic {
             public:
                 ForeachIterator(core::Iterator<Type> *iterator);
 
-                bool operator!=($Unused InvalidType unused);
+                bool operator!=($Unused UnusedType unused);
 
                 const core::Iterator<Type> *operator++();
 
@@ -56,14 +56,14 @@ namespace EnhancedBasic {
             virtual inline Iterable<Type>::ForeachIterator begin() const;
 
             $RetNotIgnored()
-            virtual inline constexpr InvalidType end() const;
+            virtual inline constexpr UnusedType end() const;
 
             virtual core::Iterator<Type> *iterator() const = 0;
         };
     } // namespace core
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/core/Iterable.tcc"
+#include "EnhancedBasic/core/Iterable.hpp"
 
 #endif // CXX_LANGUAGE
 

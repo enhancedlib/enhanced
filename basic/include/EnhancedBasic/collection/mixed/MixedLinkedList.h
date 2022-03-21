@@ -37,10 +37,10 @@
 
 #ifdef CXX_LANGUAGE // C++ language
 
-namespace EnhancedBasic {
+namespace BasicGenericImpl {
     namespace collection {
         namespace mixed {
-            class ENHANCED_BASIC_API MixedLinkedList0 {
+            class ENHANCED_BASIC_API MixedLinkedListImpl {
             private:
                 struct Node {
                     void *value;
@@ -65,7 +65,7 @@ namespace EnhancedBasic {
                 static Node *&backNode(Node *&node);
 
             protected:
-                struct GenericsOperator {
+                struct GenericOperator {
                     void *(*allocate)(GenericReference);
 
                     void (*destroy)(void *);
@@ -73,18 +73,18 @@ namespace EnhancedBasic {
                     bool (*equals)(GenericReference, GenericReference);
                 };
 
-                class ENHANCED_BASIC_API MixedLinkedListIterator0 {
-                    friend class MixedLinkedList0;
+                class ENHANCED_BASIC_API MixedLinkedListIteratorImpl {
+                    friend class MixedLinkedListImpl;
 
                 private:
-                    const MixedLinkedList0 *mixedLinkedList;
+                    const MixedLinkedListImpl *mixedLinkedList;
 
                     mutable bool isFirst;
 
                 protected:
-                    explicit MixedLinkedListIterator0(const MixedLinkedList0 *mixedLinkedList);
+                    explicit MixedLinkedListIteratorImpl(const MixedLinkedListImpl *mixedLinkedList);
 
-                    virtual ~MixedLinkedListIterator0() noexcept;
+                    virtual ~MixedLinkedListIteratorImpl() noexcept;
 
                     $RetNotIgnored()
                     bool hasNext0() const;
@@ -102,15 +102,15 @@ namespace EnhancedBasic {
                     Size count0() const;
                 };
 
-                GenericsOperator genericsOperator;
+                GenericOperator genericOperator;
 
-                mutable MixedLinkedListIterator0 *iterator;
+                mutable MixedLinkedListIteratorImpl *iterator;
 
-                explicit MixedLinkedList0(GenericsOperator genericsOperator);
+                explicit MixedLinkedListImpl(GenericOperator genericOperator);
 
-                virtual ~MixedLinkedList0() noexcept;
+                virtual ~MixedLinkedListImpl() noexcept;
 
-                MixedLinkedList0(const MixedLinkedList0 &other);
+                MixedLinkedListImpl(const MixedLinkedListImpl &other);
 
                 Size getLength0() const;
 
@@ -138,9 +138,15 @@ namespace EnhancedBasic {
 
                 void removeFirst0();
             };
+        }
+    }
+}
 
+namespace EnhancedBasic {
+    namespace collection {
+        namespace mixed {
         /*
-         * When you build project with Microsoft Visual C++ compiler,
+         * When you build project with Microsoft Visual C++ Compiler,
          * If you don't explicitly extend the "Collection" class, you will see an error in compiling.
          * The compiler thinks the return type of virtual function 'copy' isn't
          * covariant with the return type the super method.
@@ -154,15 +160,18 @@ namespace EnhancedBasic {
         #pragma warning(push)
         #pragma warning(disable: 4584)
             template <typename Type>
-            class MixedLinkedList final : public Collection<Type>, public MixedDeque<Type>,
-                                          public MixedList<Type>, public MixedLinkedList0 {
+            class MixedLinkedList final : public Collection<Type>, public MixedDeque<Type>, public MixedList<Type>,
+                                          public BasicGenericImpl::collection::mixed::MixedLinkedListImpl {
         #pragma warning(pop)
-        #else // Non Microsoft Visual C++ compiler
+        #else // Non Microsoft Visual C++ Compiler
             template <typename Type>
-            class MixedLinkedList final : public MixedList<Type>, public MixedDeque<Type>, private MixedLinkedList0 {
+            class MixedLinkedList final : public MixedList<Type>, public MixedDeque<Type>,
+                                          private BasicGenericImpl::collection::mixed::MixedLinkedListImpl {
         #endif // COMPILER_MSVC
             private:
-                class MixedLinkedListIterator : public core::Iterator<Type>, private MixedLinkedListIterator0 {
+                using MixedLinkedListImpl = BasicGenericImpl::collection::mixed::MixedLinkedListImpl;
+
+                class MixedLinkedListIterator : public core::Iterator<Type>, private MixedLinkedListIteratorImpl {
                     friend struct core::Iterable<Type>;
 
                 public:
@@ -228,7 +237,7 @@ namespace EnhancedBasic {
                 inline typename core::Iterable<Type>::ForeachIterator begin() const override;
 
                 $RetNotIgnored()
-                inline constexpr InvalidType end() const override;
+                inline constexpr UnusedType end() const override;
 
                 inline void addLast(const Type &element) override;
 
@@ -258,7 +267,7 @@ namespace EnhancedBasic {
     } // namespace collection
 } // namespace EnhancedBasic
 
-#include "EnhancedBasic/collection/mixed/MixedLinkedList.tcc"
+#include "EnhancedBasic/collection/mixed/MixedLinkedList.hpp"
 
 #endif // CXX_LANGUAGE
 
