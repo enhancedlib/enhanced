@@ -56,7 +56,7 @@ namespace EnhancedBasic {
             virtual inline Iterable<Type>::ForeachIterator begin() const;
 
             $RetNotIgnored()
-            virtual inline constexpr UnusedType end() const;
+            virtual inline UnusedType end() const;
 
             virtual core::Iterator<Type> *iterator() const = 0;
         };

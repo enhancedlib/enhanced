@@ -92,7 +92,9 @@ namespace EnhancedBasic {
             }
 
             template <typename Type>
-            MixedLinkedList<Type>::MixedLinkedList() : MixedLinkedListImpl({allocate, destroy, equals}) {}
+            MixedLinkedList<Type>::MixedLinkedList() : MixedLinkedListImpl(
+                {MixedLinkedListImpl::allocate, MixedLinkedListImpl::destroy, MixedLinkedListImpl::equals}
+            ) {}
 
             template <typename Type>
             MixedLinkedList<Type>::MixedLinkedList(const MixedLinkedList <Type> &other) :
@@ -160,7 +162,7 @@ namespace EnhancedBasic {
 
             template <typename Type>
             $RetNotIgnored()
-            constexpr UnusedType MixedLinkedList<Type>::end() const {
+            UnusedType MixedLinkedList<Type>::end() const {
                 return MixedList<Type>::end();
             }
 

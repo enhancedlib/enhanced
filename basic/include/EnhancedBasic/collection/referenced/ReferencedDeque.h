@@ -76,7 +76,7 @@ namespace EnhancedBasic {
                 }
 
                 $RetNotIgnored()
-                constexpr UnusedType end() const override {
+                UnusedType end() const override {
                     return Deque<Type>::end();
                 }
 

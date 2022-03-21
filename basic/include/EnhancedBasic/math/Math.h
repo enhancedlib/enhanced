@@ -40,8 +40,6 @@ namespace EnhancedBasic {
         private:
             Math();
 
-            ~Math();
-
         public:
             static uint8 abs(int8 number);
 

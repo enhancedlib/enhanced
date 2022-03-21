@@ -31,7 +31,7 @@ using EnhancedBasic::core::String;
 bool Exception::enableExceptions = true;
 bool Exception::enableExceptionsTraceback = true;
 
-Exception::Exception(const String &message) noexcept:
+Exception::Exception(String &&message) noexcept:
     message(message), cause(null) {
 }
 
@@ -39,14 +39,14 @@ Exception::Exception(const Exception *cause) noexcept:
     message(""), cause(cause) {
 }
 
-Exception::Exception(const String &message, const Exception *cause) noexcept:
+Exception::Exception(String &&message, const Exception *cause) noexcept:
     message(message), cause(cause) {
 }
 
 Exception::~Exception() noexcept = default;
 
 String Exception::traceback() noexcept {
-    return "";
+    return (String) this->message;
 }
 
 const Exception *Exception::getCause() noexcept {

@@ -27,10 +27,10 @@
 
 static ExceptionContextBlock *exceptionContextBlockStack = null;
 
-static char *traceback(Exception *self);
+static char *traceback(ExceptionType *self);
 
-Exception newException(const uint exceptionCode, const char *const exceptionMessage) {
-    Exception exception = {
+ExceptionType newException(const uint exceptionCode, const char *const exceptionMessage) {
+    ExceptionType exception = {
         .message = exceptionMessage,
         .code = exceptionCode,
         .traceback = traceback
@@ -52,7 +52,7 @@ bool exceptionContextBlockStackIsEmpty() {
     return exceptionContextBlockStack == null;
 }
 
-void exceptionThrow(Exception exception) {
+void exceptionThrow(ExceptionType exception) {
     if (exceptionContextBlockStackIsEmpty()) {
         processAbnormalAbort();
     } else {
@@ -61,6 +61,6 @@ void exceptionThrow(Exception exception) {
     }
 }
 
-char *traceback(Exception *self) {
+char *traceback(ExceptionType *self) {
     return (char *) self->message;
 }

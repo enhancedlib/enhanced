@@ -102,7 +102,7 @@ namespace BasicGenericImpl {
 
             mutable VectorIteratorImpl *iterator;
 
-            VectorImpl(Size length, GenericOperator genericOperator);
+            VectorImpl(Size maxCount, GenericOperator genericOperator);
 
             VectorImpl(const VectorImpl &other);
 

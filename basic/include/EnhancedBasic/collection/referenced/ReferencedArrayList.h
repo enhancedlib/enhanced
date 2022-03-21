@@ -91,7 +91,7 @@ namespace BasicGenericImpl {
 
                 mutable ReferencedArrayListIteratorImpl *iterator;
 
-                ReferencedArrayListImpl(Size length, GenericOperator genericOperator);
+                ReferencedArrayListImpl(Size maxCount, GenericOperator genericOperator);
 
                 ReferencedArrayListImpl(const ReferencedArrayListImpl &other);
 

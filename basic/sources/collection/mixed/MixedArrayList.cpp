@@ -78,6 +78,7 @@ MixedArrayListImpl::MixedArrayListImpl(const Size maxCount, const GenericOperato
 MixedArrayListImpl::MixedArrayListImpl(const MixedArrayListImpl &other) :
     length(other.length), elements(new Node[other.maxCount]), maxCount(other.maxCount),
     genericOperator(other.genericOperator), iterator(null) {
+    assert(other.maxCount >= other.length);
     for (Size index = 0; index < other.length; ++ index) {
         if (other.elements[index].dynamic) {
             this->elements[index].value = this->genericOperator.allocate(generic_cast(other.elements[index].value));

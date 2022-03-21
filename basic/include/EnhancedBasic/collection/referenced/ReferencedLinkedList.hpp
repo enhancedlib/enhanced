@@ -151,7 +151,7 @@ namespace EnhancedBasic {
 
             template <typename Type>
             $RetNotIgnored()
-            constexpr UnusedType ReferencedLinkedList<Type>::end() const {
+            UnusedType ReferencedLinkedList<Type>::end() const {
                 return List<Type>::end();
             }
 

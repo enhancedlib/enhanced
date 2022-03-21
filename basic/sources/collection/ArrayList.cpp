@@ -79,6 +79,7 @@ ArrayListImpl::ArrayListImpl(const Size maxCount, const GenericOperator genericO
 ArrayListImpl::ArrayListImpl(const ArrayListImpl &other) :
     length(other.length), elements(new void *[other.maxCount]), maxCount(other.maxCount),
     genericOperator(other.genericOperator), iterator(null) {
+    assert(other.maxCount >= other.length);
     for (Size index = 0; index < other.length; ++ index) {
         this->elements[index] = this->genericOperator.allocate(generic_cast(other.elements[index]));
     }

@@ -101,7 +101,7 @@ namespace BasicGenericImpl {
 
                 mutable MixedArrayListIteratorImpl *iterator;
 
-                MixedArrayListImpl(Size length, GenericOperator genericOperator);
+                MixedArrayListImpl(Size maxCount, GenericOperator genericOperator);
 
                 MixedArrayListImpl(const MixedArrayListImpl &other);
 
@@ -142,7 +142,8 @@ namespace EnhancedBasic {
             private:
                 using MixedArrayListImpl = BasicGenericImpl::collection::mixed::MixedArrayListImpl;
 
-                class MixedArrayListIterator : public MixedArrayListImpl::MixedArrayListIteratorImpl, public core::Iterator<Type> {
+                class MixedArrayListIterator : public core::Iterator<Type>,
+                                               private MixedArrayListImpl::MixedArrayListIteratorImpl {
                     friend struct core::Iterable<Type>;
 
                 public:

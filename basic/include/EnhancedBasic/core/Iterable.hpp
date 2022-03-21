@@ -64,7 +64,7 @@ namespace EnhancedBasic {
         }
 
         template <typename Type>
-        constexpr UnusedType Iterable<Type>::end() const {
+        UnusedType Iterable<Type>::end() const {
             return UNUSED_VALUE;
         }
     }

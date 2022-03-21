@@ -91,7 +91,7 @@ namespace EnhancedBasic {
 
             String(char *value);
 
-            explicit String(Size count);
+            explicit String(Size length);
 
             String(const String &other);
 
@@ -136,7 +136,7 @@ namespace EnhancedBasic {
 
             String replace(char oldChar, char newChar);
 
-            String replace(const String &substr, const String &newSubstring);
+            String replace(const String &oldSubstring, const String &newSubstring);
 
             String replace(char oldChar, const String &newSubstring);
 

@@ -44,27 +44,23 @@ typedef enum TryBlockCurrentStatus {
     TryBlockFunctionReturn
 } TryBlockCurrentStatus;
 
-typedef enum StandardExceptions {
-    BaseException,
-} StandardExceptions;
-
-typedef struct Exception {
+typedef struct ExceptionType {
     const char *message;
 
     uint code;
 
-    char *(*const traceback)(struct Exception *self);
-} Exception;
+    char *(*const traceback)(struct ExceptionType *self);
+} ExceptionType;
 
 typedef struct ExceptionContextBlock {
-    Exception *exception;
+    ExceptionType *exception;
 
     Snapshot snapshot;
 
     struct ExceptionContextBlock *link;
 } ExceptionContextBlock;
 
-ENHANCED_BASIC_API Exception newException(uint exceptionCode, const char *exceptionMessage);
+ENHANCED_BASIC_API ExceptionType newException(uint exceptionCode, const char *exceptionMessage);
 
 ENHANCED_BASIC_API void exceptionContextBlockStackPush(ExceptionContextBlock *exceptionContextBlock);
 
@@ -72,11 +68,7 @@ ENHANCED_BASIC_API void exceptionContextBlockStackPopup();
 
 ENHANCED_BASIC_API bool exceptionContextBlockStackIsEmpty();
 
-ENHANCED_BASIC_API void exceptionThrow(Exception exception);
-
-#ifdef COMPILER_MSVC
-#pragma warning(disable: 4003)
-#endif // COMPILER_MSVC
+ENHANCED_BASIC_API void exceptionThrow(ExceptionType exception);
 
 #define TRY \
     { \
@@ -84,7 +76,7 @@ ENHANCED_BASIC_API void exceptionThrow(Exception exception);
         exceptionContextBlockStackPush(&_CONTEXT_BLOCK); \
         TryBlockCurrentStatus _TRY_BLOCK_CURRENT_STATUS = takeSnapshot(_CONTEXT_BLOCK.snapshot); \
         bool _IN_FINALLY = false; \
-        Exception *_EXCEPTION; \
+        ExceptionType *_EXCEPTION; \
         if (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred) { \
             _EXCEPTION = _CONTEXT_BLOCK.exception; \
         } \
@@ -94,7 +86,7 @@ ENHANCED_BASIC_API void exceptionThrow(Exception exception);
 #define CATCH(exceptionCode, variable) \
         } else if ((exceptionCode) == -1 || \
                    (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred && _EXCEPTION->code == (exceptionCode))) { \
-            Exception *(variable) = _EXCEPTION; \
+            ExceptionType *(variable) = _EXCEPTION; \
             _TRY_BLOCK_CURRENT_STATUS = TryBlockExceptionCapture;
 
 #define PASS_TRY \
@@ -168,11 +160,11 @@ namespace EnhancedBasic {
                  */
                 static bool enableExceptionsTraceback;
 
-                explicit Exception(const String &message = "") noexcept;
+                explicit Exception(String &&message = "") noexcept;
 
                 explicit Exception(const Exception *cause) noexcept;
 
-                Exception(const String &message, const Exception *cause) noexcept;
+                Exception(String &&message, const Exception *cause) noexcept;
 
                 virtual ~Exception() noexcept;
 

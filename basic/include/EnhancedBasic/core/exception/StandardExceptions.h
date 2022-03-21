@@ -18,27 +18,18 @@
  * by your access to or use of third-party content, products, etc.
  */
 
-#include "EnhancedBasic/math/Math.h"
+#ifndef ENHANCED_BASIC_CORE_EXCEPTION_STANDARD_EXCEPTIONS_H
+#define ENHANCED_BASIC_CORE_EXCEPTION_STANDARD_EXCEPTIONS_H
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 
-using EnhancedBasic::Math::Math;
+#if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
 
-Math::Math() = default;
+typedef enum StandardExceptions {
+    Exception
+} StandardExceptions;
 
-uint8 Math::abs(int8 number) {
-    return (number < 0) ? -number : number;
-}
+#endif defined(C_LANGUAGE) || defined(ENHANCED_BASIC_C_MODE)
 
-uint16 Math::abs(int16 number) {
-    return (number < 0) ? -number : number;
-}
-
-uint32 Math::abs(int32 number) {
-    return (number < 0) ? -number : number;
-}
-
-uint64 Math::abs(int64 number) {
-    return (number < 0) ? -number : number;
-}
+#endif // !ENHANCED_BASIC_CORE_EXCEPTION_STANDARD_EXCEPTIONS_H

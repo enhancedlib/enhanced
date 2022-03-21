@@ -87,7 +87,7 @@ char *stringCopy(const char *const string) {
 
 $RetRequiresRelease()
 char *stringResize(const char *const string, const Size newSize) {
-    assert(string == null), assert(newSize < 1);
+    assert(string != null), assert(newSize > 1);
 
     char *newString = stringNew(newSize);
     if (newString == null) {

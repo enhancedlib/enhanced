@@ -580,8 +580,8 @@ typedef UnusedType UNUSED_TYPE;
 #define UNUSED_VALUE null
 
 #ifdef CXX_LANGUAGE
-template <typename ConvertType>
-inline ConvertType &forceCast(auto &&value) {
+template <typename ConvertType, typename Type>
+inline ConvertType &forceCast(Type &&value) {
     return *((ConvertType *)(void *) &value);
 }
 #endif // CXX_LANGUAGE

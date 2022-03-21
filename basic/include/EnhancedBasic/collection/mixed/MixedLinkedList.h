@@ -171,7 +171,8 @@ namespace EnhancedBasic {
             private:
                 using MixedLinkedListImpl = BasicGenericImpl::collection::mixed::MixedLinkedListImpl;
 
-                class MixedLinkedListIterator : public core::Iterator<Type>, private MixedLinkedListIteratorImpl {
+                class MixedLinkedListIterator : public core::Iterator<Type>,
+                                                private MixedLinkedListImpl::MixedLinkedListIteratorImpl {
                     friend struct core::Iterable<Type>;
 
                 public:
@@ -237,7 +238,7 @@ namespace EnhancedBasic {
                 inline typename core::Iterable<Type>::ForeachIterator begin() const override;
 
                 $RetNotIgnored()
-                inline constexpr UnusedType end() const override;
+                inline UnusedType end() const override;
 
                 inline void addLast(const Type &element) override;
 

@@ -69,6 +69,7 @@ set(
     include/EnhancedBasic/core/Iterator.h
     include/EnhancedBasic/core/String.h
     include/EnhancedBasic/core/exception/Exception.h
+    include/EnhancedBasic/core/exception/StandardExceptions.h
     include/EnhancedBasic/math/LargeInteger.h
     include/EnhancedBasic/math/Math.h
     include/EnhancedBasic/generic/Allocator.h

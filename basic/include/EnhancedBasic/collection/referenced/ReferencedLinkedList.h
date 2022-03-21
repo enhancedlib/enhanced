@@ -225,7 +225,7 @@ namespace EnhancedBasic {
                 inline typename core::Iterable<Type>::ForeachIterator begin() const override;
 
                 $RetNotIgnored()
-                inline constexpr UnusedType end() const override;
+                inline UnusedType end() const override;
 
                 inline void addLast(const Type &element) override;
 

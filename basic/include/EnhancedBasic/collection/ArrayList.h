@@ -94,7 +94,7 @@ namespace BasicGenericImpl {
 
             mutable ArrayListIteratorImpl *iterator;
 
-            ArrayListImpl(Size length, GenericOperator genericOperator);
+            ArrayListImpl(Size maxCount, GenericOperator genericOperator);
 
             ArrayListImpl(const ArrayListImpl &other);
 
