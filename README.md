@@ -6,9 +6,9 @@ This software is licensed under [Enhanced License](LICENSE).
 
 [Copyright Notice](COPYRIGHT)
 
-Repositories: [GitHub](http://github.com/any-possible/Enhanced)
+Repositories: [GitHub](https://github.com/idealarch/Enhanced)
 
-[Other Languages](docs/README.Languages.md) | [Website](http://any-possible.github.io/enhanced-website) | [Read Me](README.md) | [Help & Support](docs/en-US/Help-Support.md) | [About](docs/en-US/About.md)
+[Other Languages](docs/README.Languages.md) | [Website](https://idealarch.github.io/enhanced-website) | [Read Me](README.md) | [Help & Support](docs/en-US/Help-Support.md) | [About](docs/en-US/About.md)
 
 ---
 
@@ -48,7 +48,7 @@ There is no installer yet, you can download the source code, build the project y
 
 - These are supported environments using this library, not build environments.
 
-Compiler: [Microsoft Visual C++](http://visualstudio.microsoft.com/vs/features/cplusplus/), [GNU C/C++ Compiler](http://gcc.gnu.org/), [Clang](http://clang.llvm.org/)
+Compiler: [Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/), [GNU C/C++ Compiler](https://gcc.gnu.org/), [Clang](https://clang.llvm.org/)
 
 Operating system: Microsoft Windows Operating System, Linux (GNU/Linux)
 

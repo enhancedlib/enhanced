@@ -6,9 +6,9 @@
 
 [版权声明](../../COPYRIGHT)
 
-仓库：[GitHub](http://github.com/any-possible/Enhanced)
+仓库：[GitHub](https://github.com/idealarch/Enhanced)
 
-[其它语言](../README.Languages.md) | [网站](http://any-possible.github.io/enhanced-website) | [自述文件](README.md) | [帮助&支持](Help-Support.md) | [关于](About.md)
+[其它语言](../README.Languages.md) | [网站](https://idealarch.github.io/enhanced-website) | [自述文件](README.md) | [帮助&支持](Help-Support.md) | [关于](About.md)
 
 ---
 
@@ -48,7 +48,7 @@
 
 - 这些是使用此库的所支持环境，而不是构建环境。
 
-编译器：[Microsoft Visual C++](http://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU C/C++ Compiler](http://gcc.gnu.org/)、[Clang](http://clang.llvm.org/)
+编译器：[Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU C/C++ Compiler](https://gcc.gnu.org/)、[Clang](https://clang.llvm.org/)
 
 操作系统：Microsoft Windows操作系统、Linux
 
