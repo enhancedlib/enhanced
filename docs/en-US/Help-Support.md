@@ -1,6 +1,6 @@
 # Help & Support
 
-[Other Languages](../Help-Support.Languages.md) | [Website](https://idealarch.github.io/enhanced-website) | [Read Me](../../README.md) | [Help & Support](Help-Support.md) | [About](About.md)
+[Other Languages](../Help-Support.Languages.md) | [Website](https://sharedwonder.github.io/enhanced-website) | [Read Me](../../README.md) | [Help & Support](Help-Support.md) | [About](About.md)
 
 ## Q: Why is this software named Enhanced?
 

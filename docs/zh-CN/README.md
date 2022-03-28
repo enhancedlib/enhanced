@@ -6,9 +6,9 @@
 
 [版权声明](../../COPYRIGHT)
 
-仓库：[GitHub](https://github.com/idealarch/Enhanced)
+仓库：[GitHub](https://github.com/sharedwonder/Enhanced)
 
-[其它语言](../README.Languages.md) | [网站](https://idealarch.github.io/enhanced-website) | [自述文件](README.md) | [帮助&支持](Help-Support.md) | [关于](About.md)
+[其它语言](../README.Languages.md) | [网站](https://sharedwonder.github.io/enhanced-website) | [自述文件](README.md) | [帮助&支持](Help-Support.md) | [关于](About.md)
 
 ---
 

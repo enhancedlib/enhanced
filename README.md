@@ -6,9 +6,9 @@ This software is licensed under [Enhanced License](LICENSE).
 
 [Copyright Notice](COPYRIGHT)
 
-Repositories: [GitHub](https://github.com/idealarch/Enhanced)
+Repositories: [GitHub](https://github.com/sharedwonder/Enhanced)
 
-[Other Languages](docs/README.Languages.md) | [Website](https://idealarch.github.io/enhanced-website) | [Read Me](README.md) | [Help & Support](docs/en-US/Help-Support.md) | [About](docs/en-US/About.md)
+[Other Languages](docs/README.Languages.md) | [Website](https://sharedwonder.github.io/enhanced-website) | [Read Me](README.md) | [Help & Support](docs/en-US/Help-Support.md) | [About](docs/en-US/About.md)
 
 ---
 
