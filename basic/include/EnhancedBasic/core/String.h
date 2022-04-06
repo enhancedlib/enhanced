@@ -2,20 +2,25 @@
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  * This software is licensed under Enhanced License.
  *
- * This copyright disclaimer is subject to change without notice.
+ * This copyright notice is subject to change without notice.
  *
- * This software is a free software,
- * everyone can change, copy, publication, demonstrate, use, etc.
- *
- * If you change and publication this software,
- * must credit the original software source and author's name,
- * and include this copyright disclaimer and
- * the license of this software in your software.
+ * This software is a free software, everyone can change,
+ * copy, publication, demonstrate, use, etc.
  *
  * This software and documentation may provide
  * third-party content, product and other information.
- * I am not responsible for any loss or damage caused
- * by your access to or use of third-party content, products, etc.
+ * The authors or copyright holders be not responsible for any loss or damage
+ * caused by your access to or use of third-party content, products, etc.
+ *
+ * For any loss or damage caused by This software,
+ * the authors or copyright holders may provide possible solutions,
+ * but it does not mean that the authors or copyright holders
+ * will definitely solve the problem.
+ * In no event shall the author or copyright
+ * owner be liable for any claims, damages or other liabilities.
+ *
+ * You should see the Enhanced License in this software, if not, visit
+ * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
 #ifndef ENHANCED_BASIC_CORE_STRING_H
