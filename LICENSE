@@ -1,5 +1,5 @@
                             Enhanced License
-                  Version 0.5, Last updated: 2022/04/06
+                  Version 0.5.1, Last updated: 2022/04/07
 
             Copyright © 2022 Liu Baihao. All rights reserved.
     https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt
@@ -7,9 +7,21 @@
 1. Definition
  - (1) "License" shall mean all sections of this documentation.
 
- - (2) "Licensor" shall mean the author(s) or the copyright owner(s).
+ - (2) "Licensor" shall mean the author(s) and/or the copyright holder(s).
 
- - (3) "Software" shall mean all parts of this software.
+ - (3) "Software" shall mean all parts of the software licensed under this License.
+
+ - (4) "Software based on the Software" shall mean a modified version of or
+       software that depends on the Software.
+       Including:
+        - a. Software compiled after modifying the source code of the Software*.
+        - b. Software that links the Software* through dynamic or static linking.
+        - c. Software that uses a lot of code from the Software*.
+       Not including:
+        - a. Software that calls only the main function in the Software*.
+
+ - Note: Where ambiguity arises, the word with "*" (like "word*")
+         is interpreted as the meaning in this section.
 
 2. Notice of this License
  - This License is subject to change without notice.
@@ -18,16 +30,21 @@
 
 3. Permissions
  - Unless otherwise stated, anyone can deal in the Software
-   without restriction, including but not limited to use,
-   copy, modify, merge, publish, or distribute.
+   without restriction (except for the exceptions mentioned in the following paragraph),
+   including but not limited to use, copy, modify, merge, publish, or distribute.
 
- - Exception:
-   You CANNOT receive any remuneration through the Software,
-   including but not limited to sale, bundle other software for distribution,
-   other than modified copies or through software based on the Software.
+ - You CANNOT receive any remuneration through the Software without permissions,
+   including but not limited to sale the Software, bundle other software for distribution
+   (software based on the Software is not included).
 
  - Any license, copyright notice, or agreement that accompanies
-   the distribution of the Software CANNOT be removed without permissions.
+   the distribution of the Software CANNOT be removed.
+
+ - For software based on the Software, you can select a new license
+   (of course, you can also continue to use this License),
+   add a new copyright notice, etc.
+   But all licenses, copyright notices, and/or agreements
+   in the Software* must be included in that software.
 
 4. Disclaimer
  - The Software is always provided "AS IS",
