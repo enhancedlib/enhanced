@@ -11,17 +11,8 @@
 
  - (3) "Software" shall mean all parts of the software licensed under this License.
 
- - (4) "Software based on the Software" shall mean a modified version of or
-       software that depends on the Software.
-       Including:
-        - a. Software compiled after modifying the source code of the Software*.
-        - b. Software that links the Software* through dynamic or static linking.
-        - c. Software that uses a lot of code from the Software*.
-       Not including:
-        - a. Software that calls only the main function in the Software*.
-
- - Note: Where ambiguity arises, the word with "*" (like "word*")
-         is interpreted as the meaning in this section.
+ - (4) "Another software based on the Software" shall mean a modified version of or
+       software that depends on this Software.
 
 2. Notice of this License
  - This License is subject to change without notice.
@@ -35,16 +26,15 @@
 
  - You CANNOT receive any remuneration through the Software without permissions,
    including but not limited to sale the Software, bundle other software for distribution
-   (software based on the Software is not included).
+   (another software based on the Software is not included).
 
  - Any license, copyright notice, or agreement that accompanies
    the distribution of the Software CANNOT be removed.
 
- - For software based on the Software, you can select a new license
-   (of course, you can also continue to use this License),
-   add a new copyright notice, etc.
+ - For another software based on the Software, you can use other licenses
+   (of course, you can also continue to use this License), add new copyright notices, etc.
    But all licenses, copyright notices, and/or agreements
-   in the Software* must be included in that software.
+   in this Software must be included in that software.
 
 4. Disclaimer
  - The Software is always provided "AS IS",
