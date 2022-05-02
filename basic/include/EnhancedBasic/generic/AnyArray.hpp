@@ -39,7 +39,7 @@ namespace EnhancedBasic {
         AnyArray::AnyArray(const Type *value) : anyArray((void *) value) {}
 
         template <typename Type>
-        AnyArray::AnyArray(const AnyArray &copy) : anyArray(copy) {}
+        AnyArray::AnyArray(const AnyArray &other) : anyArray(other) {}
 
         template <typename Type>
         Type *AnyArray::cast() const {

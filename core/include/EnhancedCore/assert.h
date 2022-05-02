@@ -31,14 +31,14 @@
 
 EXTERN_C_START
 
-ENHANCED_CORE_API void assertFailed(const char *message, const char *file, uint line);
+ENHANCED_CORE_API void assertionFailed(const char *message, const char *file, uint line);
 
 #ifdef assert
 #undef assert
 #endif // assert
 
 #define dynamicAssert(expression) \
-    ((expression) || (assertFailed(#expression, __FILE__, __LINE__), 0))
+    ((expression) || (assertionFailed(#expression, __FILE__, __LINE__), 0))
 
 #define dynamic_assert dynamicAssert
 

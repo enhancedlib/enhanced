@@ -30,8 +30,7 @@
 using EnhancedBasic::Utility::LargeInteger;
 
 LargeInteger::LargeInteger(Size size) :
-    bytes(new Byte[size]), isNegative(0), size(size) {
-}
+    bytes(new Byte[size]), isNegative(0), size(size) {}
 
 template <typename Type>
 LargeInteger::LargeInteger(Type number) :
@@ -44,8 +43,6 @@ LargeInteger::LargeInteger(Type number) :
     }
     this->size = count;
 }
-
-template LargeInteger::LargeInteger(int number);
 
 LargeInteger LargeInteger::add(LargeInteger number) {
     return *this;

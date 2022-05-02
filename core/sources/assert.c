@@ -32,7 +32,7 @@
 #include "EnhancedCore/string.h"
 #include "EnhancedCore/process.h"
 
-void assertFailed(const char *const message, const char *const file, const uint line) {
+void assertionFailed(const char *const message, const char *const file, const uint line) {
     printf("Failed to assert: %s, file \"%s\", line %d", message, file, line);
     processAbnormalAbort();
 }

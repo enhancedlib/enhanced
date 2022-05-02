@@ -22,29 +22,30 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#ifndef ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCE0LIST_H
-#define ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCE0LIST_H
+#ifndef ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCE0QUEUE_H
+#define ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCE0QUEUE_H
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
 #include "EnhancedCore/annotations.h"
 
 #include "EnhancedBasic/collection/Collection.h"
-#include "EnhancedBasic/collection/List.h"
+#include "EnhancedBasic/collection/Queue.h"
 
 #ifdef CXX_LANGUAGE // C++ language
 
 namespace EnhancedBasic {
     namespace collection {
-        namespace referenced {
+        namespace refer {
             template <typename Type>
-            struct ReferencedList : public List<Type> {
-                virtual ReferencedList<Type> *copy() const = 0;
+            struct ReferQueue : public Queue<Type> {
+                $RetRequiresRelease()
+                    virtual ReferQueue<Type>* copy() const = 0;
             };
-        } // namespace referenced
+        } // namespace refer
     } // namespace collection
 } // namespace EnhancedBasic
 
 #endif // CXX_LANGUAGE
 
-#endif // !ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCE0LIST_H
+#endif // !ENHANCED_BASIC_COLLECTION_REFERENCE_REFERENCE0QUEUE_H

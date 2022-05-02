@@ -36,7 +36,7 @@ Size Allocator0::getSize0() const {
 
 void Allocator0::allocate0(Size newSize, Size sizeOfType) {
     this->size = newSize;
-    this->space = memoryAlloc(newSize * sizeOfType);
+    this->space = operator new(newSize * sizeOfType);
 }
 
 void Allocator0::destroy0() {
@@ -45,8 +45,8 @@ void Allocator0::destroy0() {
 
 void Allocator0::resize0(Size resize, Size sizeOfType) {
     this->size = resize;
-    void *copy = memoryAlloc(resize * sizeOfType);
+    void *copy = operator new(resize * sizeOfType);
     memoryCopy(copy, this->space, this->size);
-    memoryFree(this->space);
+    operator delete(this->space);
     this->space = copy;
 }

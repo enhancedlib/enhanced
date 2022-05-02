@@ -38,7 +38,8 @@ MODULE_VERSION(Basic, 0, 1, 0, 0.1, "dev", 1)
 MODULE_AUTHOR(Basic, "Liu Baihao")
 MODULE_ABOUT(Basic, "The basic module of Enhanced.")
 
-MODULE_RELATIONS(Basic,
+MODULE_RELATIONS(
+    Basic,
     REQUIRES_MODULE(Core),
     EXPORTS_PACKAGE(EnhancedBasic::collection),
     EXPORTS_PACKAGE(EnhancedBasic::collection::referenced),

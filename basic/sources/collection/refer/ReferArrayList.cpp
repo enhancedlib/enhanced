@@ -22,7 +22,7 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/collection/referenced/ReferencedArrayList.h"
+#include "EnhancedBasic/collection/refer/ReferArrayList.h"
 
 #include "EnhancedCore/defines.h"
 #include "EnhancedCore/types.h"
@@ -32,26 +32,26 @@
 
 #include "EnhancedBasic/generic/Generic.h"
 
-using BasicGenericImpl::collection::referenced::ReferencedArrayListImpl;
+using BasicGenericImpl::collection::refer::ReferArrayListImpl;
 
-ReferencedArrayListImpl::ReferencedArrayListIteratorImpl::
-ReferencedArrayListIteratorImpl(const ReferencedArrayListImpl *const referenceArrayList) :
+ReferArrayListImpl::ReferArrayListIteratorImpl::
+ReferArrayListIteratorImpl(const ReferArrayListImpl* const referenceArrayList) :
     referenceArrayList(referenceArrayList), indexer(referenceArrayList->elements), isFirst(true),
     end(referenceArrayList->elements + referenceArrayList->getLength0()) {}
 
-ReferencedArrayListImpl::ReferencedArrayListIteratorImpl::~ReferencedArrayListIteratorImpl() noexcept = default;
+ReferArrayListImpl::ReferArrayListIteratorImpl::~ReferArrayListIteratorImpl() noexcept = default;
 
 $RetNotIgnored()
-bool ReferencedArrayListImpl::ReferencedArrayListIteratorImpl::hasNext0() const {
+bool ReferArrayListImpl::ReferArrayListIteratorImpl::hasNext0() const {
     return this->indexer != this->end;
 }
 
-void ReferencedArrayListImpl::ReferencedArrayListIteratorImpl::next0() const {
+void ReferArrayListImpl::ReferArrayListIteratorImpl::next0() const {
     ++ this->indexer;
 }
 
 $RetNotIgnored()
-bool ReferencedArrayListImpl::ReferencedArrayListIteratorImpl::each0() const {
+bool ReferArrayListImpl::ReferArrayListIteratorImpl::each0() const {
     if (this->isFirst) {
         this->isFirst = false;
         return !this->referenceArrayList->isEmpty0();
@@ -62,26 +62,26 @@ bool ReferencedArrayListImpl::ReferencedArrayListIteratorImpl::each0() const {
 }
 
 $RetNotIgnored()
-GenericReference ReferencedArrayListImpl::ReferencedArrayListIteratorImpl::get0() const {
+GenericReference ReferArrayListImpl::ReferArrayListIteratorImpl::get0() const {
     return generic_cast(*this->indexer);
 }
 
-void ReferencedArrayListImpl::ReferencedArrayListIteratorImpl::reset0() const {
+void ReferArrayListImpl::ReferArrayListIteratorImpl::reset0() const {
     this->isFirst = true;
     this->indexer = this->referenceArrayList->elements;
 }
 
 $RetNotIgnored()
-Size ReferencedArrayListImpl::ReferencedArrayListIteratorImpl::count0() const {
+Size ReferArrayListImpl::ReferArrayListIteratorImpl::count0() const {
     return this->referenceArrayList->getLength0();
 }
 
-ReferencedArrayListImpl::ReferencedArrayListImpl(const Size maxCount, const GenericOperator genericOperator) :
-    length(0), elements(new void *[maxCount]), maxCount(maxCount),
+ReferArrayListImpl::ReferArrayListImpl(const Size maxCount, const GenericOperator genericOperator) :
+    length(0), elements(new void* [maxCount]), maxCount(maxCount),
     genericOperator(genericOperator), iterator(null) {}
 
-ReferencedArrayListImpl::ReferencedArrayListImpl(const ReferencedArrayListImpl &other) :
-    length(other.length), elements(new void *[other.maxCount]), maxCount(other.maxCount),
+ReferArrayListImpl::ReferArrayListImpl(const ReferArrayListImpl & other) :
+    length(other.length), elements(new void* [other.maxCount]), maxCount(other.maxCount),
     genericOperator(other.genericOperator), iterator(null) {
     assert(other.maxCount >= other.length);
     for (Size index = 0; index < other.length; ++ index) {
@@ -89,27 +89,27 @@ ReferencedArrayListImpl::ReferencedArrayListImpl(const ReferencedArrayListImpl &
     }
 }
 
-ReferencedArrayListImpl::~ReferencedArrayListImpl() noexcept {
+ReferArrayListImpl::~ReferArrayListImpl() noexcept {
     delete[] this->elements;
 }
 
 $RetNotIgnored()
-Size ReferencedArrayListImpl::getLength0() const {
+Size ReferArrayListImpl::getLength0() const {
     return this->length;
 }
 
 $RetNotIgnored()
-bool ReferencedArrayListImpl::isEmpty0() const {
+bool ReferArrayListImpl::isEmpty0() const {
     return this->length == 0;
 }
 
 $RetNotIgnored()
-GenericReference ReferencedArrayListImpl::get0(const Size index) const {
+GenericReference ReferArrayListImpl::get0(const Size index) const {
     return generic_cast(this->elements[index]);
 }
 
 $RetNotIgnored()
-bool ReferencedArrayListImpl::contain0(GenericReference value) const {
+bool ReferArrayListImpl::contain0(GenericReference value) const {
     for (Size index = 0; index < this->length; ++ index) {
         if (this->genericOperator.equals(generic_cast(this->elements[index]), value)) {
             return true;
@@ -119,7 +119,7 @@ bool ReferencedArrayListImpl::contain0(GenericReference value) const {
     return false;
 }
 
-void ReferencedArrayListImpl::add0(GenericReference element) {
+void ReferArrayListImpl::add0(GenericReference element) {
     if (this->length == this->maxCount) {
         this->expand0(this->maxCount);
     }
@@ -128,28 +128,28 @@ void ReferencedArrayListImpl::add0(GenericReference element) {
     ++ this->length;
 }
 
-void ReferencedArrayListImpl::remove0() {
+void ReferArrayListImpl::remove0() {
     -- this->length;
 }
 
-void ReferencedArrayListImpl::expand0(const Size size) {
+void ReferArrayListImpl::expand0(const Size size) {
     Size count = this->maxCount + size;
-    void **array = new void *[count];
+    void** array = new void* [count];
 
-    arrayCopy(array, this->elements, this->length, sizeof(void *));
+    arrayCopy(array, this->elements, this->length, sizeof(void*));
     delete[] this->elements;
 
     this->elements = array;
     this->maxCount = count;
 }
 
-void ReferencedArrayListImpl::shrink0(const Size size) {
+void ReferArrayListImpl::shrink0(const Size size) {
     Size count = this->maxCount - size;
     assert(count > this->length);
 
-    void **array = new void *[count];
+    void** array = new void* [count];
 
-    arrayCopy(array, this->elements, count, sizeof(void *));
+    arrayCopy(array, this->elements, count, sizeof(void*));
     delete[] this->elements;
 
     this->elements = array;

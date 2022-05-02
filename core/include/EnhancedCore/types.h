@@ -588,8 +588,7 @@ template <typename ConvertType, typename Type>
 inline ConvertType &forceCast(Type &&value) {
     return *((ConvertType *)(void *) &value);
 }
-#endif // CXX_LANGUAGE
-
 #define force_cast forceCast
+#endif // CXX_LANGUAGE
 
 #endif // !ENHANCED_CORE_TYPES_H

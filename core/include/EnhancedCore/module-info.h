@@ -39,7 +39,8 @@ MODULE_VERSION(Core, 0, 1, 0, 0.1, "dev", 1)
 MODULE_AUTHOR(Core, "Liu Baihao")
 MODULE_ABOUT(Core, "The core module of Enhanced.")
 
-MODULE_RELATIONS(Core,
+MODULE_RELATIONS(
+    Core,
     EXPORTS_PACKAGE(EnhancedCore)
 )
 
