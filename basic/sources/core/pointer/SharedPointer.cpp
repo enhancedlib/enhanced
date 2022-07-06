@@ -22,43 +22,43 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/core/pointer/SharedPointer.h"
+#include "Enhanced/basic/core/pointer/SharedPointer.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/annotations.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/annotations.h"
 
-using BasicGenericImpl::core::pointer::SharedPointerImpl;
+using EnhancedGenericImpl::basic::core::pointer::SharedPointerImpl;
 
-SharedPointerImpl::SharedPointerImpl(void *ptr, SharedPointerImpl::GenericOperator genericOperator) :
+SharedPointerImpl::SharedPointerImpl(void* ptr, SharedPointerImpl::GenericOperator genericOperator) :
     pointer(ptr), referenceCount(new Size(1)), genericOperator(genericOperator) {}
 
-SharedPointerImpl::SharedPointerImpl(const SharedPointerImpl &other) :
+SharedPointerImpl::SharedPointerImpl(const SharedPointerImpl& other) :
     pointer(other.pointer), referenceCount(other.referenceCount), genericOperator(other.genericOperator) {
     ++ (*other.referenceCount);
 }
 
 SharedPointerImpl::~SharedPointerImpl() noexcept {
-    this->release0();
+    release0();
 }
 
 void SharedPointerImpl::release0() noexcept {
-    if ((-- (*this->referenceCount)) == 0) {
-        this->genericOperator.destroy(this->pointer);
-        this->pointer = null;
-        delete this->referenceCount;
+    if ((--(*referenceCount)) == 0) {
+        genericOperator.destroy(pointer);
+        pointer = null;
+        delete referenceCount;
     }
 }
 
-void SharedPointerImpl::assign0(void *value) noexcept {
-    this->release0();
-    this->referenceCount = new Size(1);
-    this->pointer = value;
+void SharedPointerImpl::assign0(void* value) noexcept {
+    release0();
+    referenceCount = new Size(1);
+    pointer = value;
 }
 
-void SharedPointerImpl::assign0(const SharedPointerImpl &other) noexcept {
-    this->release0();
-    this->pointer = other.pointer;
-    this->referenceCount = other.referenceCount;
-    ++ (*this->referenceCount);
+void SharedPointerImpl::assign0(const SharedPointerImpl& other) noexcept {
+    release0();
+    pointer = other.pointer;
+    referenceCount = other.referenceCount;
+    ++ (*referenceCount);
 }

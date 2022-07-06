@@ -24,7 +24,7 @@
 
 #include <process.h>
 
-#include "EnhancedCore/process.h"
+#include "Enhanced/core/process.h"
 
 void processExit(int status) {
     exit(status);

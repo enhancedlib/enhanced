@@ -22,58 +22,57 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/core/String.h"
+#include "Enhanced/basic/core/String.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/annotations.h"
-#include "EnhancedCore/memory.h"
-#include "EnhancedCore/array.h"
-#include "EnhancedCore/string.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/annotations.h"
+#include "Enhanced/core/memory.h"
+#include "Enhanced/core/array.h"
+#include "Enhanced/core/string.h"
 
-#include "EnhancedBasic/collection/ArrayList.h"
+#include "Enhanced/basic/collection/ArrayList.h"
 
-using EnhancedBasic::core::String;
-using EnhancedBasic::collection::List;
-using EnhancedBasic::collection::ArrayList;
+using Enhanced::basic::core::String;
+using Enhanced::basic::collection::List;
+using Enhanced::basic::collection::ArrayList;
 
-String::String(const char *const value) : value(const_cast<char *>(value)), length(stringLength(value)),
-                                          dynamic(false) {}
+String::String(const char* const value) : value(const_cast<char*>(value)), length(stringLength(value)), dynamic(false) {}
 
-String::String(char *const value) : value(value), length(stringLength(value)), dynamic(false) {}
+String::String(char* const value) : value(value), length(stringLength(value)), dynamic(false) {}
 
 String::String(const Size length) : value(stringNew(length)), length(length), dynamic(true) {}
 
-String::String(const String &other) : value(stringCopy(other)), length(other.length), dynamic(true) {}
+String::String(const String& other) : value(stringCopy(other)), length(other.length), dynamic(true) {}
 
-String::String(String &&other) noexcept : value(other), length(other.length), dynamic(other.dynamic) {}
+String::String(String&& other) noexcept: value(other), length(other.length), dynamic(other.dynamic) {}
 
 String::~String() {
-    if (this->dynamic) {
-        delete this->value;
+    if (dynamic) {
+        delete value;
     }
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool String::isEmpty() const {
-    return this->length == 0;
+    return length == 0;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size String::getLength() const {
-    return this->length;
+    return length;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size String::indexOf(const char ch, const Size getN) const {
     Size indexN = 0;
 
-    for (Size index = 0; index < this->length; ++ index) {
+    for (Size index = 0; index < length; ++index) {
         if ((*this)[index] == ch) {
             if (getN == indexN) {
                 return index;
             } else {
-                ++ indexN;
+                ++indexN;
             }
         }
     }
@@ -81,14 +80,14 @@ Size String::indexOf(const char ch, const Size getN) const {
     return -1;
 }
 
-$RetNotIgnored()
-Size String::indexOf(const String &string, const Size getN) const {
+RetNotIgnored()
+Size String::indexOf(const String& string, const Size getN) const {
     Size indexN = 0;
     Size substringIndex = 0;
 
-    for (Size index = 0; index < this->length; ++ index) {
+    for (Size index = 0; index < length; ++index) {
         if ((*this)[index] == string[substringIndex]) {
-            ++ substringIndex;
+            ++substringIndex;
         } else {
             substringIndex = 0;
         }
@@ -97,7 +96,7 @@ Size String::indexOf(const String &string, const Size getN) const {
             if (getN == indexN) {
                 return index - string.length + 1;
             } else {
-                ++ indexN;
+                ++indexN;
             }
         }
     }
@@ -105,11 +104,11 @@ Size String::indexOf(const String &string, const Size getN) const {
     return -1;
 }
 
-$RetRequiresRelease()
-List<Size> *String::indexOfAll(const char ch) const {
-    List<Size> *allIndexes = new ArrayList<Size>();
+RetRequiresRelease()
+List<Size>* String::indexOfAll(const char ch) const {
+    List<Size>* allIndexes = new ArrayList<Size>();
 
-    for (Size index = 0; index < this->length; ++ index) {
+    for (Size index = 0; index < length; ++index) {
         if ((*this)[index] == ch) {
             allIndexes->add(index);
         }
@@ -118,13 +117,13 @@ List<Size> *String::indexOfAll(const char ch) const {
     return allIndexes;
 }
 
-$RetRequiresRelease()
-List<Size> *String::indexOfAll(const String &string) const {
-    List<Size> *allIndexes = new ArrayList<Size>();
+RetRequiresRelease()
+List<Size>* String::indexOfAll(const String& string) const {
+    List<Size>* allIndexes = new ArrayList<Size>();
     Size count = 0;
 
-    for (Size index = 0; index < this->length; ++ index) {
-        (*this)[index] == string[count] ? ++ count : (count = 0);
+    for (Size index = 0; index < length; ++index) {
+        (*this)[index] == string[count] ? ++count : (count = 0);
 
         if (count == string.length) {
             allIndexes->add(index - string.length + 1);
@@ -134,20 +133,20 @@ List<Size> *String::indexOfAll(const String &string) const {
     return allIndexes;
 }
 
-$RetNotIgnored()
-char *String::getCharacters() const {
-    return this->value;
+RetNotIgnored()
+char* String::getCharacters() const {
+    return value;
 }
 
-char &String::operator[](const Size index) const {
-    return this->value[index];
+char& String::operator[](const Size index) const {
+    return value[index];
 }
 
-bool String::operator==(const String &string) const {
+bool String::operator==(const String& string) const {
     return stringEqual(*this, string);
 }
 
-String String::operator+(const String &string) const {
+String String::operator+(const String& string) const {
     String newString = String(*this);
 
     if (string.length < 1) {
@@ -158,46 +157,46 @@ String String::operator+(const String &string) const {
     return newString;
 }
 
-String &String::operator=(const String &other) {
-    this->value = stringCopy(other.value);
-    this->length = other.length;
-    this->dynamic = true;
+String& String::operator=(const String& other) {
+    value = stringCopy(other.value);
+    length = other.length;
+    dynamic = true;
 
     return *this;
 }
 
-String &String::operator=(String &&other) noexcept {
-    this->value = other.value;
-    this->length = other.length;
-    this->dynamic = other.dynamic;
+String& String::operator=(String&& other) noexcept {
+    value = other.value;
+    length = other.length;
+    dynamic = other.dynamic;
 
     return *this;
 }
 
-String String::append(const String &string) {
+String String::append(const String& string) {
     if (string.length < 1) {
         return *this;
     }
 
-    Size newLength = this->length + string.length;
-    char *charArray = new char[newLength + 1];
+    Size newLength = length + string.length;
+    char* charArray = new char[newLength + 1];
     charArray[newLength] = '\0';
 
-    for (Size index = 0; index < this->length; ++ index) {
-        charArray[index] = this->value[index];
+    for (Size index = 0; index < length; ++index) {
+        charArray[index] = value[index];
     }
-    for (Size index = this->length; index < newLength; ++ index) {
-        charArray[index] = string.value[index - this->length];
+    for (Size index = length; index < newLength; ++index) {
+        charArray[index] = string.value[index - length];
     }
 
-    if (this->dynamic) {
-        delete this->value;
+    if (dynamic) {
+        delete value;
     } else {
-        this->dynamic = true;
+        dynamic = true;
     }
 
-    this->length = newLength;
-    this->value = charArray;
+    length = newLength;
+    value = charArray;
 
     return *this;
 }
@@ -206,22 +205,22 @@ String String::replace(const char oldChar, const char newChar) {
     return *this;
 }
 
-String String::replace(const String &oldSubstring, const String &newSubstring) {
+String String::replace(const String& oldSubstring, const String& newSubstring) {
     return *this;
 }
 
-String String::replace(char oldChar, const String &newSubstring) {
+String String::replace(char oldChar, const String& newSubstring) {
     return *this;
 }
 
-String String::replace(const String &oldSubstring, char newChar) {
+String String::replace(const String& oldSubstring, char newChar) {
     return *this;
 }
 
-String String::operator+=(const String &string) {
-    return this->append(string);
+String String::operator+=(const String& string) {
+    return append(string);
 }
 
-String::operator char *() const {
-    return this->getCharacters();
+String::operator char*() const {
+    return value;
 }

@@ -25,14 +25,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "EnhancedCore/assert.h"
+#include "Enhanced/core/assert.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/string.h"
-#include "EnhancedCore/process.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/string.h"
+#include "Enhanced/core/process.h"
 
-void assertionFailed(const char *const message, const char *const file, const uint line) {
+void assertionFailed(const char* const message, const char* const file, const uint line) {
     printf("Failed to assert: %s, file \"%s\", line %d", message, file, line);
     processAbnormalAbort();
 }

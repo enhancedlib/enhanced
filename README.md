@@ -54,16 +54,16 @@ Operating system: Microsoft Windows Operating System, Linux (GNU/Linux)
 
 Processor architecture: amd64 (x86_64), x86
 
-Supported C Standard: C99, C11
+Supported C Standard: C11
 
-Supported C++ Standard: C++11, C++14, C++17, C++20
+Supported C++ Standard: C++17, C++20
 
 ## 4.Build
 
 Required environments:
 
-- C Standard: C99
-- C++ Standard: C++11
+- C Standard: C11
+- C++ Standard: C++17
 - Build System: CMake
 
 Recommended environments:
@@ -72,9 +72,9 @@ Recommended environments:
 - C++ Standard: C++20
 - Build System: CMake with Ninja
 
-## 5.Purpose
+## 5.Wish
 
-I hope to use this library to make the C/C++ language software development more convenient and efficient.
+I hope this library can make the C/C++ language software development more convenient and efficient.
 
 ## 6.Technology
 
@@ -87,5 +87,3 @@ They separate the implementation of the generic classes from the generic by type
 
 You should not extend (inherit) the implementation class from another class, and you should not instantiate the implementation classes directly.
 The correct approach is to instantiate the generic classes, because the implementation classes have no public methods.
-
-Also, you shouldn't instantiate a generic class with the implementation class as type, because the generic classes privately extend (inherits) the implementation classes.

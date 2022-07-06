@@ -22,4 +22,4 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedCore/jump.h"
+#include "Enhanced/core/jump.h"

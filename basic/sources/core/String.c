@@ -22,13 +22,13 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/core/String.h"
+#include "Enhanced/basic/core/String.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/assert.h"
-#include "EnhancedCore/memory.h"
-#include "EnhancedCore/string.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/assert.h"
+#include "Enhanced/core/memory.h"
+#include "Enhanced/core/string.h"
 
 /*!
  * Get the length of the string.
@@ -36,7 +36,7 @@
  * @param self The string.
  * @return
  */
-static Size getLength(const String *self);
+static Size getLength(const String* self);
 
 /*!
  * To concatenate the current string with another string.
@@ -45,26 +45,26 @@ static Size getLength(const String *self);
  * @param str
  * @return String
  */
-static String add(String *self, String str);
+static String add(String* self, String str);
 
 String newEmptyString() {
-    char *value = (char *) memoryAlloc(sizeof(char));
+    char* value = (char*) memoryAlloc(sizeof(char));
     *value = '\0';
     return newStringExt(value, 0);
 }
 
-String toString(char *const value) {
+String toString(char* const value) {
     return newStringExt(value, stringLength(value));
 }
 
 String newString(const Size length) {
-    char *value = (char *) memoryAlloc((length + 1) * sizeof(char));
+    char* value = (char*) memoryAlloc((length + 1) * sizeof(char));
     return newStringExt(value, length);
 }
 
-String newStringExt(const char *const value, const Size length) {
+String newStringExt(const char* const value, const Size length) {
     String string = {
-        .value = (char *) value,
+        .value = (char*) value,
         .length = length,
         .getLength = getLength,
         .add = add
@@ -72,15 +72,15 @@ String newStringExt(const char *const value, const Size length) {
     return string;
 }
 
-Size getLength(const String *self) {
+Size getLength(const String* self) {
     return self->length;
 }
 
-String add(String *self, String str) {
+String add(String* self, String str) {
     assert(self != null), assert(str.length > 0);
 
     Size newLength = self->length + str.length;
-    char *newString = (char *) memoryAlloc((newLength + 1) * sizeof(char));
+    char* newString = (char*) memoryAlloc((newLength + 1) * sizeof(char));
     if (newString == null) {
         return *self;
     }

@@ -22,16 +22,16 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedCore/string.h"
+#include "Enhanced/core/string.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/assert.h"
-#include "EnhancedCore/memory.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/assert.h"
+#include "Enhanced/core/memory.h"
 
-$RetRequiresRelease()
-char *stringNew(const Size length) {
-    char *str = (char *) memoryAlloc((length + 1) * sizeof(char));
+RetRequiresRelease()
+char* stringNew(const Size length) {
+    char* str = (char*) memoryAlloc((length + 1) * sizeof(char));
     if (str == null) {
         return null;
     }
@@ -40,8 +40,8 @@ char *stringNew(const Size length) {
     return str;
 }
 
-$RetNotIgnored()
-Size stringLength(const char *const string) {
+RetNotIgnored()
+Size stringLength(const char* const string) {
     assert(string != null);
 
     Size length;
@@ -51,8 +51,8 @@ Size stringLength(const char *const string) {
     return length;
 }
 
-$RetNotIgnored()
-bool stringEqual(const char *const string1, const char *const string2) {
+RetNotIgnored()
+bool stringEqual(const char* const string1, const char* const string2) {
     Size length;
 
     if (string1 == string2) {
@@ -69,13 +69,13 @@ bool stringEqual(const char *const string1, const char *const string2) {
     }
 }
 
-$RetRequiresRelease()
-char *stringCopy(const char *const string) {
+RetRequiresRelease()
+char* stringCopy(const char* const string) {
     assert(string != null);
 
     Size length = stringLength(string);
 
-    char *copy = stringNew(length);
+    char* copy = stringNew(length);
     if (copy == null) {
         return null;
     }
@@ -89,11 +89,11 @@ char *stringCopy(const char *const string) {
     return copy;
 }
 
-$RetRequiresRelease()
-char *stringResize(const char *const string, const Size newSize) {
+RetRequiresRelease()
+char* stringResize(const char* const string, const Size newSize) {
     assert(string != null), assert(newSize > 1);
 
-    char *newString = stringNew(newSize);
+    char* newString = stringNew(newSize);
     if (newString == null) {
         return null;
     }

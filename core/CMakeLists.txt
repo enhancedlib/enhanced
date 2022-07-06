@@ -18,17 +18,17 @@ set(
 
 set(
     HEADERS
-    include/EnhancedCore/module-info.h
-    include/EnhancedCore/annotations.h
-    include/EnhancedCore/array.h
-    include/EnhancedCore/assert.h
-    include/EnhancedCore/export.h
-    include/EnhancedCore/defines.h
-    include/EnhancedCore/jump.h
-    include/EnhancedCore/memory.h
-    include/EnhancedCore/process.h
-    include/EnhancedCore/string.h
-    include/EnhancedCore/types.h
+    include/Enhanced/core/module-info.h
+    include/Enhanced/core/annotations.h
+    include/Enhanced/core/array.h
+    include/Enhanced/core/assert.h
+    include/Enhanced/core/export.h
+    include/Enhanced/core/defines.h
+    include/Enhanced/core/jump.h
+    include/Enhanced/core/memory.h
+    include/Enhanced/core/process.h
+    include/Enhanced/core/string.h
+    include/Enhanced/core/types.h
 )
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")

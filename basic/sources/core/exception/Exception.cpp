@@ -22,41 +22,38 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/core/exception/Exception.h"
+#include "Enhanced/basic/core/exception/Exception.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
 
-#include "EnhancedBasic/core/String.h"
+#include "Enhanced/basic/core/String.h"
 
-using EnhancedBasic::core::exception::Exception;
-using EnhancedBasic::core::String;
+using Enhanced::basic::core::exception::Exception;
+using Enhanced::basic::core::String;
 
 bool Exception::enableExceptions = true;
 bool Exception::enableExceptionsTraceback = true;
 
-Exception::Exception(String &&message) noexcept:
-    message(message), cause(null) {
+Exception::Exception(String&& message) noexcept: message(message), cause(null) {
 }
 
-Exception::Exception(const Exception *cause) noexcept:
-    message(""), cause(cause) {
+Exception::Exception(const Exception* cause) noexcept: message(""), cause(cause) {
 }
 
-Exception::Exception(String &&message, const Exception *cause) noexcept:
-    message(message), cause(cause) {
+Exception::Exception(String&& message, const Exception* cause) noexcept: message(message), cause(cause) {
 }
 
 Exception::~Exception() noexcept = default;
 
 String Exception::traceback() noexcept {
-    return (String) this->message;
+    return (String) message;
 }
 
-const Exception *Exception::getCause() noexcept {
-    return this->cause;
+const Exception* Exception::getCause() noexcept {
+    return cause;
 }
 
-const String &Exception::getMessage() noexcept {
-    return this->message;
+const String& Exception::getMessage() noexcept {
+    return message;
 }

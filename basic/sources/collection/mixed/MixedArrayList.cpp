@@ -22,104 +22,104 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/collection/mixed/MixedArrayList.h"
+#include "Enhanced/basic/collection/mixed/MixedArrayList.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/annotations.h"
-#include "EnhancedCore/array.h"
-#include "EnhancedCore/assert.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/annotations.h"
+#include "Enhanced/core/array.h"
+#include "Enhanced/core/assert.h"
 
-#include "EnhancedBasic/generic/Generic.h"
+#include "Enhanced/basic/util/Generic.h"
 
-using BasicGenericImpl::collection::mixed::MixedArrayListImpl;
+using EnhancedGenericImpl::basic::collection::mixed::MixedArrayListImpl;
 
-MixedArrayListImpl::MixedArrayListIteratorImpl::MixedArrayListIteratorImpl(const MixedArrayListImpl *mixedArrayList) :
+MixedArrayListImpl::MixedArrayListIteratorImpl::MixedArrayListIteratorImpl(const MixedArrayListImpl* mixedArrayList) :
     mixedArrayList(mixedArrayList), indexer(mixedArrayList->elements), isFirst(true),
-    end((const Node *) mixedArrayList->elements + mixedArrayList->getLength0()) {}
+    end((const Node*) mixedArrayList->elements + mixedArrayList->getLength0()) {}
 
 MixedArrayListImpl::MixedArrayListIteratorImpl::~MixedArrayListIteratorImpl() noexcept = default;
 
-$RetNotIgnored()
+RetNotIgnored()
 bool MixedArrayListImpl::MixedArrayListIteratorImpl::hasNext0() const {
-    return this->indexer != this->end;
+    return indexer != end;
 }
 
 void MixedArrayListImpl::MixedArrayListIteratorImpl::next0() const {
-    ++ this->indexer;
+    ++ indexer;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool MixedArrayListImpl::MixedArrayListIteratorImpl::each0() const {
-    if (this->isFirst) {
-        this->isFirst = false;
-        return !this->mixedArrayList->isEmpty0();
+    if (isFirst) {
+        isFirst = false;
+        return !mixedArrayList->isEmpty0();
     }
 
-    this->next0();
-    return this->hasNext0();
+    next0();
+    return hasNext0();
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference MixedArrayListImpl::MixedArrayListIteratorImpl::get0() const {
-    return generic_cast((*this->indexer).value);
+    return generic_cast((*indexer).value);
 }
 
 void MixedArrayListImpl::MixedArrayListIteratorImpl::reset0() const {
-    this->isFirst = true;
-    this->indexer = this->mixedArrayList->elements;
+    isFirst = true;
+    indexer = mixedArrayList->elements;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size MixedArrayListImpl::MixedArrayListIteratorImpl::count0() const {
-    return this->mixedArrayList->getLength0();
+    return mixedArrayList->getLength0();
 }
 
 MixedArrayListImpl::MixedArrayListImpl(const Size maxCount, const GenericOperator genericOperator) :
     length(0), elements(new Node[maxCount]), maxCount(maxCount),
     genericOperator(genericOperator), iterator(null) {}
 
-MixedArrayListImpl::MixedArrayListImpl(const MixedArrayListImpl &other) :
+MixedArrayListImpl::MixedArrayListImpl(const MixedArrayListImpl& other) :
     length(other.length), elements(new Node[other.maxCount]), maxCount(other.maxCount),
     genericOperator(other.genericOperator), iterator(null) {
     assert(other.maxCount >= other.length);
     for (Size index = 0; index < other.length; ++ index) {
         if (other.elements[index].dynamic) {
-            this->elements[index].value = this->genericOperator.allocate(generic_cast(other.elements[index].value));
+            elements[index].value = genericOperator.allocate(generic_cast(other.elements[index].value));
         } else {
-            this->elements[index] = other.elements[index];
+            elements[index] = other.elements[index];
         }
     }
 }
 
 MixedArrayListImpl::~MixedArrayListImpl() noexcept {
-    while (this->length > 0) {
-        this->remove0();
+    while (length > 0) {
+        remove0();
     }
 
-    delete[] this->elements;
-    delete this->iterator;
+    delete[] elements;
+    delete iterator;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size MixedArrayListImpl::getLength0() const {
-    return this->length;
+    return length;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool MixedArrayListImpl::isEmpty0() const {
-    return this->length == 0;
+    return length == 0;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference MixedArrayListImpl::get0(const Size index) const {
-    return generic_cast(this->elements[index].value);
+    return generic_cast(elements[index].value);
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool MixedArrayListImpl::contain0(GenericReference value) const {
-    for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericOperator.equals(generic_cast(this->elements[index].value), value)) {
+    for (Size index = 0; index < length; ++ index) {
+        if (genericOperator.equals(generic_cast(elements[index].value), value)) {
             return true;
         }
     }
@@ -128,49 +128,49 @@ bool MixedArrayListImpl::contain0(GenericReference value) const {
 }
 
 void MixedArrayListImpl::add0(GenericReference element) {
-    if (this->length == this->maxCount) {
-        this->expand0(this->maxCount);
+    if (length == maxCount) {
+        expand0(maxCount);
     }
 
-    this->elements[this->length] = {this->genericOperator.allocate(element), true};
-    ++ this->length;
+    elements[length] = {genericOperator.allocate(element), true};
+    ++ length;
 }
 
-void MixedArrayListImpl::addReferenced0(GenericReference element) {
-    if (this->length == this->maxCount) {
-        this->expand0(this->maxCount);
+void MixedArrayListImpl::addReference0(GenericReference element) {
+    if (length == maxCount) {
+        expand0(maxCount);
     }
 
-    this->elements[this->length] = {&element, false};
-    ++ this->length;
+    elements[length] = {&element, false};
+    ++ length;
 }
 
 void MixedArrayListImpl::remove0() {
-    if (this->elements[-- this->length].dynamic) {
-        this->genericOperator.destroy(this->elements[this->length].value);
+    if (elements[--length].dynamic) {
+        genericOperator.destroy(elements[length].value);
     }
 }
 
 void MixedArrayListImpl::expand0(const Size size) {
-    Size count = this->maxCount + size;
-    Node *array = new Node[count];
+    Size count = maxCount + size;
+    Node* array = new Node[count];
 
-    arrayCopy(array, this->elements, this->length, sizeof(Node));
-    delete[] this->elements;
+    arrayCopy(array, elements, length, sizeof(Node));
+    delete[] elements;
 
-    this->elements = array;
-    this->maxCount = count;
+    elements = array;
+    maxCount = count;
 }
 
 void MixedArrayListImpl::shrink0(const Size size) {
-    Size count = this->maxCount - size;
-    assert(count > this->length);
+    Size count = maxCount - size;
+    assert(count > length);
 
-    Node *array = new Node[count];
+    Node* array = new Node[count];
 
-    arrayCopy(array, this->elements, count, sizeof(Node));
-    delete[] this->elements;
+    arrayCopy(array, elements, count, sizeof(Node));
+    delete[] elements;
 
-    this->elements = array;
-    this->maxCount = count;
+    elements = array;
+    maxCount = count;
 }

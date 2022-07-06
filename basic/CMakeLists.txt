@@ -13,17 +13,14 @@ set(
     sources/math/LargeInteger.cpp
     sources/math/Math.c
     sources/math/Math.cpp
-    sources/generic/Any.cpp
-    sources/generic/Allocator.cpp
+    sources/util/Allocator.cpp
     sources/collection/ArrayList.cpp
     sources/collection/LinkedList.cpp
     sources/collection/Vector.cpp
     sources/collection/mixed/MixedArrayList.cpp
     sources/collection/mixed/MixedLinkedList.cpp
-    sources/collection/referenced/ReferencedArrayList.cpp
-    sources/collection/referenced/ReferencedLinkedList.cpp
-    sources/core/Integer.c
-    sources/core/Integer.cpp
+    sources/collection/refer/ReferArrayList.cpp
+    sources/collection/refer/ReferLinkedList.cpp
     sources/core/String.c
     sources/core/String.cpp
     sources/core/exception/Exception.c
@@ -33,54 +30,39 @@ set(
 
 set(
     HEADERS
-    include/EnhancedBasic/module-info.h
-    include/EnhancedBasic/export.h
-    include/EnhancedBasic/collection/Vector.hpp
-    include/EnhancedBasic/collection/ArrayDeque.h
-    include/EnhancedBasic/collection/ArrayList.h
-    include/EnhancedBasic/collection/ArrayList.hpp
-    include/EnhancedBasic/collection/Collection.h
-    include/EnhancedBasic/collection/Deque.h
-    include/EnhancedBasic/collection/LinkedList.h
-    include/EnhancedBasic/collection/LinkedList.hpp
-    include/EnhancedBasic/collection/LinkedQueue.h
-    include/EnhancedBasic/collection/List.h
-    include/EnhancedBasic/collection/PriorityQueue.h
-    include/EnhancedBasic/collection/Queue.h
-    include/EnhancedBasic/collection/Tuple.h
-    include/EnhancedBasic/collection/mixed/MixedArrayList.h
-    include/EnhancedBasic/collection/mixed/MixedArrayList.hpp
-    include/EnhancedBasic/collection/mixed/MixedDeque.h
-    include/EnhancedBasic/collection/mixed/MixedLinkedList.h
-    include/EnhancedBasic/collection/mixed/MixedLinkedList.hpp
-    include/EnhancedBasic/collection/mixed/MixedList.h
-    include/EnhancedBasic/collection/mixed/MixedQueue.h
-    include/EnhancedBasic/collection/referenced/ReferencedArrayList.h
-    include/EnhancedBasic/collection/referenced/ReferencedArrayList.hpp
-    include/EnhancedBasic/collection/referenced/ReferencedDeque.h
-    include/EnhancedBasic/collection/referenced/ReferencedLinkedList.h
-    include/EnhancedBasic/collection/referenced/ReferencedLinkedList.hpp
-    include/EnhancedBasic/collection/referenced/ReferencedList.h
-    include/EnhancedBasic/collection/referenced/ReferencedQueue.h
-    include/EnhancedBasic/collection/RandomAccess.h
-    include/EnhancedBasic/core/Integer.h
-    include/EnhancedBasic/core/Iterable.h
-    include/EnhancedBasic/core/Iterable.hpp
-    include/EnhancedBasic/core/Iterator.h
-    include/EnhancedBasic/core/String.h
-    include/EnhancedBasic/core/exception/Exception.h
-    include/EnhancedBasic/core/exception/StandardExceptions.h
-    include/EnhancedBasic/math/LargeInteger.h
-    include/EnhancedBasic/math/Math.h
-    include/EnhancedBasic/generic/Allocator.h
-    include/EnhancedBasic/generic/Allocator.hpp
-    include/EnhancedBasic/generic/Any.h
-    include/EnhancedBasic/generic/Any.hpp
-    include/EnhancedBasic/generic/AnyArray.h
-    include/EnhancedBasic/generic/AnyArray.hpp
-    include/EnhancedBasic/generic/Generic.h
-    include/EnhancedBasic/core/pointer/SharedPointer.h
-    include/EnhancedBasic/core/pointer/SharedPointer.hpp
+    include/Enhanced/basic/module-info.h
+    include/Enhanced/basic/export.h
+    include/Enhanced/basic/collection/ArrayDeque.h
+    include/Enhanced/basic/collection/ArrayList.h
+    include/Enhanced/basic/collection/Collection.h
+    include/Enhanced/basic/collection/Deque.h
+    include/Enhanced/basic/collection/LinkedList.h
+    include/Enhanced/basic/collection/LinkedQueue.h
+    include/Enhanced/basic/collection/List.h
+    include/Enhanced/basic/collection/PriorityQueue.h
+    include/Enhanced/basic/collection/Queue.h
+    include/Enhanced/basic/collection/Tuple.h
+    include/Enhanced/basic/collection/mixed/MixedArrayList.h
+    include/Enhanced/basic/collection/mixed/MixedDeque.h
+    include/Enhanced/basic/collection/mixed/MixedLinkedList.h
+    include/Enhanced/basic/collection/mixed/MixedList.h
+    include/Enhanced/basic/collection/mixed/MixedQueue.h
+    include/Enhanced/basic/collection/refer/ReferArrayList.h
+    include/Enhanced/basic/collection/refer/ReferDeque.h
+    include/Enhanced/basic/collection/refer/ReferLinkedList.h
+    include/Enhanced/basic/collection/refer/ReferList.h
+    include/Enhanced/basic/collection/refer/ReferQueue.h
+    include/Enhanced/basic/collection/RandomAccess.h
+    include/Enhanced/basic/core/Iterable.h
+    include/Enhanced/basic/core/Iterator.h
+    include/Enhanced/basic/core/String.h
+    include/Enhanced/basic/core/exception/Exception.h
+    include/Enhanced/basic/core/exception/StandardExceptions.h
+    include/Enhanced/basic/math/LargeInteger.h
+    include/Enhanced/basic/math/Math.h
+    include/Enhanced/basic/util/Allocator.h
+    include/Enhanced/basic/util/Generic.h
+    include/Enhanced/basic/core/pointer/SharedPointer.h
 )
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")

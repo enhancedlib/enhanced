@@ -22,27 +22,30 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
+#include "Enhanced/basic/math/LargeInteger.h"
 
-#include "EnhancedBasic/math/LargeInteger.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
 
-using EnhancedBasic::Utility::LargeInteger;
+using Enhanced::basic::math::LargeInteger;
+using Enhanced::basic::core::String;
 
-LargeInteger::LargeInteger(Size size) :
-    bytes(new Byte[size]), isNegative(0), size(size) {}
+template <typename NumberType>
+LargeInteger LargeInteger::from(NumberType number) {
+    return LargeInteger(number);
+}
 
-template <typename Type>
-LargeInteger::LargeInteger(Type number) :
-    bytes(null), isNegative(number < 0) {
+LargeInteger::LargeInteger(uint64 number) : bytes(null), isNegative(number < 0) {
     Size count = 1;
-    Type value = number;
+    uint64 value = number;
     while (value > 0) {
         value = value / 10;
-        ++ count;
+        ++count;
     }
-    this->size = count;
+    size = count;
 }
+
+LargeInteger::LargeInteger(const String& number) : bytes(new Byte[number.getLength()]), isNegative(false), size(number.getLength()) {}
 
 LargeInteger LargeInteger::add(LargeInteger number) {
     return *this;
@@ -58,8 +61,4 @@ LargeInteger LargeInteger::mul(LargeInteger number) {
 
 LargeInteger LargeInteger::div(LargeInteger number) {
     return *this;
-}
-
-LargeInteger EnhancedBasic::Utility::LargeInteger::newNumber(Size size) {
-    return LargeInteger(size);
 }

@@ -24,45 +24,45 @@
 
 #include <malloc.h>
 
-#include "EnhancedCore/memory.h"
+#include "Enhanced/core/memory.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/annotations.h"
-#include "EnhancedCore/assert.h"
-#include "EnhancedCore/types.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/annotations.h"
+#include "Enhanced/core/assert.h"
+#include "Enhanced/core/types.h"
 
-$MustInspectResult $RetRequiresRelease()
-void *memoryAlloc(const Size size) {
+MustInspectResult RetRequiresRelease()
+void* memoryAlloc(const Size size) {
     assert(size > 0);
 
     return malloc(size);
 }
 
-void memoryFree(void *const pointer) {
+void memoryFree(void* const pointer) {
     if (pointer != null) {
         free(pointer);
     }
 }
 
-void memorySet(void *ptr, const Byte byte, const Size size) {
+void memorySet(void* ptr, const Byte byte, const Size size) {
     assert(ptr != null), assert(size > 0);
 
     for (Size index = 0; index < size; ++ index) {
-        ((Byte *) ptr)[index] = byte;
+        ((Byte*) ptr)[index] = byte;
     }
 }
 
-void memoryCopy(void *destination, const void *const source, const Size size) {
+void memoryCopy(void* destination, const void* const source, const Size size) {
     assert(destination != null), assert(source != null), assert(size > 0);
 
     Size countBlock = size / sizeof(qword);
     Size countByte = size % sizeof(qword);
 
-    while ((countBlock --) > 0) {
-        ((qword *) destination)[countBlock] = ((qword *) source)[countBlock];
+    while ((countBlock--) > 0) {
+        ((qword*) destination)[countBlock] = ((qword*) source)[countBlock];
     }
 
-    while ((countByte --) > 0) {
-        ((Byte *) destination)[countByte] = ((Byte *) source)[countByte];
+    while ((countByte--) > 0) {
+        ((Byte*) destination)[countByte] = ((Byte*) source)[countByte];
     }
 }

@@ -12,6 +12,7 @@
     </sourceRoots>
     <excludeRoots>
       <file path="$PROJECT_DIR$/.vs" />
+      <file path="$PROJECT_DIR$/.vscode" />
     </excludeRoots>
   </component>
 </project>

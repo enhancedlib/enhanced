@@ -22,18 +22,18 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/core/exception/Exception.h"
+#include "Enhanced/basic/core/exception/Exception.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/jump.h"
-#include "EnhancedCore/memory.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/jump.h"
+#include "Enhanced/core/memory.h"
 
-static ExceptionContextBlock *exceptionContextBlockStack = null;
+static ExceptionContextBlock* exceptionContextBlockStack = null;
 
-static char *traceback(ExceptionType *self);
+static char* traceback(ExceptionType* self);
 
-ExceptionType newException(const uint exceptionCode, const char *const exceptionMessage) {
+ExceptionType newException(const uint exceptionCode, const char* const exceptionMessage) {
     ExceptionType exception = {
         .message = exceptionMessage,
         .code = exceptionCode,
@@ -42,7 +42,7 @@ ExceptionType newException(const uint exceptionCode, const char *const exception
     return exception;
 }
 
-void exceptionContextBlockStackPush(ExceptionContextBlock *exceptionContextBlock) {
+void exceptionContextBlockStackPush(ExceptionContextBlock* exceptionContextBlock) {
     exceptionContextBlock->exception = null;
     exceptionContextBlock->link = exceptionContextBlockStack;
     exceptionContextBlockStack = exceptionContextBlock;
@@ -65,6 +65,6 @@ void exceptionThrow(ExceptionType exception) {
     }
 }
 
-char *traceback(ExceptionType *self) {
-    return (char *) self->message;
+char* traceback(ExceptionType* self) {
+    return (char*) self->message;
 }

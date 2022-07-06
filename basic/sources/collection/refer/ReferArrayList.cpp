@@ -22,17 +22,17 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/collection/refer/ReferArrayList.h"
+#include "Enhanced/basic/collection/refer/ReferArrayList.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/annotations.h"
-#include "EnhancedCore/array.h"
-#include "EnhancedCore/assert.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/annotations.h"
+#include "Enhanced/core/array.h"
+#include "Enhanced/core/assert.h"
 
-#include "EnhancedBasic/generic/Generic.h"
+#include "Enhanced/basic/util/Generic.h"
 
-using BasicGenericImpl::collection::refer::ReferArrayListImpl;
+using EnhancedGenericImpl::basic::collection::refer::ReferArrayListImpl;
 
 ReferArrayListImpl::ReferArrayListIteratorImpl::
 ReferArrayListIteratorImpl(const ReferArrayListImpl* const referenceArrayList) :
@@ -41,77 +41,77 @@ ReferArrayListIteratorImpl(const ReferArrayListImpl* const referenceArrayList) :
 
 ReferArrayListImpl::ReferArrayListIteratorImpl::~ReferArrayListIteratorImpl() noexcept = default;
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ReferArrayListImpl::ReferArrayListIteratorImpl::hasNext0() const {
-    return this->indexer != this->end;
+    return indexer != end;
 }
 
 void ReferArrayListImpl::ReferArrayListIteratorImpl::next0() const {
-    ++ this->indexer;
+    ++ indexer;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ReferArrayListImpl::ReferArrayListIteratorImpl::each0() const {
-    if (this->isFirst) {
-        this->isFirst = false;
-        return !this->referenceArrayList->isEmpty0();
+    if (isFirst) {
+        isFirst = false;
+        return !referenceArrayList->isEmpty0();
     }
 
-    this->next0();
-    return this->hasNext0();
+    next0();
+    return hasNext0();
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference ReferArrayListImpl::ReferArrayListIteratorImpl::get0() const {
-    return generic_cast(*this->indexer);
+    return generic_cast(*indexer);
 }
 
 void ReferArrayListImpl::ReferArrayListIteratorImpl::reset0() const {
-    this->isFirst = true;
-    this->indexer = this->referenceArrayList->elements;
+    isFirst = true;
+    indexer = referenceArrayList->elements;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size ReferArrayListImpl::ReferArrayListIteratorImpl::count0() const {
-    return this->referenceArrayList->getLength0();
+    return referenceArrayList->getLength0();
 }
 
 ReferArrayListImpl::ReferArrayListImpl(const Size maxCount, const GenericOperator genericOperator) :
     length(0), elements(new void* [maxCount]), maxCount(maxCount),
     genericOperator(genericOperator), iterator(null) {}
 
-ReferArrayListImpl::ReferArrayListImpl(const ReferArrayListImpl & other) :
+ReferArrayListImpl::ReferArrayListImpl(const ReferArrayListImpl& other) :
     length(other.length), elements(new void* [other.maxCount]), maxCount(other.maxCount),
     genericOperator(other.genericOperator), iterator(null) {
     assert(other.maxCount >= other.length);
     for (Size index = 0; index < other.length; ++ index) {
-        this->elements[index] = other.elements[index];
+        elements[index] = other.elements[index];
     }
 }
 
 ReferArrayListImpl::~ReferArrayListImpl() noexcept {
-    delete[] this->elements;
+    delete[] elements;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size ReferArrayListImpl::getLength0() const {
-    return this->length;
+    return length;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ReferArrayListImpl::isEmpty0() const {
-    return this->length == 0;
+    return length == 0;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference ReferArrayListImpl::get0(const Size index) const {
-    return generic_cast(this->elements[index]);
+    return generic_cast(elements[index]);
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ReferArrayListImpl::contain0(GenericReference value) const {
-    for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericOperator.equals(generic_cast(this->elements[index]), value)) {
+    for (Size index = 0; index < length; ++ index) {
+        if (genericOperator.equals(generic_cast(elements[index]), value)) {
             return true;
         }
     }
@@ -120,38 +120,38 @@ bool ReferArrayListImpl::contain0(GenericReference value) const {
 }
 
 void ReferArrayListImpl::add0(GenericReference element) {
-    if (this->length == this->maxCount) {
-        this->expand0(this->maxCount);
+    if (length == maxCount) {
+        expand0(maxCount);
     }
 
-    this->elements[this->length] = &element;
-    ++ this->length;
+    elements[length] = &element;
+    ++ length;
 }
 
 void ReferArrayListImpl::remove0() {
-    -- this->length;
+    --length;
 }
 
 void ReferArrayListImpl::expand0(const Size size) {
-    Size count = this->maxCount + size;
+    Size count = maxCount + size;
     void** array = new void* [count];
 
-    arrayCopy(array, this->elements, this->length, sizeof(void*));
-    delete[] this->elements;
+    arrayCopy(array, elements, length, sizeof(void*));
+    delete[] elements;
 
-    this->elements = array;
-    this->maxCount = count;
+    elements = array;
+    maxCount = count;
 }
 
 void ReferArrayListImpl::shrink0(const Size size) {
-    Size count = this->maxCount - size;
-    assert(count > this->length);
+    Size count = maxCount - size;
+    assert(count > length);
 
     void** array = new void* [count];
 
-    arrayCopy(array, this->elements, count, sizeof(void*));
-    delete[] this->elements;
+    arrayCopy(array, elements, count, sizeof(void*));
+    delete[] elements;
 
-    this->elements = array;
-    this->maxCount = count;
+    elements = array;
+    maxCount = count;
 }

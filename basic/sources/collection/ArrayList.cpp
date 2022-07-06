@@ -22,100 +22,97 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/collection/ArrayList.h"
+#include "Enhanced/basic/collection/ArrayList.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/annotations.h"
-#include "EnhancedCore/array.h"
-#include "EnhancedCore/assert.h"
-#include "EnhancedCore/memory.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/annotations.h"
+#include "Enhanced/core/array.h"
+#include "Enhanced/core/assert.h"
+#include "Enhanced/core/memory.h"
 
-#include "EnhancedBasic/generic/Generic.h"
+#include "Enhanced/basic/util/Generic.h"
 
-using BasicGenericImpl::collection::ArrayListImpl;
+using EnhancedGenericImpl::basic::collection::ArrayListImpl;
 
-ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl *const arrayList) :
-    arrayList(arrayList), indexer(arrayList->elements), isFirst(true),
-    end(arrayList->elements + arrayList->getLength0()) {}
+ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* const arrayList) :
+    arrayList(arrayList), indexer(arrayList->elements), isFirst(true), end(arrayList->elements + arrayList->getLength0()) {}
 
 ArrayListImpl::ArrayListIteratorImpl::~ArrayListIteratorImpl() noexcept = default;
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
-    return this->indexer != this->end;
+    return indexer != end;
 }
 
 void ArrayListImpl::ArrayListIteratorImpl::next0() const {
-    ++ this->indexer;
+    ++ indexer;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ArrayListImpl::ArrayListIteratorImpl::each0() const {
-    if (this->isFirst) {
-        this->isFirst = false;
-        return !this->arrayList->isEmpty0();
+    if (isFirst) {
+        isFirst = false;
+        return !arrayList->isEmpty0();
     }
 
-    this->next0();
-    return this->hasNext0();
+    next0();
+    return hasNext0();
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference ArrayListImpl::ArrayListIteratorImpl::get0() const {
-    return generic_cast(*this->indexer);
+    return generic_cast(*indexer);
 }
 
 void ArrayListImpl::ArrayListIteratorImpl::reset0() const {
-    this->isFirst = true;
-    this->indexer = this->arrayList->elements;
+    isFirst = true;
+    indexer = arrayList->elements;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size ArrayListImpl::ArrayListIteratorImpl::count0() const {
-    return this->arrayList->getLength0();
+    return arrayList->getLength0();
 }
 
 ArrayListImpl::ArrayListImpl(const Size maxCount, const GenericOperator genericOperator) :
-    length(0), elements(new void *[maxCount]), maxCount(maxCount),
-    genericOperator(genericOperator), iterator(null) {}
+    length(0), elements(new void*[maxCount]), maxCount(maxCount), genericOperator(genericOperator), iterator(null) {}
 
-ArrayListImpl::ArrayListImpl(const ArrayListImpl &other) :
-    length(other.length), elements(new void *[other.maxCount]), maxCount(other.maxCount),
-    genericOperator(other.genericOperator), iterator(null) {
+ArrayListImpl::ArrayListImpl(const ArrayListImpl& other) :
+    length(other.length), elements(new void*[other.maxCount]), maxCount(other.maxCount), genericOperator(other.genericOperator), iterator(null) {
     assert(other.maxCount >= other.length);
     for (Size index = 0; index < other.length; ++ index) {
-        this->elements[index] = this->genericOperator.allocate(generic_cast(other.elements[index]));
+        elements[index] = genericOperator.allocate(generic_cast(other.elements[index]));
     }
 }
 
 ArrayListImpl::~ArrayListImpl() noexcept {
-    while (this->length > 0) {
-        this->remove0();
+    while (length > 0) {
+        remove0();
     }
-    delete[] this->elements;
-    delete this->iterator;
+    delete[] elements;
+    delete iterator;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size ArrayListImpl::getLength0() const {
-    return this->length;
+    return length;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ArrayListImpl::isEmpty0() const {
-    return this->length == 0;
+    return length == 0;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference ArrayListImpl::get0(Size index) const {
-    return generic_cast(this->elements[index]);
+    return generic_cast(elements[index]);
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ArrayListImpl::contain0(GenericReference value) const {
-    for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericOperator.equals(generic_cast(this->elements[index]), value)) {
+    for (Size index = 0; index < length; ++ index) {
+        if (genericOperator.equals(generic_cast(elements[index]), value)) {
             return true;
         }
     }
@@ -124,38 +121,38 @@ bool ArrayListImpl::contain0(GenericReference value) const {
 }
 
 void ArrayListImpl::add0(GenericReference element) {
-    if (this->length == this->maxCount) {
-        this->expand0(this->maxCount);
+    if (length == maxCount) {
+        expand0(maxCount);
     }
 
-    this->elements[this->length] = this->genericOperator.allocate(element);
-    ++ this->length;
+    elements[length] = genericOperator.allocate(element);
+    ++ length;
 }
 
 void ArrayListImpl::remove0() {
-    this->genericOperator.destroy(this->elements[-- this->length]);
+    genericOperator.destroy(elements[--length]);
 }
 
 void ArrayListImpl::expand0(const Size size) {
-    Size count = this->maxCount + size;
-    void **array = new void *[count];
+    Size count = maxCount + size;
+    void** array = new void*[count];
 
-    arrayCopy(array, this->elements, this->length, sizeof(void *));
-    delete[] this->elements;
+    arrayCopy(array, elements, length, sizeof(void*));
+    delete[] elements;
 
-    this->elements = array;
-    this->maxCount = count;
+    elements = array;
+    maxCount = count;
 }
 
 void ArrayListImpl::shrink0(const Size size) {
-    Size count = this->maxCount - size;
-    assert(count > this->length);
+    Size count = maxCount - size;
+    assert(count > length);
 
-    void **array = new void *[count];
+    void** array = new void*[count];
 
-    arrayCopy(array, this->elements, count, sizeof(void *));
-    delete[] this->elements;
+    arrayCopy(array, elements, count, sizeof(void*));
+    delete[] elements;
 
-    this->elements = array;
-    this->maxCount = count;
+    elements = array;
+    maxCount = count;
 }

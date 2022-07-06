@@ -1,5 +1,3 @@
-# -*- Git Ignore File -*-
-
 # Ignore the build folder.
 build/
 

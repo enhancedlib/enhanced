@@ -22,27 +22,21 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/math/Math.h"
+#include "Enhanced/basic/math/Math.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
 
-using EnhancedBasic::Math::Math;
+using Enhanced::basic::math::Math;
 
-Math::Math() = default;
+template <>
+uint8 Math::abs(int8 number);
 
-uint8 Math::abs(int8 number) {
-    return (number < 0) ? -number : number;
-}
+template <>
+uint16 Math::abs(int16 number);
 
-uint16 Math::abs(int16 number) {
-    return (number < 0) ? -number : number;
-}
+template <>
+uint32 Math::abs(int32 number);
 
-uint32 Math::abs(int32 number) {
-    return (number < 0) ? -number : number;
-}
-
-uint64 Math::abs(int64 number) {
-    return (number < 0) ? -number : number;
-}
+template <>
+uint64 Math::abs(int64 number);

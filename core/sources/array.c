@@ -22,32 +22,32 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedCore/array.h"
+#include "Enhanced/core/array.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/assert.h"
-#include "EnhancedCore/memory.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/assert.h"
+#include "Enhanced/core/memory.h"
 
-$RetRequiresRelease()
-void *arrayNew(const Size length, const Size sizeOfType) {
+RetRequiresRelease()
+void* arrayNew(const Size length, const Size sizeOfType) {
     return memoryAlloc(length * sizeOfType);
 }
 
-void arraySetInt(void *const array, const Size count, int64 value, const Size sizeOfType) {
+void arraySetInt(void* const array, const Size count, int64 value, const Size sizeOfType) {
     arraySet(array, count, &value, sizeOfType);
 }
 
-void arraySet(void *const array, const Size count, void *const address, const Size sizeOfType) {
+void arraySet(void* const array, const Size count, void* const address, const Size sizeOfType) {
     assert(array != null), assert(count > 0), assert(sizeOfType > 0);
 
     Size size = count * sizeOfType;
 
     for (Size index = 0; index < size; ++ index) {
-        ((Byte *) array)[index] = ((Byte *) address)[index % sizeOfType];
+        ((Byte*) array)[index] = ((Byte*) address)[index % sizeOfType];
     }
 }
 
-void arrayCopy(void *const destArray, void *const srcArray, const Size count, const Size sizeOfType) {
+void arrayCopy(void* const destArray, void* const srcArray, const Size count, const Size sizeOfType) {
     memoryCopy(destArray, srcArray, count * sizeOfType);
 }

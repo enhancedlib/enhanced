@@ -22,70 +22,70 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/collection/refer/ReferLinkedList.h"
+#include "Enhanced/basic/collection/refer/ReferLinkedList.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/annotations.h"
-#include "EnhancedCore/assert.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/annotations.h"
+#include "Enhanced/core/assert.h"
 
-#include "EnhancedBasic/generic/Generic.h"
+#include "Enhanced/basic/util/Generic.h"
 
-using BasicGenericImpl::collection::refer::ReferLinkedListImpl;
+using EnhancedGenericImpl::basic::collection::refer::ReferLinkedListImpl;
 
 ReferLinkedListImpl::ReferLinkedListIteratorImpl::
 ReferLinkedListIteratorImpl(const ReferLinkedListImpl* const referLinkedList) :
     referLinkedList(referLinkedList), isFirst(true) {
-    this->referLinkedList->indexer = this->referLinkedList->first;
+    referLinkedList->indexer = referLinkedList->first;
 }
 
 ReferLinkedListImpl::ReferLinkedListIteratorImpl::~ReferLinkedListIteratorImpl() noexcept = default;
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::hasNext0() const {
-    if (this->isFirst) {
-        this->isFirst = false;
+    if (isFirst) {
+        isFirst = false;
         return true;
     } else {
-        return this->referLinkedList->indexer != null;
+        return referLinkedList->indexer != null;
     }
 }
 
 void ReferLinkedListImpl::ReferLinkedListIteratorImpl::next0() const {
-    ReferLinkedListImpl::nextNode(this->referLinkedList->indexer);
+    nextNode(referLinkedList->indexer);
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::each0() const {
-    if (this->isFirst) {
-        this->isFirst = false;
-        return !this->referLinkedList->isEmpty0();
+    if (isFirst) {
+        isFirst = false;
+        return !referLinkedList->isEmpty0();
     }
 
-    this->next0();
-    return this->hasNext0();
+    next0();
+    return hasNext0();
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference ReferLinkedListImpl::ReferLinkedListIteratorImpl::get0() const {
-    return generic_cast(this->referLinkedList->indexer->value);
+    return generic_cast(referLinkedList->indexer->value);
 }
 
 void ReferLinkedListImpl::ReferLinkedListIteratorImpl::reset0() const {
-    this->isFirst = true;
-    this->referLinkedList->indexer = this->referLinkedList->first;
+    isFirst = true;
+    referLinkedList->indexer = referLinkedList->first;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size ReferLinkedListImpl::ReferLinkedListIteratorImpl::count0() const {
-    return this->referLinkedList->getLength0();
+    return referLinkedList->getLength0();
 }
 
-ReferLinkedListImpl::Node*& ReferLinkedListImpl::nextNode(Node * &node) {
+ReferLinkedListImpl::Node*& ReferLinkedListImpl::nextNode(Node*& node) {
     return node = node->next;
 }
 
-ReferLinkedListImpl::Node*& ReferLinkedListImpl::backNode(Node * &node) {
+ReferLinkedListImpl::Node*& ReferLinkedListImpl::backNode(Node*& node) {
     return node = node->back;
 }
 
@@ -93,130 +93,130 @@ ReferLinkedListImpl::ReferLinkedListImpl(const GenericOperator genericOperator) 
     first(null), last(null), indexer(null), length(0),
     genericOperator(genericOperator), iterator(null) {}
 
-ReferLinkedListImpl::ReferLinkedListImpl(const ReferLinkedListImpl & other) :
+ReferLinkedListImpl::ReferLinkedListImpl(const ReferLinkedListImpl& other) :
     first(null), last(null), indexer(null), length(0),
     genericOperator(other.genericOperator), iterator(null) {
-    this->indexer = other.first;
+    indexer = other.first;
     for (Size count = 0; count < other.length; ++ count) {
-        this->addLast0(generic_cast(this->indexer->value));
-        ReferLinkedListImpl::nextNode(this->indexer);
+        addLast0(generic_cast(indexer->value));
+        nextNode(indexer);
     }
 }
 
 ReferLinkedListImpl::~ReferLinkedListImpl() noexcept {
-    for (Size count = 1; count < this->length; ++ count) {
-        ReferLinkedListImpl::backNode(this->last);
-        delete this->last->next;
+    for (Size count = 1; count < length; ++ count) {
+        backNode(last);
+        delete last->next;
     }
 
-    delete this->last;
-    delete this->iterator;
+    delete last;
+    delete iterator;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size ReferLinkedListImpl::getLength0() const {
-    return this->length;
+    return length;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ReferLinkedListImpl::isEmpty0() const {
-    return this->length == 0;
+    return length == 0;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference ReferLinkedListImpl::getLast0() const {
-    return generic_cast(this->last->value);
+    return generic_cast(last->value);
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference ReferLinkedListImpl::getFirst0() const {
-    return generic_cast(this->first->value);
+    return generic_cast(first->value);
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference ReferLinkedListImpl::get0(const Size index) const {
-    if (index < this->length >> 1) {
-        this->indexer = this->first;
+    if (index < length >> 1) {
+        indexer = first;
         for (Size count = 0; count < index; ++ count) {
-            ReferLinkedListImpl::nextNode(this->indexer);
+            nextNode(indexer);
         }
     } else {
-        this->indexer = this->last;
-        for (Size count = this->length - 1; count > index; -- count) {
-            ReferLinkedListImpl::backNode(this->indexer);
+        indexer = last;
+        for (Size count = length - 1; count > index; --count) {
+            backNode(indexer);
         }
     }
 
-    return generic_cast(this->indexer->value);
+    return generic_cast(indexer->value);
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool ReferLinkedListImpl::contain0(GenericReference value) const {
-    this->indexer = this->first;
-    for (Size count = 0; count < this->length; ++ count) {
-        if (this->genericOperator.equals(generic_cast(this->indexer->value), value)) {
+    indexer = first;
+    for (Size count = 0; count < length; ++ count) {
+        if (genericOperator.equals(generic_cast(indexer->value), value)) {
             return true;
         }
-        this->indexer = this->indexer->next;
+        indexer = indexer->next;
     }
 
     return false;
 }
 
 void ReferLinkedListImpl::addLast0(GenericReference element) {
-    if (this->isEmpty0()) {
-        this->last = new Node();
-        this->last->value = &element;
-        this->first = this->last;
+    if (isEmpty0()) {
+        last = new Node();
+        last->value = &element;
+        first = last;
     } else {
-        this->last->next = new Node();
-        this->last->next->value = &element;
-        this->last->next->back = this->last;
-        ReferLinkedListImpl::nextNode(this->last);
+        last->next = new Node();
+        last->next->value = &element;
+        last->next->back = last;
+        nextNode(last);
     }
 
-    ++ this->length;
+    ++ length;
 }
 
 void ReferLinkedListImpl::removeLast0() {
-    assert(!this->isEmpty0());
+    assert(!isEmpty0());
 
-    if (this->length > 1) {
-        ReferLinkedListImpl::backNode(this->last);
-        delete this->last->next;
+    if (length > 1) {
+        backNode(last);
+        delete last->next;
     } else {
-        delete this->last;
-        this->last = this->first = null;
+        delete last;
+        last = first = null;
     }
 
-    -- this->length;
+    --length;
 }
 
 void ReferLinkedListImpl::addFirst0(GenericReference element) {
-    if (this->isEmpty0()) {
-        this->first = new Node();
-        this->first->value = &element;
-        this->last = this->first;
+    if (isEmpty0()) {
+        first = new Node();
+        first->value = &element;
+        last = first;
     } else {
-        this->first->back = new Node();
-        this->first->back->value = &element;
-        this->first->back->next = this->first;
-        ReferLinkedListImpl::backNode(this->first);
+        first->back = new Node();
+        first->back->value = &element;
+        first->back->next = first;
+        backNode(first);
     }
 
-    ++ this->length;
+    ++ length;
 }
 
 void ReferLinkedListImpl::removeFirst0() {
-    assert(!this->isEmpty0());
+    assert(!isEmpty0());
 
-    if (this->length > 1) {
-        ReferLinkedListImpl::nextNode(this->first);
-        delete this->first->back;
+    if (length > 1) {
+        nextNode(first);
+        delete first->back;
     } else {
-        delete this->first;
-        this->first = this->last = null;
+        delete first;
+        first = last = null;
     }
 
-    -- this->length;
+    --length;
 }

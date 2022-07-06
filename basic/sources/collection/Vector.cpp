@@ -22,92 +22,92 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include "EnhancedBasic/collection/Vector.h"
+#include "Enhanced/basic/collection/Vector.h"
 
-#include "EnhancedCore/defines.h"
-#include "EnhancedCore/types.h"
-#include "EnhancedCore/annotations.h"
-#include "EnhancedCore/assert.h"
+#include "Enhanced/core/defines.h"
+#include "Enhanced/core/types.h"
+#include "Enhanced/core/annotations.h"
+#include "Enhanced/core/assert.h"
 
-#include "EnhancedBasic/generic/Generic.h"
+#include "Enhanced/basic/util/Generic.h"
 
-using BasicGenericImpl::collection::VectorImpl;
+using EnhancedGenericImpl::basic::collection::VectorImpl;
 
-VectorImpl::VectorIteratorImpl::VectorIteratorImpl(const VectorImpl *const vector) :
+VectorImpl::VectorIteratorImpl::VectorIteratorImpl(const VectorImpl* const vector) :
     vector(vector), indexer(vector->elements), isFirst(true),
     end(vector->genericOperator.index(vector->elements, vector->getLength0())) {}
 
 VectorImpl::VectorIteratorImpl::~VectorIteratorImpl() noexcept = default;
 
-$RetNotIgnored()
+RetNotIgnored()
 bool VectorImpl::VectorIteratorImpl::hasNext0() const {
-    return this->indexer != this->end;
+    return indexer != end;
 }
 
 void VectorImpl::VectorIteratorImpl::next0() const {
-    this->indexer = this->vector->genericOperator.index(this->indexer, 1);
+    indexer = vector->genericOperator.index(indexer, 1);
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool VectorImpl::VectorIteratorImpl::each0() const {
-    if (this->isFirst) {
-        this->isFirst = false;
-        return !this->vector->isEmpty0();
+    if (isFirst) {
+        isFirst = false;
+        return !vector->isEmpty0();
     }
 
-    this->next0();
-    return this->hasNext0();
+    next0();
+    return hasNext0();
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference VectorImpl::VectorIteratorImpl::get0() const {
-    return generic_cast(this->indexer);
+    return generic_cast(indexer);
 }
 
 void VectorImpl::VectorIteratorImpl::reset0() const {
-    this->isFirst = true;
-    this->indexer = this->vector->elements;
+    isFirst = true;
+    indexer = vector->elements;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size VectorImpl::VectorIteratorImpl::count0() const {
-    return this->vector->getLength0();
+    return vector->getLength0();
 }
 
 VectorImpl::VectorImpl(const Size maxCount, const GenericOperator genericOperator) :
     maxCount(maxCount), length(0), elements(genericOperator.allocateArray(maxCount)),
     genericOperator(genericOperator), iterator(null) {}
 
-VectorImpl::VectorImpl(const VectorImpl &other) :
+VectorImpl::VectorImpl(const VectorImpl& other) :
     maxCount(other.maxCount), length(other.length), elements(other.genericOperator.allocateArray(other.maxCount)),
     genericOperator(other.genericOperator), iterator(null) {
-    this->genericOperator.copyArray(this->elements, other.elements, other.length);
+    genericOperator.copyArray(elements, other.elements, other.length);
 }
 
 VectorImpl::~VectorImpl() noexcept {
-    operator delete(this->elements);
-    delete this->iterator;
+    operator delete(elements);
+    delete iterator;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 Size VectorImpl::getLength0() const {
-    return this->length;
+    return length;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool VectorImpl::isEmpty0() const {
-    return this->length == 0;
+    return length == 0;
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 GenericReference VectorImpl::get0(const Size index) const {
-    return this->genericOperator.getElement(this->elements, index);
+    return genericOperator.getElement(elements, index);
 }
 
-$RetNotIgnored()
+RetNotIgnored()
 bool VectorImpl::contain0(GenericReference value) const {
-    for (Size index = 0; index < this->length; ++ index) {
-        if (this->genericOperator.equals(this->get0(index), value)) {
+    for (Size index = 0; index < length; ++index) {
+        if (genericOperator.equals(get0(index), value)) {
             return true;
         }
     }
@@ -116,38 +116,38 @@ bool VectorImpl::contain0(GenericReference value) const {
 }
 
 void VectorImpl::add0(GenericReference element) {
-    if (this->length == this->maxCount) {
-        this->expand0(this->maxCount);
+    if (length == maxCount) {
+        expand0(maxCount);
     }
 
-    this->genericOperator.setElement(this->elements, this->length, element);
-    ++ this->length;
+    genericOperator.setElement(elements, length, element);
+    ++length;
 }
 
 void VectorImpl::remove0() {
-    -- this->length;
+    --length;
 }
 
 void VectorImpl::expand0(const Size size) {
-    Size count = this->maxCount + size;
-    void *array = this->genericOperator.allocateArray(count);
+    Size count = maxCount + size;
+    void* array = genericOperator.allocateArray(count);
 
-    this->genericOperator.moveArray(array, this->elements, this->length);
-    operator delete(this->elements);
+    genericOperator.moveArray(array, elements, length);
+    operator delete(elements);
 
-    this->elements = array;
-    this->maxCount = count;
+    elements = array;
+    maxCount = count;
 }
 
 void VectorImpl::shrink0(const Size size) {
-    Size count = this->maxCount - size;
-    assert(count > this->length);
+    Size count = maxCount - size;
+    assert(count > length);
 
-    void *array = this->genericOperator.allocateArray(count);
+    void* array = genericOperator.allocateArray(count);
 
-    this->genericOperator.moveArray(array, this->elements, this->length);
-    operator delete(this->elements);
+    genericOperator.moveArray(array, elements, length);
+    operator delete(elements);
 
-    this->elements = array;
-    this->maxCount = count;
+    elements = array;
+    maxCount = count;
 }
