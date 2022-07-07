@@ -153,7 +153,7 @@ namespace Enhanced::basic::collection::refer {
 #pragma warning(disable: 4584)
     template <typename Type>
     class ReferLinkedList final : public Collection<Type>, public ReferList<Type>, public ReferDeque<Type>,
-        private BasicGenericImpl::collection::refer::ReferLinkedListImpl {
+        private EnhancedGenericImpl::basic::collection::refer::ReferLinkedListImpl {
     #pragma warning(pop)
 #else // Non Microsoft Visual C++ Compiler
     template <typename Type>

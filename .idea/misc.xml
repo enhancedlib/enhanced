@@ -13,6 +13,8 @@
     <excludeRoots>
       <file path="$PROJECT_DIR$/.vs" />
       <file path="$PROJECT_DIR$/.vscode" />
+      <file path="$PROJECT_DIR$/build" />
+      <file path="$PROJECT_DIR$/release" />
     </excludeRoots>
   </component>
 </project>

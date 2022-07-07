@@ -29,9 +29,10 @@
 #include "Enhanced/core/annotations.h"
 
 namespace Enhanced::basic::collection {
-    template <typename Type>
-    class RandomAccess {
-        RetNotIgnored()
-        virtual Type& operator[](Size index) const = 0;
+    struct RandomAccess {
+    protected:
+        static Size DEFAULT_ARRAY_INIT_SIZE;
     };
+
+    Size RandomAccess::DEFAULT_ARRAY_INIT_SIZE = 255;
 }

@@ -157,7 +157,7 @@ namespace Enhanced::basic::collection {
 #pragma warning(disable: 4584)
     template <typename Type>
     class LinkedList final : public Collection<Type>, public List<Type>, public Deque<Type>,
-                             public BasicGenericImpl::collection::LinkedListImpl {
+                             public EnhancedGenericImpl::basic::collection::LinkedListImpl {
 #pragma warning(pop)
 #else // Non Microsoft Visual C++ Compiler
     template <typename Type>

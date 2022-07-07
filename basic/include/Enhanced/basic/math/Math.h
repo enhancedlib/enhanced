@@ -39,14 +39,11 @@ EXTERN_C_END
 
 namespace Enhanced::basic::math {
     class ENHANCED_BASIC_API Math final {
-    private:
-        Math() = default;
-
     public:
+        Math() = delete;
+
         template <typename NumberType, typename ReturnType>
-        static ReturnType abs(NumberType number) {
-            return (number < 0) ? -number : number;
-        }
+        static ReturnType abs(NumberType number);
     };
 }
 

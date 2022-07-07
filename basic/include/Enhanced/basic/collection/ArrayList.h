@@ -126,7 +126,7 @@ namespace EnhancedGenericImpl::basic::collection {
 
 namespace Enhanced::basic::collection {
     template <typename Type>
-    class ArrayList final : public List<Type>, public RandomAccess<Type>, private EnhancedGenericImpl::basic::collection::ArrayListImpl {
+    class ArrayList final : public List<Type>, public RandomAccess, private EnhancedGenericImpl::basic::collection::ArrayListImpl {
     private:
         using ArrayListImpl = EnhancedGenericImpl::basic::collection::ArrayListImpl;
 
@@ -181,7 +181,7 @@ namespace Enhanced::basic::collection {
         }
 
     public:
-        inline ArrayList() : ArrayListImpl(UINT8_MAX, {allocate, destroy, equals}) {}
+        inline ArrayList() : ArrayListImpl(DEFAULT_ARRAY_INIT_SIZE, {allocate, destroy, equals}) {}
 
         explicit inline ArrayList(Size maxCount) : ArrayListImpl(maxCount, {allocate, destroy, equals}) {}
 

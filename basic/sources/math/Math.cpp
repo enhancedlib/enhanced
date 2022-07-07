@@ -29,14 +29,12 @@
 
 using Enhanced::basic::math::Math;
 
-template <>
-uint8 Math::abs(int8 number);
+template <typename NumberType, typename ReturnType>
+ReturnType Math::abs(NumberType number) {
+    return (number < 0) ? -number : number;
+}
 
-template <>
-uint16 Math::abs(int16 number);
-
-template <>
-uint32 Math::abs(int32 number);
-
-template <>
-uint64 Math::abs(int64 number);
+template <> uint8 Math::abs(int8 number);
+template <> uint16 Math::abs(int16 number);
+template <> uint32 Math::abs(int32 number);
+template <> uint64 Math::abs(int64 number);

@@ -122,13 +122,12 @@ namespace EnhancedGenericImpl::basic::collection::refer {
 
 namespace Enhanced::basic::collection::refer {
     template <typename Type>
-    class ReferArrayList final : public ReferList<Type>, public RandomAccess<Type>,
+    class ReferArrayList final : public ReferList<Type>, public RandomAccess,
                                  private EnhancedGenericImpl::basic::collection::refer::ReferArrayListImpl {
     private:
         using ReferArrayListImpl = EnhancedGenericImpl::basic::collection::refer::ReferArrayListImpl;
 
-        class ReferArrayListIterator : public core::Iterator<Type>,
-                                       private ReferArrayListImpl::ReferArrayListIteratorImpl {
+        class ReferArrayListIterator : public core::Iterator<Type>, private ReferArrayListImpl::ReferArrayListIteratorImpl {
             friend struct core::Iterable<Type>;
 
         public:
@@ -170,7 +169,7 @@ namespace Enhanced::basic::collection::refer {
         }
 
     public:
-        inline ReferArrayList() : ReferArrayListImpl(UINT8_MAX, {equals}) {};
+        inline ReferArrayList() : ReferArrayListImpl(DEFAULT_ARRAY_INIT_SIZE, {equals}) {};
 
         explicit inline ReferArrayList(Size maxCount) : ReferArrayListImpl(maxCount, {equals}) {}
 

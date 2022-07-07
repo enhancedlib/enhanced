@@ -134,7 +134,7 @@ namespace EnhancedGenericImpl::basic::collection::mixed {
 
 namespace Enhanced::basic::collection::mixed {
     template <typename Type>
-    class MixedArrayList final : public MixedList<Type>, public RandomAccess<Type>,
+    class MixedArrayList final : public MixedList<Type>, public RandomAccess,
                                  private EnhancedGenericImpl::basic::collection::mixed::MixedArrayListImpl {
     private:
         using MixedArrayListImpl = EnhancedGenericImpl::basic::collection::mixed::MixedArrayListImpl;
@@ -191,7 +191,7 @@ namespace Enhanced::basic::collection::mixed {
         }
 
     public:
-        inline MixedArrayList() : MixedArrayListImpl(UINT8_MAX, {allocate, destroy, equals}) {}
+        inline MixedArrayList() : MixedArrayListImpl(DEFAULT_ARRAY_INIT_SIZE, {allocate, destroy, equals}) {}
 
         explicit inline MixedArrayList(Size maxCount) : MixedArrayListImpl(maxCount, {allocate, destroy, equals}) {}
 

@@ -135,7 +135,7 @@ namespace EnhancedGenericImpl::basic::collection {
 
 namespace Enhanced::basic::collection {
     template <typename Type>
-    class Vector final : public List<Type>, public RandomAccess<Type>, private EnhancedGenericImpl::basic::collection::VectorImpl {
+    class Vector final : public List<Type>, public RandomAccess, private EnhancedGenericImpl::basic::collection::VectorImpl {
     private:
         using VectorImpl = EnhancedGenericImpl::basic::collection::VectorImpl;
 
@@ -210,7 +210,7 @@ namespace Enhanced::basic::collection {
         }
 
     public:
-        inline Vector() : VectorImpl(UINT8_MAX, {allocateArray, copyArray, moveArray, index, getElement, setElement, equals}) {}
+        inline Vector() : VectorImpl(DEFAULT_ARRAY_INIT_SIZE, {allocateArray, copyArray, moveArray, index, getElement, setElement, equals}) {}
 
         explicit inline Vector(Size maxCount) : VectorImpl(maxCount, {allocateArray, copyArray, moveArray, index, getElement, setElement, equals}) {}
 

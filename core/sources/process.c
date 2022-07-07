@@ -22,9 +22,9 @@
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
  */
 
-#include <process.h>
-
 #include "Enhanced/core/process.h"
+
+#include <process.h>
 
 void processExit(int status) {
     exit(status);
