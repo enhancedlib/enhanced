@@ -26,6 +26,16 @@
 
 #include "defines.h"
 
+// Prevents system definitions from conflicting with the definitions of this header file.
+#ifdef COMPILER_MSVC
+#include <limits.h>
+#else
+#define _INC_LIMITS
+#ifdef COMPILER_GCC
+#define _GCC_LIMITS_H_
+#endif // COMPILER_GCC
+#endif // COMPILER_MSVC
+
 typedef char int8;
 typedef short int16;
 typedef int int32;
@@ -126,72 +136,6 @@ typedef int NullType;
 #define null ((void*) 0)
 typedef void* NullType;
 #endif // CXX_LANGUAGE
-
-#ifndef SUPPRESS_DEFINES_UPPERCASE_TYPES
-
-#ifdef NULL
-#undef NULL
-#endif // NULL
-#ifdef TRUE
-#undef TRUE
-#endif // TRUE
-#ifdef FALSE
-#undef FALSE
-#endif // FALSE
-
-typedef int8 INT8;
-typedef int16 INT16;
-typedef int32 INT32;
-typedef int64 INT64;
-
-typedef uint8 UINT8;
-typedef uint16 UINT16;
-typedef uint32 UINT32;
-typedef uint64 UINT64;
-
-typedef float32 FLOAT32;
-typedef float64 FLOAT64;
-#ifndef COMPILER_MSVC // Non Microsoft Visual C++ Compiler
-#if defined(X86_PROCESSOR) // 32-bit
-typedef float96 FLOAT96;
-#elif defined(X64_PROCESSOR) // 64-bit
-typedef float128 FLOAT128;
-#endif // defined(X86_PROCESSOR)
-#endif // !COMPILER_MSVC
-
-typedef char CHAR;
-typedef short SHORT;
-typedef int INT;
-typedef long LONG;
-typedef llong LLONG;
-
-typedef uchar UCHAR;
-typedef ushort USHORT;
-typedef uint UINT;
-typedef ulong ULONG;
-typedef ullong ULLONG;
-
-typedef float FLOAT;
-typedef double DOUBLE;
-typedef ldouble LDOUBLE;
-
-typedef Byte BYTE_TYPE;
-typedef WChar WCHAR_TYPE;
-typedef Size SIZE_TYPE;
-
-typedef byte BYTE;
-typedef word WORD;
-typedef dword DWORD;
-typedef qword QWORD;
-
-typedef bool BOOL;
-#define TRUE true
-#define FALSE false
-
-#define NULL null
-typedef NullType NULL_TYPE;
-
-#endif // !SUPPRESS_DEFINES_UPPERCASE_TYPES
 
 #ifdef INT8_MIN
 #undef INT8_MIN
