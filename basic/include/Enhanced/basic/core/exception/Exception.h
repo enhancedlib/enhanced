@@ -72,59 +72,112 @@ ENHANCED_BASIC_API bool exceptionContextBlockStackIsEmpty();
 
 ENHANCED_BASIC_API void exceptionThrow(ExceptionType exception);
 
+/*
+ * // -*- TRY-CATCH-PASSED-END_TRY -*-
+ * {
+ *     ExceptionContextBlock _CONTEXT_BLOCK;
+ *     exceptionContextBlockStackPush(&_CONTEXT_BLOCK);
+ *     TryBlockCurrentStatus _TRY_BLOCK_CURRENT_STATUS = takeSnapshot(_CONTEXT_BLOCK.snapshot);
+ *     bool _IN_FINALLY = false;
+ *     ExceptionType* _EXCEPTION;
+ *     if (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred) {
+ *         _EXCEPTION = _CONTEXT_BLOCK.exception;
+ *     }
+ *     if (_TRY_BLOCK_CURRENT_STATUS == TryBlockInto) {
+ *         _TRY_BLOCK_CURRENT_STATUS = TryBlockNoException;
+ *         // -*- TRY block -*-
+ *     } else if ((exceptionCode) == -1 ||
+ *                (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred && _EXCEPTION->code == (exceptionCode))) {
+ *         ExceptionType* (variable) = _EXCEPTION;
+ *         _TRY_BLOCK_CURRENT_STATUS = TryBlockExceptionCapture;
+ *         // -*- CATCH block -*-
+ *     }
+ *     if (_TRY_BLOCK_CURRENT_STATUS == TryBlockNoException) {
+ *         // -*- PASSED block -*-
+ *     }
+ *     _IN_FINALLY = true;
+ *     {
+ *         // -*- FINALLY block -*-
+ *     }
+ *     exceptionContextBlockStackPopup();
+ *     if (_TRY_BLOCK_CURRENT_STATUS == TryBlockBreak) {
+ *         jumpTo(_CONTEXT_BLOCK.snapshot, TryBlockFunctionReturn);
+ *     }
+ *     if (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred) {
+ *         exceptionThrow(*_EXCEPTION);
+ *     }
+ * }
+ *
+ * // -*- RETURN_IN_TRY -*-
+ * {
+ *     if (_IN_FINALLY) {
+ *         exceptionContextBlockStackPopup();
+ *         return value;
+ *     }
+ *     Snapshot snapshot;
+ *     memoryCopy(snapshot, _CONTEXT_BLOCK.snapshot, sizeof(Snapshot));
+ *     if (takeSnapshot(_CONTEXT_BLOCK.snapshot) == TryBlockFunctionReturn) {
+ *         return value;
+ *     } else {
+ *         jumpTo(snapshot, TryBlockBreak);
+ *     }
+ * }
+ */
+
+// The macro definitions here is not indented to support IDE auto-indentation.
+
 #define TRY \
-    { \
-        ExceptionContextBlock _CONTEXT_BLOCK; \
-        exceptionContextBlockStackPush(&_CONTEXT_BLOCK); \
-        TryBlockCurrentStatus _TRY_BLOCK_CURRENT_STATUS = takeSnapshot(_CONTEXT_BLOCK.snapshot); \
-        bool _IN_FINALLY = false; \
-        ExceptionType* _EXCEPTION; \
-        if (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred) { \
-            _EXCEPTION = _CONTEXT_BLOCK.exception; \
-        } \
-        if (_TRY_BLOCK_CURRENT_STATUS == TryBlockInto) { \
-            _TRY_BLOCK_CURRENT_STATUS = TryBlockNoException;
+{ \
+ExceptionContextBlock _CONTEXT_BLOCK; \
+exceptionContextBlockStackPush(&_CONTEXT_BLOCK); \
+TryBlockCurrentStatus _TRY_BLOCK_CURRENT_STATUS = takeSnapshot(_CONTEXT_BLOCK.snapshot); \
+bool _IN_FINALLY = false; \
+ExceptionType* _EXCEPTION; \
+if (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred) { \
+_EXCEPTION = _CONTEXT_BLOCK.exception; \
+} \
+if (_TRY_BLOCK_CURRENT_STATUS == TryBlockInto) { \
+_TRY_BLOCK_CURRENT_STATUS = TryBlockNoException;
 
 #define CATCH(exceptionCode, variable) \
-        } else if ((exceptionCode) == -1 || \
-                   (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred && _EXCEPTION->code == (exceptionCode))) { \
-            ExceptionType* (variable) = _EXCEPTION; \
-            _TRY_BLOCK_CURRENT_STATUS = TryBlockExceptionCapture;
+} else if ((exceptionCode) == -1 || (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred && _EXCEPTION->code == (exceptionCode))) { \
+ExceptionType* (variable) = _EXCEPTION; \
+_TRY_BLOCK_CURRENT_STATUS = TryBlockExceptionCapture;
 
 #define PASSED \
-        } \
-        if (_TRY_BLOCK_CURRENT_STATUS == TryBlockNoException) {
+} \
+if (_TRY_BLOCK_CURRENT_STATUS == TryBlockNoException) {
 
 #define FINALLY \
-        } \
-        _IN_FINALLY = true; \
-        {
+} \
+_IN_FINALLY = true; \
+{
 
 #define END_TRY \
-        } \
-        exceptionContextBlockStackPopup(); \
-        if (_TRY_BLOCK_CURRENT_STATUS == TryBlockBreak) { \
-            jumpTo(_CONTEXT_BLOCK.snapshot, TryBlockFunctionReturn); \
-        } \
-        if (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred) { \
-            exceptionThrow(*_EXCEPTION); \
-        } \
-    } (void) 0
+} \
+exceptionContextBlockStackPopup(); \
+if (_TRY_BLOCK_CURRENT_STATUS == TryBlockBreak) { \
+jumpTo(_CONTEXT_BLOCK.snapshot, TryBlockFunctionReturn); \
+} \
+if (_TRY_BLOCK_CURRENT_STATUS == TryBlockExceptionOccurred) { \
+exceptionThrow(*_EXCEPTION); \
+} \
+} (void) 0
 
 #define RETURN_IN_TRY(value) \
-    { \
-        if (_IN_FINALLY) { \
-            exceptionContextBlockStackPopup(); \
-            return value; \
-        } \
-        Snapshot snapshot; \
-        memoryCopy(snapshot, _CONTEXT_BLOCK.snapshot, sizeof(Snapshot)); \
-        if (takeSnapshot(_CONTEXT_BLOCK.snapshot) == TryBlockFunctionReturn) { \
-            return value; \
-        } else { \
-            jumpTo(snapshot, TryBlockBreak); \
-        } \
-    } (void) 0
+{ \
+if (_IN_FINALLY) { \
+exceptionContextBlockStackPopup(); \
+return value; \
+} \
+Snapshot snapshot; \
+memoryCopy(snapshot, _CONTEXT_BLOCK.snapshot, sizeof(Snapshot)); \
+if (takeSnapshot(_CONTEXT_BLOCK.snapshot) == TryBlockFunctionReturn) { \
+return value; \
+} else { \
+jumpTo(snapshot, TryBlockBreak); \
+} \
+} (void) 0
 
 #define THROW exceptionThrow
 
