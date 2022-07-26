@@ -1,5 +1,5 @@
                             Enhanced License
-                  Version 0.5.1, Last updated: 2022/04/07
+                  Version 0.5.2, Last updated: 2022/07/26
 
             Copyright © 2022 Liu Baihao. All rights reserved.
     https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt
@@ -11,40 +11,34 @@
 
  - (3) "Software" shall mean all parts of the software licensed under this License.
 
- - (4) "Another software based on the Software" shall mean a modified version of or
-       software that depends on this Software.
+ - (4) "Other software based on the Software" shall mean modified editions of the Software
+       and other software that depends on this Software.
 
-2. Notice of this License
- - This License is subject to change without notice.
+2. Notice of the License
+ - The License is subject to change without notice.
 
- - Everyone can copy this License, but CANNOT change it.
+ - Everyone can copy the License, but CANNOT change it.
 
 3. Permissions
- - Unless otherwise stated, anyone can deal in the Software
-   without restriction (except for the exceptions mentioned in the following paragraph),
+ - Unless otherwise stated, anyone can deal in the Software without restriction,
    including but not limited to use, copy, modify, merge, publish, or distribute.
 
- - You CANNOT receive any remuneration through the Software without permissions,
+ - You may not receive any remuneration through the Software without permissions,
    including but not limited to sale the Software, bundle other software for distribution
-   (another software based on the Software is not included).
+   (other software based on the Software is not included).
 
- - Any license, copyright notice, or agreement that accompanies
-   the distribution of the Software CANNOT be removed.
+ - You may not remove any licenses, copyright notices, or agreements in the Software
+   that accompany the distribution of the Software.
 
- - For another software based on the Software, you can use other licenses
-   (of course, you can also continue to use this License), add new copyright notices, etc.
-   But all licenses, copyright notices, and/or agreements
-   in this Software must be included in that software.
+ - Other software based on the Software shall indicate that it is based on the Software
+   and contains or indicates the License.
 
 4. Disclaimer
  - The Software is always provided "AS IS",
-   without warranty of any kind, express or implied,
-   including but not limited to the warranties of merchantability.
+   WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
 
- - THE SOFTWARE MAY PROVIDE THIRD-PARTY CONTENT, PRODUCT AND OTHER INFORMATION.
-   THE LICENSOR IS NOT RESPONSIBLE FOR ANY LOSS OR DAMAGE
-   CAUSED BY YOUR ACCESS TO OR USE OF THIRD-PARTY CONTENT, PRODUCTS, ETC.
-
- - FOR ANY LOSS OR DAMAGE CAUSED BY THE SOFTWARE, THE LICENSOR MAY PROVIDE POSSIBLE SOLUTIONS,
+ - FOR ANY LOSS OR DAMAGE CAUSED BY THE SOFTWARE OR YOUR ACCESS TO OR
+   USE OF THIRD-PARTY CONTENT, PRODUCTS, ETC, THE LICENSOR MAY PROVIDE POSSIBLE SOLUTIONS,
    BUT IT DOES NOT MEAN THAT THE LICENSOR WILL DEFINITELY SOLVE THE PROBLEM.
    IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIMS, DAMAGES OR OTHER LIABILITIES.
