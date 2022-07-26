@@ -9,7 +9,6 @@
  * The Software is always provided "AS IS",
  * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
- *
  */
 
 #pragma once
