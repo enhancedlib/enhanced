@@ -1,38 +1,28 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ *
  * This software is licensed under Enhanced License.
- *
- * This copyright notice is subject to change without notice.
- *
- * This software is a free software, everyone can change,
- * copy, publication, demonstrate, use, etc.
- *
- * This software and documentation may provide
- * third-party content, product and other information.
- * The Licensor is not responsible for any loss or damage
- * caused by your access to or use of third-party content, products, etc.
- *
- * For any loss or damage caused by this software,
- * the licensor may provide possible solutions,
- * but it does not mean that the licensor will definitely solve the problem.
- * In no event shall the licensor be liable for any claims,
- * damages or other liabilities.
- *
+ * You may not use this file except in compliance with the License.
  * You should see a copy of Enhanced License in this software, if not, visit
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ *
+ * The Software is always provided "AS IS",
+ * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
  */
 
-#include "Enhanced/basic/collection/refer/ReferArrayList.h"
+#include "enhanced/basic/collection/refer/ReferArrayList.h"
 
-#include "Enhanced/core/defines.h"
-#include "Enhanced/core/types.h"
-#include "Enhanced/core/annotations.h"
-#include "Enhanced/core/array.h"
-#include "Enhanced/core/assert.h"
+#include "enhanced/core/defines.h"
+#include "enhanced/core/types.h"
+#include "enhanced/core/annotations.h"
+#include "enhanced/core/array.h"
+#include "enhanced/core/assert.h"
 
-#include "Enhanced/basic/util/Generic.h"
+#include "enhanced/basic/util/generic.h"
 
-using EnhancedGenericImpl::basic::collection::refer::ReferArrayListImpl;
+using enhanced::basic::generic_impl::collection::refer::ReferArrayListImpl;
 
 ReferArrayListImpl::ReferArrayListIteratorImpl::
 ReferArrayListIteratorImpl(const ReferArrayListImpl* const referenceArrayList) :
@@ -41,16 +31,16 @@ ReferArrayListIteratorImpl(const ReferArrayListImpl* const referenceArrayList) :
 
 ReferArrayListImpl::ReferArrayListIteratorImpl::~ReferArrayListIteratorImpl() noexcept = default;
 
-RetNotIgnored()
+RetCannotIgnored()
 bool ReferArrayListImpl::ReferArrayListIteratorImpl::hasNext0() const {
     return indexer != end;
 }
 
 void ReferArrayListImpl::ReferArrayListIteratorImpl::next0() const {
-    ++ indexer;
+    ++indexer;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 bool ReferArrayListImpl::ReferArrayListIteratorImpl::each0() const {
     if (isFirst) {
         isFirst = false;
@@ -61,7 +51,7 @@ bool ReferArrayListImpl::ReferArrayListIteratorImpl::each0() const {
     return hasNext0();
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference ReferArrayListImpl::ReferArrayListIteratorImpl::get0() const {
     return generic_cast(*indexer);
 }
@@ -71,7 +61,7 @@ void ReferArrayListImpl::ReferArrayListIteratorImpl::reset0() const {
     indexer = referenceArrayList->elements;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 Size ReferArrayListImpl::ReferArrayListIteratorImpl::count0() const {
     return referenceArrayList->getLength0();
 }
@@ -84,7 +74,7 @@ ReferArrayListImpl::ReferArrayListImpl(const ReferArrayListImpl& other) :
     length(other.length), elements(new void* [other.maxCount]), maxCount(other.maxCount),
     genericOperator(other.genericOperator), iterator(null) {
     assert(other.maxCount >= other.length);
-    for (Size index = 0; index < other.length; ++ index) {
+    for (Size index = 0; index < other.length; ++index) {
         elements[index] = other.elements[index];
     }
 }
@@ -93,24 +83,24 @@ ReferArrayListImpl::~ReferArrayListImpl() noexcept {
     delete[] elements;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 Size ReferArrayListImpl::getLength0() const {
     return length;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 bool ReferArrayListImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference ReferArrayListImpl::get0(const Size index) const {
     return generic_cast(elements[index]);
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 bool ReferArrayListImpl::contain0(GenericReference value) const {
-    for (Size index = 0; index < length; ++ index) {
+    for (Size index = 0; index < length; ++index) {
         if (genericOperator.equals(generic_cast(elements[index]), value)) {
             return true;
         }
@@ -125,7 +115,7 @@ void ReferArrayListImpl::add0(GenericReference element) {
     }
 
     elements[length] = &element;
-    ++ length;
+    ++length;
 }
 
 void ReferArrayListImpl::remove0() {

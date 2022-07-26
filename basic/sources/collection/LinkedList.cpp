@@ -1,37 +1,27 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ *
  * This software is licensed under Enhanced License.
- *
- * This copyright notice is subject to change without notice.
- *
- * This software is a free software, everyone can change,
- * copy, publication, demonstrate, use, etc.
- *
- * This software and documentation may provide
- * third-party content, product and other information.
- * The Licensor is not responsible for any loss or damage
- * caused by your access to or use of third-party content, products, etc.
- *
- * For any loss or damage caused by this software,
- * the licensor may provide possible solutions,
- * but it does not mean that the licensor will definitely solve the problem.
- * In no event shall the licensor be liable for any claims,
- * damages or other liabilities.
- *
+ * You may not use this file except in compliance with the License.
  * You should see a copy of Enhanced License in this software, if not, visit
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ *
+ * The Software is always provided "AS IS",
+ * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
  */
 
-#include "Enhanced/basic/collection/LinkedList.h"
+#include "enhanced/basic/collection/LinkedList.h"
 
-#include "Enhanced/core/defines.h"
-#include "Enhanced/core/types.h"
-#include "Enhanced/core/annotations.h"
-#include "Enhanced/core/assert.h"
+#include "enhanced/core/defines.h"
+#include "enhanced/core/types.h"
+#include "enhanced/core/annotations.h"
+#include "enhanced/core/assert.h"
 
-#include "Enhanced/basic/util/Generic.h"
+#include "enhanced/basic/util/generic.h"
 
-using EnhancedGenericImpl::basic::collection::LinkedListImpl;
+using enhanced::basic::generic_impl::collection::LinkedListImpl;
 
 LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl* linkedList) :
     linkedList(linkedList), isFirst(true) {
@@ -40,7 +30,7 @@ LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListI
 
 LinkedListImpl::LinkedListIteratorImpl::~LinkedListIteratorImpl() noexcept = default;
 
-RetNotIgnored()
+RetCannotIgnored()
 bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
     if (isFirst) {
         isFirst = false;
@@ -54,7 +44,7 @@ void LinkedListImpl::LinkedListIteratorImpl::next0() const {
     nextNode(linkedList->indexer);
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 bool LinkedListImpl::LinkedListIteratorImpl::each0() const {
     if (isFirst) {
         isFirst = false;
@@ -65,7 +55,7 @@ bool LinkedListImpl::LinkedListIteratorImpl::each0() const {
     return hasNext0();
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference LinkedListImpl::LinkedListIteratorImpl::get0() const {
     return generic_cast(linkedList->indexer->value);
 }
@@ -75,7 +65,7 @@ void LinkedListImpl::LinkedListIteratorImpl::reset0() const {
     linkedList->indexer = linkedList->first;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 Size LinkedListImpl::LinkedListIteratorImpl::count0() const {
     return linkedList->getLength0();
 }
@@ -96,14 +86,14 @@ LinkedListImpl::LinkedListImpl(const LinkedListImpl& other) :
     first(null), last(null), indexer(null), length(0),
     genericOperator(other.genericOperator), iterator(null) {
     indexer = other.first;
-    for (Size count = 0; count < other.length; ++ count) {
+    for (Size count = 0; count < other.length; ++count) {
         addLast0(generic_cast(indexer->value));
         nextNode(indexer);
     }
 }
 
 LinkedListImpl::~LinkedListImpl() noexcept {
-    for (Size count = 1; count < length; ++ count) {
+    for (Size count = 1; count < length; ++count) {
         backNode(last);
 
         genericOperator.destroy(last->next->value);
@@ -118,31 +108,31 @@ LinkedListImpl::~LinkedListImpl() noexcept {
     delete iterator;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 Size LinkedListImpl::getLength0() const {
     return length;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 bool LinkedListImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference LinkedListImpl::getFirst0() const {
     return generic_cast(first->value);
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference LinkedListImpl::getLast0() const {
     return generic_cast(last->value);
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference LinkedListImpl::get0(const Size index) const {
     if (index < length >> 1) {
         indexer = first;
-        for (Size count = 0; count < index; ++ count) {
+        for (Size count = 0; count < index; ++count) {
             nextNode(indexer);
         }
     } else {
@@ -155,10 +145,10 @@ GenericReference LinkedListImpl::get0(const Size index) const {
     return generic_cast(indexer->value);
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 bool LinkedListImpl::contain0(GenericReference value) const {
     indexer = first;
-    for (Size count = 0; count < length; ++ count) {
+    for (Size count = 0; count < length; ++count) {
         if (genericOperator.equals(indexer->value, const_cast<void*&>(value))) {
             return true;
         }
@@ -180,7 +170,7 @@ void LinkedListImpl::addLast0(GenericReference element) {
         nextNode(last);
     }
 
-    ++ length;
+    ++length;
 }
 
 void LinkedListImpl::removeLast0() {
@@ -211,7 +201,7 @@ void LinkedListImpl::addFirst0(GenericReference element) {
         backNode(first);
     }
 
-    ++ length;
+    ++length;
 }
 
 void LinkedListImpl::removeFirst0() {

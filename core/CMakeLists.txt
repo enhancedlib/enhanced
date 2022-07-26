@@ -10,25 +10,25 @@ set(
     SOURCES
     sources/array.c
     sources/assert.c
-    sources/jump.c
     sources/memory.c
     sources/process.c
     sources/string.c
+    sources/string.cpp
 )
 
 set(
     HEADERS
-    include/Enhanced/core/module-info.h
-    include/Enhanced/core/annotations.h
-    include/Enhanced/core/array.h
-    include/Enhanced/core/assert.h
-    include/Enhanced/core/export.h
-    include/Enhanced/core/defines.h
-    include/Enhanced/core/jump.h
-    include/Enhanced/core/memory.h
-    include/Enhanced/core/process.h
-    include/Enhanced/core/string.h
-    include/Enhanced/core/types.h
+    include/enhanced/core/module-info.h
+    include/enhanced/core/annotations.h
+    include/enhanced/core/array.h
+    include/enhanced/core/assert.h
+    include/enhanced/core/export.h
+    include/enhanced/core/defines.h
+    include/enhanced/core/jump.h
+    include/enhanced/core/memory.h
+    include/enhanced/core/process.h
+    include/enhanced/core/string.h
+    include/enhanced/core/types.h
 )
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")

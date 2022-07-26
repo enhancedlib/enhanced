@@ -1,37 +1,28 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ *
  * This software is licensed under Enhanced License.
- *
- * This copyright notice is subject to change without notice.
- *
- * This software is a free software, everyone can change,
- * copy, publication, demonstrate, use, etc.
- *
- * This software and documentation may provide
- * third-party content, product and other information.
- * The Licensor is not responsible for any loss or damage
- * caused by your access to or use of third-party content, products, etc.
- *
- * For any loss or damage caused by this software,
- * the licensor may provide possible solutions,
- * but it does not mean that the licensor will definitely solve the problem.
- * In no event shall the licensor be liable for any claims,
- * damages or other liabilities.
- *
+ * You may not use this file except in compliance with the License.
  * You should see a copy of Enhanced License in this software, if not, visit
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ *
+ * The Software is always provided "AS IS",
+ * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
  */
 
 #include <malloc.h>
 
-#include "Enhanced/core/memory.h"
+#include "enhanced/core/memory.h"
 
-#include "Enhanced/core/defines.h"
-#include "Enhanced/core/annotations.h"
-#include "Enhanced/core/assert.h"
-#include "Enhanced/core/types.h"
+#include "enhanced/core/defines.h"
+#include "enhanced/core/types.h"
+#include "enhanced/core/annotations.h"
+#include "enhanced/core/assert.h"
+#include "enhanced/core/types.h"
 
-MustInspectResult RetRequiresRelease()
+MustInspectResult Nullable RetRequiresRelease()
 void* memoryAlloc(const Size size) {
     assert(size > 0);
 
@@ -44,11 +35,11 @@ void memoryFree(void* const pointer) {
     }
 }
 
-void memorySet(void* ptr, const Byte byte, const Size size) {
+void memorySet(void* ptr, const byte aByte, const Size size) {
     assert(ptr != null), assert(size > 0);
 
-    for (Size index = 0; index < size; ++ index) {
-        ((Byte*) ptr)[index] = byte;
+    for (Size index = 0; index < size; ++index) {
+        ((byte*) ptr)[index] = aByte;
     }
 }
 
@@ -58,11 +49,11 @@ void memoryCopy(void* destination, const void* const source, const Size size) {
     Size countBlock = size / sizeof(qword);
     Size countByte = size % sizeof(qword);
 
-    while ((countBlock--) > 0) {
+    while (countBlock-- > 0) {
         ((qword*) destination)[countBlock] = ((qword*) source)[countBlock];
     }
 
-    while ((countByte--) > 0) {
-        ((Byte*) destination)[countByte] = ((Byte*) source)[countByte];
+    while (countByte-- > 0) {
+        ((byte*) destination)[countByte] = ((byte*) source)[countByte];
     }
 }

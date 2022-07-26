@@ -1,34 +1,24 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ *
  * This software is licensed under Enhanced License.
- *
- * This copyright notice is subject to change without notice.
- *
- * This software is a free software, everyone can change,
- * copy, publication, demonstrate, use, etc.
- *
- * This software and documentation may provide
- * third-party content, product and other information.
- * The Licensor is not responsible for any loss or damage
- * caused by your access to or use of third-party content, products, etc.
- *
- * For any loss or damage caused by this software,
- * the licensor may provide possible solutions,
- * but it does not mean that the licensor will definitely solve the problem.
- * In no event shall the licensor be liable for any claims,
- * damages or other liabilities.
- *
+ * You may not use this file except in compliance with the License.
  * You should see a copy of Enhanced License in this software, if not, visit
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ *
+ * The Software is always provided "AS IS",
+ * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
  */
 
-#include "Enhanced/basic/math/LargeInteger.h"
+#include "enhanced/basic/math/LargeInteger.h"
 
-#include "Enhanced/core/defines.h"
-#include "Enhanced/core/types.h"
+#include "enhanced/core/defines.h"
+#include "enhanced/core/types.h"
 
-using Enhanced::basic::math::LargeInteger;
-using Enhanced::basic::core::String;
+using enhanced::basic::math::LargeInteger;
+using enhanced::basic::String;
 
 template <typename NumberType>
 LargeInteger LargeInteger::from(NumberType number) {
@@ -45,20 +35,20 @@ LargeInteger::LargeInteger(uint64 number) : bytes(null), isNegative(number < 0) 
     size = count;
 }
 
-LargeInteger::LargeInteger(const String& number) : bytes(new Byte[number.getLength()]), isNegative(false), size(number.getLength()) {}
+LargeInteger::LargeInteger(const String& number) : bytes(new byte[number.getLength()]), isNegative(false), size(number.getLength()) {}
 
 LargeInteger LargeInteger::add(LargeInteger number) {
-    return *this;
+    return self;
 }
 
 LargeInteger LargeInteger::sub(LargeInteger number) {
-    return *this;
+    return self;
 }
 
 LargeInteger LargeInteger::mul(LargeInteger number) {
-    return *this;
+    return self;
 }
 
 LargeInteger LargeInteger::div(LargeInteger number) {
-    return *this;
+    return self;
 }

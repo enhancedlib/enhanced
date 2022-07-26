@@ -1,37 +1,27 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ *
  * This software is licensed under Enhanced License.
- *
- * This copyright notice is subject to change without notice.
- *
- * This software is a free software, everyone can change,
- * copy, publication, demonstrate, use, etc.
- *
- * This software and documentation may provide
- * third-party content, product and other information.
- * The Licensor is not responsible for any loss or damage
- * caused by your access to or use of third-party content, products, etc.
- *
- * For any loss or damage caused by this software,
- * the licensor may provide possible solutions,
- * but it does not mean that the licensor will definitely solve the problem.
- * In no event shall the licensor be liable for any claims,
- * damages or other liabilities.
- *
+ * You may not use this file except in compliance with the License.
  * You should see a copy of Enhanced License in this software, if not, visit
  * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ *
+ * The Software is always provided "AS IS",
+ * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
  */
 
-#include "Enhanced/basic/collection/mixed/MixedLinkedList.h"
+#include "enhanced/basic/collection/mixed/MixedLinkedList.h"
 
-#include "Enhanced/core/defines.h"
-#include "Enhanced/core/types.h"
-#include "Enhanced/core/annotations.h"
-#include "Enhanced/core/assert.h"
+#include "enhanced/core/defines.h"
+#include "enhanced/core/types.h"
+#include "enhanced/core/annotations.h"
+#include "enhanced/core/assert.h"
 
-#include "Enhanced/basic/util/Generic.h"
+#include "enhanced/basic/util/generic.h"
 
-using EnhancedGenericImpl::basic::collection::mixed::MixedLinkedListImpl;
+using enhanced::basic::generic_impl::collection::mixed::MixedLinkedListImpl;
 
 MixedLinkedListImpl::MixedLinkedListIteratorImpl::
 MixedLinkedListIteratorImpl(const MixedLinkedListImpl* mixedLinkedList) :
@@ -41,7 +31,7 @@ MixedLinkedListIteratorImpl(const MixedLinkedListImpl* mixedLinkedList) :
 
 MixedLinkedListImpl::MixedLinkedListIteratorImpl::~MixedLinkedListIteratorImpl() noexcept = default;
 
-RetNotIgnored()
+RetCannotIgnored()
 bool MixedLinkedListImpl::MixedLinkedListIteratorImpl::hasNext0() const {
     if (isFirst) {
         isFirst = false;
@@ -55,7 +45,7 @@ void MixedLinkedListImpl::MixedLinkedListIteratorImpl::next0() const {
     nextNode(mixedLinkedList->indexer);
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 bool MixedLinkedListImpl::MixedLinkedListIteratorImpl::each0() const {
     if (isFirst) {
         isFirst = false;
@@ -66,7 +56,7 @@ bool MixedLinkedListImpl::MixedLinkedListIteratorImpl::each0() const {
     return hasNext0();
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference MixedLinkedListImpl::MixedLinkedListIteratorImpl::get0() const {
     return generic_cast(mixedLinkedList->indexer->value);
 }
@@ -76,7 +66,7 @@ void MixedLinkedListImpl::MixedLinkedListIteratorImpl::reset0() const {
     mixedLinkedList->indexer = mixedLinkedList->first;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 Size MixedLinkedListImpl::MixedLinkedListIteratorImpl::count0() const {
     return mixedLinkedList->getLength0();
 }
@@ -97,7 +87,7 @@ MixedLinkedListImpl::MixedLinkedListImpl(const MixedLinkedListImpl& other) :
     first(null), last(null), indexer(null), length(0),
     genericOperator(other.genericOperator), iterator(null) {
     indexer = other.first;
-    for (Size count = 0; count < other.length; ++ count) {
+    for (Size count = 0; count < other.length; ++count) {
         if (indexer->dynamic) {
             addLast0(generic_cast(indexer->value));
         } else {
@@ -108,7 +98,7 @@ MixedLinkedListImpl::MixedLinkedListImpl(const MixedLinkedListImpl& other) :
 }
 
 MixedLinkedListImpl::~MixedLinkedListImpl() noexcept {
-    for (Size count = 1; count < length; ++ count) {
+    for (Size count = 1; count < length; ++count) {
         backNode(last);
 
         if (last->next->dynamic) {
@@ -125,31 +115,31 @@ MixedLinkedListImpl::~MixedLinkedListImpl() noexcept {
     delete iterator;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 Size MixedLinkedListImpl::getLength0() const {
     return length;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 bool MixedLinkedListImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference MixedLinkedListImpl::getFirst0() const {
     return generic_cast(first->value);
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference MixedLinkedListImpl::getLast0() const {
     return generic_cast(last->value);
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 GenericReference MixedLinkedListImpl::get0(const Size index) const {
     if (index < length >> 1) {
         indexer = first;
-        for (Size count = 0; count < index; ++ count) {
+        for (Size count = 0; count < index; ++count) {
             nextNode(indexer);
         }
     } else {
@@ -162,10 +152,10 @@ GenericReference MixedLinkedListImpl::get0(const Size index) const {
     return generic_cast(indexer->value);
 }
 
-RetNotIgnored()
+RetCannotIgnored()
 bool MixedLinkedListImpl::contain0(GenericReference value) const {
     indexer = first;
-    for (Size count = 0; count < length; ++ count) {
+    for (Size count = 0; count < length; ++count) {
         if (genericOperator.equals(generic_cast(indexer->value), value)) {
             return true;
         }
@@ -189,7 +179,7 @@ void MixedLinkedListImpl::addLast0(GenericReference element) {
         nextNode(last);
     }
 
-    ++ length;
+    ++length;
 }
 
 void MixedLinkedListImpl::addLastReference0(GenericReference element) {
@@ -204,7 +194,7 @@ void MixedLinkedListImpl::addLastReference0(GenericReference element) {
         nextNode(last);
     }
 
-    ++ length;
+    ++length;
 }
 
 void MixedLinkedListImpl::removeLast0() {
@@ -241,7 +231,7 @@ void MixedLinkedListImpl::addFirst0(GenericReference element) {
         backNode(first);
     }
 
-    ++ length;
+    ++length;
 }
 
 void MixedLinkedListImpl::addFirstReference0(GenericReference element) {
@@ -256,7 +246,7 @@ void MixedLinkedListImpl::addFirstReference0(GenericReference element) {
         backNode(first);
     }
 
-    ++ length;
+    ++length;
 }
 
 void MixedLinkedListImpl::removeFirst0() {
