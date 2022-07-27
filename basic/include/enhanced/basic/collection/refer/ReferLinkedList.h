@@ -214,7 +214,7 @@ namespace enhanced::basic::collection::refer {
 
         RetRequiresRelease()
         inline ReferLinkedList<Type>* copy() const override {
-            return new ReferLinkedList<Type>(self);
+            return new ReferLinkedList<Type>(*this);
         }
 
         inline Iterator<Type>* iterator() const override {

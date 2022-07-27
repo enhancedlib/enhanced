@@ -37,17 +37,17 @@ LargeInteger::LargeInteger(uint64 number) : bytes(null), isNegative(number < 0) 
 LargeInteger::LargeInteger(const String& number) : bytes(new byte[number.getLength()]), isNegative(false), size(number.getLength()) {}
 
 LargeInteger LargeInteger::add(LargeInteger number) {
-    return self;
+    return *this;
 }
 
 LargeInteger LargeInteger::sub(LargeInteger number) {
-    return self;
+    return *this;
 }
 
 LargeInteger LargeInteger::mul(LargeInteger number) {
-    return self;
+    return *this;
 }
 
 LargeInteger LargeInteger::div(LargeInteger number) {
-    return self;
+    return *this;
 }

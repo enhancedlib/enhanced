@@ -29,7 +29,7 @@ EXTERN_C_START
 typedef struct ExceptionType {
     const char* message;
     uint code;
-    char* (*const traceback)(struct ExceptionType* self);
+    char* (*const getTraceback)(struct ExceptionType* self);
 } ExceptionType;
 
 typedef enum TryBlockCurrentStatus {
@@ -184,7 +184,7 @@ namespace enhanced::basic::exception {
         static bool enableExceptions;
 
         /*!
-         * Set whether to enable exceptions traceback of this library.
+         * Set whether to enable exceptions getTraceback of this library.
          *
          * true: Enable
          * false: Disable
@@ -202,7 +202,7 @@ namespace enhanced::basic::exception {
         virtual ~Exception() noexcept;
 
         RetCannotIgnored()
-        String traceback() noexcept;
+        String getTraceback() noexcept;
 
         RetCannotIgnored()
         const Exception* getCause() noexcept;

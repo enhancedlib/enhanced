@@ -193,7 +193,7 @@ namespace enhanced::basic::collection {
 
         RetRequiresRelease()
         inline ArrayList<Type>* copy() const override {
-            return new ArrayList<Type>(self);
+            return new ArrayList<Type>(*this);
         }
 
         RetCannotIgnored()

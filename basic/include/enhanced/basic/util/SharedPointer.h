@@ -97,16 +97,16 @@ namespace enhanced::basic::util {
 
         SharedPointer<Type>& operator=(Type* value) noexcept {
             assign0(value);
-            return self;
+            return *this;
         }
 
         SharedPointer<Type>& operator=(const SharedPointer<Type>& other) noexcept {
             assign0(other);
-            return self;
+            return *this;
         }
 
         SharedPointer<Type> operator+=(Size offset) noexcept {
-            SharedPointer<Type> copy = self;
+            SharedPointer<Type> copy = *this;
             static_cast<Type*>(copy.pointer) += offset;
             return copy;
         }
@@ -120,7 +120,7 @@ namespace enhanced::basic::util {
         }
 
         SharedPointer<Type> operator-=(Size offset) noexcept {
-            SharedPointer<Type> copy = self;
+            SharedPointer<Type> copy = *this;
             static_cast<Type*>(copy.pointer) -= offset;
             return copy;
         }

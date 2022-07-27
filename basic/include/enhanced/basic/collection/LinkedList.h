@@ -228,7 +228,7 @@ namespace enhanced::basic::collection {
 
         RetRequiresRelease()
         inline LinkedList<Type>* copy() const override {
-            return new LinkedList<Type>(self);
+            return new LinkedList<Type>(*this);
         }
 
         RetCannotIgnored()

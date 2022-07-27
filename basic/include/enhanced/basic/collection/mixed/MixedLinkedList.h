@@ -228,7 +228,7 @@ namespace enhanced::basic::collection::mixed {
 
         RetRequiresRelease()
         inline MixedLinkedList<Type>* copy() const override {
-            return new MixedLinkedList<Type>(self);
+            return new MixedLinkedList<Type>(*this);
         }
 
         inline Iterator<Type>* iterator() const override {

@@ -55,7 +55,7 @@ Size String::getLength() const {
 RetCannotIgnored()
 Size String::indexOf(const char ch) const {
     for (Size index = 0; index < length; ++index) {
-        if (self[index] == ch) {
+        if ((*this)[index] == ch) {
             return index;
         }
     }
@@ -68,7 +68,7 @@ Size String::indexOf(const String& string) const {
     Size substringIndex = 0;
 
     for (Size index = 0; index < length; ++index) {
-        self[index] == string[substringIndex] ? ++substringIndex : substringIndex = 0;
+        (*this)[index] == string[substringIndex] ? ++substringIndex : substringIndex = 0;
 
         if (substringIndex == string.length) {
             return index - string.length + 1;
@@ -81,7 +81,7 @@ Size String::indexOf(const String& string) const {
 RetCannotIgnored()
 Size String::lastIndexOf(const char ch) const {
     for (Size index = length - 1; index >= 0; --index) {
-        if (self[index] == ch) {
+        if ((*this)[index] == ch) {
             return index;
         }
     }
@@ -94,7 +94,7 @@ Size String::lastIndexOf(const String& string) const {
     Size substringIndex = string.length - 1;
 
     for (Size index = length - 1; index >= 0; --index) {
-        self[index] == string[substringIndex] ? --substringIndex : substringIndex = string.length - 1;
+        (*this)[index] == string[substringIndex] ? --substringIndex : substringIndex = string.length - 1;
 
         if (substringIndex == string.length) {
             return index;
@@ -109,7 +109,7 @@ Size String::indexOf(const char ch, const Size getN) const {
     Size indexN = 0;
 
     for (Size index = 0; index < length; ++index) {
-        if (self[index] == ch) {
+        if ((*this)[index] == ch) {
             if (getN == indexN) {
                 return index;
             } else {
@@ -127,7 +127,7 @@ Size String::indexOf(const String& string, const Size getN) const {
     Size substringIndex = 0;
 
     for (Size index = 0; index < length; ++index) {
-        self[index] == string[substringIndex] ? ++substringIndex : substringIndex = 0;
+        (*this)[index] == string[substringIndex] ? ++substringIndex : substringIndex = 0;
 
         if (substringIndex == string.length) {
             if (getN == indexN) {
@@ -146,7 +146,7 @@ List<Size>* String::indexOfAll(const char ch) const {
     List<Size>* allIndexes = new ArrayList<Size>();
 
     for (Size index = 0; index < length; ++index) {
-        if (self[index] == ch) {
+        if ((*this)[index] == ch) {
             allIndexes->add(index);
         }
     }
@@ -160,7 +160,7 @@ List<Size>* String::indexOfAll(const String& string) const {
     Size substringIndex = 0;
 
     for (Size index = 0; index < length; ++index) {
-        self[index] == string[substringIndex] ? ++substringIndex : (substringIndex = 0);
+        (*this)[index] == string[substringIndex] ? ++substringIndex : (substringIndex = 0);
 
         if (substringIndex == string.length) {
             allIndexes->add(index - string.length + 1);
@@ -180,11 +180,11 @@ char& String::operator[](const Size index) const {
 }
 
 bool String::operator==(const String& string) const {
-    return stringEqual(self, string);
+    return stringEqual(*this, string);
 }
 
 String String::operator+(const String& string) const {
-    String newString = self;
+    String newString = *this;
 
     if (string.length < 1) {
         return newString;
@@ -196,7 +196,7 @@ String String::operator+(const String& string) const {
 
 String String::append(const String& string) {
     if (string.length < 1) {
-        return self;
+        return *this;
     }
 
     Size newLength = length + string.length;
@@ -219,28 +219,28 @@ String String::append(const String& string) {
     length = newLength;
     value = charArray;
 
-    return self;
+    return *this;
 }
 
 String String::replace(const char oldChar, const char newChar) {
-    return self;
+    return *this;
 }
 
 String String::replace(const String& oldSubstring, const String& newSubstring) {
-    return self;
+    return *this;
 }
 
 String String::replace(char oldChar, const String& newSubstring) {
-    return self;
+    return *this;
 }
 
 String String::replace(const String& oldSubstring, char newChar) {
-    return self;
+    return *this;
 }
 
 String& String::operator=(const String& other) {
     if (this == &other) {
-        return self;
+        return *this;
     }
 
     if (!staticString) {
@@ -251,7 +251,7 @@ String& String::operator=(const String& other) {
     length = other.length;
     staticString = false;
 
-    return self;
+    return *this;
 }
 
 String& String::operator=(String&& other) noexcept {
@@ -263,7 +263,7 @@ String& String::operator=(String&& other) noexcept {
     length = other.length;
     staticString = true;
 
-    return self;
+    return *this;
 }
 
 String String::operator+=(const String& string) {

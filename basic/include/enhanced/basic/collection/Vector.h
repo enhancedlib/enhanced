@@ -222,7 +222,7 @@ namespace enhanced::basic::collection {
 
         RetRequiresRelease()
         inline Vector<Type>* copy() const override {
-            return new Vector<Type>(self);
+            return new Vector<Type>(*this);
         }
 
         RetCannotIgnored()

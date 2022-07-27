@@ -181,7 +181,7 @@ namespace enhanced::basic::collection::refer {
 
         RetRequiresRelease()
         inline ReferArrayList<Type>* copy() const override {
-            return new ReferArrayList<Type>(self);
+            return new ReferArrayList<Type>(*this);
         }
 
         inline Iterator<Type>* iterator() const override {

@@ -22,13 +22,13 @@
 
 static ExceptionContext* exceptionContextStack = null;
 
-static char* traceback(ExceptionType* self);
+static char* getTraceback(ExceptionType* self);
 
 ExceptionType newException(const uint exceptionCode, const char* const exceptionMessage) {
     ExceptionType exception = {
         .message = exceptionMessage,
         .code = exceptionCode,
-        .traceback = traceback
+        .getTraceback = getTraceback
     };
     return exception;
 }
@@ -50,7 +50,7 @@ bool exceptionContextStackIsEmpty() {
 
 void exceptionThrow(ExceptionType exception) {
     if (exceptionContextStackIsEmpty()) {
-        fprintf(stderr, exception.traceback(&exception));
+        fprintf(stderr, exception.getTraceback(&exception));
         processAbnormalAbort();
     } else {
         exceptionContextStack->exception = &exception;
@@ -58,6 +58,6 @@ void exceptionThrow(ExceptionType exception) {
     }
 }
 
-char* traceback(ExceptionType* self) {
+char* getTraceback(ExceptionType* self) {
     return (char*) self->message;
 }

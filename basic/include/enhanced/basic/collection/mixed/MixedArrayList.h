@@ -203,7 +203,7 @@ namespace enhanced::basic::collection::mixed {
 
         RetRequiresRelease()
         inline MixedArrayList<Type>* copy() const override {
-            return new MixedArrayList<Type>(self);
+            return new MixedArrayList<Type>(*this);
         }
 
         RetCannotIgnored()

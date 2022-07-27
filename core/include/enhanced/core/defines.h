@@ -130,10 +130,6 @@
 #define EXTERN_C_END
 #endif // CXX_LANGUAGE
 
-#ifdef CXX_LANGUAGE
-#define self (*this)
-#endif // CXX_LANGUAGE
-
 #if defined(C_LANGUAGE) && !defined(C_99_OR_MORE)
 #warning Shall use C11 or later
 #endif // defined(CXX_LANGUAGE) && !defined(CXX_11_OR_MORE)
