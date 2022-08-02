@@ -19,13 +19,13 @@
 #include "enhanced/basic/export.h"
 #include "enhanced/basic/String.h"
 
-#if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
+#if defined(C_LANGUAGE) || defined(ENHANCED_BASIC_C_MODE)
 
 EXTERN_C_START
 
 EXTERN_C_END
 
-#else // C++ language
+#else
 
 namespace enhanced::basic::math {
     class ENHANCED_BASIC_API LargeInteger {

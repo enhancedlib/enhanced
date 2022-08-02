@@ -24,46 +24,6 @@
 
 using enhanced::basic::generic_impl::collection::ArrayListImpl;
 
-ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* const arrayList) :
-    arrayList(arrayList), indexer(arrayList->elements), isFirst(true), end(arrayList->elements + arrayList->getLength0()) {}
-
-ArrayListImpl::ArrayListIteratorImpl::~ArrayListIteratorImpl() noexcept = default;
-
-RetCannotIgnored()
-bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
-    return indexer != end;
-}
-
-void ArrayListImpl::ArrayListIteratorImpl::next0() const {
-    ++indexer;
-}
-
-RetCannotIgnored()
-bool ArrayListImpl::ArrayListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !arrayList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
-}
-
-RetCannotIgnored()
-GenericReference ArrayListImpl::ArrayListIteratorImpl::get0() const {
-    return generic_cast(*indexer);
-}
-
-void ArrayListImpl::ArrayListIteratorImpl::reset0() const {
-    isFirst = true;
-    indexer = arrayList->elements;
-}
-
-RetCannotIgnored()
-Size ArrayListImpl::ArrayListIteratorImpl::count0() const {
-    return arrayList->getLength0();
-}
-
 ArrayListImpl::ArrayListImpl(const Size maxCount, const GenericOperator genericOperator) :
     length(0), elements(new void*[maxCount]), maxCount(maxCount), genericOperator(genericOperator), iterator(null) {}
 
@@ -83,22 +43,22 @@ ArrayListImpl::~ArrayListImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 Size ArrayListImpl::getLength0() const {
     return length;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool ArrayListImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference ArrayListImpl::get0(Size index) const {
     return generic_cast(elements[index]);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool ArrayListImpl::contain0(GenericReference value) const {
     for (Size index = 0; index < length; ++index) {
         if (genericOperator.equals(generic_cast(elements[index]), value)) {
@@ -144,4 +104,44 @@ void ArrayListImpl::shrink0(const Size size) {
 
     elements = array;
     maxCount = count;
+}
+
+ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* const arrayList) :
+    arrayList(arrayList), indexer(arrayList->elements), isFirst(true), end(arrayList->elements + arrayList->getLength0()) {}
+
+ArrayListImpl::ArrayListIteratorImpl::~ArrayListIteratorImpl() noexcept = default;
+
+RetCannotIgnored
+bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
+    return indexer != end;
+}
+
+void ArrayListImpl::ArrayListIteratorImpl::next0() const {
+    ++indexer;
+}
+
+RetCannotIgnored
+bool ArrayListImpl::ArrayListIteratorImpl::each0() const {
+    if (isFirst) {
+        isFirst = false;
+        return !arrayList->isEmpty0();
+    }
+
+    next0();
+    return hasNext0();
+}
+
+RetCannotIgnored
+GenericReference ArrayListImpl::ArrayListIteratorImpl::get0() const {
+    return generic_cast(*indexer);
+}
+
+void ArrayListImpl::ArrayListIteratorImpl::reset0() const {
+    isFirst = true;
+    indexer = arrayList->elements;
+}
+
+RetCannotIgnored
+Size ArrayListImpl::ArrayListIteratorImpl::count0() const {
+    return arrayList->getLength0();
 }

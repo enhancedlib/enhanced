@@ -18,7 +18,7 @@
 
 #include "enhanced/basic/export.h"
 
-#if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
+#if defined(C_LANGUAGE) || defined(ENHANCED_BASIC_C_MODE)
 
 EXTERN_C_START
 

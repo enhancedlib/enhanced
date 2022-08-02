@@ -18,7 +18,7 @@
 #include "enhanced/core/assert.h"
 #include "enhanced/core/memory.h"
 
-RetRequiresRelease()
+RetRequiresRelease
 char* stringNew(const Size length) {
     char* str = (char*) memoryAlloc((length + 1) * sizeof(char));
     if (str == null) {
@@ -29,7 +29,7 @@ char* stringNew(const Size length) {
     return str;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 Size stringLength(const char* const string) {
     assert(string != null);
 
@@ -39,7 +39,7 @@ Size stringLength(const char* const string) {
     return length;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool stringEqual(const char* const string1, const char* const string2) {
     Size length;
 
@@ -57,7 +57,7 @@ bool stringEqual(const char* const string1, const char* const string2) {
     }
 }
 
-RetRequiresRelease()
+RetRequiresRelease
 char* stringCopy(const char* const string) {
     assert(string != null);
 
@@ -68,12 +68,12 @@ char* stringCopy(const char* const string) {
         return null;
     }
 
-    memoryCopy(copy, string, length);
+    memoryCopy(copy, string, length + 1);
 
     return copy;
 }
 
-RetRequiresRelease()
+RetRequiresRelease
 char* stringResize(const char* const string, const Size newSize) {
     assert(string != null), assert(newSize > 1);
 

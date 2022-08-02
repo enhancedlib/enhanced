@@ -11,154 +11,78 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-/*!
- * This file provides annotations for APIs. \n
- * \n
- * Restrictive annotations don't affect compilation,
- * they don't have practical significance. \n
- * Attribute annotations may affect compilation.
- *
- * @note The annotation with round brackets has arguments.
- *
- * @verbatim
- *
- * Restrictive annotations:
- *
- *     Unsupported()        Indicates an environment not supported by the API.
- *
- *     Optional             Indicates the argument is optional.
- *
- *     Out                  Sets the argument inside the function and pass it out
- *                          The argument must be a pointer or reference.
- *
- *     InOut                Passes a argument and
- *                          sets the argument inside the function and pass it out.
- *
- *     OutNotIgnored        Sets the argument inside the function and pass it out.
- *                          Passed any should not ignore.
- *
- *     InOutRequired        Passes a argument and
- *                          sets the argument inside the function and pass it out.
- *                          Passed any should not ignore.
- *
- *     NotNull              Indicates the pointer cannot be null.
- *
- *     Unused               Unused argument.
- *
- *     ReferReturn          Indicates the return value should be treated
- *                          as a reference.
- *
- *     RetCannotIgnored()   The return value cannot be ignored.
- *
- *     RequiresRelease      Indicates the programmer release the pointer
- *                          (return value or argument).
- *
- *     RetRequiresRelease() Merges RetCannotIgnored() and RequiresRelease.
- *
- *     CaseFallThrough()    Suppress warning: "switch-case" statement without
- *                          break statement.
- *
- * Attribute annotations:
- *
- *     Attribute()          Adds an attribute to the API.
- *
- *     NoVtable             Virtual tables are not created for the class.
- *
- *     NoInline             Prevents the compiler from inlining
- *                          the function/method.
- *
- *     NoReturn             Indicates the function/method has no a return value.
- *
- * @endverbatim
- */
-
 #pragma once
 
 #include "defines.h"
 #include "types.h"
 
-// =============================Restrictive annotations============================
-
 #ifdef COMPILER_MSVC
-#pragma warning(disable: 4003)
 #include <sal.h>
-#endif // COMPILER_MSVC
-
-#define Unsupported(options)
-
-#ifdef COMPILER_MSVC
 
 #define Optional _In_opt_
 #define Out _Out_opt_
 #define InOut _Inout_opt_
-#define OutNotIgnored _Out_
+#define OutCannotIgnored _Out_
 #define InOutRequired  _Inout_
 
 #define NotNull _Notnull_
 #define Nullable _Maybenull_
 
 #define MustInspectResult _Must_inspect_result_
-#define SuccessWhen(options) _Success_ options
+#define SuccessIf(expression) _Success_(expression)
 
-#define When(options) _When_ options
+#define When(expression, annotations) _When_(expression, annotations)
 
 #else
-
-#define SuccessWhen_(expression)
-
-#define When_(expression, annotations)
 
 #define Optional
 #define Out
 #define InOut
-#define OutNotIgnored
+#define OutCannotIgnored
 #define InOutRequired
 
 #define NotNull
 #define Nullable
 
 #define MustInspectResult
-#define SuccessWhen(options) Success_ options
+#define SuccessIf(expression)
 
-#define When(options) When_ options
+#define When(expression, annotations)
 
 #endif // COMPILER_MSVC
+
+#define Unsupported(...)
 
 #define Unused [[maybe_unused]]
 
-#if defined(CXX_20_OR_MORE)
-#define RetCannotIgnored(options) [[nodiscard options]]
-#elif defined(CXX_17_OR_MORE) // C++17 or more
-#define RetCannotIgnored(options) [[nodiscard]]
-#elif defined(COMPILER_MSVC) // Microsoft Visual C++ Compiler
-#define RetCannotIgnored(options) _Check_return_
+#if defined(CXX_17_OR_MORE)
+#define RetCannotIgnored [[nodiscard]]
+#elif defined(COMPILER_MSVC)
+#define RetCannotIgnored _Check_return_
 #else
-#define RetCannotIgnored(options)
+#define RetCannotIgnored
 #endif // CXX_20_OR_MORE
 
-#define ReferReturn
+#if defined(CXX_20_OR_MORE)
+#define RetCannotIgnoredExt(cause) [[nodiscard(cause)]]
+#elif defined(CXX_17_OR_MORE)
+#define RetCannotIgnoredExt(cause) [[nodiscard]]
+#elif defined(COMPILER_MSVC)
+#define RetCannotIgnoredExt(cause) _Check_return_
+#else
+#define RetCannotIgnoredExt(cause)
+#endif // CXX_20_OR_MORE
 
-#define RequiresRelease
-
-#define RetRequiresRelease(options) RetCannotIgnored(options) RequiresRelease
+#define RetRequiresRelease RetCannotIgnoredExt("The return value needs to be released")
 
 #ifdef CXX_14_OR_MORE
-#define Deprecated(options) [[deprecated options]]
+#define Deprecated [[deprecated]]
 #else
-#define Deprecated(options)
+#define Deprecated
 #endif // CXX_14_OR_MORE
 
-// ==============================Attribute annotations=============================
-
-#ifdef COMPILER_MSVC
-#define Attribute(options) __declspec options
+#ifdef CXX_14_OR_MORE
+#define DeprecatedExt(message) [[deprecated(message)]]
 #else
-#define Attribute(options) __attribute__(options)
-#endif // COMPILER_MSVC
-
-#ifdef CXX_LANGUAGE
-#define NoVtable Attribute((novtable))
-#endif // CXX_LANGUAGE
-
-#define NoInline Attribute((noinline))
-#define NoReturn Attribute((noreturn))
+#define DeprecatedExt(message)
+#endif // CXX_14_OR_MORE

@@ -16,7 +16,7 @@
 #include "enhanced/core/defines.h"
 #include "enhanced/core/types.h"
 
-#if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
+#if defined(C_LANGUAGE) || defined(ENHANCED_BASIC_C_MODE)
 
 typedef enum StandardExceptions {
     Exception

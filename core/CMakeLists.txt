@@ -59,32 +59,32 @@ endif ()
 message("${PROMPT} Included directories: ${INCLUDE_DIRECTORIES}")
 
 install(DIRECTORY "include" DESTINATION "${CMAKE_INSTALL_PREFIX}")
-message("${PROMPT} Installs directory \"include\" to ${CMAKE_INSTALL_PREFIX}")
+message("${PROMPT} Set the installation directory for the \"include\" directory")
 
 string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
 string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE_UPPER)
 
-add_library(${MODULE_FULL_NAME}-Static STATIC ${SOURCES} ${HEADERS})
-message("${PROMPT} Adds target (static library) \"${MODULE_FULL_NAME}-Static\"")
+add_library(${MODULE_FULL_NAME}-static STATIC ${SOURCES} ${HEADERS})
+message("${PROMPT} Adds target (static library) \"${MODULE_FULL_NAME}-static\"")
 
-target_compile_definitions(${MODULE_FULL_NAME}-Static PUBLIC ${BUILD_TYPE_UPPER})
-target_include_directories(${MODULE_FULL_NAME}-Static PRIVATE ${INCLUDE_DIRECTORIES})
+target_compile_definitions(${MODULE_FULL_NAME}-static PUBLIC ${BUILD_TYPE_UPPER})
+target_include_directories(${MODULE_FULL_NAME}-static PRIVATE ${INCLUDE_DIRECTORIES})
 
-set_target_properties(${MODULE_FULL_NAME}-Static PROPERTIES OUTPUT_NAME ${MODULE_FULL_NAME})
+set_target_properties(${MODULE_FULL_NAME}-static PROPERTIES OUTPUT_NAME ${MODULE_FULL_NAME})
 if (WIN32)
-    set_target_properties(${MODULE_FULL_NAME}-Static PROPERTIES PREFIX "lib")
+    set_target_properties(${MODULE_FULL_NAME}-static PROPERTIES PREFIX "lib")
 endif ()
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    set_target_properties(${MODULE_FULL_NAME}-Static PROPERTIES POSTFIX "_d")
+    set_target_properties(${MODULE_FULL_NAME}-static PROPERTIES POSTFIX "_d")
 endif ()
 
 foreach (REQUIRES_MODULE_FULL_NAME IN ITEMS ${REQUIRES_MODULES})
-    target_link_libraries(${MODULE_FULL_NAME}-Static PRIVATE ${REQUIRES_MODULE_FULL_NAME}-Static)
+    target_link_libraries(${MODULE_FULL_NAME}-static PRIVATE ${REQUIRES_MODULE_FULL_NAME}-static)
     message("${PROMPT} The target \"${MODULE_FULL_NAME}\" links library \"${REQUIRES_MODULE_FULL_NAME}\"")
 endforeach ()
 
-install(TARGETS ${MODULE_FULL_NAME}-Static)
-message("${PROMPT} Installs target \"${MODULE_FULL_NAME}-Static\"")
+install(TARGETS ${MODULE_FULL_NAME}-static)
+message("${PROMPT} Set the installation directory for the target \"${MODULE_FULL_NAME}-static\"")
 
 add_library(${MODULE_FULL_NAME} SHARED ${SOURCES} ${HEADERS})
 message("${PROMPT} Adds target (dynamic library) \"${MODULE_FULL_NAME}\"")
@@ -108,6 +108,6 @@ foreach (REQUIRES_MODULE_FULL_NAME IN ITEMS ${REQUIRES_MODULES})
 endforeach ()
 
 install(TARGETS ${MODULE_FULL_NAME})
-message("${PROMPT} Installs target \"${MODULE_FULL_NAME}\"")
+message("${PROMPT} Set the installation directory for the target \"${MODULE_FULL_NAME}\"")
 
 message("${PROMPT} Module configuring done")

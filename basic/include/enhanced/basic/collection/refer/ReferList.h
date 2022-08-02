@@ -20,7 +20,7 @@
 #include "enhanced/basic/collection/Collection.h"
 #include "enhanced/basic/collection/List.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::collection::refer {
     template <typename Type>

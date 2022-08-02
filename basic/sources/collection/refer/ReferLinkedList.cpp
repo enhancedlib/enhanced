@@ -22,54 +22,6 @@
 
 using enhanced::basic::generic_impl::collection::refer::ReferLinkedListImpl;
 
-ReferLinkedListImpl::ReferLinkedListIteratorImpl::
-ReferLinkedListIteratorImpl(const ReferLinkedListImpl* const referLinkedList) :
-    referLinkedList(referLinkedList), isFirst(true) {
-    referLinkedList->indexer = referLinkedList->first;
-}
-
-ReferLinkedListImpl::ReferLinkedListIteratorImpl::~ReferLinkedListIteratorImpl() noexcept = default;
-
-RetCannotIgnored()
-bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::hasNext0() const {
-    if (isFirst) {
-        isFirst = false;
-        return true;
-    } else {
-        return referLinkedList->indexer != null;
-    }
-}
-
-void ReferLinkedListImpl::ReferLinkedListIteratorImpl::next0() const {
-    nextNode(referLinkedList->indexer);
-}
-
-RetCannotIgnored()
-bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !referLinkedList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
-}
-
-RetCannotIgnored()
-GenericReference ReferLinkedListImpl::ReferLinkedListIteratorImpl::get0() const {
-    return generic_cast(referLinkedList->indexer->value);
-}
-
-void ReferLinkedListImpl::ReferLinkedListIteratorImpl::reset0() const {
-    isFirst = true;
-    referLinkedList->indexer = referLinkedList->first;
-}
-
-RetCannotIgnored()
-Size ReferLinkedListImpl::ReferLinkedListIteratorImpl::count0() const {
-    return referLinkedList->getLength0();
-}
-
 ReferLinkedListImpl::Node*& ReferLinkedListImpl::nextNode(Node*& node) {
     return node = node->next;
 }
@@ -102,27 +54,27 @@ ReferLinkedListImpl::~ReferLinkedListImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 Size ReferLinkedListImpl::getLength0() const {
     return length;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool ReferLinkedListImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference ReferLinkedListImpl::getLast0() const {
     return generic_cast(last->value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference ReferLinkedListImpl::getFirst0() const {
     return generic_cast(first->value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference ReferLinkedListImpl::get0(const Size index) const {
     if (index < length >> 1) {
         indexer = first;
@@ -139,7 +91,7 @@ GenericReference ReferLinkedListImpl::get0(const Size index) const {
     return generic_cast(indexer->value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool ReferLinkedListImpl::contain0(GenericReference value) const {
     indexer = first;
     for (Size count = 0; count < length; ++count) {
@@ -208,4 +160,52 @@ void ReferLinkedListImpl::removeFirst0() {
     }
 
     --length;
+}
+
+ReferLinkedListImpl::ReferLinkedListIteratorImpl::
+ReferLinkedListIteratorImpl(const ReferLinkedListImpl* const referLinkedList) :
+    referLinkedList(referLinkedList), isFirst(true) {
+    referLinkedList->indexer = referLinkedList->first;
+}
+
+ReferLinkedListImpl::ReferLinkedListIteratorImpl::~ReferLinkedListIteratorImpl() noexcept = default;
+
+RetCannotIgnored
+bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::hasNext0() const {
+    if (isFirst) {
+        isFirst = false;
+        return true;
+    } else {
+        return referLinkedList->indexer != null;
+    }
+}
+
+void ReferLinkedListImpl::ReferLinkedListIteratorImpl::next0() const {
+    nextNode(referLinkedList->indexer);
+}
+
+RetCannotIgnored
+bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::each0() const {
+    if (isFirst) {
+        isFirst = false;
+        return !referLinkedList->isEmpty0();
+    }
+
+    next0();
+    return hasNext0();
+}
+
+RetCannotIgnored
+GenericReference ReferLinkedListImpl::ReferLinkedListIteratorImpl::get0() const {
+    return generic_cast(referLinkedList->indexer->value);
+}
+
+void ReferLinkedListImpl::ReferLinkedListIteratorImpl::reset0() const {
+    isFirst = true;
+    referLinkedList->indexer = referLinkedList->first;
+}
+
+RetCannotIgnored
+Size ReferLinkedListImpl::ReferLinkedListIteratorImpl::count0() const {
+    return referLinkedList->getLength0();
 }

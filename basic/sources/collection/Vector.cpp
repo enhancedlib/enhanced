@@ -22,47 +22,6 @@
 
 using enhanced::basic::generic_impl::collection::VectorImpl;
 
-VectorImpl::VectorIteratorImpl::VectorIteratorImpl(const VectorImpl* const vector) :
-    vector(vector), indexer(vector->elements), isFirst(true),
-    end(vector->genericOperator.index(vector->elements, vector->getLength0())) {}
-
-VectorImpl::VectorIteratorImpl::~VectorIteratorImpl() noexcept = default;
-
-RetCannotIgnored()
-bool VectorImpl::VectorIteratorImpl::hasNext0() const {
-    return indexer != end;
-}
-
-void VectorImpl::VectorIteratorImpl::next0() const {
-    indexer = vector->genericOperator.index(indexer, 1);
-}
-
-RetCannotIgnored()
-bool VectorImpl::VectorIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !vector->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
-}
-
-RetCannotIgnored()
-GenericReference VectorImpl::VectorIteratorImpl::get0() const {
-    return generic_cast(indexer);
-}
-
-void VectorImpl::VectorIteratorImpl::reset0() const {
-    isFirst = true;
-    indexer = vector->elements;
-}
-
-RetCannotIgnored()
-Size VectorImpl::VectorIteratorImpl::count0() const {
-    return vector->getLength0();
-}
-
 VectorImpl::VectorImpl(const Size maxCount, const GenericOperator genericOperator) :
     maxCount(maxCount), length(0), elements(genericOperator.allocateArray(maxCount)),
     genericOperator(genericOperator), iterator(null) {}
@@ -78,22 +37,22 @@ VectorImpl::~VectorImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 Size VectorImpl::getLength0() const {
     return length;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool VectorImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference VectorImpl::get0(const Size index) const {
     return genericOperator.getElement(elements, index);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool VectorImpl::contain0(GenericReference value) const {
     for (Size index = 0; index < length; ++index) {
         if (genericOperator.equals(get0(index), value)) {
@@ -139,4 +98,45 @@ void VectorImpl::shrink0(const Size size) {
 
     elements = array;
     maxCount = count;
+}
+
+VectorImpl::VectorIteratorImpl::VectorIteratorImpl(const VectorImpl* const vector) :
+    vector(vector), indexer(vector->elements), isFirst(true),
+    end(vector->genericOperator.index(vector->elements, vector->getLength0())) {}
+
+VectorImpl::VectorIteratorImpl::~VectorIteratorImpl() noexcept = default;
+
+RetCannotIgnored
+bool VectorImpl::VectorIteratorImpl::hasNext0() const {
+    return indexer != end;
+}
+
+void VectorImpl::VectorIteratorImpl::next0() const {
+    indexer = vector->genericOperator.index(indexer, 1);
+}
+
+RetCannotIgnored
+bool VectorImpl::VectorIteratorImpl::each0() const {
+    if (isFirst) {
+        isFirst = false;
+        return !vector->isEmpty0();
+    }
+
+    next0();
+    return hasNext0();
+}
+
+RetCannotIgnored
+GenericReference VectorImpl::VectorIteratorImpl::get0() const {
+    return generic_cast(indexer);
+}
+
+void VectorImpl::VectorIteratorImpl::reset0() const {
+    isFirst = true;
+    indexer = vector->elements;
+}
+
+RetCannotIgnored
+Size VectorImpl::VectorIteratorImpl::count0() const {
+    return vector->getLength0();
 }

@@ -18,7 +18,7 @@
 #include "enhanced/core/assert.h"
 #include "enhanced/core/memory.h"
 
-RetRequiresRelease()
+RetRequiresRelease
 void* arrayNew(const Size length, const Size sizeOfType) {
     return memoryAlloc(length * sizeOfType);
 }

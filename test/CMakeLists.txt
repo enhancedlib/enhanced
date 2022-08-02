@@ -25,7 +25,7 @@ foreach (SOURCE IN ITEMS ${SOURCES})
     target_include_directories(${NAME} PRIVATE ${INCLUDE_DIRECTORIES})
 
     foreach (REQUIRES_MODULE_FULL_NAME IN ITEMS ${REQUIRES_MODULES})
-        target_link_libraries(${NAME} PRIVATE ${REQUIRES_MODULE_FULL_NAME}-Static)
+        target_link_libraries(${NAME} PRIVATE ${REQUIRES_MODULE_FULL_NAME})
         message("${PROMPT} The target \"${NAME}\" links library \"${REQUIRES_MODULE_FULL_NAME}\"")
     endforeach ()
 endforeach ()

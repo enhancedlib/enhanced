@@ -15,7 +15,7 @@
 
 #include "enhanced/core/defines.h"
 
-#if defined(WINDOWS_OS) /* Windows OS */ && defined(ENHANCED_BASIC_DYNAMIC_LIBRARY) /* Dynamic library */
+#if defined(WINDOWS_OS) && defined(ENHANCED_BASIC_DYNAMIC_LIBRARY) // Dynamic library
 #ifdef ENHANCED_BASIC_EXPORTS // Export
 #define ENHANCED_BASIC_API __declspec(dllexport)
 #else // Import

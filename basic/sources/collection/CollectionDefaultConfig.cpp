@@ -11,8 +11,12 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include "enhanced/basic/collection/RandomAccess.h"
+#include "enhanced/basic/collection/CollectionDefaultConfig.h"
 
-using enhanced::basic::collection::RandomAccess;
+#include "enhanced/core/defines.h"
+#include "enhanced/core/types.h"
+#include "enhanced/core/annotations.h"
 
-Size RandomAccess::DEFAULT_ARRAY_INIT_SIZE = 255;
+using enhanced::basic::collection::CollectionDefaultConfig;
+
+Size CollectionDefaultConfig::ARRAY_INIT_SIZE = 255;

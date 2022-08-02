@@ -19,7 +19,7 @@
 
 #include "Queue.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::collection {
     template <typename Type>
@@ -28,7 +28,7 @@ namespace enhanced::basic::collection {
 
         virtual Type& getLast() const = 0;
 
-        RetRequiresRelease()
+        RetRequiresRelease
         virtual Deque<Type>* copy() const = 0;
 
         virtual void addLast(const Type& element) = 0;

@@ -23,47 +23,6 @@
 
 using enhanced::basic::generic_impl::collection::mixed::MixedArrayListImpl;
 
-MixedArrayListImpl::MixedArrayListIteratorImpl::MixedArrayListIteratorImpl(const MixedArrayListImpl* mixedArrayList) :
-    mixedArrayList(mixedArrayList), indexer(mixedArrayList->elements), isFirst(true),
-    end((const Node*) mixedArrayList->elements + mixedArrayList->getLength0()) {}
-
-MixedArrayListImpl::MixedArrayListIteratorImpl::~MixedArrayListIteratorImpl() noexcept = default;
-
-RetCannotIgnored()
-bool MixedArrayListImpl::MixedArrayListIteratorImpl::hasNext0() const {
-    return indexer != end;
-}
-
-void MixedArrayListImpl::MixedArrayListIteratorImpl::next0() const {
-    ++indexer;
-}
-
-RetCannotIgnored()
-bool MixedArrayListImpl::MixedArrayListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !mixedArrayList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
-}
-
-RetCannotIgnored()
-GenericReference MixedArrayListImpl::MixedArrayListIteratorImpl::get0() const {
-    return generic_cast((*indexer).value);
-}
-
-void MixedArrayListImpl::MixedArrayListIteratorImpl::reset0() const {
-    isFirst = true;
-    indexer = mixedArrayList->elements;
-}
-
-RetCannotIgnored()
-Size MixedArrayListImpl::MixedArrayListIteratorImpl::count0() const {
-    return mixedArrayList->getLength0();
-}
-
 MixedArrayListImpl::MixedArrayListImpl(const Size maxCount, const GenericOperator genericOperator) :
     length(0), elements(new Node[maxCount]), maxCount(maxCount),
     genericOperator(genericOperator), iterator(null) {}
@@ -90,22 +49,22 @@ MixedArrayListImpl::~MixedArrayListImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 Size MixedArrayListImpl::getLength0() const {
     return length;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool MixedArrayListImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference MixedArrayListImpl::get0(const Size index) const {
     return generic_cast(elements[index].value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool MixedArrayListImpl::contain0(GenericReference value) const {
     for (Size index = 0; index < length; ++index) {
         if (genericOperator.equals(generic_cast(elements[index].value), value)) {
@@ -162,4 +121,45 @@ void MixedArrayListImpl::shrink0(const Size size) {
 
     elements = array;
     maxCount = count;
+}
+
+MixedArrayListImpl::MixedArrayListIteratorImpl::MixedArrayListIteratorImpl(const MixedArrayListImpl* mixedArrayList) :
+    mixedArrayList(mixedArrayList), indexer(mixedArrayList->elements), isFirst(true),
+    end((const Node*) mixedArrayList->elements + mixedArrayList->getLength0()) {}
+
+MixedArrayListImpl::MixedArrayListIteratorImpl::~MixedArrayListIteratorImpl() noexcept = default;
+
+RetCannotIgnored
+bool MixedArrayListImpl::MixedArrayListIteratorImpl::hasNext0() const {
+    return indexer != end;
+}
+
+void MixedArrayListImpl::MixedArrayListIteratorImpl::next0() const {
+    ++indexer;
+}
+
+RetCannotIgnored
+bool MixedArrayListImpl::MixedArrayListIteratorImpl::each0() const {
+    if (isFirst) {
+        isFirst = false;
+        return !mixedArrayList->isEmpty0();
+    }
+
+    next0();
+    return hasNext0();
+}
+
+RetCannotIgnored
+GenericReference MixedArrayListImpl::MixedArrayListIteratorImpl::get0() const {
+    return generic_cast((*indexer).value);
+}
+
+void MixedArrayListImpl::MixedArrayListIteratorImpl::reset0() const {
+    isFirst = true;
+    indexer = mixedArrayList->elements;
+}
+
+RetCannotIgnored
+Size MixedArrayListImpl::MixedArrayListIteratorImpl::count0() const {
+    return mixedArrayList->getLength0();
 }

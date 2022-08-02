@@ -20,7 +20,7 @@
 #include "enhanced/basic/collection/Deque.h"
 #include "ReferQueue.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::collection::refer {
 /*
@@ -43,10 +43,10 @@ namespace enhanced::basic::collection::refer {
     template <typename Type>
     struct ReferDeque : public Deque<Type>, public ReferQueue<Type> {
 #endif // COMPILER_MSVC
-        RetCannotIgnored()
+        RetCannotIgnored
             virtual Size getLength() const = 0;
 
-        RetCannotIgnored()
+        RetCannotIgnored
             virtual bool isEmpty() const = 0;
 
         virtual Type& getFirst() const = 0;
@@ -59,19 +59,19 @@ namespace enhanced::basic::collection::refer {
 
         virtual bool contain(const Type& value) const = 0;
 
-        RetCannotIgnored()
+        RetCannotIgnored
             typename Iterable<Type>::ForeachIterator begin() const override {
             return Deque<Type>::begin();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
             void* end() const override {
             return Deque<Type>::end();
         }
 
         virtual Iterator<Type>* iterator() const = 0;
 
-        RetRequiresRelease()
+        RetRequiresRelease
             virtual ReferDeque<Type>* copy() const = 0;
 
         virtual void addLast(const Type& element) = 0;

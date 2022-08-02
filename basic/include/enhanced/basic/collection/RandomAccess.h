@@ -19,7 +19,5 @@
 
 namespace enhanced::basic::collection {
     struct RandomAccess {
-    protected:
-        static Size DEFAULT_ARRAY_INIT_SIZE;
     };
 }

@@ -21,9 +21,9 @@
 /*!
  * Creates a new string.
  *
- * @param length   The count of the new string.
+ * @param length  The count of the new string.
  */
-RetRequiresRelease()
+RetRequiresRelease
 ENHANCED_CORE_API char* stringNew(Size length);
 
 /*!
@@ -33,7 +33,7 @@ ENHANCED_CORE_API char* stringNew(Size length);
  * @return Size   The count of the string.
  */
 EXTERN_C
-RetCannotIgnored()
+RetCannotIgnored
 ENHANCED_CORE_API Size stringLength(const char* string);
 
 /*!
@@ -44,7 +44,7 @@ ENHANCED_CORE_API Size stringLength(const char* string);
  * @return bool    Whether the string "string1" is equal to the string "string2".
  */
 EXTERN_C
-RetCannotIgnored()
+RetCannotIgnored
 ENHANCED_CORE_API bool stringEqual(const char* string1, const char* string2);
 
 /*!
@@ -53,7 +53,7 @@ ENHANCED_CORE_API bool stringEqual(const char* string1, const char* string2);
  * @param string  A string.
  * @return char*  The new string.
  */
-RetRequiresRelease()
+RetRequiresRelease
 ENHANCED_CORE_API char* stringCopy(const char* string);
 
 /*!
@@ -63,5 +63,5 @@ ENHANCED_CORE_API char* stringCopy(const char* string);
  * @param newSize  The count of the new string.
  * @return char*   The new string.
  */
-RetRequiresRelease()
+RetRequiresRelease
 ENHANCED_CORE_API char* stringResize(const char* string, Size newSize);

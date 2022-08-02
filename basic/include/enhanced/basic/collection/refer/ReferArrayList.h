@@ -24,10 +24,11 @@
 
 #include "enhanced/basic/util/generic.h"
 
+#include "enhanced/basic/collection/CollectionDefaultConfig.h"
 #include "enhanced/basic/collection/RandomAccess.h"
 #include "ReferList.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::generic_impl::collection::refer {
     class ENHANCED_BASIC_API ReferArrayListImpl {
@@ -60,20 +61,20 @@ namespace enhanced::basic::generic_impl::collection::refer {
 
             virtual ~ReferArrayListIteratorImpl() noexcept;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             bool hasNext0() const;
 
             void next0() const;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             bool each0() const;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             GenericReference get0() const;
 
             void reset0() const;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             Size count0() const;
         };
 
@@ -87,16 +88,16 @@ namespace enhanced::basic::generic_impl::collection::refer {
 
         virtual ~ReferArrayListImpl() noexcept;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Size getLength0() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         bool isEmpty0() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         GenericReference get0(Size index) const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         bool contain0(GenericReference value) const;
 
         void add0(GenericReference element);
@@ -122,7 +123,7 @@ namespace enhanced::basic::collection::refer {
         public:
             explicit inline ReferArrayListIterator(const ReferArrayList<Type>* referArrayList) : ReferArrayListIteratorImpl(referArrayList) {}
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline bool hasNext() const override {
                 return hasNext0();
             }
@@ -132,12 +133,12 @@ namespace enhanced::basic::collection::refer {
                 return this;
             }
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline bool each() const override {
                 return each0();
             }
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline Type& get() const override {
                 return (Type&) get0();
             }
@@ -146,40 +147,40 @@ namespace enhanced::basic::collection::refer {
                 reset0();
             }
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline Size count() const override {
                 return count0();
             }
         };
 
-        RetCannotIgnored()
+        RetCannotIgnored
         static bool equals(GenericReference element, GenericReference value) {
             return ((Type&) element) == ((Type&) (value));
         }
 
     public:
-        inline ReferArrayList() : ReferArrayListImpl(DEFAULT_ARRAY_INIT_SIZE, {equals}) {};
+        inline ReferArrayList() : ReferArrayListImpl(CollectionDefaultConfig::ARRAY_INIT_SIZE, {equals}) {};
 
         explicit inline ReferArrayList(Size maxCount) : ReferArrayListImpl(maxCount, {equals}) {}
 
         inline ReferArrayList(const ReferArrayList<Type>& other) : ReferArrayListImpl(other) {}
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Size getLength() const override {
             return getLength0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline bool isEmpty() const override {
             return isEmpty0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline bool contain(const Type& value) const override {
             return contain0((GenericReference) value);
         }
 
-        RetRequiresRelease()
+        RetRequiresRelease
         inline ReferArrayList<Type>* copy() const override {
             return new ReferArrayList<Type>(*this);
         }
@@ -188,12 +189,12 @@ namespace enhanced::basic::collection::refer {
             return Iterable<Type>::template getIterator<ReferArrayListIterator>(ReferArrayListImpl::iterator,this);
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Type& get(Size index) const override {
             return (Type&) get0(index);
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Type& operator[](Size index) const override {
             return (Type&) get0(index);
         }

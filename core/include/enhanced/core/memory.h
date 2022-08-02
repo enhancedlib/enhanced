@@ -28,7 +28,7 @@ EXTERN_C_START
  * @param size     The size to be allocated (unit: byte).
  * @return void*   A pointer to the newly allocated space.
  */
-MustInspectResult Nullable RetRequiresRelease()
+MustInspectResult Nullable RetRequiresRelease
 ENHANCED_CORE_API void* memoryAlloc(Size size);
 
 /*!

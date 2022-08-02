@@ -16,7 +16,7 @@
 #include "enhanced/core/defines.h"
 #include "enhanced/core/types.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic {
     template <typename Type>
@@ -26,7 +26,7 @@ namespace enhanced::basic {
         /*!
          * Determines if there are still elements can iterate over.
          */
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual bool hasNext() const = 0;
 
         /*!
@@ -37,13 +37,13 @@ namespace enhanced::basic {
         /*!
          * Usage: while (<list>.each())
          */
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual bool each() const = 0;
 
         /*!
          * Gets the current element.
          */
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual Type& get() const = 0;
 
         /*!
@@ -54,7 +54,7 @@ namespace enhanced::basic {
         /*!
          * Gets the number of elements.
          */
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual Size count() const = 0;
     };
 }

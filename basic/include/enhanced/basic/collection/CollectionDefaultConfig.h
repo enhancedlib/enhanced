@@ -13,23 +13,14 @@
 
 #pragma once
 
-#include "module.h"
+#include "enhanced/core/defines.h"
+#include "enhanced/core/types.h"
+#include "enhanced/core/annotations.h"
 
-MODULE_INFO_START // Start defining module information.
+#include "enhanced/basic/export.h"
 
-/*!
- * This module is the core module of Enhanced.
- * It includes based function.
- */
-MODULE(core)
-
-MODULE_VERSION(core, 0, 1, 0, "dev", 1, 0.1)
-MODULE_AUTHOR(core, "Liu Baihao")
-MODULE_ABOUT(core, "The core module of Enhanced.")
-
-MODULE_RELATIONS(
-    core,
-    EXPORTS_PACKAGE(enhanced::core)
-)
-
-MODULE_INFO_END // End defining module information.
+namespace enhanced::basic::collection {
+    struct ENHANCED_BASIC_API CollectionDefaultConfig {
+        static Size ARRAY_INIT_SIZE; // 255
+    };
+}

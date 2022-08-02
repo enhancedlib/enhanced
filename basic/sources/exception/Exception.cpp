@@ -24,25 +24,25 @@ using enhanced::basic::String;
 bool Exception::enableExceptions = true;
 bool Exception::enableExceptionsTraceback = true;
 
-Exception::Exception(String&& message) noexcept: message(message), cause(null) {
+Exception::Exception(String&& message) noexcept : message(message), cause(null) {
 }
 
-Exception::Exception(const Exception* cause) noexcept: message(""), cause(cause) {
+Exception::Exception(const Exception* cause) noexcept : message(""), cause(cause) {
 }
 
-Exception::Exception(String&& message, const Exception* cause) noexcept: message(message), cause(cause) {
+Exception::Exception(String&& message, const Exception* cause) noexcept : message(message), cause(cause) {
 }
 
 Exception::~Exception() noexcept = default;
 
-String Exception::traceback() noexcept {
-    return (String) message;
+const String& Exception::getTraceback() const noexcept {
+    return message;
 }
 
-const Exception* Exception::getCause() noexcept {
+const Exception* Exception::getCause() const noexcept {
     return cause;
 }
 
-const String& Exception::getMessage() noexcept {
+const String& Exception::getMessage() const noexcept {
     return message;
 }

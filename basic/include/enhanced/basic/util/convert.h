@@ -18,7 +18,7 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::basic::util {
+namespace enhanced::basic::util::convert {
     template <typename ConvertType, typename Type>
     inline ConvertType& forceCast(Type&& value) {
         return *((ConvertType*) (void*) &value);

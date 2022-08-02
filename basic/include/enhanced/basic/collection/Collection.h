@@ -19,23 +19,23 @@
 
 #include "enhanced/basic/Iterable.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::collection {
     template <typename Type>
     struct Collection : public Iterable<Type> {
         virtual ~Collection() noexcept = default;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual Size getLength() const = 0;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual bool isEmpty() const = 0;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual bool contain(const Type& value) const = 0;
 
-        RetRequiresRelease()
+        RetRequiresRelease
         virtual Collection<Type>* copy() const = 0;
     };
 }

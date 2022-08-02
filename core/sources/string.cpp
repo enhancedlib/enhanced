@@ -18,24 +18,24 @@
 #include "enhanced/core/assert.h"
 #include "enhanced/core/memory.h"
 
-RetRequiresRelease()
+RetRequiresRelease
 char* stringNew(const Size length) {
     char* str = new char[length + 1];
     str[length] = '\0';
     return str;
 }
 
-RetRequiresRelease()
+RetRequiresRelease
 char* stringCopy(const char* const string) {
     assert(string != null);
 
     Size length = stringLength(string);
     char* copy = new char[length + 1];
-    memoryCopy(copy, string, length);
+    memoryCopy(copy, string, length + 1);
     return copy;
 }
 
-RetRequiresRelease()
+RetRequiresRelease
 char* stringResize(const char* const string, const Size newSize) {
     assert(string != null), assert(newSize > 1);
 

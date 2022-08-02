@@ -18,7 +18,7 @@
 
 #include "Queue.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::collection {
     template <typename Type>

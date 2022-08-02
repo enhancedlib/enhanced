@@ -21,7 +21,7 @@
 #include "enhanced/core/assert.h"
 #include "enhanced/core/types.h"
 
-MustInspectResult Nullable RetRequiresRelease()
+MustInspectResult Nullable RetRequiresRelease
 void* memoryAlloc(const Size size) {
     assert(size > 0);
 
@@ -48,11 +48,11 @@ void memoryCopy(void* destination, const void* const source, const Size size) {
     Size countBlock = size / sizeof(qword);
     Size countByte = size % sizeof(qword);
 
-    while (countBlock-- > 0) {
-        ((qword*) destination)[countBlock] = ((qword*) source)[countBlock];
+    for (Size index = 0; index < countBlock; ++index) {
+        ((qword*) destination)[index] = ((qword*) source)[index];
     }
 
-    while (countByte-- > 0) {
-        ((byte*) destination)[countByte] = ((byte*) source)[countByte];
+    for (Size index = size - countByte; index < size; ++index) {
+        ((byte*) destination)[index] = ((byte*) source)[index];
     }
 }

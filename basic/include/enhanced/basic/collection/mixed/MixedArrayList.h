@@ -24,10 +24,11 @@
 
 #include "enhanced/basic/util/generic.h"
 
+#include "enhanced/basic/collection/CollectionDefaultConfig.h"
 #include "enhanced/basic/collection/RandomAccess.h"
 #include "MixedList.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::generic_impl::collection::mixed {
     class ENHANCED_BASIC_API MixedArrayListImpl {
@@ -70,20 +71,20 @@ namespace enhanced::basic::generic_impl::collection::mixed {
 
             virtual ~MixedArrayListIteratorImpl() noexcept;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             bool hasNext0() const;
 
             void next0() const;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             bool each0() const;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             GenericReference get0() const;
 
             void reset0() const;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             Size count0() const;
         };
 
@@ -97,16 +98,16 @@ namespace enhanced::basic::generic_impl::collection::mixed {
 
         virtual ~MixedArrayListImpl() noexcept;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Size getLength0() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         bool isEmpty0() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         GenericReference get0(Size index) const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         bool contain0(GenericReference value) const;
 
         void add0(GenericReference element);
@@ -135,7 +136,7 @@ namespace enhanced::basic::collection::mixed {
         public:
             explicit inline MixedArrayListIterator(const MixedArrayList<Type>* arrayList) : MixedArrayListIteratorImpl(arrayList) {}
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline bool hasNext() const override {
                 return hasNext0();
             }
@@ -145,12 +146,12 @@ namespace enhanced::basic::collection::mixed {
                 return this;
             }
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline bool each() const override {
                 return each0();
             }
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline Type& get() const override {
                 return (Type&) get0();
             }
@@ -159,13 +160,13 @@ namespace enhanced::basic::collection::mixed {
                 reset0();
             }
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline Size count() const override {
                 return count0();
             }
         };
 
-        RetRequiresRelease()
+        RetRequiresRelease
         static void* allocate(GenericReference element) {
             return new Type(reinterpret_cast<Type&>(element));
         }
@@ -174,44 +175,44 @@ namespace enhanced::basic::collection::mixed {
             delete (Type*) element;
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         static bool equals(GenericReference element, GenericReference value) {
             return ((Type&) element) == ((Type&) (value));
         }
 
     public:
-        inline MixedArrayList() : MixedArrayListImpl(DEFAULT_ARRAY_INIT_SIZE, {allocate, destroy, equals}) {}
+        inline MixedArrayList() : MixedArrayListImpl(CollectionDefaultConfig::ARRAY_INIT_SIZE, {allocate, destroy, equals}) {}
 
         explicit inline MixedArrayList(Size maxCount) : MixedArrayListImpl(maxCount, {allocate, destroy, equals}) {}
 
         inline MixedArrayList(const MixedArrayList<Type>& other) : MixedArrayListImpl(other) {}
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Size getLength() const override {
             return getLength0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline bool isEmpty() const override {
             return isEmpty0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline bool contain(const Type& value) const override {
             return contain0((GenericReference) value);
         }
 
-        RetRequiresRelease()
+        RetRequiresRelease
         inline MixedArrayList<Type>* copy() const override {
             return new MixedArrayList<Type>(*this);
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Type& get(Size index) const override {
             return (Type&) get0(index);
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Type& operator[](Size index) const override {
             return (Type&) get0(index);
         }

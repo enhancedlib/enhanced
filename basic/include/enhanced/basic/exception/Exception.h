@@ -22,7 +22,7 @@
 #include "enhanced/basic/export.h"
 #include "enhanced/basic/String.h"
 
-#if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
+#if defined(C_LANGUAGE) || defined(ENHANCED_BASIC_C_MODE)
 
 EXTERN_C_START
 
@@ -163,7 +163,7 @@ jumpTo(snapshot, TryBlockBreak); \
 
 EXTERN_C_END
 
-#else // C++ language
+#else
 
 namespace enhanced::basic::exception {
     class ENHANCED_BASIC_API Exception {
@@ -201,14 +201,14 @@ namespace enhanced::basic::exception {
 
         virtual ~Exception() noexcept;
 
-        RetCannotIgnored()
-        String getTraceback() noexcept;
+        RetCannotIgnored
+        const String& getTraceback() const noexcept;
 
-        RetCannotIgnored()
-        const Exception* getCause() noexcept;
+        RetCannotIgnored
+        const Exception* getCause() const noexcept;
 
-        RetCannotIgnored()
-        const String& getMessage() noexcept;
+        RetCannotIgnored
+        const String& getMessage() const noexcept;
     };
 }
 

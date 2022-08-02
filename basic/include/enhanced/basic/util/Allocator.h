@@ -19,7 +19,7 @@
 
 #include "enhanced/basic/export.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::generic_impl::util {
     class ENHANCED_BASIC_API Allocator0 {
@@ -29,7 +29,7 @@ namespace enhanced::basic::generic_impl::util {
     protected:
         void* space = null;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Size getSize0() const;
 
         void allocate0(Size newSize, Size sizeOfType);
@@ -44,12 +44,12 @@ namespace enhanced::basic::util {
     template <typename Type>
     class Allocator : private enhanced::basic::generic_impl::util::Allocator0 {
     public:
-        RetCannotIgnored()
+        RetCannotIgnored
         Size getSize() const {
             return getSize0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Type& get(Size index) const {
             return ((Type*) space)[index];
         }
@@ -63,7 +63,7 @@ namespace enhanced::basic::util {
         }
 
         template <typename ...Args>
-        ReferReturn RetCannotIgnored()
+        RetCannotIgnored
         Type& construct(Size index, Args ...args) {
             return get(index) = Type(args...);
         }
@@ -73,8 +73,7 @@ namespace enhanced::basic::util {
         }
 
         template <typename ...Args>
-        ReferReturn RetCannotIgnored()
-        Type* constructAll(Args ...args) {
+        void constructAll(Args ...args) {
             for (Size index = 0; index < getSize(); ++index) {
                 get(index) = Type(args...);
             }

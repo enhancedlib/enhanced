@@ -19,7 +19,7 @@
 
 #include "Iterator.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic {
     template <typename Type>
@@ -32,7 +32,7 @@ namespace enhanced::basic {
         public:
             explicit ForeachIterator(Iterator<Type>* iterator) : iterator(iterator) {}
 
-            bool operator!=(Unused void* unused) {
+            bool operator!=(byte) {
                 return iterator->hasNext();
             }
 
@@ -56,14 +56,14 @@ namespace enhanced::basic {
         }
 
     public:
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual inline Iterable<Type>::ForeachIterator begin() const {
             return Iterable<Type>::ForeachIterator(iterator());
         }
 
-        RetCannotIgnored()
-        virtual inline void* end() const {
-            return null;
+        RetCannotIgnored
+        virtual inline byte end() const {
+            return 0;
         }
 
         virtual Iterator<Type>* iterator() const = 0;

@@ -25,9 +25,9 @@
 #endif // defined(__GNUC__)
 
 // Detect the architecture for the current platform
-#if defined(_M_IX86) || defined(__i386__) // 32-bit
+#if defined(_M_IX86) || defined(__i386__) // x86
 #define X86_PROCESSOR
-#elif defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64__) // 64-bit
+#elif defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64__) // amd64 (x86_64)
 #define X64_PROCESSOR
 #else // Unknown
 #define UNKNOWN_PROCESSOR
@@ -45,9 +45,9 @@
 // Detect the current language and its standard.
 #ifdef __cplusplus // C++ language
 
-#ifdef COMPILER_MSVC // Microsoft Visual C++
+#ifdef COMPILER_MSVC
 #define CXX_LANGUAGE _MSVC_LANG
-#else // Non Microsoft Visual C++ Compiler
+#else
 #define CXX_LANGUAGE __cplusplus
 #endif // COMPILER_MSVC
 
@@ -119,6 +119,12 @@
 
 #define COMPILING_DATE __DATE__
 #define COMPILING_TIME __TIME__
+
+#ifdef COMPILER_MSVC
+#define ATTRIBUTE(options) __declspec options
+#else
+#define ATTRIBUTE(options) __attribute__(options)
+#endif // COMPILER_MSVC
 
 #ifdef CXX_LANGUAGE
 #define EXTERN_C extern "C"

@@ -22,54 +22,6 @@
 
 using enhanced::basic::generic_impl::collection::mixed::MixedLinkedListImpl;
 
-MixedLinkedListImpl::MixedLinkedListIteratorImpl::
-MixedLinkedListIteratorImpl(const MixedLinkedListImpl* mixedLinkedList) :
-    mixedLinkedList(mixedLinkedList), isFirst(true) {
-    mixedLinkedList->indexer = mixedLinkedList->first;
-}
-
-MixedLinkedListImpl::MixedLinkedListIteratorImpl::~MixedLinkedListIteratorImpl() noexcept = default;
-
-RetCannotIgnored()
-bool MixedLinkedListImpl::MixedLinkedListIteratorImpl::hasNext0() const {
-    if (isFirst) {
-        isFirst = false;
-        return true;
-    } else {
-        return mixedLinkedList->indexer != null;
-    }
-}
-
-void MixedLinkedListImpl::MixedLinkedListIteratorImpl::next0() const {
-    nextNode(mixedLinkedList->indexer);
-}
-
-RetCannotIgnored()
-bool MixedLinkedListImpl::MixedLinkedListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !mixedLinkedList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
-}
-
-RetCannotIgnored()
-GenericReference MixedLinkedListImpl::MixedLinkedListIteratorImpl::get0() const {
-    return generic_cast(mixedLinkedList->indexer->value);
-}
-
-void MixedLinkedListImpl::MixedLinkedListIteratorImpl::reset0() const {
-    isFirst = true;
-    mixedLinkedList->indexer = mixedLinkedList->first;
-}
-
-RetCannotIgnored()
-Size MixedLinkedListImpl::MixedLinkedListIteratorImpl::count0() const {
-    return mixedLinkedList->getLength0();
-}
-
 MixedLinkedListImpl::Node*& MixedLinkedListImpl::nextNode(Node*& node) {
     return node = node->next;
 }
@@ -114,27 +66,27 @@ MixedLinkedListImpl::~MixedLinkedListImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 Size MixedLinkedListImpl::getLength0() const {
     return length;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool MixedLinkedListImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference MixedLinkedListImpl::getFirst0() const {
     return generic_cast(first->value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference MixedLinkedListImpl::getLast0() const {
     return generic_cast(last->value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference MixedLinkedListImpl::get0(const Size index) const {
     if (index < length >> 1) {
         indexer = first;
@@ -151,7 +103,7 @@ GenericReference MixedLinkedListImpl::get0(const Size index) const {
     return generic_cast(indexer->value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool MixedLinkedListImpl::contain0(GenericReference value) const {
     indexer = first;
     for (Size count = 0; count < length; ++count) {
@@ -266,4 +218,52 @@ void MixedLinkedListImpl::removeFirst0() {
     }
 
     --length;
+}
+
+MixedLinkedListImpl::MixedLinkedListIteratorImpl::
+MixedLinkedListIteratorImpl(const MixedLinkedListImpl* mixedLinkedList) :
+    mixedLinkedList(mixedLinkedList), isFirst(true) {
+    mixedLinkedList->indexer = mixedLinkedList->first;
+}
+
+MixedLinkedListImpl::MixedLinkedListIteratorImpl::~MixedLinkedListIteratorImpl() noexcept = default;
+
+RetCannotIgnored
+bool MixedLinkedListImpl::MixedLinkedListIteratorImpl::hasNext0() const {
+    if (isFirst) {
+        isFirst = false;
+        return true;
+    } else {
+        return mixedLinkedList->indexer != null;
+    }
+}
+
+void MixedLinkedListImpl::MixedLinkedListIteratorImpl::next0() const {
+    nextNode(mixedLinkedList->indexer);
+}
+
+RetCannotIgnored
+bool MixedLinkedListImpl::MixedLinkedListIteratorImpl::each0() const {
+    if (isFirst) {
+        isFirst = false;
+        return !mixedLinkedList->isEmpty0();
+    }
+
+    next0();
+    return hasNext0();
+}
+
+RetCannotIgnored
+GenericReference MixedLinkedListImpl::MixedLinkedListIteratorImpl::get0() const {
+    return generic_cast(mixedLinkedList->indexer->value);
+}
+
+void MixedLinkedListImpl::MixedLinkedListIteratorImpl::reset0() const {
+    isFirst = true;
+    mixedLinkedList->indexer = mixedLinkedList->first;
+}
+
+RetCannotIgnored
+Size MixedLinkedListImpl::MixedLinkedListIteratorImpl::count0() const {
+    return mixedLinkedList->getLength0();
 }

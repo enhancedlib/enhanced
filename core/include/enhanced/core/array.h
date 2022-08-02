@@ -26,7 +26,7 @@ EXTERN_C_START
  * @param length          The count of the original array.
  * @param sizeOfType      The byte size of array type (generally: "sizeof(<array type>)").
  */
-RetRequiresRelease()
+RetRequiresRelease
 ENHANCED_CORE_API void* arrayNew(Size length, Size sizeOfType);
 
 /*!

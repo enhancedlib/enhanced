@@ -4,7 +4,10 @@ build/
 # Ignore the release folder.
 release/
 
-# Ignore all files in test except cmakelist.txt.
+# Ignore the debug folder.
+debug/
+
+# Ignore all files in the test directory except CMakeLists.txt.
 test/*
 !test/CMakeLists.txt
 

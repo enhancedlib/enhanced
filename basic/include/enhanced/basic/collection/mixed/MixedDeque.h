@@ -20,7 +20,7 @@
 #include "enhanced/basic/collection/Deque.h"
 #include "MixedQueue.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::collection::mixed {
 /*

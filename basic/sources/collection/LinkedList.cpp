@@ -22,53 +22,6 @@
 
 using enhanced::basic::generic_impl::collection::LinkedListImpl;
 
-LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl* linkedList) :
-    linkedList(linkedList), isFirst(true) {
-    linkedList->indexer = linkedList->first;
-}
-
-LinkedListImpl::LinkedListIteratorImpl::~LinkedListIteratorImpl() noexcept = default;
-
-RetCannotIgnored()
-bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
-    if (isFirst) {
-        isFirst = false;
-        return true;
-    } else {
-        return linkedList->indexer != null;
-    }
-}
-
-void LinkedListImpl::LinkedListIteratorImpl::next0() const {
-    nextNode(linkedList->indexer);
-}
-
-RetCannotIgnored()
-bool LinkedListImpl::LinkedListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !linkedList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
-}
-
-RetCannotIgnored()
-GenericReference LinkedListImpl::LinkedListIteratorImpl::get0() const {
-    return generic_cast(linkedList->indexer->value);
-}
-
-void LinkedListImpl::LinkedListIteratorImpl::reset0() const {
-    isFirst = true;
-    linkedList->indexer = linkedList->first;
-}
-
-RetCannotIgnored()
-Size LinkedListImpl::LinkedListIteratorImpl::count0() const {
-    return linkedList->getLength0();
-}
-
 LinkedListImpl::Node*& LinkedListImpl::nextNode(Node*& node) {
     return node = node->next;
 }
@@ -107,27 +60,27 @@ LinkedListImpl::~LinkedListImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 Size LinkedListImpl::getLength0() const {
     return length;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool LinkedListImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference LinkedListImpl::getFirst0() const {
     return generic_cast(first->value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference LinkedListImpl::getLast0() const {
     return generic_cast(last->value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference LinkedListImpl::get0(const Size index) const {
     if (index < length >> 1) {
         indexer = first;
@@ -144,7 +97,7 @@ GenericReference LinkedListImpl::get0(const Size index) const {
     return generic_cast(indexer->value);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool LinkedListImpl::contain0(GenericReference value) const {
     indexer = first;
     for (Size count = 0; count < length; ++count) {
@@ -217,4 +170,51 @@ void LinkedListImpl::removeFirst0() {
     }
 
     --length;
+}
+
+LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl* linkedList) :
+    linkedList(linkedList), isFirst(true) {
+    linkedList->indexer = linkedList->first;
+}
+
+LinkedListImpl::LinkedListIteratorImpl::~LinkedListIteratorImpl() noexcept = default;
+
+RetCannotIgnored
+bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
+    if (isFirst) {
+        isFirst = false;
+        return true;
+    } else {
+        return linkedList->indexer != null;
+    }
+}
+
+void LinkedListImpl::LinkedListIteratorImpl::next0() const {
+    nextNode(linkedList->indexer);
+}
+
+RetCannotIgnored
+bool LinkedListImpl::LinkedListIteratorImpl::each0() const {
+    if (isFirst) {
+        isFirst = false;
+        return !linkedList->isEmpty0();
+    }
+
+    next0();
+    return hasNext0();
+}
+
+RetCannotIgnored
+GenericReference LinkedListImpl::LinkedListIteratorImpl::get0() const {
+    return generic_cast(linkedList->indexer->value);
+}
+
+void LinkedListImpl::LinkedListIteratorImpl::reset0() const {
+    isFirst = true;
+    linkedList->indexer = linkedList->first;
+}
+
+RetCannotIgnored
+Size LinkedListImpl::LinkedListIteratorImpl::count0() const {
+    return linkedList->getLength0();
 }

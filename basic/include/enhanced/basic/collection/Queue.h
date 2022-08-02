@@ -19,24 +19,24 @@
 
 #include "Collection.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::collection {
     template <typename Type>
     struct Queue : public Collection<Type> {
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual Type& getFirst() const = 0;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual Type& getLast() const = 0;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual Type& get(Size index) const = 0;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         virtual Type& operator[](Size index) const = 0;
 
-        RetRequiresRelease()
+        RetRequiresRelease
         virtual Queue<Type>* copy() const = 0;
 
         virtual void addLast(const Type& element) = 0;

@@ -20,7 +20,7 @@
 #include "enhanced/basic/collection/Collection.h"
 #include "enhanced/basic/collection/Queue.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::collection::mixed {
     template <typename Type>

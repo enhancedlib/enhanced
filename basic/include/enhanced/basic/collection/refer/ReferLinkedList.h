@@ -27,7 +27,7 @@
 #include "ReferList.h"
 #include "ReferDeque.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::generic_impl::collection::refer {
     class ENHANCED_BASIC_API ReferLinkedListImpl {
@@ -70,20 +70,20 @@ namespace enhanced::basic::generic_impl::collection::refer {
 
             virtual ~ReferLinkedListIteratorImpl() noexcept;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             bool hasNext0() const;
 
             void next0() const;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             bool each0() const;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             GenericReference get0() const;
 
             void reset0() const;
 
-            RetCannotIgnored()
+            RetCannotIgnored
             Size count0() const;
         };
 
@@ -97,22 +97,22 @@ namespace enhanced::basic::generic_impl::collection::refer {
 
         virtual ~ReferLinkedListImpl() noexcept;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Size getLength0() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         bool isEmpty0() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         GenericReference getLast0() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         GenericReference getFirst0() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         GenericReference get0(Size index) const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         bool contain0(GenericReference value) const;
 
         void addLast0(GenericReference element);
@@ -144,7 +144,7 @@ namespace enhanced::basic::collection::refer {
     class ReferLinkedList final : public Collection<Type>, public ReferList<Type>, public ReferDeque<Type>,
         private enhanced::basic::generic_impl::collection::refer::ReferLinkedListImpl {
     #pragma warning(pop)
-#else // Non Microsoft Visual C++ Compiler
+#else
     template <typename Type>
     class ReferLinkedList final : public ReferList<Type>, public ReferDeque<Type>, private enhanced::basic::generic_impl::collection::refer::ReferLinkedListImpl {
 #endif // COMPILER_MSVC
@@ -157,7 +157,7 @@ namespace enhanced::basic::collection::refer {
         public:
             explicit inline ReferLinkedListIterator(const ReferLinkedList<Type>* referenceLinkedList) : ReferLinkedListIteratorImpl(referenceLinkedList) {}
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline bool hasNext() const override {
                 return hasNext0();
             }
@@ -167,12 +167,12 @@ namespace enhanced::basic::collection::refer {
                 return this;
             }
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline bool each() const override {
                 return each0();
             }
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline Type& get() const override {
                 return (Type&) get0();
             }
@@ -181,13 +181,13 @@ namespace enhanced::basic::collection::refer {
                 reset0();
             }
 
-            RetCannotIgnored()
+            RetCannotIgnored
             inline Size count() const override {
                 return count0();
             }
         };
 
-        RetCannotIgnored()
+        RetCannotIgnored
         static bool equals(GenericReference element, GenericReference value) {
             return ((Type&) (element)) == ((Type&) value);
         }
@@ -197,22 +197,22 @@ namespace enhanced::basic::collection::refer {
 
         ReferLinkedList(const ReferLinkedList<Type>& other) : ReferLinkedList(other) {}
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Size getLength() const override {
             return getLength0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline bool isEmpty() const override {
             return isEmpty0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline bool contain(const Type& value) const override {
             return contain0((GenericReference) value);
         }
 
-        RetRequiresRelease()
+        RetRequiresRelease
         inline ReferLinkedList<Type>* copy() const override {
             return new ReferLinkedList<Type>(*this);
         }
@@ -221,32 +221,32 @@ namespace enhanced::basic::collection::refer {
             return Iterable<Type>::template getIterator<ReferLinkedListIterator>(ReferLinkedListImpl::iterator, this);
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline typename Iterable<Type>::ForeachIterator begin() const override {
             return List<Type>::begin();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline void* end() const override {
             return List<Type>::end();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Type& getLast() const override {
             return (Type&) getLast0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Type& getFirst() const override {
             return (Type&) getFirst0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Type& get(Size index) const override {
             return (Type&) get0(index);
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         inline Type& operator[](Size index) const override {
             return (Type&) get0(index);
         }

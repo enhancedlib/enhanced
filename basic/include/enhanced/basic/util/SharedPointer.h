@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
@@ -18,7 +17,7 @@
 #include "enhanced/core/types.h"
 #include "enhanced/core/annotations.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::generic_impl::util {
     class SharedPointerImpl {
@@ -65,32 +64,32 @@ namespace enhanced::basic::util {
             release0();
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         SharedPointer<Type> operator+(Size offset) const noexcept {
             return static_cast<Type*>(pointer) + offset;
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         SharedPointer<Type> operator-(Size offset) const noexcept {
             return static_cast<Type*>(pointer) - offset;
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Type** operator&() noexcept {
             return &static_cast<Type*>(pointer);
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Type* operator->() noexcept {
             return static_cast<Type*>(pointer);
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Type& operator*() noexcept {
             return *static_cast<Type*>(pointer);
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Type& operator[](Size offset) noexcept {
             return static_cast<Type*>(pointer)[offset];
         }
@@ -133,11 +132,11 @@ namespace enhanced::basic::util {
             return static_cast<Type*>(pointer)--;
         }
 
-        RetCannotIgnored()
+        RetCannotIgnored
         operator Type*() noexcept {
             return static_cast<Type*>(pointer);
         }
-    };;
+    };
 }
 
 #endif // CXX_LANGUAGE

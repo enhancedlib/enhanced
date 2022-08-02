@@ -17,9 +17,9 @@ typedef const struct {
     int major;
     int minor;
     int patch;
-    double build;
     const char* releaseLevel;
     int serial;
+    double build;
 } ModuleVersion;
 
 typedef const char* ModuleAuthor;
@@ -39,8 +39,8 @@ typedef const struct {
 #define MODULE_INFO_END
 
 #define MODULE(name)
-#define MODULE_VERSION(name, major, minor, patch, build, releaseLevel, serial) \
-    static ModuleVersion Module ## name ## Version = {major, minor, patch, build, releaseLevel, serial};
+#define MODULE_VERSION(name, major, minor, patch, level, serial, build) \
+    static ModuleVersion Module ## name ## Version = {major, minor, patch, level, serial, build};
 #define MODULE_AUTHOR(name, author) static ModuleAuthor Module ## name ## Author = (author);
 #define MODULE_ABOUT(name, about) static ModuleAbout Module ## name ## About = (about);
 

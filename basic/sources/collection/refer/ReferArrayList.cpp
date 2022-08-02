@@ -23,48 +23,6 @@
 
 using enhanced::basic::generic_impl::collection::refer::ReferArrayListImpl;
 
-ReferArrayListImpl::ReferArrayListIteratorImpl::
-ReferArrayListIteratorImpl(const ReferArrayListImpl* const referenceArrayList) :
-    referenceArrayList(referenceArrayList), indexer(referenceArrayList->elements), isFirst(true),
-    end(referenceArrayList->elements + referenceArrayList->getLength0()) {}
-
-ReferArrayListImpl::ReferArrayListIteratorImpl::~ReferArrayListIteratorImpl() noexcept = default;
-
-RetCannotIgnored()
-bool ReferArrayListImpl::ReferArrayListIteratorImpl::hasNext0() const {
-    return indexer != end;
-}
-
-void ReferArrayListImpl::ReferArrayListIteratorImpl::next0() const {
-    ++indexer;
-}
-
-RetCannotIgnored()
-bool ReferArrayListImpl::ReferArrayListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !referenceArrayList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
-}
-
-RetCannotIgnored()
-GenericReference ReferArrayListImpl::ReferArrayListIteratorImpl::get0() const {
-    return generic_cast(*indexer);
-}
-
-void ReferArrayListImpl::ReferArrayListIteratorImpl::reset0() const {
-    isFirst = true;
-    indexer = referenceArrayList->elements;
-}
-
-RetCannotIgnored()
-Size ReferArrayListImpl::ReferArrayListIteratorImpl::count0() const {
-    return referenceArrayList->getLength0();
-}
-
 ReferArrayListImpl::ReferArrayListImpl(const Size maxCount, const GenericOperator genericOperator) :
     length(0), elements(new void* [maxCount]), maxCount(maxCount),
     genericOperator(genericOperator), iterator(null) {}
@@ -82,22 +40,22 @@ ReferArrayListImpl::~ReferArrayListImpl() noexcept {
     delete[] elements;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 Size ReferArrayListImpl::getLength0() const {
     return length;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool ReferArrayListImpl::isEmpty0() const {
     return length == 0;
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 GenericReference ReferArrayListImpl::get0(const Size index) const {
     return generic_cast(elements[index]);
 }
 
-RetCannotIgnored()
+RetCannotIgnored
 bool ReferArrayListImpl::contain0(GenericReference value) const {
     for (Size index = 0; index < length; ++index) {
         if (genericOperator.equals(generic_cast(elements[index]), value)) {
@@ -143,4 +101,46 @@ void ReferArrayListImpl::shrink0(const Size size) {
 
     elements = array;
     maxCount = count;
+}
+
+ReferArrayListImpl::ReferArrayListIteratorImpl::
+ReferArrayListIteratorImpl(const ReferArrayListImpl* const referenceArrayList) :
+    referenceArrayList(referenceArrayList), indexer(referenceArrayList->elements), isFirst(true),
+    end(referenceArrayList->elements + referenceArrayList->getLength0()) {}
+
+ReferArrayListImpl::ReferArrayListIteratorImpl::~ReferArrayListIteratorImpl() noexcept = default;
+
+RetCannotIgnored
+bool ReferArrayListImpl::ReferArrayListIteratorImpl::hasNext0() const {
+    return indexer != end;
+}
+
+void ReferArrayListImpl::ReferArrayListIteratorImpl::next0() const {
+    ++indexer;
+}
+
+RetCannotIgnored
+bool ReferArrayListImpl::ReferArrayListIteratorImpl::each0() const {
+    if (isFirst) {
+        isFirst = false;
+        return !referenceArrayList->isEmpty0();
+    }
+
+    next0();
+    return hasNext0();
+}
+
+RetCannotIgnored
+GenericReference ReferArrayListImpl::ReferArrayListIteratorImpl::get0() const {
+    return generic_cast(*indexer);
+}
+
+void ReferArrayListImpl::ReferArrayListIteratorImpl::reset0() const {
+    isFirst = true;
+    indexer = referenceArrayList->elements;
+}
+
+RetCannotIgnored
+Size ReferArrayListImpl::ReferArrayListIteratorImpl::count0() const {
+    return referenceArrayList->getLength0();
 }

@@ -18,9 +18,10 @@
 #include "enhanced/core/annotations.h"
 
 #include "enhanced/basic/export.h"
+#include "IntegerWrapper.h"
 #include "enhanced/basic/collection/List.h"
 
-#if defined(C_LANGUAGE) /* C language */ || defined(ENHANCED_BASIC_C_MODE)
+#if defined(C_LANGUAGE) || defined(ENHANCED_BASIC_C_MODE)
 
 EXTERN_C_START
 
@@ -57,7 +58,7 @@ ENHANCED_BASIC_API String newStringExt(const char* value, Size length);
 
 EXTERN_C_END
 
-#else // C++ language
+#else
 
 namespace enhanced::basic {
     class ENHANCED_BASIC_API String {
@@ -74,10 +75,80 @@ namespace enhanced::basic {
 
         bool staticString;
 
-    public:
-        String(const char* value = "") noexcept;
+        bool referString;
 
-        String(char* value) noexcept;
+        class ENHANCED_BASIC_API SafeCharRef : IntegerWrapper<char> {
+            friend class String;
+
+        private:
+            bool canModify;
+
+            SafeCharRef(char& value, bool canModify);
+
+            void check() const;
+
+        public:
+            IntegerWrapper<char>& operator++() override;
+
+            IntegerWrapper<char>& operator--() override;
+
+            const IntegerWrapper<char> operator++(int) override;
+
+            const IntegerWrapper<char> operator--(int) override;
+
+            IntegerWrapper<char>& operator=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator+=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator-=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator*=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator/=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator%=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator<<=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator>>=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator&=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator^=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator|=(const IntegerWrapper<char>& other) override;
+
+            IntegerWrapper<char>& operator=(const char& other) override;
+
+            IntegerWrapper<char>& operator+=(const char& other) override;
+
+            IntegerWrapper<char>& operator-=(const char& other) override;
+
+            IntegerWrapper<char>& operator*=(const char& other) override;
+
+            IntegerWrapper<char>& operator/=(const char& other) override;
+
+            IntegerWrapper<char>& operator%=(const char& other) override;
+
+            IntegerWrapper<char>& operator<<=(const char& other) override;
+
+            IntegerWrapper<char>& operator>>=(const char& other) override;
+
+            IntegerWrapper<char>& operator&=(const char& other) override;
+
+            IntegerWrapper<char>& operator^=(const char& other) override;
+
+            IntegerWrapper<char>& operator|=(const char& other) override;
+        };
+
+        String(const char* value, byte) noexcept;
+
+    public:
+        static String from(const char* value);
+
+        String(const char* value = "");
+
+        String(char* value);
 
         explicit String(Size length);
 
@@ -87,62 +158,81 @@ namespace enhanced::basic {
 
         ~String();
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Size getLength() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         bool isEmpty() const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Size indexOf(char ch) const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Size indexOf(const String& string) const;
 
-        RetCannotIgnored()
-        Size lastIndexOf(char ch) const;
-
-        RetCannotIgnored()
-        Size lastIndexOf(const String& string) const;
-
-        RetCannotIgnored()
+        RetCannotIgnored
         Size indexOf(char ch, Size getN) const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         Size indexOf(const String& string, Size getN) const;
 
-        RetRequiresRelease()
+        RetCannotIgnored
+        Size lastIndexOf(char ch) const;
+
+        RetCannotIgnored
+        Size lastIndexOf(const String& string) const;
+
+        RetCannotIgnored
+        Size lastIndexOf(char ch, Size getN) const;
+
+        RetCannotIgnored
+        Size lastIndexOf(const String& string, Size getN) const;
+
+        RetRequiresRelease
         collection::List<Size>* indexOfAll(char ch) const;
 
-        RetRequiresRelease()
+        RetRequiresRelease
         collection::List<Size>* indexOfAll(const String& string) const;
 
-        RetCannotIgnored()
+        RetCannotIgnored
         char* getCharacters() const;
 
-        char& operator[](Size index) const;
+        RetCannotIgnored
+        SafeCharRef at(Size index) const;
 
+        RetCannotIgnored
+        SafeCharRef operator[](Size index) const;
+
+        RetCannotIgnored
         bool operator==(const String& string) const;
 
+        RetCannotIgnored
         String operator+(const String& string) const;
 
+        RetCannotIgnored
         operator char*() const;
 
-        String append(const String& string);
+        String& append(const String& string);
 
-        String replace(char oldChar, char newChar);
+        String& replace(char oldChar, char newChar);
 
-        String replace(const String& oldSubstring, const String& newSubstring);
+        String& replace(const String& oldSubstring, const String& newSubstring);
 
-        String replace(char oldChar, const String& newSubstring);
+        String& replace(char oldChar, const String& newSubstring);
 
-        String replace(const String& oldSubstring, char newChar);
+        String& replace(const String& oldSubstring, char newChar);
+
+        char& set(Size index, char ch);
+
+        String& toUpperCase();
+
+        String& toLowerCase();
 
         String& operator=(const String& other);
 
         String& operator=(String&& other) noexcept;
 
-        String operator+=(const String& string);
+        String& operator+=(const String& string);
     };
 }
 

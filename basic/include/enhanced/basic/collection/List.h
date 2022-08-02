@@ -18,7 +18,7 @@
 
 #include "Collection.h"
 
-#ifdef CXX_LANGUAGE // C++ language
+#ifdef CXX_LANGUAGE
 
 namespace enhanced::basic::collection {
     template <typename Type>
@@ -27,7 +27,7 @@ namespace enhanced::basic::collection {
 
         virtual Type& operator[](Size index) const = 0;
 
-        RetRequiresRelease()
+        RetRequiresRelease
         virtual List<Type>* copy() const = 0;
 
         virtual void add(const Type& element) = 0;
