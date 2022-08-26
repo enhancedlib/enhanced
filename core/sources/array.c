@@ -1,12 +1,14 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * This software is licensed under Enhanced License.
+ * Licensed under the Enhanced License, Version 0.5.4 (the "License").
  * You may not use this file except in compliance with the License.
- * You should see a copy of Enhanced License in this software, if not, visit
- * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ * You may obtain a copy of the License at
  *
- * The Software is always provided "AS IS",
+ *     https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt
+ *
+ * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+ * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
  * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -23,17 +25,17 @@ void* arrayNew(const Size length, const Size sizeOfType) {
     return memoryAlloc(length * sizeOfType);
 }
 
-void arraySetInt(void* const array, const Size count, int64 value, const Size sizeOfType) {
-    arraySet(array, count, &value, sizeOfType);
+void arraySet(void* const array, const Size count, int64 value, const Size sizeOfType) {
+    arraySetPtr(array, count, &value, sizeOfType);
 }
 
-void arraySet(void* const array, const Size count, void* const address, const Size sizeOfType) {
+void arraySetPtr(void* const array, const Size count, void* const valuePtr, const Size sizeOfType) {
     assert(array != null), assert(count > 0), assert(sizeOfType > 0);
 
     Size size = count * sizeOfType;
 
     for (Size index = 0; index < size; ++index) {
-        ((byte*) array)[index] = ((byte*) address)[index % sizeOfType];
+        ((byte*) array)[index] = ((byte*) valuePtr)[index % sizeOfType];
     }
 }
 

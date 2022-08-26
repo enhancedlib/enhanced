@@ -14,6 +14,8 @@ set(
     sources/process.c
     sources/string.c
     sources/string.cpp
+    sources/wstring.c
+    sources/wstring.cpp
 )
 
 set(
@@ -29,6 +31,7 @@ set(
     include/enhanced/core/process.h
     include/enhanced/core/string.h
     include/enhanced/core/types.h
+    include/enhanced/core/wstring.h
 )
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")

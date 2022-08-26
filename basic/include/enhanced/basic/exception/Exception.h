@@ -1,12 +1,14 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * This software is licensed under Enhanced License.
+ * Licensed under the Enhanced License, Version 0.5.4 (the "License").
  * You may not use this file except in compliance with the License.
- * You should see a copy of Enhanced License in this software, if not, visit
- * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ * You may obtain a copy of the License at
  *
- * The Software is always provided "AS IS",
+ *     https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt
+ *
+ * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+ * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
  * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -27,10 +29,15 @@
 EXTERN_C_START
 
 typedef struct ExceptionType {
-    const char* message;
-    uint code;
-    char* (*const getTraceback)(struct ExceptionType* self);
+    struct ExceptionType* parent;
+    uint64 code;
 } ExceptionType;
+
+typedef struct ExceptionInstance {
+    const char* message;
+    ExceptionType type;
+    char* (*const getTraceback)(struct ExceptionInstance* self);
+} ExceptionInstance;
 
 typedef enum TryBlockCurrentStatus {
     TryBlockInto,
@@ -42,14 +49,16 @@ typedef enum TryBlockCurrentStatus {
 } TryBlockCurrentStatus;
 
 typedef struct ExceptionContext {
-    ExceptionType* exception;
+    ExceptionInstance* exception;
     Snapshot snapshot;
     bool inFinally;
     TryBlockCurrentStatus status;
     struct ExceptionContext* link;
 } ExceptionContext;
 
-ENHANCED_BASIC_API ExceptionType newException(uint exceptionCode, const char* exceptionMessage);
+ENHANCED_BASIC_API extern const ExceptionType Exception;
+
+ENHANCED_BASIC_API ExceptionInstance newException(ExceptionType type, const char* message);
 
 ENHANCED_BASIC_API void exceptionContextStackPush(ExceptionContext* exceptionContext);
 
@@ -57,10 +66,12 @@ ENHANCED_BASIC_API void exceptionContextStackPopup();
 
 ENHANCED_BASIC_API bool exceptionContextStackIsEmpty();
 
-ENHANCED_BASIC_API void exceptionThrow(ExceptionType exception);
+ENHANCED_BASIC_API bool exceptionInstanceOf(ExceptionInstance* exception, ExceptionType type);
+
+ENHANCED_BASIC_API void exceptionThrow(ExceptionInstance exception);
 
 /*
- * // -*- TRY-CATCH-PASSED-END_TRY -*-
+ * // TRY - CATCH - PASSED - FINALLY - END_TRY
  * {
  *     ExceptionContext _CONTEXT;
  *     exceptionContextStackPush(&_CONTEXT);
@@ -70,8 +81,8 @@ ENHANCED_BASIC_API void exceptionThrow(ExceptionType exception);
  *     if (_CONTEXT.status == TryBlockInto) {
  *         _CONTEXT.status = TryBlockNoException;
  *         // -*- TRY block -*-
- *     } else if ((exceptionCode) == -1 || (_CONTEXT.status == TryBlockExceptionOccurred && _CONTEXT.exception->code == (exceptionCode))) {
- *         ExceptionType* (variable) = _CONTEXT.exception;
+ *     } else if (exceptionInstanceOf(_CONTEXT.exception, (exceptionType))) {
+ *         ExceptionInstance* (variable) = _CONTEXT.exception;
  *         _CONTEXT.status = TryBlockExceptionCapture;
  *         // -*- CATCH block -*-
  *     }
@@ -91,7 +102,7 @@ ENHANCED_BASIC_API void exceptionThrow(ExceptionType exception);
  *     }
  * }
  *
- * // -*- RETURN_IN_TRY -*-
+ * // RETURN_IN_TRY
  * {
  *     if (_CONTEXT.inFinally) {
  *         exceptionContextStackPopup();
@@ -119,9 +130,9 @@ if (_CONTEXT.status == TryBlockExceptionOccurred) { \
 if (_CONTEXT.status == TryBlockInto) { \
 _CONTEXT.status = TryBlockNoException;
 
-#define CATCH(exceptionCode, variable) \
-} else if ((exceptionCode) == -1 || (_CONTEXT.status == TryBlockExceptionOccurred && _CONTEXT.exception->code == (exceptionCode))) { \
-ExceptionType* (variable) = _CONTEXT.exception; \
+#define CATCH(exceptionType, variable) \
+} else if (exceptionInstanceOf(_CONTEXT.exception, (exceptionType))) { \
+ExceptionInstance* (variable) = _CONTEXT.exception; \
 _CONTEXT.status = TryBlockExceptionCapture;
 
 #define PASSED \
@@ -160,6 +171,8 @@ jumpTo(snapshot, TryBlockBreak); \
 } (void) 0
 
 #define THROW exceptionThrow
+
+#define THROW_NEW(type, message) exceptionThrow(newException(type, message))
 
 EXTERN_C_END
 

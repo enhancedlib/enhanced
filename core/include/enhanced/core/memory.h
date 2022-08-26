@@ -1,12 +1,14 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * This software is licensed under Enhanced License.
+ * Licensed under the Enhanced License, Version 0.5.4 (the "License").
  * You may not use this file except in compliance with the License.
- * You should see a copy of Enhanced License in this software, if not, visit
- * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ * You may obtain a copy of the License at
  *
- * The Software is always provided "AS IS",
+ *     https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt
+ *
+ * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+ * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
  * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -54,7 +56,7 @@ ENHANCED_CORE_API void memorySet(void* ptr, byte aByte, Size size);
 /*!
  * Copies a memory space.
  *
- * @example memoryCopy(source, destination, 10 * sizeof(int))
+ * @example memoryCopy(destination, source, 10 * sizeof(int))
  *
  * @param destination   The target memory space.
  * @param source        A source pointer.

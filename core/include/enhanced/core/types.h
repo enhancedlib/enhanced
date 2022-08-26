@@ -1,12 +1,14 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * This software is licensed under Enhanced License.
+ * Licensed under the Enhanced License, Version 0.5.4 (the "License").
  * You may not use this file except in compliance with the License.
- * You should see a copy of Enhanced License in this software, if not, visit
- * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ * You may obtain a copy of the License at
  *
- * The Software is always provided "AS IS",
+ *     https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt
+ *
+ * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+ * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
  * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -75,7 +77,8 @@ typedef float128 ldouble;
 typedef float64 ldouble;
 #endif // !COMPILER_MSVC
 
-typedef uint16 WChar;
+typedef uint16 wchar;
+
 #if defined(X86_PROCESSOR)
 typedef uint32 Size;
 #elif defined(X64_PROCESSOR)
@@ -206,15 +209,13 @@ typedef void* NullType;
 #undef LDOUBLE_MIN
 #endif // LDOUBLE_MIN
 
-#ifdef BYTE_TYPE_MIN
-#undef BYTE_TYPE_MIN
-#endif // BYTE_TYPE_MIN
-#ifdef WCHAR_TYPE_MIN
-#undef WCHAR_TYPE_MIN
-#endif // WCHAR_TYPE_MIN
-#ifdef SIZE_TYPE_MIN
-#undef SIZE_TYPE_MIN
-#endif // SIZE_TYPE_MIN
+#ifdef WCHAR_MIN
+#undef WCHAR_MIN
+#endif // WCHAR_MIN
+
+#ifdef SIZE_MIN
+#undef SIZE_MIN
+#endif // SIZE_MIN
 
 #ifdef BYTE_MIN
 #undef BYTE_MIN
@@ -229,23 +230,23 @@ typedef void* NullType;
 #undef QWORD_MIN
 #endif // QWORD_MIN
 
-#define INT8_MIN ((int8) (-(0xff >> 1) - 1)) // -128
-#define INT16_MIN ((int16) (-(0xffff >> 1) - 1)) // -32768
-#define INT32_MIN ((int32) (-(0xffffffff >> 1) - 1)) // -2147483648
-#define INT64_MIN ((int64) (-(0xffffffffffffffff >> 1) - 1)) // -9223372036854775808
+#define INT8_MIN ((int8) (-(0xFF >> 1) - 1)) // -128
+#define INT16_MIN ((int16) (-(0xFFFF >> 1) - 1)) // -32768
+#define INT32_MIN ((int32) (-(0xFFFFFFFF >> 1) - 1)) // -2147483648
+#define INT64_MIN ((int64) (-(0xFFFFFFFFFFFFFFFF >> 1) - 1)) // -9223372036854775808
 
 #define UINT8_MIN ((uint8) 0x0) // 0
 #define UINT16_MIN ((uint16) 0x0) // 0
 #define UINT32_MIN ((uint32) 0x0) // 0
 #define UINT64_MIN ((uint64) 0x0) // 0
 
-#define FLOAT32_MIN ((float32) 1.17549435082228750796873653722224568E-38)
-#define FLOAT64_MIN ((float64) 2.22507385850720138309023271733240406E-308)
+#define FLOAT32_MIN ((float32) 1.17549435082228750796873653722224568e-38)
+#define FLOAT64_MIN ((float64) 2.22507385850720138309023271733240406e-308)
 #ifndef COMPILER_MSVC
 #if defined(X86_PROCESSOR)
 #define FLOAT96_MIN ((float96) 3.36210314311209350626267781732175260E-4932L) // Why is it the same as float128? (Tested)
 #elif defined(X64_PROCESSOR)
-#define FLOAT128_MIN ((float128) 3.36210314311209350626267781732175260E-4932L)
+#define FLOAT128_MIN ((float128) 3.36210314311209350626267781732175260e-4932L)
 #endif // defined(X86_PROCESSOR)
 #endif // !COMPILER_MSVC
 
@@ -287,14 +288,14 @@ typedef void* NullType;
 #endif // defined(X86_PROCESSOR)
 #endif // COMPILER_MSVC
 
-#define BYTE_TYPE_MIN UINT8_MIN
-#define WCHAR_TYPE_MIN UINT16_MIN
+#define WCHAR_MIN UINT16_MIN
+
 #if defined(X86_PROCESSOR)
-#define SIZE_TYPE_MIN UINT32_MIN
+#define SIZE_MIN UINT32_MIN
 #elif defined(X64_PROCESSOR)
-#define SIZE_TYPE_MIN UINT64_MIN
+#define SIZE_MIN UINT64_MIN
 #else // Unknown
-#define SIZE_TYPE_MIN UINT32_MIN
+#define SIZE_MIN UINT32_MIN
 #endif // X64_PROCESSOR
 
 #define BYTE_MIN UINT8_MIN
@@ -383,12 +384,10 @@ typedef void* NullType;
 #undef LDOUBLE_MAX
 #endif // LDOUBLE_MAX
 
-#ifdef BYTE_MAX
-#undef BYTE_MAX
-#endif // BYTE_MAX
 #ifdef WCHAR_MAX
 #undef WCHAR_MAX
 #endif // WCHAR_MAX
+
 #ifdef SIZE_MAX
 #undef SIZE_MAX
 #endif // SIZE_MAX
@@ -406,23 +405,23 @@ typedef void* NullType;
 #undef QWORD_MAX
 #endif // QWORD_MAX
 
-#define INT8_MAX ((int8) (0xff >> 1)) // 127
-#define INT16_MAX ((int16) (0xffff >> 1)) // 32767
-#define INT32_MAX ((int32) (0xffffffff >> 1)) // 2147483647
-#define INT64_MAX ((int64) (0xffffffffffffffff >> 1)) // 9223372036854775807
+#define INT8_MAX ((int8) (0xFF >> 1)) // 127
+#define INT16_MAX ((int16) (0xFFFF >> 1)) // 32767
+#define INT32_MAX ((int32) (0xFFFFFFFF >> 1)) // 2147483647
+#define INT64_MAX ((int64) (0xFFFFFFFFFFFFFFFF >> 1)) // 9223372036854775807
 
-#define UINT8_MAX ((uint8) 0xff) // 255
-#define UINT16_MAX ((uint16) 0xffff) // 65535
-#define UINT32_MAX ((uint32) 0xffffffff) // 4294967295
-#define UINT64_MAX ((uint64) 0xffffffffffffffff) // 18446744073709551615
+#define UINT8_MAX ((uint8) 0xFF) // 255
+#define UINT16_MAX ((uint16) 0xFFFF) // 65535
+#define UINT32_MAX ((uint32) 0xFFFFFFFF) // 4294967295
+#define UINT64_MAX ((uint64) 0xFFFFFFFFFFFFFFFF) // 18446744073709551615
 
-#define FLOAT32_MAX ((float32) 3.40282346638528859811704183484516925E+38)
-#define FLOAT64_MAX ((float64) 1.79769313486231570814527423731704357E+308)
+#define FLOAT32_MAX ((float32) 3.40282346638528859811704183484516925e+38)
+#define FLOAT64_MAX ((float64) 1.79769313486231570814527423731704357e+308)
 #ifndef COMPILER_MSVC
 #if defined(X86_PROCESSOR)
 #define FLOAT96_MAX ((float96) 1.18973149535723176502126385303097021E+4932L) // Why is it the same as float128? (Tested)
 #elif defined(X64_PROCESSOR)
-#define FLOAT128_MAX ((float128) 1.18973149535723176502126385303097021E+4932L)
+#define FLOAT128_MAX ((float128) 1.18973149535723176502126385303097021e+4932L)
 #endif // defined(X86_PROCESSOR)
 #endif // !COMPILER_MSVC
 
@@ -464,8 +463,8 @@ typedef void* NullType;
 #endif // defined(X86_PROCESSOR)
 #endif // COMPILER_MSVC
 
-#define BYTE_MAX UINT8_MAX
 #define WCHAR_MAX UINT16_MAX
+
 #if defined(X86_PROCESSOR)
 #define SIZE_MAX UINT32_MAX
 #elif defined(X64_PROCESSOR)
@@ -493,13 +492,13 @@ typedef void* NullType;
 #endif // NaN
 
 #ifdef COMPILER_MSVC
-#define POSITIVE_INFINITY ((double) (1e+300 * 1e+300)) // Positive infinity: inf
-#define NEGATIVE_INFINITY (-POSITIVE_INFINITY) // Negative infinity: -inf
-#define INFINITY POSITIVE_INFINITY // Infinity: inf
-#define NAN ((double) (INFINITY * 0.0)) // Not-a-Number: -nan(ind)
-#else // Another compiler
-#define POSITIVE_INFINITY (1.0 / 0.0) // Positive infinity: inf
-#define NEGATIVE_INFINITY (-1.0 / 0.0) // Negative infinity: -inf
-#define INFINITY POSITIVE_INFINITY // Infinity: inf
-#define NAN (0.0 / 0.0) // Not-a-Number: nan
+#define POSITIVE_INFINITY ((double) (1e+300 * 1e+300)) // Positive infinity
+#define NEGATIVE_INFINITY (-POSITIVE_INFINITY) // Negative infinity
+#define INFINITY POSITIVE_INFINITY // Infinity
+#define NAN ((double) (INFINITY * 0.0)) // Not-a-Number
+#else // Other compilers
+#define POSITIVE_INFINITY (1.0 / 0.0) // Positive infinity
+#define NEGATIVE_INFINITY (-1.0 / 0.0) // Negative infinity
+#define INFINITY POSITIVE_INFINITY // Infinity
+#define NAN (0.0 / 0.0) // Not-a-Number
 #endif // COMPILER_MSVC

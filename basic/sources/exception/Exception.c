@@ -1,12 +1,14 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * This software is licensed under Enhanced License.
+ * Licensed under the Enhanced License, Version 0.5.4 (the "License").
  * You may not use this file except in compliance with the License.
- * You should see a copy of Enhanced License in this software, if not, visit
- * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ * You may obtain a copy of the License at
  *
- * The Software is always provided "AS IS",
+ *     https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt
+ *
+ * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+ * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
  * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -20,14 +22,19 @@
 
 #include <stdio.h>
 
+const ExceptionType Exception = {
+    .parent = null,
+    .code = 0xFFFFFFFFFFFFFFFF
+};
+
 static ExceptionContext* exceptionContextStack = null;
 
-static char* getTraceback(ExceptionType* self);
+static char* getTraceback(ExceptionInstance* self);
 
-ExceptionType newException(const uint exceptionCode, const char* const exceptionMessage) {
-    ExceptionType exception = {
-        .message = exceptionMessage,
-        .code = exceptionCode,
+ExceptionInstance newException(const ExceptionType type, const char* const message) {
+    ExceptionInstance exception = {
+        .message = message,
+        .type = type,
         .getTraceback = getTraceback
     };
     return exception;
@@ -48,9 +55,24 @@ bool exceptionContextStackIsEmpty() {
     return exceptionContextStack == null;
 }
 
-void exceptionThrow(ExceptionType exception) {
+bool exceptionInstanceOf(struct ExceptionInstance* exception, ExceptionType type) {
+    if (exception->type.code == type.code || type.code == Exception.code) {
+        return true;
+    }
+
+    ExceptionType* parent = exception->type.parent;
+    while (parent != null) {
+        if (parent->code == type.code) {
+            return true;
+        }
+        parent = parent->parent;
+    }
+    return false;
+}
+
+void exceptionThrow(ExceptionInstance exception) {
     if (exceptionContextStackIsEmpty()) {
-        fprintf(stderr, exception.getTraceback(&exception));
+        fprintf(stderr, "%s\n", exception.getTraceback(&exception));
         processAbnormalAbort();
     } else {
         exceptionContextStack->exception = &exception;
@@ -58,6 +80,6 @@ void exceptionThrow(ExceptionType exception) {
     }
 }
 
-char* getTraceback(ExceptionType* self) {
+char* getTraceback(ExceptionInstance* self) {
     return (char*) self->message;
 }

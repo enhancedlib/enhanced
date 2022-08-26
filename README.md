@@ -1,6 +1,6 @@
 # Enhanced
 
-A Powerful C/C++ Development Framework
+A More Powerful C/C++ Development Framework
 
 This software is licensed under [Enhanced License](LICENSE).
 
@@ -27,18 +27,18 @@ It contains many useful modules with a powerful variety of classes and functions
 
 Note: many functions have not been developed yet, and will be gradually added in the future.
 
-- 1. Basic data types (e.g. String, Integer)
-- 2. More powerful exception handling (including C language support)
-- 3. Containers (collection, set, map, etc.)
-- 4. Template (generic) classes and functions (C++ only)
-- 5. Threading.
-- 6. Cross-platform underlying APIs
-- 7. Data processing.
-- 8. ...
+1. Basic data types (e.g. String, Integer)
+2. More powerful exception handling (including C language support)
+3. Containers (collection, set, map, etc.)
+4. Template (generic) classes and functions (C++ only)
+5. Threading.
+6. Cross-platform underlying APIs
+7. Data processing.
+8. ...
 
 ## 2.Install/Uninstall
 
-There is no installer yet, you can download the source code, build the project yourself.
+There is no installer yet, you can download the source type, build the project yourself.
 
 - The installer and uninstaller will be provided in the future.
 
@@ -60,30 +60,12 @@ Supported C++ Standard: C++17, C++20
 
 ## 4.Build
 
-Required environments:
+Environments:
 
-- C Standard: C11
-- C++ Standard: C++17
-- Build System: CMake
-
-Recommended environments:
-
-- C Standard: C11
+- C Standard: C11;
 - C++ Standard: C++20
 - Build System: CMake with Ninja
 
 ## 5.Wish
 
 I hope this library can make the C/C++ language software development more convenient and efficient.
-
-## 6.Technology
-
-### About Generics (Templates) in This Project
-
-In this project, a class whose class name is follows "Impl" is a generic implementation class of a generic class.
-Most implementations of generic classes are in the implementation classes (except for a few special generic classes).
-
-They separate the implementation of the generic classes from the generic by type erasure (pseudo-generic).
-
-You should not extend (inherit) the implementation class from another class, and you should not instantiate the implementation classes directly.
-The correct approach is to instantiate the generic classes, because the implementation classes have no public methods.

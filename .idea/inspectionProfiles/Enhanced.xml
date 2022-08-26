@@ -1,9 +1,11 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Enhanced" />
+    <inspection_tool class="HidingNonVirtualFunction" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="INFORMATION_ATTRIBUTES" />
     <inspection_tool class="OCUnusedGlobalDeclaration" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="OCUnusedIncludeDirective" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="OCUnusedMacro" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="OCUnusedStruct" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnusedValue" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="INFORMATION_ATTRIBUTES" />
   </profile>
 </component>

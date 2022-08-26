@@ -1,12 +1,14 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * This software is licensed under Enhanced License.
+ * Licensed under the Enhanced License, Version 0.5.4 (the "License").
  * You may not use this file except in compliance with the License.
- * You should see a copy of Enhanced License in this software, if not, visit
- * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ * You may obtain a copy of the License at
  *
- * The Software is always provided "AS IS",
+ *     https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt
+ *
+ * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+ * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
  * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -16,54 +18,26 @@
 #include "enhanced/core/defines.h"
 #include "enhanced/core/types.h"
 #include "enhanced/core/annotations.h"
-#include "enhanced/core/assert.h"
 #include "enhanced/core/memory.h"
-#include "enhanced/core/array.h"
 #include "enhanced/core/string.h"
 
-#include "enhanced/basic/IntegerWrapper.h"
-#include "enhanced/basic/exception/Exception.h"
-#include "enhanced/basic/collection/List.h"
-#include "enhanced/basic/collection/ArrayList.h"
+#include "enhanced/basic/MutableString.h"
+#include "enhanced/basic/container/List.h"
+#include "enhanced/basic/container/ArrayList.h"
 
 using enhanced::basic::String;
-using enhanced::basic::IntegerWrapper;
-using enhanced::basic::exception::Exception;
-using enhanced::basic::collection::List;
-using enhanced::basic::collection::ArrayList;
+using enhanced::basic::CharSequence;
+using enhanced::basic::MutableString;
+using enhanced::basic::container::List;
+using enhanced::basic::container::ArrayList;
 
-String String::from(const char* value) {
-    return {value, 0};
-}
+String::String(NotNull char* value, Size length) : CharSequence<char>(value, length) {}
 
-String::String(const char* value, byte) noexcept :
-    value(stringCopy(value)), length(stringLength(value)), staticString(false), referString(false) {}
+String::String(NotNull const char* const value) : String(const_cast<char*>(value)) {}
 
-String::String(const char* const value) : value(const_cast<char*>(value)), length(stringLength(value)), staticString(true), referString(false) {}
+String::String(NotNull char* const value) : CharSequence<char>(value, stringLength(value)) {}
 
-String::String(char* const value) : value(stringCopy(value)), length(stringLength(value)), staticString(false), referString(false) {}
-
-String::String(const Size length) : value(stringNew(length)), length(length), staticString(false), referString(false) {}
-
-String::String(const String& other) : value(stringCopy(other)), length(other.length), staticString(false), referString(false) {}
-
-String::String(String&& other) noexcept : value(other.value), length(other.length), staticString(other.staticString), referString(true) {}
-
-String::~String() {
-    if (!staticString && !referString) {
-        delete[] value;
-    }
-}
-
-RetCannotIgnored
-bool String::isEmpty() const {
-    return length == 0;
-}
-
-RetCannotIgnored
-Size String::getLength() const {
-    return length;
-}
+String::String(const String& other) : CharSequence<char>(other, other.length) {}
 
 RetCannotIgnored
 Size String::indexOf(const char ch) const {
@@ -256,230 +230,25 @@ List<Size>* String::indexOfAll(const String& string) const {
     return allIndexes;
 }
 
-RetCannotIgnored
-char* String::getCharacters() const {
-    return value;
+MutableString String::uppercase() {
+    return MutableString(value).toUppercase();
 }
 
-RetCannotIgnored
-String::SafeCharRef String::at(Size index) const {
-    return {value[index], !staticString};
+MutableString String::lowercase() {
+    return MutableString(value).toLowercase();
 }
 
-RetCannotIgnored
-String::SafeCharRef String::operator[](const Size index) const {
-    return at(index);
-}
-
-RetCannotIgnored
 bool String::operator==(const String& string) const {
-    return stringEqual(value, string);
+    return stringEqual(value, string.value);
 }
 
 RetCannotIgnored
-String String::operator+(const String& string) const {
-    String newString = value;
+MutableString String::operator+(const String& string) const {
+    Size newLength = length + string.length;
+    MutableString newString(newLength);
 
-    if (string.length < 1) {
-        return newString;
-    }
-    newString.append(string);
+    memoryCopy(newString.value, value, newLength);
+    memoryCopy(newString.value + length, string.value, newLength);
 
     return newString;
 }
-
-RetCannotIgnored
-String::operator char*() const {
-    return value;
-}
-
-String& String::append(const String& string) {
-    if (string.length < 1) {
-        return *this;
-    }
-
-    Size newLength = length + string.length;
-    char* charArray = new char[newLength + 1];
-    charArray[newLength] = '\0';
-
-    for (Size index = 0; index < length; ++index) {
-        charArray[index] = value[index];
-    }
-    for (Size index = length; index < newLength; ++index) {
-        charArray[index] = string.value[index - length];
-    }
-
-    if (!staticString && !referString) {
-        delete[] value;
-    } else {
-        staticString = false;
-    }
-
-    length = newLength;
-    value = charArray;
-
-    return *this;
-}
-
-String& String::replace(const char oldChar, const char newChar) {
-    return *this;
-}
-
-String& String::replace(const String& oldSubstring, const String& newSubstring) {
-    return *this;
-}
-
-String& String::replace(char oldChar, const String& newSubstring) {
-    return *this;
-}
-
-String& String::replace(const String& oldSubstring, char newChar) {
-    return *this;
-}
-
-char& String::set(Size index, char ch) {
-    if (staticString) {
-        String copy = stringCopy(value);
-        value = copy;
-        staticString = false;
-        referString = false;
-    }
-
-    return value[index] = ch;
-}
-
-String& String::toUpperCase() {
-    if (staticString) {
-        String copy = stringCopy(value);
-        value = copy;
-        staticString = false;
-        referString = false;
-    }
-
-    for (Size index = 0; index < length; ++index) {
-        if (index >= 'a' && index <= 'z') {
-            (value[index] -= 'a') += 'A';
-        }
-    }
-    return *this;
-}
-
-String& String::toLowerCase() {
-    if (staticString) {
-        String copy = stringCopy(value);
-        value = copy;
-        staticString = false;
-        referString = false;
-    }
-
-    for (Size index = 0; index < length; ++index) {
-        if (index >= 'A' && index <= 'Z') {
-            (value[index] -= 'A') += 'a';
-        }
-    }
-    return *this;
-}
-
-String& String::operator=(const String& other) {
-    if (this == &other) {
-        return *this;
-    }
-
-    if (!staticString && !referString) {
-        delete[] value;
-    }
-
-    value = stringCopy(other.value);
-    length = other.length;
-    staticString = false;
-    referString = false;
-
-    return *this;
-}
-
-String& String::operator=(String&& other) noexcept {
-    if (!staticString && !referString) {
-        delete[] value;
-    }
-
-    value = other.value;
-    length = other.length;
-    staticString = other.staticString;
-    referString = true;
-
-    return *this;
-}
-
-String& String::operator+=(const String& string) {
-    return append(string);
-}
-
-String::SafeCharRef::SafeCharRef(char& value, bool canModify) : IntegerWrapper<char>(value), canModify(canModify) {}
-
-void String::SafeCharRef::check() const {
-    if (!canModify) {
-        throw Exception("Static string cannot modify");
-    }
-}
-
-#define OPERATOR_IMPL(_operator) \
-IntegerWrapper<char>& String::SafeCharRef::operator _operator() { \
-    check(); \
-    return IntegerWrapper::operator _operator(); \
-}
-
-OPERATOR_IMPL(++)
-OPERATOR_IMPL(--)
-
-#undef OPERATOR_IMPL
-
-#define OPERATOR_IMPL(_operator) \
-const IntegerWrapper<char> String::SafeCharRef::operator _operator(int) { \
-    check(); \
-    return IntegerWrapper::operator _operator(0); \
-}
-
-OPERATOR_IMPL(++)
-OPERATOR_IMPL(--)
-
-#undef OPERATOR_IMPL
-
-#define OPERATOR_IMPL(_operator) \
-IntegerWrapper<char>& String::SafeCharRef::operator _operator(const IntegerWrapper<char>& other) { \
-    check(); \
-    return IntegerWrapper::operator _operator(other); \
-}
-
-OPERATOR_IMPL(=)
-OPERATOR_IMPL(+=)
-OPERATOR_IMPL(-=)
-OPERATOR_IMPL(*=)
-OPERATOR_IMPL(/=)
-OPERATOR_IMPL(%=)
-OPERATOR_IMPL(<<=)
-OPERATOR_IMPL(>>=)
-OPERATOR_IMPL(&=)
-OPERATOR_IMPL(^=)
-OPERATOR_IMPL(|=)
-
-#undef OPERATOR_IMPL
-
-#define OPERATOR_IMPL(_operator) \
-IntegerWrapper<char>& String::SafeCharRef::operator _operator(const char& other) { \
-    check(); \
-    return IntegerWrapper::operator _operator(other); \
-}
-
-OPERATOR_IMPL(=)
-OPERATOR_IMPL(+=)
-OPERATOR_IMPL(-=)
-OPERATOR_IMPL(*=)
-OPERATOR_IMPL(/=)
-OPERATOR_IMPL(%=)
-OPERATOR_IMPL(<<=)
-OPERATOR_IMPL(>>=)
-OPERATOR_IMPL(&=)
-OPERATOR_IMPL(^=)
-OPERATOR_IMPL(|=)
-
-#undef OPERATOR_IMPL

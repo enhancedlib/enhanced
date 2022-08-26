@@ -1,12 +1,14 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * This software is licensed under Enhanced License.
+ * Licensed under the Enhanced License, Version 0.5.4 (the "License").
  * You may not use this file except in compliance with the License.
- * You should see a copy of Enhanced License in this software, if not, visit
- * <https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt>
+ * You may obtain a copy of the License at
  *
- * The Software is always provided "AS IS",
+ *     https://sharedwonder.github.io/enhanced-website/ENHANCED-LICENSE.txt
+ *
+ * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+ * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
  * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -30,9 +32,9 @@ MODULE_RELATIONS(
     basic,
     REQUIRES_MODULE(core),
     EXPORTS_PACKAGE(enhanced::basic),
-    EXPORTS_PACKAGE(enhanced::basic::collection),
-    EXPORTS_PACKAGE(enhanced::basic::collection::mixed),
-    EXPORTS_PACKAGE(enhanced::basic::collection::refer),
+    EXPORTS_PACKAGE(enhanced::basic::container),
+    EXPORTS_PACKAGE(enhanced::basic::container::mixed),
+    EXPORTS_PACKAGE(enhanced::basic::container::refer),
     EXPORTS_PACKAGE(enhanced::basic::exception),
     EXPORTS_PACKAGE(enhanced::basic::math),
     EXPORTS_PACKAGE(enhanced::basic::util)

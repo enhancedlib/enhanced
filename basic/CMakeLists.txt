@@ -13,14 +13,15 @@ set(
     sources/math/LargeInteger.cpp
     sources/math/Math.c
     sources/math/Math.cpp
-    sources/collection/ArrayList.cpp
-    sources/collection/CollectionDefaultConfig.cpp
-    sources/collection/LinkedList.cpp
-    sources/collection/Vector.cpp
-    sources/collection/mixed/MixedArrayList.cpp
-    sources/collection/mixed/MixedLinkedList.cpp
-    sources/collection/refer/ReferArrayList.cpp
-    sources/collection/refer/ReferLinkedList.cpp
+    sources/container/ArrayList.cpp
+    sources/container/ContainerConfig.cpp
+    sources/container/LinkedList.cpp
+    sources/container/Vector.cpp
+    sources/container/mixed/MixedArrayList.cpp
+    sources/container/mixed/MixedLinkedList.cpp
+    sources/container/refer/ReferArrayList.cpp
+    sources/container/refer/ReferLinkedList.cpp
+    sources/MutableString.cpp
     sources/String.c
     sources/String.cpp
     sources/exception/Exception.c
@@ -33,40 +34,42 @@ set(
     HEADERS
     include/enhanced/basic/module-info.h
     include/enhanced/basic/export.h
-    include/enhanced/basic/collection/ArrayDeque.h
-    include/enhanced/basic/collection/ArrayList.h
-    include/enhanced/basic/collection/Collection.h
-    include/enhanced/basic/collection/CollectionDefaultConfig.h
-    include/enhanced/basic/collection/Deque.h
-    include/enhanced/basic/collection/LinkedList.h
-    include/enhanced/basic/collection/LinkedQueue.h
-    include/enhanced/basic/collection/List.h
-    include/enhanced/basic/collection/PriorityQueue.h
-    include/enhanced/basic/collection/Queue.h
-    include/enhanced/basic/collection/Tuple.h
-    include/enhanced/basic/collection/mixed/MixedArrayList.h
-    include/enhanced/basic/collection/mixed/MixedDeque.h
-    include/enhanced/basic/collection/mixed/MixedLinkedList.h
-    include/enhanced/basic/collection/mixed/MixedList.h
-    include/enhanced/basic/collection/mixed/MixedQueue.h
-    include/enhanced/basic/collection/refer/ReferArrayList.h
-    include/enhanced/basic/collection/refer/ReferDeque.h
-    include/enhanced/basic/collection/refer/ReferLinkedList.h
-    include/enhanced/basic/collection/refer/ReferList.h
-    include/enhanced/basic/collection/refer/ReferQueue.h
-    include/enhanced/basic/collection/RandomAccess.h
-    include/enhanced/basic/IntegerWrapper.h
+    include/enhanced/basic/container/ArrayDeque.h
+    include/enhanced/basic/container/ArrayList.h
+    include/enhanced/basic/container/Collection.h
+    include/enhanced/basic/container/ContainerConfig.h
+    include/enhanced/basic/container/Deque.h
+    include/enhanced/basic/container/LinkedList.h
+    include/enhanced/basic/container/LinkedQueue.h
+    include/enhanced/basic/container/List.h
+    include/enhanced/basic/container/PriorityQueue.h
+    include/enhanced/basic/container/Queue.h
+    include/enhanced/basic/container/Tuple.h
+    include/enhanced/basic/container/mixed/MixedArrayList.h
+    include/enhanced/basic/container/mixed/MixedDeque.h
+    include/enhanced/basic/container/mixed/MixedLinkedList.h
+    include/enhanced/basic/container/mixed/MixedList.h
+    include/enhanced/basic/container/mixed/MixedQueue.h
+    include/enhanced/basic/container/refer/ReferArrayList.h
+    include/enhanced/basic/container/refer/ReferDeque.h
+    include/enhanced/basic/container/refer/ReferLinkedList.h
+    include/enhanced/basic/container/refer/ReferList.h
+    include/enhanced/basic/container/refer/ReferQueue.h
+    include/enhanced/basic/container/RandomAccess.h
+    include/enhanced/basic/CharSequence.h
     include/enhanced/basic/Iterable.h
     include/enhanced/basic/Iterator.h
+    include/enhanced/basic/MutableString.h
     include/enhanced/basic/String.h
     include/enhanced/basic/exception/Exception.h
-    include/enhanced/basic/exception/StandardExceptions.h
     include/enhanced/basic/math/LargeInteger.h
     include/enhanced/basic/math/Math.h
     include/enhanced/basic/util/Allocator.h
+    include/enhanced/basic/util/Checker.h
     include/enhanced/basic/util/convert.h
     include/enhanced/basic/util/generic.h
     include/enhanced/basic/util/SharedPointer.h
+
 )
 
 message("${PROMPT} Configuring module: ${MODULE_FULL_NAME}")
@@ -124,7 +127,7 @@ endforeach ()
 install(TARGETS ${MODULE_FULL_NAME}-static)
 message("${PROMPT} Set the installation directory for the target \"${MODULE_FULL_NAME}-static\"")
 
-add_library(${MODULE_FULL_NAME} SHARED ${SOURCES} ${HEADERS})
+add_library(${MODULE_FULL_NAME} SHARED ${SOURCES} ${HEADERS} sources/CharSequence.cpp)
 message("${PROMPT} Adds target (dynamic library) \"${MODULE_FULL_NAME}\"")
 
 target_compile_definitions(${MODULE_FULL_NAME} PRIVATE ENHANCED_${MODULE_NAME_UPPER}_EXPORTS)
