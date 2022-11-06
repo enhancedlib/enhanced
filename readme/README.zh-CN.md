@@ -6,7 +6,7 @@
 
 此软件遵循[Enhanced Software License](../LICENSE)。
 
-[其它语言](LANGUAGES.md) | [版权声明](../COPYRIGHT) | [网站](https://sharedwonder.github.io/enhanced) | [GitHub仓库](https://github.com/sharedwonder/Enhanced)
+[其它语言](LANGUAGES.md) | [版权声明](../COPYRIGHT) | [网站](https://sharedwonder.github.io/enhanced/) | [GitHub仓库](https://github.com/sharedwonder/enhanced/)
 
 ---
 
@@ -39,11 +39,11 @@
 环境：
 
 - 编译器：[Clang](https://clang.llvm.org/)、[Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU C/C++ Compiler](https://gcc.gnu.org/)
-- 操作系统：Microsoft Windows操作系统、基于Linux内核的操作系统、
+- 操作系统：Microsoft Windows操作系统、基于Linux内核的操作系统
 - 处理器：x86、amd64 (x86_64)
-- C标准: C11
+- 构建系统: [XMake](https://xmake.io/#/zh-cn/)、[CMake](https://cmake.org/)
+- C标准: C17
 - C++标准: C++20
-- 构建系统: [XMake](https://xmake.io/#/zh-cn/)/[CMake](https://cmake.org/)
 
 ## 愿望
 
@@ -57,12 +57,12 @@
 
 ### 问：这个软件免费吗？
 
-答：是的，这个软件免费并且开源。但使用此软件必须遵守[许可协议（Enhanced Software License）](../../LICENSE)，否则，你不得使用此软件。
+答：是的，这个软件免费并且开源。但使用此软件必须遵守[许可协议（Enhanced Software License）](../LICENSE)，否则，你不得使用此软件。
 
 ## 关于
 
 - *版本*：0.0.1 Build-0.1 Dev 1
-- *网站*： <https://sharedwonder.github.io/enhanced>
+- *网站*： <https://sharedwonder.github.io/enhanced/>
 - *作者*：刘柏豪
 - *作者职业*：中学生
 - *作者邮箱*：<liubaihaohello@outlook.com>
