@@ -24,85 +24,94 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core {
-    template <typename CharType>
-    class MutableBasicString;
+NAMESPACE_L2_BEGIN(enhanced, core)
 
-    template <typename CharType>
-    class ENHANCED_CORE_API BasicString : public CharSequence<CharType> {
-    protected:
-        BasicString(NotNull CharType* value, Size length) noexcept;
+template <typename CharType>
+class MutableBasicString;
 
-    public:
-        BasicString(NotNull const CharType* value) noexcept;
+template <typename CharType>
+class ENHANCED_CORE_API BasicString : public CharSequence<CharType> {
+protected:
+    BasicString(CharType* value, sizetype length) noexcept;
 
-        BasicString(NotNull CharType* value) noexcept;
+public:
+    BasicString(const CharType* value) noexcept;
 
-        BasicString(const BasicString& other) noexcept;
+    BasicString(CharType* value) noexcept;
 
-        BasicString(BasicString&& other) noexcept;
+    BasicString(const BasicString& other) noexcept;
 
-        RetCannotIgnored
-        Size indexOf(CharType ch) const noexcept;
+    BasicString(BasicString&& other) noexcept;
 
-        RetCannotIgnored
-        Size indexOf(CharType ch, Size getN) const noexcept;
+    NoIgnoreRet
+    sizetype indexOf(CharType ch) const noexcept;
 
-        RetCannotIgnored
-        Size indexOf(const BasicString& string) const noexcept;
+    NoIgnoreRet
+    sizetype indexOf(CharType ch, sizetype getN) const noexcept;
 
-        RetCannotIgnored
-        Size indexOf(const BasicString& string, Size getN) const noexcept;
+    NoIgnoreRet
+    sizetype indexOf(const BasicString& string) const noexcept;
 
-        RetCannotIgnored
-        Size lastIndexOf(const BasicString& string) const noexcept;
+    NoIgnoreRet
+    sizetype indexOf(const BasicString& string, sizetype getN) const noexcept;
 
-        RetCannotIgnored
-        Size lastIndexOf(const BasicString& string, Size getN) const noexcept;
+    NoIgnoreRet
+    sizetype lastIndexOf(const BasicString& string) const noexcept;
 
-        RetCannotIgnored
-        Size lastIndexOf(CharType ch) const noexcept;
+    NoIgnoreRet
+    sizetype lastIndexOf(const BasicString& string, sizetype getN) const noexcept;
 
-        RetCannotIgnored
-        Size lastIndexOf(CharType ch, Size getN) const noexcept;
+    NoIgnoreRet
+    sizetype lastIndexOf(CharType ch) const noexcept;
 
-        RetRequiresRelease
-        collections::ArrayList<Size> indexOfAll(CharType ch) const noexcept;
+    NoIgnoreRet
+    sizetype lastIndexOf(CharType ch, sizetype getN) const noexcept;
 
-        RetRequiresRelease
-        collections::ArrayList<Size> indexOfAll(const BasicString& string) const noexcept;
+    RetRequiresRelease
+    collections::ArrayList<sizetype> indexOfAll(CharType ch) const noexcept;
 
-        RetCannotIgnored
-        MutableBasicString<CharType> replace(CharType oldChar, CharType newChar) const;
+    RetRequiresRelease
+    collections::ArrayList<sizetype> indexOfAll(const BasicString& string) const noexcept;
 
-        RetCannotIgnored
-        MutableBasicString<CharType> replace(const BasicString& oldSubstring, const BasicString& newSubstring) const;
+    NoIgnoreRet
+    MutableBasicString<CharType> replace(CharType oldChar, CharType newChar) const;
 
-        RetCannotIgnored
-        MutableBasicString<CharType> replace(CharType oldChar, const BasicString& newSubstring) const;
+    NoIgnoreRet
+    MutableBasicString<CharType> replace(const BasicString& oldSubstring, const BasicString& newSubstring) const;
 
-        RetCannotIgnored
-        MutableBasicString<CharType> replace(const BasicString& oldSubstring, CharType newChar) const;
+    NoIgnoreRet
+    MutableBasicString<CharType> replace(CharType oldChar, const BasicString& newSubstring) const;
 
-        RetCannotIgnored
-        MutableBasicString<CharType> uppercase() const;
+    NoIgnoreRet
+    MutableBasicString<CharType> replace(const BasicString& oldSubstring, CharType newChar) const;
 
-        RetCannotIgnored
-        MutableBasicString<CharType> lowercase() const;
+    NoIgnoreRet
+    MutableBasicString<CharType> uppercase() const;
 
-        RetCannotIgnored
-        bool operator==(const BasicString& string) const noexcept;
+    NoIgnoreRet
+    MutableBasicString<CharType> lowercase() const;
 
-        RetCannotIgnored
-        MutableBasicString<CharType> operator+(const BasicString& string) const;
+    NoIgnoreRet
+    bool operator==(const BasicString& string) const noexcept;
 
-        BasicString& operator=(const BasicString& other) noexcept;
+    NoIgnoreRet
+    MutableBasicString<CharType> operator+(const BasicString& string) const;
 
-        BasicString& operator=(BasicString&& other) noexcept;
-    };
+    BasicString& operator=(const BasicString& other) noexcept;
 
-    using String = BasicString<char>;
-    using WideString = BasicString<wchar>;
-}
+    BasicString& operator=(BasicString&& other) noexcept;
+};
+
+using String = BasicString<char>;
+using WideString = BasicString<wchar>;
+#ifdef CXX_U8CHAR_SUPPORTED
+using U8String = BasicString<u8char>;
+#endif
+#ifdef CXX_11_OR_LATER
+using U16String = BasicString<u16char>;
+using U32String = BasicString<u32char>;
+#endif
+
+NAMESPACE_L2_END
 
 #endif

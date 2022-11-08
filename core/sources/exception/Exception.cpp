@@ -13,15 +13,42 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
+#include <exception>
+
 #include <enhanced/core/exception/Exception.h>
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/process.h>
 #include <enhanced/core/String.h>
+#include <enhanced/core/io/stdio.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
 using enhanced::core::exception::Exception;
 using enhanced::core::String;
+using enhanced::core::io::errstream;
+
+using TerminateHandler = void(*)();
+
+static void terminateHandler() {
+    try {
+        std::rethrow_exception(std::current_exception());
+    } catch (const Exception& exception) {
+        errstream->print(exception.getTraceback());
+    } catch (const std::exception& exception) {
+        errstream->print(exception.what());
+    } catch (...) {
+        processAbort();
+    }
+}
+
+static TerminateHandler setupTerminateHandler() noexcept {
+    std::set_terminate(terminateHandler);
+    return terminateHandler;
+}
+
+const TerminateHandler terminateHandlerFunc = setupTerminateHandler();
 
 Exception::Exception(const String& message) noexcept : message((String&&) message), cause(null) {}
 

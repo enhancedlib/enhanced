@@ -13,7 +13,6 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-
 #include <enhanced/core/io/OutputStream.h>
 
 #include <enhanced/core/defines.h>
@@ -23,22 +22,14 @@
 
 using enhanced::core::io::OutputStream;
 
-void OutputStream::write(char ch) const {
+void OutputStream::write(byte b) const {
     NOT_IMPLEMENTED();
 }
 
-void OutputStream::write(const char* message) const {
+void OutputStream::write(byte* buffer, sizetype size) const {
     NOT_IMPLEMENTED();
 }
 
-void OutputStream::write(String& message) const {
-    NOT_IMPLEMENTED();
-}
-
-void OutputStream::writeLine(const char* message) const {
-    NOT_IMPLEMENTED();
-}
-
-void OutputStream::writeLine(String& message) const {
+void OutputStream::writeLine(const String& string) const {
     NOT_IMPLEMENTED();
 }

@@ -33,7 +33,7 @@ EXTERN_C_START
  * @return void*   A pointer to the newly allocated space.
  */
 MustInspectResult RetNullable RetRequiresRelease
-ENHANCED_CORE_API void* memoryAlloc(Size size);
+ENHANCED_CORE_API void* memoryAlloc(sizetype size);
 
 /*!
  * Frees a memory space to which the pointer points. \n
@@ -55,7 +55,7 @@ ENHANCED_CORE_API void memoryFree(void* pointer);
  * @param aByte   A byte (range: 0 ~ 255).
  * @param size    The byte size of the pointer. (generally: "<memory size> * sizeof(<pointer type>)").
  */
-ENHANCED_CORE_API void memorySet(void* ptr, byte aByte, Size size);
+ENHANCED_CORE_API void memorySet(void* ptr, byte aByte, sizetype size);
 
 /*!
  * Copies a memory space.
@@ -66,25 +66,27 @@ ENHANCED_CORE_API void memorySet(void* ptr, byte aByte, Size size);
  * @param source        A source pointer.
  * @param size          The byte size of the source pointer. (generally: "<count> * sizeof(<pointer type>)").
  */
-ENHANCED_CORE_API void memoryCopy(void* destination, const void* source, Size size);
+ENHANCED_CORE_API void memoryCopy(void* destination, const void* source, sizetype size);
 
 EXTERN_C_END
 
 #ifdef CXX_LANGUAGE
 
-void* operator new(Size size);
+void* operator new(sizetype size);
 
 void operator delete(void* pointer) noexcept;
 
-void* operator new[](Size size);
+void* operator new[](sizetype size);
 
 void operator delete[](void* pointer) noexcept;
 
-namespace enhanced::core {
-    using ::memoryAlloc;
-    using ::memoryFree;
-    using ::memorySet;
-    using ::memoryCopy;
-}
+NAMESPACE_L2_BEGIN(enhanced, core)
+
+using ::memoryAlloc;
+using ::memoryFree;
+using ::memorySet;
+using ::memoryCopy;
+
+NAMESPACE_L2_END
 
 #endif

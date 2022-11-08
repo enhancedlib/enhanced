@@ -24,51 +24,60 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core {
-    template <typename CharType>
-    class ENHANCED_CORE_API MutableBasicString : public BasicString<CharType> {
-    public:
-        MutableBasicString(NotNull const CharType* value);
+NAMESPACE_L2_BEGIN(enhanced, core)
 
-        MutableBasicString(NotNull CharType* value);
+template <typename CharType>
+class ENHANCED_CORE_API MutableBasicString : public BasicString<CharType> {
+public:
+    MutableBasicString(const CharType* value);
 
-        explicit MutableBasicString(Size length);
+    MutableBasicString(CharType* value);
 
-        MutableBasicString(const MutableBasicString& other);
+    explicit MutableBasicString(sizetype length);
 
-        MutableBasicString(MutableBasicString&& other) noexcept;
+    MutableBasicString(const MutableBasicString& other);
 
-        ~MutableBasicString() noexcept;
+    MutableBasicString(MutableBasicString&& other) noexcept;
 
-        RetCannotIgnored
-        CharType& at(Size index) const noexcept;
+    ~MutableBasicString() noexcept;
 
-        RetCannotIgnored
-        CharType& operator[](Size index) const noexcept;
+    NoIgnoreRet
+    CharType& at(sizetype index) const noexcept;
 
-        MutableBasicString& append(const BasicString<CharType>& other);
+    NoIgnoreRet
+    CharType& operator[](sizetype index) const noexcept;
 
-        MutableBasicString& replaceTo(CharType oldChar, CharType newChar);
+    MutableBasicString& append(const BasicString<CharType>& other);
 
-        MutableBasicString& replaceTo(const BasicString<CharType>& oldSubstring, const BasicString<CharType>& newSubstring);
+    MutableBasicString& replaceTo(CharType oldChar, CharType newChar);
 
-        MutableBasicString& replaceTo(CharType oldChar, const BasicString<CharType>& newSubstring);
+    MutableBasicString& replaceTo(const BasicString<CharType>& oldSubstring, const BasicString<CharType>& newSubstring);
 
-        MutableBasicString& replaceTo(const BasicString<CharType>& oldSubstring, CharType newChar);
+    MutableBasicString& replaceTo(CharType oldChar, const BasicString<CharType>& newSubstring);
 
-        MutableBasicString& toUppercase();
+    MutableBasicString& replaceTo(const BasicString<CharType>& oldSubstring, CharType newChar);
 
-        MutableBasicString& toLowercase();
+    MutableBasicString& toUppercase();
 
-        MutableBasicString& operator=(const MutableBasicString& other);
+    MutableBasicString& toLowercase();
 
-        MutableBasicString& operator=(MutableBasicString&& other) noexcept;
+    MutableBasicString& operator=(const MutableBasicString& other);
 
-        MutableBasicString& operator+=(const BasicString<CharType>& other);
-    };
+    MutableBasicString& operator=(MutableBasicString&& other) noexcept;
 
-    using MutableString = MutableBasicString<char>;
-    using MutableWideString = MutableBasicString<wchar>;
-}
+    MutableBasicString& operator+=(const BasicString<CharType>& other);
+};
+
+using MutableString = MutableBasicString<char>;
+using MutableWideString = MutableBasicString<wchar>;
+#ifdef CXX_U8CHAR_SUPPORTED
+using U8MutableString = MutableBasicString<u8char>;
+#endif
+#ifdef CXX_11_OR_LATER
+using U16MutableString = MutableBasicString<u16char>;
+using U32MutableString = MutableBasicString<u32char>;
+#endif
+
+NAMESPACE_L2_END
 
 #endif

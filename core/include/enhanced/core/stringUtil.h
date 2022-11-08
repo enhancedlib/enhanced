@@ -26,7 +26,7 @@
  * @param length  The count of the new string.
  */
 RetRequiresRelease RetNullable MustInspectResult
-ENHANCED_CORE_API char* stringNew(Size length);
+ENHANCED_CORE_API char* stringNew(sizetype length);
 
 /*!
  * Copies a string to a new string.
@@ -35,7 +35,7 @@ ENHANCED_CORE_API char* stringNew(Size length);
  * @return char*  The new string.
  */
 RetRequiresRelease RetNullable MustInspectResult
-ENHANCED_CORE_API char* stringCopy(NotNull const char* source);
+ENHANCED_CORE_API char* stringCopy(const char* source);
 
 /*!
  * Copies a string to a new string.
@@ -45,7 +45,7 @@ ENHANCED_CORE_API char* stringCopy(NotNull const char* source);
  * @return char*  The new string.
  */
 RetRequiresRelease RetNullable MustInspectResult
-ENHANCED_CORE_API char* stringCopyExt(NotNull const char* source, Size length);
+ENHANCED_CORE_API char* stringCopyExt(const char* source, sizetype length);
 
 /*!
  * Copies a string to a new string with a new length.
@@ -56,16 +56,16 @@ ENHANCED_CORE_API char* stringCopyExt(NotNull const char* source, Size length);
  * @return char*   The new string.
  */
 RetRequiresRelease RetNullable MustInspectResult
-ENHANCED_CORE_API char* stringCopyResize(NotNull const char* string, Size oldSize, Size newSize);
+ENHANCED_CORE_API char* stringCopyResize(const char* string, sizetype oldSize, sizetype newSize);
 
 /*!
  * Gets the count of a string.
  *
  * @param string  A string.
- * @return Size   The count of the string.
+ * @return sizetype   The count of the string.
  */
-RetCannotIgnored
-ENHANCED_CORE_API Size stringLength(NotNull const char* string);
+NoIgnoreRet
+ENHANCED_CORE_API sizetype stringLength(const char* string);
 
 /*!
  * Verifies two strings are the same.
@@ -74,20 +74,8 @@ ENHANCED_CORE_API Size stringLength(NotNull const char* string);
  * @param string2  Another string.
  * @return bool    Whether the string "string1" is equal to the string "string2".
  */
-RetCannotIgnored
+NoIgnoreRet
 ENHANCED_CORE_API bool stringEqual(const char* string1, const char* string2);
-
-/*!
- * Verifies two strings are the same.
- *
- * @param string1  A string.
- * @param length1  The length of 'string1'.
- * @param string2  Another string.
- * @param length2  The length of 'string2'.
- * @return bool    Whether the string "string1" is equal to the string "string2".
- */
-RetCannotIgnored
-ENHANCED_CORE_API bool stringEqualExt(const char* string1, Size length1, const char* string2, Size length2);
 
 /*!
  * Creates a new wide string.
@@ -95,7 +83,7 @@ ENHANCED_CORE_API bool stringEqualExt(const char* string1, Size length1, const c
  * @param length  The count of the new wide string.
  */
 RetRequiresRelease RetNullable MustInspectResult
-ENHANCED_CORE_API wchar* wstringNew(Size length);
+ENHANCED_CORE_API wchar* wstringNew(sizetype length);
 
 /*!
  * Copies a wide string to a new wide string of the same count.
@@ -104,7 +92,7 @@ ENHANCED_CORE_API wchar* wstringNew(Size length);
  * @return char*  The new wide string.
  */
 RetRequiresRelease RetNullable MustInspectResult
-ENHANCED_CORE_API wchar* wstringCopy(NotNull const wchar* source);
+ENHANCED_CORE_API wchar* wstringCopy(const wchar* source);
 
 /*!
  * Copies a wide string to a new string.
@@ -114,7 +102,7 @@ ENHANCED_CORE_API wchar* wstringCopy(NotNull const wchar* source);
  * @return char*  The new string.
  */
 RetRequiresRelease RetNullable MustInspectResult
-ENHANCED_CORE_API wchar* wstringCopyExt(NotNull const wchar* source, Size length);
+ENHANCED_CORE_API wchar* wstringCopyExt(const wchar* source, sizetype length);
 
 /*!
  * Resets the size of a wide string.
@@ -125,16 +113,16 @@ ENHANCED_CORE_API wchar* wstringCopyExt(NotNull const wchar* source, Size length
  * @return char*   The new wide string.
  */
 RetRequiresRelease RetNullable MustInspectResult
-ENHANCED_CORE_API wchar* wstringCopyResize(NotNull const wchar* wstring, Size oldSize, Size newSize);
+ENHANCED_CORE_API wchar* wstringCopyResize(const wchar* wstring, sizetype oldSize, sizetype newSize);
 
 /*!
  * Gets the count of a wide string.
  *
  * @param wstring  A wide string.
- * @return Size    The count of the wide string.
+ * @return sizetype    The count of the wide string.
  */
-RetCannotIgnored
-ENHANCED_CORE_API Size wstringLength(NotNull const wchar* wstring);
+NoIgnoreRet
+ENHANCED_CORE_API sizetype wstringLength(const wchar* wstring);
 
 /*!
  * Verifies two wide strings are the same.
@@ -143,62 +131,45 @@ ENHANCED_CORE_API Size wstringLength(NotNull const wchar* wstring);
  * @param wstring2  Another wide string.
  * @return bool     Whether the wide string 'wstring1' is equal to the wide string 'wstring2'.
  */
-RetCannotIgnored
+NoIgnoreRet
 ENHANCED_CORE_API bool wstringEqual(const wchar* wstring1, const wchar* wstring2);
-
-/*!
- * Verifies two wide strings are the same.
- *
- * Extension for 'wstringEqual' function
- *
- * @param wstring1  A wide string.
- * @param length1   The length of 'wstring1'.
- * @param wstring2  Another wide string.
- * @param length2   The length of 'wstring2'.
- * @return bool     Whether the string 'string1' is equal to the string 'string2'.
- */
-RetCannotIgnored
-ENHANCED_CORE_API bool wstringEqualExt(const wchar* wstring1, Size length1, const wchar* wstring2, Size length2);
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core {
-    using ::stringNew;
-    using ::stringCopy;
-    using ::stringCopyExt;
-    using ::stringCopyResize;
-    using ::stringLength;
-    using ::stringEqual;
-    using ::stringEqualExt;
+NAMESPACE_L2_BEGIN(enhanced, core)
 
-    using ::wstringNew;
-    using ::wstringCopy;
-    using ::wstringCopyExt;
-    using ::wstringCopyResize;
-    using ::wstringLength;
-    using ::wstringEqual;
-    using ::wstringEqualExt;
+using ::stringNew;
+using ::stringCopy;
+using ::stringCopyExt;
+using ::stringCopyResize;
+using ::stringLength;
+using ::stringEqual;
 
-    template <typename CharType>
-    ENHANCED_CORE_API CharType* tstringNew(Size length);
+using ::wstringNew;
+using ::wstringCopy;
+using ::wstringCopyExt;
+using ::wstringCopyResize;
+using ::wstringLength;
+using ::wstringEqual;
 
-    template <typename CharType>
-    ENHANCED_CORE_API CharType* tstringCopy(NotNull const CharType* source);
+template <typename CharType>
+ENHANCED_CORE_API CharType* tstringNew(sizetype length);
 
-    template <typename CharType>
-    ENHANCED_CORE_API CharType* tstringCopyExt(NotNull const CharType* source, Size length);
+template <typename CharType>
+ENHANCED_CORE_API CharType* tstringCopy(const CharType* source);
 
-    template <typename CharType>
-    ENHANCED_CORE_API CharType* tstringCopyResize(NotNull const CharType* source, Size oldSize, Size newSize);
+template <typename CharType>
+ENHANCED_CORE_API CharType* tstringCopyExt(const CharType* source, sizetype length);
 
-    template <typename CharType>
-    ENHANCED_CORE_API Size tstringLength(NotNull const CharType* string) noexcept;
+template <typename CharType>
+ENHANCED_CORE_API CharType* tstringCopyResize(const CharType* source, sizetype oldSize, sizetype newSize);
 
-    template <typename CharType>
-    ENHANCED_CORE_API bool tstringEqual(const CharType* string1, const CharType* string2) noexcept;
+template <typename CharType>
+ENHANCED_CORE_API sizetype tstringLength(const CharType* string) noexcept;
 
-    template <typename CharType>
-    ENHANCED_CORE_API bool tstringEqualExt(const CharType* string1, Size length1, const CharType* string2, Size length2) noexcept;
-}
+template <typename CharType>
+ENHANCED_CORE_API bool tstringEqual(const CharType* string1, const CharType* string2) noexcept;
+
+NAMESPACE_L2_END
 
 #endif

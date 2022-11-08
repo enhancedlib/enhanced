@@ -23,11 +23,13 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::collections::refer {
-    template <typename Type>
-    struct AbstractClass ReferList : List<Type> {
-        virtual ReferList<Type>* copy() const = 0;
-    };
-}
+NAMESPACE_L4_BEGIN(enhanced, core, collections, refer)
+
+template <typename Type>
+struct AbstractClass ReferList : List<Type> {
+    virtual ReferList<Type>* copy() const = 0;
+};
+
+NAMESPACE_L4_END
 
 #endif

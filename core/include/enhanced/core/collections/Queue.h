@@ -22,36 +22,38 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::collections {
-    template <typename Type>
-    struct AbstractClass Queue : Collection<Type> {
-        RetCannotIgnored
-        virtual Type& getFirst() const = 0;
+NAMESPACE_L3_BEGIN(enhanced, core, collections)
 
-        RetCannotIgnored
-        virtual Type& getLast() const = 0;
+template <typename Type>
+struct AbstractClass Queue : Collection<Type> {
+    NoIgnoreRet
+    virtual Type& getFirst() const = 0;
 
-        RetCannotIgnored
-        virtual Type& get(Size index) const = 0;
+    NoIgnoreRet
+    virtual Type& getLast() const = 0;
 
-        RetCannotIgnored
-        virtual Type& operator[](Size index) const = 0;
+    NoIgnoreRet
+    virtual Type& get(sizetype index) const = 0;
 
-        RetRequiresRelease
-        virtual Queue<Type>* copy() const = 0;
+    NoIgnoreRet
+    virtual Type& operator[](sizetype index) const = 0;
 
-        virtual void addLast(const Type& element) = 0;
+    RetRequiresRelease
+    virtual Queue<Type>* copy() const = 0;
 
-        virtual Type removeFirst() = 0;
+    virtual void addLast(const Type& element) = 0;
 
-        virtual void add(const Type& element) = 0;
+    virtual Type removeFirst() = 0;
 
-        virtual Type remove() = 0;
+    virtual void add(const Type& element) = 0;
 
-        virtual void push(const Type& element) = 0;
+    virtual Type remove() = 0;
 
-        virtual Type popup() = 0;
-    };
-}
+    virtual void push(const Type& element) = 0;
+
+    virtual Type popup() = 0;
+};
+
+NAMESPACE_L3_END
 
 #endif

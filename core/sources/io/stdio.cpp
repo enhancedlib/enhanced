@@ -15,11 +15,30 @@
 
 #include <enhanced/core/io/stdio.h>
 
-#include <enhanced/core/io/InputStream.h>
-#include <enhanced/core/io/PrintStream.h>
+#include <enhanced/core/io/WarpedInputStream.h>
+#include <enhanced/core/io/WarpedOutputStream.h>
 
 namespace enhanced::core::io {
-    InputStream* stdin = null;
-    PrintStream* stdout = null;
-    PrintStream* stderr = null;
+    static WarpedInputStream* _instream = null;
+    static WarpedOutputStream* _outstream = null;
+    static WarpedOutputStream* _errstream = null;
+
+    WarpedInputStream* const& instream = _instream;
+    WarpedOutputStream* const& outstream = _outstream;
+    WarpedOutputStream* const& errstream = _errstream;
+
+    void setIn(WarpedInputStream* in) {
+        instream->flush();
+        _instream = in;
+    }
+
+    void setOut(WarpedOutputStream* out) {
+        outstream->flush();
+        _outstream = out;
+    }
+
+    void setErr(WarpedOutputStream* err) {
+        errstream->flush();
+        _errstream = err;
+    }
 }

@@ -22,45 +22,47 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core {
-    template <typename CharType>
-    class ENHANCED_CORE_API CharSequence {
-    protected:
-        CharType* value;
+NAMESPACE_L2_BEGIN(enhanced, core)
 
-        Size length;
+template <typename CharType>
+class ENHANCED_CORE_API CharSequence {
+protected:
+    CharType* value;
 
-    public:
-        CharSequence(NotNull CharType* value, Size length);
+    sizetype length;
 
-        CharSequence(const CharSequence& other) noexcept;
+public:
+    CharSequence(CharType* value, sizetype length);
 
-        CharSequence(CharSequence&& other) noexcept;
+    CharSequence(const CharSequence& other) noexcept;
 
-        virtual ~CharSequence() noexcept;
+    CharSequence(CharSequence&& other) noexcept;
 
-        RetCannotIgnored
-        Size getLength() const noexcept;
+    virtual ~CharSequence() noexcept;
 
-        RetCannotIgnored
-        bool isEmpty() const noexcept;
+    NoIgnoreRet
+    sizetype getLength() const noexcept;
 
-        RetCannotIgnored
-        CharType* getChars() const noexcept;
+    NoIgnoreRet
+    bool isEmpty() const noexcept;
 
-        RetCannotIgnored
-        const CharType at(Size index) const noexcept;
+    NoIgnoreRet
+    CharType* getChars() const noexcept;
 
-        RetCannotIgnored
-        const CharType operator[](Size index) const noexcept;
+    NoIgnoreRet
+    const CharType at(sizetype index) const noexcept;
 
-        CharSequence& operator=(const CharSequence& other) noexcept;
+    NoIgnoreRet
+    const CharType operator[](sizetype index) const noexcept;
 
-        CharSequence& operator=(CharSequence&& other) noexcept;
+    CharSequence& operator=(const CharSequence& other) noexcept;
 
-        RetCannotIgnored
-        operator CharType*() const noexcept;
-    };
-}
+    CharSequence& operator=(CharSequence&& other) noexcept;
+
+    NoIgnoreRet
+    operator CharType*() const noexcept;
+};
+
+NAMESPACE_L2_END
 
 #endif

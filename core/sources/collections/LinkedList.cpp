@@ -41,14 +41,14 @@ LinkedListImpl::LinkedListImpl(const LinkedListImpl& other) :
     first(null), last(null), indexer(null), size(0),
     genericOperator(other.genericOperator), iterator(null) {
     indexer = other.first;
-    for (Size count = 0; count < other.size; ++count) {
+    for (sizetype count = 0; count < other.size; ++count) {
         addLast0(GET_GENERIC_VALUE(indexer->value));
         nextNode(indexer);
     }
 }
 
 LinkedListImpl::~LinkedListImpl() noexcept {
-    for (Size count = 1; count < size; ++count) {
+    for (sizetype count = 1; count < size; ++count) {
         prevNode(last);
 
         genericOperator.destroy(last->next->value);
@@ -61,36 +61,36 @@ LinkedListImpl::~LinkedListImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored
-Size LinkedListImpl::getSize0() const {
+NoIgnoreRet
+sizetype LinkedListImpl::getSize0() const {
     return size;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool LinkedListImpl::isEmpty0() const {
     return size == 0;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 Generic& LinkedListImpl::getFirst0() const {
     return GET_GENERIC_VALUE(first->value);
 }
 
-RetCannotIgnored
+NoIgnoreRet
 Generic& LinkedListImpl::getLast0() const {
     return GET_GENERIC_VALUE(last->value);
 }
 
-RetCannotIgnored
-Generic& LinkedListImpl::get0(const Size index) const {
+NoIgnoreRet
+Generic& LinkedListImpl::get0(const sizetype index) const {
     if (index < (size >> 1)) {
         indexer = first;
-        for (Size count = 0; count < index; ++count) {
+        for (sizetype count = 0; count < index; ++count) {
             nextNode(indexer);
         }
     } else {
         indexer = last;
-        for (Size count = size - 1; count > index; --count) {
+        for (sizetype count = size - 1; count > index; --count) {
             prevNode(indexer);
         }
     }
@@ -98,10 +98,10 @@ Generic& LinkedListImpl::get0(const Size index) const {
     return GET_GENERIC_VALUE(indexer->value);
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool LinkedListImpl::contain0(Generic& value) const {
     indexer = first;
-    for (Size count = 0; count < size; ++count) {
+    for (sizetype count = 0; count < size; ++count) {
         if (genericOperator.equals(indexer->value, const_cast<void*&>(value))) {
             return true;
         }
@@ -180,7 +180,7 @@ LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListI
 
 LinkedListImpl::LinkedListIteratorImpl::~LinkedListIteratorImpl() noexcept = default;
 
-RetCannotIgnored
+NoIgnoreRet
 bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
     if (isFirst) {
         isFirst = false;
@@ -194,7 +194,7 @@ void LinkedListImpl::LinkedListIteratorImpl::next0() const {
     nextNode(linkedList->indexer);
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool LinkedListImpl::LinkedListIteratorImpl::each0() const {
     if (isFirst) {
         isFirst = false;
@@ -205,7 +205,7 @@ bool LinkedListImpl::LinkedListIteratorImpl::each0() const {
     return hasNext0();
 }
 
-RetCannotIgnored
+NoIgnoreRet
 Generic& LinkedListImpl::LinkedListIteratorImpl::get0() const {
     return GET_GENERIC_VALUE(linkedList->indexer->value);
 }
@@ -215,7 +215,7 @@ void LinkedListImpl::LinkedListIteratorImpl::reset0() const {
     linkedList->indexer = linkedList->first;
 }
 
-RetCannotIgnored
-Size LinkedListImpl::LinkedListIteratorImpl::count0() const {
+NoIgnoreRet
+sizetype LinkedListImpl::LinkedListIteratorImpl::count0() const {
     return linkedList->getSize0();
 }

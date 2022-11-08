@@ -21,8 +21,10 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::collections {
-    struct RandomAccess {};
-}
+NAMESPACE_L3_BEGIN(enhanced, core, collections)
+
+struct RandomAccess {};
+
+NAMESPACE_L3_END
 
 #endif

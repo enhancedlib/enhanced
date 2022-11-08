@@ -18,21 +18,20 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-
 #include <enhanced/core/exception/Error.h>
 
-#ifdef C_LANGUAGE
+ENHANCED_CORE_API extern const CExceptionType CNotImplementedError;
 
-ENHANCED_CORE_API extern const ExceptionType NotImplementedError;
+#ifdef CXX_LANGUAGE
 
-#else
+NAMESPACE_L3_BEGIN(enhanced, core, exception)
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API NotImplementedError : public Error {
-    public:
-        explicit NotImplementedError(const String& message = "Not yet implemented") noexcept;
-    };
-}
+class ENHANCED_CORE_API NotImplementedError : public Error {
+public:
+    explicit NotImplementedError(const String& message = "Not yet implemented") noexcept;
+};
+
+NAMESPACE_L3_END
 
 #define NOT_IMPLEMENTED throw enhanced::core::exception::NotImplementedError
 

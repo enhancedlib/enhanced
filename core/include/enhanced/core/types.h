@@ -17,32 +17,11 @@
 
 #include <enhanced/core/defines.h>
 
-// Prevents system definitions from conflicting with the definitions of this header file.
-#ifdef COMPILER_MSVC
-#include <limits.h>
-#else
-#ifdef COMPILER_GCC
-#define _INC_LIMITS
-#define _GCC_LIMITS_H_
-#endif
-#ifdef COMPILER_CLANG
-#define __CLANG_LIMITS_H
-#endif
-#endif
-
 typedef signed char schar;
 
-// TODO
-#ifdef CXX_LANGUAGE
-#ifdef __cpp_char8_t
-#define CXX_CHAR8_SUPPORTED
-typedef char8_t char8;
-#endif
-typedef char16_t char16;
-typedef char32_t char32;
-#endif
-
 typedef long long llong;
+
+typedef long double ldouble;
 
 typedef unsigned char uchar;
 typedef unsigned short ushort;
@@ -50,7 +29,7 @@ typedef unsigned int uint;
 typedef unsigned long ulong;
 typedef unsigned long long ullong;
 
-typedef char int8;
+typedef schar int8;
 typedef short int16;
 typedef int int32;
 #if defined(WINDOWS_OS) || defined(ARCH_X86) || defined(ARCH_ARM32)
@@ -71,13 +50,11 @@ typedef ulong uint64;
 typedef float float32;
 typedef double float64;
 
-// TODO wchar_t
-typedef uint16 wchar;
-
+// The name "sizetype" is used instead of "size" because "size" is often used as a variable/function name.
 #if defined(ARCH_X86) || defined(ARCH_ARM32)
-typedef uint32 Size;
+typedef uint32 sizetype;
 #else
-typedef uint64 Size;
+typedef uint64 sizetype;
 #endif
 
 typedef uint8 byte;
@@ -85,8 +62,24 @@ typedef uint16 word;
 typedef uint32 dword;
 typedef uint64 qword;
 
+#ifdef CXX_LANGUAGE
+#ifdef CXX_U8CHAR_SUPPORTED
+typedef char8_t u8char;
+#endif
+#ifdef CXX_11_OR_LATER
+typedef char16_t u16char;
+typedef char32_t u32char;
+#endif
+#endif
+
+#ifdef WCHAR_IS_BUILTIN_TYPE
+typedef wchar_t wchar;
+#else
+typedef ushort wchar;
+#endif
+
 #ifdef C_LANGUAGE
-#ifdef C_99_OR_MORE
+#ifdef C_99_OR_LATER
 typedef _Bool bool;
 #else
 typedef uint8 bool;
@@ -104,7 +97,7 @@ typedef uint8 bool;
 #endif
 
 #ifdef CXX_LANGUAGE
-#ifdef CXX_11_OR_MORE
+#ifdef CXX_11_OR_LATER
 #define null nullptr
 typedef decltype(null) NullType;
 #else
@@ -118,7 +111,7 @@ typedef decltype(null) NullType;
 #define null ((void*) 0)
 #endif
 
-// TODO: CHAR8_MIN, CHAR16_MIN, CHAR32_MIN
+// TODO: u8char_MIN, u16char_MIN, u32char_MIN
 
 #ifdef INT8_MIN
 #undef INT8_MIN
@@ -192,12 +185,8 @@ typedef decltype(null) NullType;
 #undef DOUBLE_MIN
 #endif
 
-#ifdef WCHAR_MIN
-#undef WCHAR_MIN
-#endif
-
-#ifdef SIZE_MIN
-#undef SIZE_MIN
+#ifdef SIZE_TYPE_MIN
+#undef SIZE_TYPE_MIN
 #endif
 
 #ifdef BYTE_MIN
@@ -213,6 +202,10 @@ typedef decltype(null) NullType;
 #undef QWORD_MIN
 #endif
 
+#ifdef WCHAR_MIN
+#undef WCHAR_MIN
+#endif
+
 #define INT8_MIN ((int8) (-(0xFF >> 1) - 1)) // -128
 #define INT16_MIN ((int16) (-(0xFFFF >> 1) - 1)) // -32768
 #define INT32_MIN ((int32) (-(0xFFFFFFFF >> 1) - 1)) // -2147483648
@@ -226,7 +219,12 @@ typedef decltype(null) NullType;
 #define FLOAT32_MIN ((float32) 1.17549435082228750796873653722224568e-38)
 #define FLOAT64_MIN ((float64) 2.22507385850720138309023271733240406e-308)
 
+#ifdef CHAR_IS_UNSIGNED_CHAR
+#define CHAR_MIN UINT8_MIN
+#else
 #define CHAR_MIN INT8_MIN
+#endif
+
 #define SHORT_MIN INT16_MIN
 #define INT_MIN INT32_MIN
 #if defined(WINDOWS_OS) || defined(ARCH_X86) || defined(ARCH_ARM32)
@@ -249,13 +247,10 @@ typedef decltype(null) NullType;
 #define FLOAT_MIN FLOAT32_MIN
 #define DOUBLE_MIN FLOAT64_MIN
 
-#define WCHAR_MIN UINT16_MIN
-
-// TODO
 #if defined(ARCH_X86) || defined(ARCH_ARM32)
-#define SIZE_MIN UINT64_MIN
+#define SIZE_TYPE_MIN UINT64_MIN
 #else
-#define SIZE_MIN UINT32_MIN
+#define SIZE_TYPE_MIN UINT32_MIN
 #endif
 
 #define BYTE_MIN UINT8_MIN
@@ -263,7 +258,9 @@ typedef decltype(null) NullType;
 #define DWORD_MIN UINT32_MIN
 #define QWORD_MIN UINT64_MIN
 
-// TODO: CHAR8_MAX, CHAR16_MAX, CHAR32_MAX
+#define WCHAR_MIN UINT16_MIN
+
+// TODO: u8char_MAX, u16char_MAX, u32char_MAX
 
 #ifdef INT8_MAX
 #undef INT8_MAX
@@ -337,12 +334,8 @@ typedef decltype(null) NullType;
 #undef DOUBLE_MAX
 #endif
 
-#ifdef WCHAR_MAX
-#undef WCHAR_MAX
-#endif
-
-#ifdef SIZE_MAX
-#undef SIZE_MAX
+#ifdef SIZE_TYPE_MAX
+#undef SIZE_TYPE_MAX
 #endif
 
 #ifdef BYTE_MAX
@@ -358,6 +351,10 @@ typedef decltype(null) NullType;
 #undef QWORD_MAX
 #endif
 
+#ifdef WCHAR_MAX
+#undef WCHAR_MAX
+#endif
+
 #define INT8_MAX ((int8) (0xFF >> 1)) // 127
 #define INT16_MAX ((int16) (0xFFFF >> 1)) // 32767
 #define INT32_MAX ((int32) (0xFFFFFFFF >> 1)) // 2147483647
@@ -371,7 +368,12 @@ typedef decltype(null) NullType;
 #define FLOAT32_MAX ((float32) 3.40282346638528859811704183484516925e+38)
 #define FLOAT64_MAX ((float64) 1.79769313486231570814527423731704357e+308)
 
+#ifdef CHAR_IS_UNSIGNED_CHAR
+#define CHAR_MAX UINT8_MAX
+#else
 #define CHAR_MAX INT8_MAX
+#endif
+
 #define SHORT_MAX INT16_MAX
 #define INT_MAX INT32_MAX
 #if defined(WINDOWS_OS) || defined(ARCH_X86)
@@ -394,19 +396,18 @@ typedef decltype(null) NullType;
 #define FLOAT_MAX FLOAT32_MAX
 #define DOUBLE_MAX FLOAT64_MAX
 
-#define WCHAR_MAX UINT16_MAX
-
-// TODO
 #if defined(ARCH_X86) || defined(ARCH_ARM32)
-#define SIZE_MAX UINT32_MAX
+#define SIZE_TYPE_MAX UINT32_MAX
 #else
-#define SIZE_MAX UINT64_MAX
+#define SIZE_TYPE_MAX UINT64_MAX
 #endif
 
 #define BYTE_MAX UINT8_MAX
 #define WORD_MAX UINT16_MAX
 #define DWORD_MAX UINT32_MAX
 #define QWORD_MAX UINT64_MAX
+
+#define WCHAR_MAX UINT16_MAX
 
 #ifdef POSITIVE_INFINITY
 #undef POSITIVE_INFINITY
@@ -422,6 +423,7 @@ typedef decltype(null) NullType;
 #endif
 
 #ifdef COMPILER_MSVC
+// Microsoft Visual C++ compiler isn't supported division by 0.0.
 #define POSITIVE_INFINITY ((double) (1e+300 * 1e+300))
 #define NEGATIVE_INFINITY (-POSITIVE_INFINITY)
 #define INFINITY POSITIVE_INFINITY

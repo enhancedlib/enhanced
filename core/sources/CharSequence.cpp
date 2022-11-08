@@ -22,7 +22,7 @@
 using enhanced::core::CharSequence;
 
 template <typename CharType>
-CharSequence<CharType>::CharSequence(NotNull CharType* value, const Size length) : value(value), length(length) {}
+CharSequence<CharType>::CharSequence(CharType* value, const sizetype length) : value(value), length(length) {}
 
 template <typename CharType>
 CharSequence<CharType>::CharSequence(const CharSequence& other) noexcept = default;
@@ -34,32 +34,32 @@ template <typename CharType>
 CharSequence<CharType>::~CharSequence() noexcept = default;
 
 template <typename CharType>
-RetCannotIgnored
+NoIgnoreRet
 bool CharSequence<CharType>::isEmpty() const noexcept {
     return length == 0;
 }
 
 template <typename CharType>
-RetCannotIgnored
-Size CharSequence<CharType>::getLength() const noexcept {
+NoIgnoreRet
+sizetype CharSequence<CharType>::getLength() const noexcept {
     return length;
 }
 
 template <typename CharType>
-RetCannotIgnored
+NoIgnoreRet
 CharType* CharSequence<CharType>::getChars() const noexcept {
     return value;
 }
 
 template <typename CharType>
-RetCannotIgnored
-const CharType CharSequence<CharType>::at(Size index) const noexcept {
+NoIgnoreRet
+const CharType CharSequence<CharType>::at(sizetype index) const noexcept {
     return value[index];
 }
 
 template <typename CharType>
-RetCannotIgnored
-const CharType CharSequence<CharType>::operator[](const Size index) const noexcept {
+NoIgnoreRet
+const CharType CharSequence<CharType>::operator[](const sizetype index) const noexcept {
     return value[index];
 }
 
@@ -70,10 +70,14 @@ template <typename CharType>
 CharSequence<CharType>& CharSequence<CharType>::operator=(CharSequence&& other) noexcept = default;
 
 template <typename CharType>
-RetCannotIgnored
+NoIgnoreRet
 CharSequence<CharType>::operator CharType*() const noexcept {
     return value;
 }
 
 template class enhanced::core::CharSequence<char>;
 template class enhanced::core::CharSequence<wchar>;
+template class enhanced::core::CharSequence<ushort>;
+template class enhanced::core::CharSequence<u8char>;
+template class enhanced::core::CharSequence<u16char>;
+template class enhanced::core::CharSequence<u32char>;

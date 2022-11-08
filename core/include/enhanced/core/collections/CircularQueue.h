@@ -14,3 +14,21 @@
  */
 
 #pragma once
+
+#include <enhanced/core/defines.h>
+#include <enhanced/core/types.h>
+#include <enhanced/core/annotations.h>
+#include <enhanced/core/collections/Queue.h>
+
+#ifdef CXX_LANGUAGE
+
+NAMESPACE_L3_BEGIN(enhanced, core, collections)
+
+template <typename Type>
+class CircularQueue : public Queue<Type> {
+public:
+};
+
+NAMESPACE_L3_END
+
+#endif

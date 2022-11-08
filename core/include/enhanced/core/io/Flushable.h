@@ -16,19 +16,14 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/exception/Exception.h>
-
-ENHANCED_CORE_API extern const CExceptionType CNullPointerException;
+#include <enhanced/core/annotations.h>
 
 #ifdef CXX_LANGUAGE
 
-NAMESPACE_L3_BEGIN(enhanced, core, exception)
+NAMESPACE_L3_BEGIN(enhanced, core, io)
 
-class ENHANCED_CORE_API NullPointerException : public Exception {
-public:
-    explicit NullPointerException(const String& message = "") noexcept;
+struct AbstractClass Flushable {
+    virtual void flush() const = 0;
 };
 
 NAMESPACE_L3_END

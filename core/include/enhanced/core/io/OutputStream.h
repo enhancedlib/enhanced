@@ -16,24 +16,24 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/io/Closeable.h>
+#include <enhanced/core/io/Flushable.h>
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::io {
-    struct AbstractClass ENHANCED_CORE_API OutputStream : public Closeable {
-        virtual void write(char ch) const;
+NAMESPACE_L3_BEGIN(enhanced, core, io)
 
-        virtual void write(const char* message) const;
+struct AbstractClass ENHANCED_CORE_API OutputStream : public Closeable, Flushable {
+    virtual void write(byte b) const;
 
-        virtual void write(String& message) const;
+    virtual void write(byte* buffer, sizetype size) const;
 
-        virtual void writeLine(const char* message) const;
+    virtual void writeLine(const String& string) const;
+};
 
-        virtual void writeLine(String& message) const;
-    };
-}
+NAMESPACE_L3_END
 
 #endif

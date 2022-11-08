@@ -20,10 +20,12 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::io {
-    struct AbstractClass Closeable {
-        virtual void close() = 0;
-    };
-}
+NAMESPACE_L3_BEGIN(enhanced, core, io)
+
+struct AbstractClass Closeable {
+    virtual void close() const = 0;
+};
+
+NAMESPACE_L3_END
 
 #endif

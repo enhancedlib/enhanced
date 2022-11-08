@@ -23,7 +23,7 @@ using enhanced::core::memoryAlloc;
 using enhanced::core::memoryFree;
 using enhanced::core::exception::MemoryAllocationError;
 
-void* operator new(Size size) {
+void* operator new(sizetype size) {
     void* space = memoryAlloc(size);
     if (space == null) {
         throw MemoryAllocationError("Cannot allocate memory");
@@ -35,7 +35,7 @@ void operator delete(void* pointer) noexcept {
     memoryFree(pointer);
 }
 
-void* operator new[](Size size) {
+void* operator new[](sizetype size) {
     return operator new(size);
 }
 

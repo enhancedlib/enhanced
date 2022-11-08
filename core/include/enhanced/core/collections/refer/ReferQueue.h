@@ -23,12 +23,14 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::collections::refer {
-    template <typename Type>
-    struct AbstractClass ReferQueue : Queue<Type> {
-        RetRequiresRelease
-        virtual ReferQueue<Type>* copy() const = 0;
-    };
-}
+NAMESPACE_L4_BEGIN(enhanced, core, collections, refer)
+
+template <typename Type>
+struct AbstractClass ReferQueue : Queue<Type> {
+    RetRequiresRelease
+    virtual ReferQueue<Type>* copy() const = 0;
+};
+
+NAMESPACE_L4_END
 
 #endif

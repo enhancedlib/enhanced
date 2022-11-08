@@ -22,20 +22,22 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::collections {
-    template <typename Type>
-    struct AbstractClass List : Collection<Type> {
-        virtual Type& get(Size index) const = 0;
+NAMESPACE_L3_BEGIN(enhanced, core, collections)
 
-        virtual Type& operator[](Size index) const = 0;
+template <typename Type>
+struct AbstractClass List : Collection<Type> {
+    virtual Type& get(sizetype index) const = 0;
 
-        RetRequiresRelease
-        virtual List<Type>* copy() const = 0;
+    virtual Type& operator[](sizetype index) const = 0;
 
-        virtual void add(const Type& element) = 0;
+    RetRequiresRelease
+    virtual List<Type>* copy() const = 0;
 
-        virtual Type remove() = 0;
-    };
-}
+    virtual void add(const Type& element) = 0;
+
+    virtual Type remove() = 0;
+};
+
+NAMESPACE_L3_END
 
 #endif

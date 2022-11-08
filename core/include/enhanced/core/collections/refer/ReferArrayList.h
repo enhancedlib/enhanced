@@ -27,193 +27,197 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced_internal::core::collections::refer {
-    class ENHANCED_CORE_API ReferArrayListImpl {
+NAMESPACE_L4_BEGIN(enhanced_internal, core, collections, refer)
+
+class ENHANCED_CORE_API ReferArrayListImpl {
+private:
+    void** elements;
+
+    sizetype size;
+
+    sizetype capacity;
+
+protected:
+    struct GenericOperator {
+        bool (*equals)(Generic&, Generic&);
+    };
+
+    class ENHANCED_CORE_API ReferArrayListIteratorImpl {
+        friend class ReferArrayListImpl;
+
     private:
-        void** elements;
+        const ReferArrayListImpl* referenceArrayList;
 
-        Size size;
+        mutable void** indexer;
 
-        Size capacity;
+        mutable bool isFirst;
+
+        void** end;
 
     protected:
-        struct GenericOperator {
-            bool (*equals)(Generic&, Generic&);
-        };
+        explicit ReferArrayListIteratorImpl(const ReferArrayListImpl* referenceArrayList);
 
-        class ENHANCED_CORE_API ReferArrayListIteratorImpl {
-            friend class ReferArrayListImpl;
+        virtual ~ReferArrayListIteratorImpl() noexcept;
 
-        private:
-            const ReferArrayListImpl* referenceArrayList;
+        NoIgnoreRet
+        bool hasNext0() const;
 
-            mutable void** indexer;
+        void next0() const;
 
-            mutable bool isFirst;
+        NoIgnoreRet
+        bool each0() const;
 
-            void** end;
+        NoIgnoreRet
+        Generic& get0() const;
 
-        protected:
-            explicit ReferArrayListIteratorImpl(const ReferArrayListImpl* referenceArrayList);
+        void reset0() const;
 
-            virtual ~ReferArrayListIteratorImpl() noexcept;
-
-            RetCannotIgnored
-            bool hasNext0() const;
-
-            void next0() const;
-
-            RetCannotIgnored
-            bool each0() const;
-
-            RetCannotIgnored
-            Generic& get0() const;
-
-            void reset0() const;
-
-            RetCannotIgnored
-            Size count0() const;
-        };
-
-        GenericOperator genericOperator;
-
-        mutable ReferArrayListIteratorImpl* iterator;
-
-        ReferArrayListImpl(Size capacity, GenericOperator genericOperator);
-
-        ReferArrayListImpl(const ReferArrayListImpl& other);
-
-        virtual ~ReferArrayListImpl() noexcept;
-
-        RetCannotIgnored
-        Size getSize0() const;
-
-        RetCannotIgnored
-        bool isEmpty0() const;
-
-        RetCannotIgnored
-        Generic& get0(Size index) const;
-
-        RetCannotIgnored
-        bool contain0(Generic& value) const;
-
-        void add0(Generic& element);
-
-        void remove0();
-
-        void expand0(Size size);
-
-        void shrink0(Size size);
+        NoIgnoreRet
+        sizetype count0() const;
     };
-}
 
-namespace enhanced::core::collections::refer {
-    template <typename Type>
-    class ENHANCED_CORE_API ReferArrayList final : public ReferList<Type>, public RandomAccess,
-                                                   private enhanced_internal::core::collections::refer::ReferArrayListImpl {
-    private:
-        using ReferArrayListImpl = enhanced_internal::core::collections::refer::ReferArrayListImpl;
+    GenericOperator genericOperator;
 
-        class ReferArrayListIterator : public Iterator<Type>, private ReferArrayListImpl::ReferArrayListIteratorImpl {
-            friend struct Iterable<Type>;
+    mutable ReferArrayListIteratorImpl* iterator;
 
-        public:
-            explicit inline ReferArrayListIterator(const ReferArrayList<Type>* referArrayList) : ReferArrayListIteratorImpl(referArrayList) {}
+    ReferArrayListImpl(sizetype capacity, GenericOperator genericOperator);
 
-            RetCannotIgnored
-            inline bool hasNext() const override {
-                return hasNext0();
-            }
+    ReferArrayListImpl(const ReferArrayListImpl& other);
 
-            inline const Iterator<Type>* next() const override {
-                next0();
-                return this;
-            }
+    virtual ~ReferArrayListImpl() noexcept;
 
-            RetCannotIgnored
-            inline bool each() const override {
-                return each0();
-            }
+    NoIgnoreRet
+    sizetype getSize0() const;
 
-            RetCannotIgnored
-            inline Type& get() const override {
-                return (Type&) get0();
-            }
+    NoIgnoreRet
+    bool isEmpty0() const;
 
-            inline void reset() const override {
-                reset0();
-            }
+    NoIgnoreRet
+    Generic& get0(sizetype index) const;
 
-            RetCannotIgnored
-            inline Size count() const override {
-                return count0();
-            }
-        };
+    NoIgnoreRet
+    bool contain0(Generic& value) const;
 
-        RetCannotIgnored
-        static bool equals(Generic& element, Generic& value) {
-            return ((Type&) element) == ((Type&) (value));
-        }
+    void add0(Generic& element);
+
+    void remove0();
+
+    void expand0(sizetype size);
+
+    void shrink0(sizetype size);
+};
+
+NAMESPACE_L4_END
+
+NAMESPACE_L4_BEGIN(enhanced, core, collections, refer)
+
+template <typename Type>
+class ENHANCED_CORE_API ReferArrayList final : public ReferList<Type>, public RandomAccess,
+                                                private enhanced_internal::core::collections::refer::ReferArrayListImpl {
+private:
+    using ReferArrayListImpl = enhanced_internal::core::collections::refer::ReferArrayListImpl;
+
+    class ReferArrayListIterator : public Iterator<Type>, private ReferArrayListImpl::ReferArrayListIteratorImpl {
+        friend struct Iterable<Type>;
 
     public:
-        inline ReferArrayList() : ReferArrayListImpl(ARRAY_INIT_SIZE, {equals}) {};
+        inline explicit ReferArrayListIterator(const ReferArrayList<Type>* referArrayList) : ReferArrayListIteratorImpl(referArrayList) {}
 
-        explicit inline ReferArrayList(Size capacity) : ReferArrayListImpl(capacity, {equals}) {}
-
-        inline ReferArrayList(const ReferArrayList<Type>& other) : ReferArrayListImpl(other) {}
-
-        RetCannotIgnored
-        inline Size getSize() const override {
-            return getSize0();
+        NoIgnoreRet
+        inline bool hasNext() const override {
+            return hasNext0();
         }
 
-        RetCannotIgnored
-        inline bool isEmpty() const override {
-            return isEmpty0();
+        inline const Iterator<Type>* next() const override {
+            next0();
+            return this;
         }
 
-        RetCannotIgnored
-        inline bool contain(const Type& value) const override {
-            return contain0((Generic&) value);
+        NoIgnoreRet
+        inline bool each() const override {
+            return each0();
         }
 
-        RetRequiresRelease
-        inline ReferArrayList<Type>* copy() const override {
-            return new ReferArrayList<Type>(*this);
+        NoIgnoreRet
+        inline Type& get() const override {
+            return (Type&) get0();
         }
 
-        inline Iterator<Type>* iterator() const override {
-            return Iterable<Type>::template getIterator<ReferArrayListIterator>(ReferArrayListImpl::iterator, this);
+        inline void reset() const override {
+            reset0();
         }
 
-        RetCannotIgnored
-        inline Type& get(Size index) const override {
-            return (Type&) get0(index);
-        }
-
-        RetCannotIgnored
-        inline Type& operator[](Size index) const override {
-            return (Type&) get0(index);
-        }
-
-        inline void add(const Type& element) override {
-            add0((Generic&) element);
-        }
-
-        inline Type remove() override {
-            Type value = get(getSize() - 1);
-            remove0();
-            return value;
-        }
-
-        inline void expand(Size size) {
-            expand0(size);
-        }
-
-        inline void shrink(Size size) {
-            shrink0(size);
+        NoIgnoreRet
+        inline sizetype count() const override {
+            return count0();
         }
     };
-}
+
+    NoIgnoreRet
+    static bool equals(Generic& element, Generic& value) {
+        return ((Type&) element) == ((Type&) (value));
+    }
+
+public:
+    inline ReferArrayList() : ReferArrayListImpl(ARRAY_INIT_SIZE, {equals}) {};
+
+    inline explicit ReferArrayList(sizetype capacity) : ReferArrayListImpl(capacity, {equals}) {}
+
+    inline ReferArrayList(const ReferArrayList<Type>& other) : ReferArrayListImpl(other) {}
+
+    NoIgnoreRet
+    inline sizetype getSize() const override {
+        return getSize0();
+    }
+
+    NoIgnoreRet
+    inline bool isEmpty() const override {
+        return isEmpty0();
+    }
+
+    NoIgnoreRet
+    inline bool contain(const Type& value) const override {
+        return contain0((Generic&) value);
+    }
+
+    RetRequiresRelease
+    inline ReferArrayList<Type>* copy() const override {
+        return new ReferArrayList<Type>(*this);
+    }
+
+    inline Iterator<Type>* iterator() const override {
+        return Iterable<Type>::template getIterator<ReferArrayListIterator>(ReferArrayListImpl::iterator, this);
+    }
+
+    NoIgnoreRet
+    inline Type& get(sizetype index) const override {
+        return (Type&) get0(index);
+    }
+
+    NoIgnoreRet
+    inline Type& operator[](sizetype index) const override {
+        return (Type&) get0(index);
+    }
+
+    inline void add(const Type& element) override {
+        add0((Generic&) element);
+    }
+
+    inline Type remove() override {
+        Type value = get(getSize() - 1);
+        remove0();
+        return value;
+    }
+
+    inline void expand(sizetype size) {
+        expand0(size);
+    }
+
+    inline void shrink(sizetype size) {
+        shrink0(size);
+    }
+};
+
+NAMESPACE_L4_END
 
 #endif

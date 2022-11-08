@@ -22,7 +22,7 @@
 #include <enhanced/core/stringUtil.h>
 #include <enhanced/core/process.h>
 
-void assertionFailed(const char* message, const char* file, uint line) {
+void assertionFailedImpl(const char* message, const char* file, uint line) {
     fprintf(stderr, "Failed to assert: %s, file \"%s\", line %d", message, file, line);
     processAbort();
 }

@@ -18,27 +18,20 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/export.h>
-#include <enhanced/core/io/OutputStream.h>
+#include <enhanced/core/String.h>
+#include <enhanced/core/io/InputStream.h>
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::io {
-    class ENHANCED_CORE_API PrintStream : public OutputStream {
-    public:
-        void print(int8 i8);
+NAMESPACE_L3_BEGIN(enhanced, core, io)
 
-        void print(int16 i16);
+class ENHANCED_CORE_API WarpedInputStream : public InputStream {
+public:
+    void close() const override;
 
-        void print(int32 i32);
+    void flush() const override;
+};
 
-        void print(int64 i64);
-
-        void print(float32 i32);
-
-        void print(float64 i64);
-
-        void close() override;
-    };
-}
+NAMESPACE_L3_END
 
 #endif

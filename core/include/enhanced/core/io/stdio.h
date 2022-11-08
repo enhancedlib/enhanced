@@ -17,25 +17,21 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
-#include <enhanced/core/io/InputStream.h>
-#include <enhanced/core/io/PrintStream.h>
+#include <enhanced/core/io/WarpedInputStream.h>
+#include <enhanced/core/io/WarpedOutputStream.h>
 
 #ifdef CXX_LANGUAGE
 
-#ifdef stdin
-#undef stdin
-#endif
-#ifdef stdout
-#undef stdout
-#endif
-#ifdef stderr
-#undef stderr
-#endif
+NAMESPACE_L3_BEGIN(enhanced, core, io)
 
-namespace enhanced::core::io {
-    ENHANCED_CORE_API extern InputStream* stdin;
-    ENHANCED_CORE_API extern PrintStream* stdout;
-    ENHANCED_CORE_API extern PrintStream* stderr;
-}
+ENHANCED_CORE_API extern WarpedInputStream* const& instream;
+ENHANCED_CORE_API extern WarpedOutputStream* const& outstream;
+ENHANCED_CORE_API extern WarpedOutputStream* const& errstream;
+
+ENHANCED_CORE_API void setIn(InputStream* in);
+ENHANCED_CORE_API void setOut(WarpedOutputStream* out);
+ENHANCED_CORE_API void setErr(WarpedOutputStream* err);
+
+NAMESPACE_L3_END
 
 #endif

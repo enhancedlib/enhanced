@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * Licensed under the Enhanced Software License.
+ * Licensed under the Enhanced Software License, latest version.
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -13,24 +13,26 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <enhanced/core/TypeInfo.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/Exception.h>
+#include <enhanced/core/String.h>
 
-ENHANCED_CORE_API extern const CExceptionType CNullPointerException;
+using enhanced::core::TypeInfo;
+using enhanced::core::String;
 
-#ifdef CXX_LANGUAGE
+NoIgnoreRet
+String TypeInfo::getName() const {
+    return info.name();
+}
 
-NAMESPACE_L3_BEGIN(enhanced, core, exception)
+NoIgnoreRet
+String TypeInfo::getRawName() const {
+    return info.raw_name();
+}
 
-class ENHANCED_CORE_API NullPointerException : public Exception {
-public:
-    explicit NullPointerException(const String& message = "") noexcept;
-};
-
-NAMESPACE_L3_END
-
-#endif
+NoIgnoreRet
+sizetype TypeInfo::hashCode() const {
+    return info.hash_code();
+}

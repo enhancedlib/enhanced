@@ -21,7 +21,7 @@
 #include <enhanced/core/memory.h>
 
 RetRequiresRelease RetNullable MustInspectResult
-char* stringNew(const Size length) {
+char* stringNew(const sizetype length) {
     char* str = (char*) memoryAlloc((length + 1) * sizeof(char));
     if (str == null) {
         return null;
@@ -32,12 +32,12 @@ char* stringNew(const Size length) {
 }
 
 RetRequiresRelease RetNullable MustInspectResult
-char* stringCopy(NotNull const char* source) {
+char* stringCopy(const char* source) {
     return stringCopyExt(source, stringLength(source));
 }
 
 RetRequiresRelease RetNullable MustInspectResult
-char* stringCopyExt(NotNull const char* source, Size length) {
+char* stringCopyExt(const char* source, sizetype length) {
     assert(source != null);
 
     char* copy = stringNew(length);
@@ -51,7 +51,7 @@ char* stringCopyExt(NotNull const char* source, Size length) {
 }
 
 RetRequiresRelease RetNullable MustInspectResult
-char* stringCopyResize(NotNull const char* string, Size oldSize, Size newSize) {
+char* stringCopyResize(const char* string, sizetype oldSize, sizetype newSize) {
     assert(string != null);
 
     char* copy = stringNew(newSize);
@@ -64,52 +64,32 @@ char* stringCopyResize(NotNull const char* string, Size oldSize, Size newSize) {
     return copy;
 }
 
-RetCannotIgnored
-Size stringLength(NotNull const char* string) {
+NoIgnoreRet
+sizetype stringLength(const char* string) {
     assert(string != null);
 
-    Size length;
+    sizetype length;
     for (length = 0; string[length] != '\0'; ++length) {}
 
     return length;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool stringEqual(const char* string1, const char* string2) {
-    Size length;
-
     if (string1 == string2) {
         return true;
     } else if (string1 == null || string2 == null) {
         return false;
-    } else if ((length = stringLength(string1)) == stringLength(string2)) {
-        for (Size index = 0; index < length; ++index) {
+    } else {
+        for (sizetype index = 0;; ++index) {
+            if ((string1[index] == '\0') ^ (string2[index] == '\0')) return false;
             if (string1[index] != string2[index]) return false;
         }
-        return true;
     }
-
-    return false;
-}
-
-RetCannotIgnored
-bool stringEqualExt(const char* string1, const Size length1, const char* string2, Size length2) {
-    if (string1 == string2) {
-        return true;
-    } else if (string1 == null || string2 == null) {
-        return false;
-    } else if (length1 == length2) {
-        for (Size index = 0; index < length1; ++index) {
-            if (string1[index] != string2[index]) return false;
-        }
-        return true;
-    }
-
-    return false;
 }
 
 RetRequiresRelease RetNullable MustInspectResult
-wchar* wstringNew(const Size length) {
+wchar* wstringNew(const sizetype length) {
     wchar* str = (wchar*) memoryAlloc((length + 1) * sizeof(wchar));
     if (str == null) {
         return null;
@@ -120,12 +100,12 @@ wchar* wstringNew(const Size length) {
 }
 
 RetRequiresRelease RetNullable MustInspectResult
-wchar* wstringCopy(NotNull const wchar* source) {
+wchar* wstringCopy(const wchar* source) {
     return wstringCopyExt(source, wstringLength(source));
 }
 
 RetRequiresRelease RetNullable MustInspectResult
-wchar* wstringCopyExt(NotNull const wchar* source, Size length) {
+wchar* wstringCopyExt(const wchar* source, sizetype length) {
     assert(source != null);
 
     wchar* copy = wstringNew(length);
@@ -139,7 +119,7 @@ wchar* wstringCopyExt(NotNull const wchar* source, Size length) {
 }
 
 RetRequiresRelease RetNullable MustInspectResult
-wchar* wstringCopyResize(NotNull const wchar* wstring, Size oldSize, Size newSize) {
+wchar* wstringCopyResize(const wchar* wstring, sizetype oldSize, sizetype newSize) {
     assert(wstring != null);
 
     wchar* copy = wstringNew(newSize);
@@ -152,46 +132,26 @@ wchar* wstringCopyResize(NotNull const wchar* wstring, Size oldSize, Size newSiz
     return copy;
 }
 
-RetCannotIgnored
-Size wstringLength(NotNull const wchar* wstring) {
+NoIgnoreRet
+sizetype wstringLength(const wchar* wstring) {
     assert(wstring != null);
 
-    Size length;
+    sizetype length;
     for (length = 0; wstring[length] != L'\0'; ++length) {}
 
     return length;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool wstringEqual(const wchar* wstring1, const wchar* wstring2) {
-    Size length;
-
     if (wstring1 == wstring2) {
         return true;
     } else if (wstring1 == null || wstring2 == null) {
         return false;
-    } else if ((length = wstringLength(wstring1)) == wstringLength(wstring2)) {
-        for (Size index = 0; index < length; ++index) {
+    } else {
+        for (sizetype index = 0;; ++index) {
+            if ((wstring1[index] == L'\0') ^ (wstring2[index] == L'\0')) return false;
             if (wstring1[index] != wstring2[index]) return false;
         }
-        return true;
     }
-
-    return false;
-}
-
-RetCannotIgnored
-bool wstringEqualExt(const wchar* wstring1, Size length1, const wchar* wstring2, Size length2) {
-    if (wstring1 == wstring2) {
-        return true;
-    } else if (wstring1 == null || wstring2 == null) {
-        return false;
-    } else if (length1 == length2) {
-        for (Size index = 0; index < length1; ++index) {
-            if (wstring1[index] != wstring2[index]) return false;
-        }
-        return true;
-    }
-
-    return false;
 }

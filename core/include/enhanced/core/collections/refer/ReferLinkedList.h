@@ -27,105 +27,110 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced_internal::core::collections::refer {
-    class ENHANCED_CORE_API ReferLinkedListImpl {
+NAMESPACE_L4_BEGIN(enhanced_internal, core, collections, refer)
+
+class ENHANCED_CORE_API ReferLinkedListImpl {
+private:
+    struct Node {
+        void* value;
+
+        Node* prev;
+
+        Node* next;
+    };
+
+    Node* first;
+
+    Node* last;
+
+    mutable Node* indexer;
+
+    sizetype size;
+
+    static Node*& prevNode(Node*& node);
+
+    static Node*& nextNode(Node*& node);
+
+protected:
+    struct GenericOperator {
+        bool (*equals)(Generic&, Generic&);
+    };
+
+    class ENHANCED_CORE_API ReferLinkedListIteratorImpl {
+        friend class ReferLinkedListImpl;
+
     private:
-        struct Node {
-            void* value;
+        const ReferLinkedListImpl* referLinkedList;
 
-            Node* prev;
-
-            Node* next;
-        };
-
-        Node* first;
-
-        Node* last;
-
-        mutable Node* indexer;
-
-        Size size;
-
-        static Node*& prevNode(Node*& node);
-
-        static Node*& nextNode(Node*& node);
+        mutable bool isFirst;
 
     protected:
-        struct GenericOperator {
-            bool (*equals)(Generic&, Generic&);
-        };
+        explicit ReferLinkedListIteratorImpl(const ReferLinkedListImpl* referLinkedList);
 
-        class ENHANCED_CORE_API ReferLinkedListIteratorImpl {
-            friend class ReferLinkedListImpl;
+        virtual ~ReferLinkedListIteratorImpl() noexcept;
 
-        private:
-            const ReferLinkedListImpl* referLinkedList;
+        NoIgnoreRet
+        bool hasNext0() const;
 
-            mutable bool isFirst;
+        void next0() const;
 
-        protected:
-            explicit ReferLinkedListIteratorImpl(const ReferLinkedListImpl* referLinkedList);
+        NoIgnoreRet
+        bool each0() const;
 
-            virtual ~ReferLinkedListIteratorImpl() noexcept;
+        NoIgnoreRet
+        Generic& get0() const;
 
-            RetCannotIgnored
-            bool hasNext0() const;
+        void reset0() const;
 
-            void next0() const;
-
-            RetCannotIgnored
-            bool each0() const;
-
-            RetCannotIgnored
-            Generic& get0() const;
-
-            void reset0() const;
-
-            RetCannotIgnored
-            Size count0() const;
-        };
-
-        GenericOperator genericOperator;
-
-        mutable ReferLinkedListIteratorImpl* iterator;
-
-        explicit ReferLinkedListImpl(GenericOperator genericOperator);
-
-        ReferLinkedListImpl(const ReferLinkedListImpl& other);
-
-        virtual ~ReferLinkedListImpl() noexcept;
-
-        RetCannotIgnored
-        Size getSize0() const;
-
-        RetCannotIgnored
-        bool isEmpty0() const;
-
-        RetCannotIgnored
-        Generic& getLast0() const;
-
-        RetCannotIgnored
-        Generic& getFirst0() const;
-
-        RetCannotIgnored
-        Generic& get0(Size index) const;
-
-        RetCannotIgnored
-        bool contain0(Generic& value) const;
-
-        void addLast0(Generic& element);
-
-        void removeLast0();
-
-        void addFirst0(Generic& element);
-
-        void removeFirst0();
+        NoIgnoreRet
+        sizetype count0() const;
     };
-}
 
-namespace enhanced::core::collections::refer {
+    GenericOperator genericOperator;
+
+    mutable ReferLinkedListIteratorImpl* iterator;
+
+    explicit ReferLinkedListImpl(GenericOperator genericOperator);
+
+    ReferLinkedListImpl(const ReferLinkedListImpl& other);
+
+    virtual ~ReferLinkedListImpl() noexcept;
+
+    NoIgnoreRet
+    sizetype getSize0() const;
+
+    NoIgnoreRet
+    bool isEmpty0() const;
+
+    NoIgnoreRet
+    Generic& getLast0() const;
+
+    NoIgnoreRet
+    Generic& getFirst0() const;
+
+    NoIgnoreRet
+    Generic& get0(sizetype index) const;
+
+    NoIgnoreRet
+    bool contain0(Generic& value) const;
+
+    void addLast0(Generic& element);
+
+    void removeLast0();
+
+    void addFirst0(Generic& element);
+
+    void removeFirst0();
+};
+
+NAMESPACE_L4_END
+
+NAMESPACE_L4_BEGIN(enhanced, core, collections, refer)
+
+template <typename Type>
+class ENHANCED_CORE_API ReferLinkedList final :
 /*
- * When you build project with Microsoft Visual C++ Compiler,
+ * When you build project with Microsoft Visual C++ compiler,
  * If you don't explicitly extend the "Collection" class, you will see an error in compiling.
  * The compiler thinks the return type of virtual function 'copy' isn't
  * covariant with the return type the super method.
@@ -138,154 +143,151 @@ namespace enhanced::core::collections::refer {
 #ifdef COMPILER_MSVC
 #pragma warning(push)
 #pragma warning(disable: 4584)
-    template <typename Type>
-    class ENHANCED_CORE_API ReferLinkedList final : public Collection<Type>, public ReferList<Type>, public ReferDeque<Type>,
-                                                    private enhanced_internal::core::collections::refer::ReferLinkedListImpl {
+    public Collection<Type>,
 #pragma warning(pop)
-#else
-    template <typename Type>
-    class ENHANCED_CORE_API ReferLinkedList final : public ReferList<Type>, public ReferDeque<Type>,
-                                                    private enhanced_internal::core::collections::refer::ReferLinkedListImpl {
 #endif
-    private:
-        using ReferLinkedListImpl = enhanced_internal::core::collections::refer::ReferLinkedListImpl;
+    public ReferList<Type>, public ReferDeque<Type>, private enhanced_internal::core::collections::refer::ReferLinkedListImpl {
+private:
+    using ReferLinkedListImpl = enhanced_internal::core::collections::refer::ReferLinkedListImpl;
 
-        class ReferLinkedListIterator : public Iterator<Type>, private ReferLinkedListIteratorImpl {
-            friend struct Iterable<Type>;
-
-        public:
-            explicit inline ReferLinkedListIterator(const ReferLinkedList<Type>* referenceLinkedList) : ReferLinkedListIteratorImpl(referenceLinkedList) {}
-
-            RetCannotIgnored
-            inline bool hasNext() const override {
-                return hasNext0();
-            }
-
-            inline const Iterator<Type>* next() const override {
-                next0();
-                return this;
-            }
-
-            RetCannotIgnored
-            inline bool each() const override {
-                return each0();
-            }
-
-            RetCannotIgnored
-            inline Type& get() const override {
-                return (Type&) get0();
-            }
-
-            inline void reset() const override {
-                reset0();
-            }
-
-            RetCannotIgnored
-            inline Size count() const override {
-                return count0();
-            }
-        };
-
-        RetCannotIgnored
-        static bool equals(Generic& element, Generic& value) {
-            return ((Type&) (element)) == ((Type&) value);
-        }
+    class ReferLinkedListIterator : public Iterator<Type>, private ReferLinkedListIteratorImpl {
+        friend struct Iterable<Type>;
 
     public:
-        inline ReferLinkedList() : ReferLinkedListImpl({equals}) {}
+        inline explicit ReferLinkedListIterator(const ReferLinkedList<Type>* referenceLinkedList) :
+            ReferLinkedListIteratorImpl(referenceLinkedList) {}
 
-        ReferLinkedList(const ReferLinkedList<Type>& other) : ReferLinkedList(other) {}
-
-        RetCannotIgnored
-        inline Size getSize() const override {
-            return getSize0();
+        NoIgnoreRet
+        inline bool hasNext() const override {
+            return hasNext0();
         }
 
-        RetCannotIgnored
-        inline bool isEmpty() const override {
-            return isEmpty0();
+        inline const Iterator<Type>* next() const override {
+            next0();
+            return this;
         }
 
-        RetCannotIgnored
-        inline bool contain(const Type& value) const override {
-            return contain0((Generic&) value);
+        NoIgnoreRet
+        inline bool each() const override {
+            return each0();
         }
 
-        RetRequiresRelease
-        inline ReferLinkedList<Type>* copy() const override {
-            return new ReferLinkedList<Type>(*this);
+        NoIgnoreRet
+        inline Type& get() const override {
+            return (Type&) get0();
         }
 
-        inline Iterator<Type>* iterator() const override {
-            return Iterable<Type>::template getIterator<ReferLinkedListIterator>(ReferLinkedListImpl::iterator, this);
+        inline void reset() const override {
+            reset0();
         }
 
-        RetCannotIgnored
-        inline typename Iterable<Type>::ForeachIterator begin() const override {
-            return List<Type>::begin();
-        }
-
-        RetCannotIgnored
-        inline byte end() const override {
-            return List<Type>::end();
-        }
-
-        RetCannotIgnored
-        inline Type& getLast() const override {
-            return (Type&) getLast0();
-        }
-
-        RetCannotIgnored
-        inline Type& getFirst() const override {
-            return (Type&) getFirst0();
-        }
-
-        RetCannotIgnored
-        inline Type& get(Size index) const override {
-            return (Type&) get0(index);
-        }
-
-        RetCannotIgnored
-        inline Type& operator[](Size index) const override {
-            return (Type&) get0(index);
-        }
-
-        inline void addLast(const Type& element) override {
-            addLast0((Generic&) element);
-        }
-
-        inline Type removeLast() override {
-            Type value = getLast();
-            removeLast0();
-            return value;
-        }
-
-        inline void addFirst(const Type& element) override {
-            addFirst0((Generic&) element);
-        }
-
-        inline Type removeFirst() override {
-            Type value = getFirst();
-            removeFirst0();
-            return value;
-        }
-
-        inline void add(const Type& element) override {
-            addLast(element);
-        }
-
-        inline Type remove() override {
-            return removeLast();
-        }
-
-        inline void push(const Type& element) override {
-            addFirst(element);
-        }
-
-        inline Type popup() override {
-            return removeFirst();
+        NoIgnoreRet
+        inline sizetype count() const override {
+            return count0();
         }
     };
-}
+
+    NoIgnoreRet
+    static bool equals(Generic& element, Generic& value) {
+        return ((Type&) (element)) == ((Type&) value);
+    }
+
+public:
+    inline ReferLinkedList() : ReferLinkedListImpl({equals}) {}
+
+    ReferLinkedList(const ReferLinkedList<Type>& other) : ReferLinkedList(other) {}
+
+    NoIgnoreRet
+    inline sizetype getSize() const override {
+        return getSize0();
+    }
+
+    NoIgnoreRet
+    inline bool isEmpty() const override {
+        return isEmpty0();
+    }
+
+    NoIgnoreRet
+    inline bool contain(const Type& value) const override {
+        return contain0((Generic&) value);
+    }
+
+    RetRequiresRelease
+    inline ReferLinkedList<Type>* copy() const override {
+        return new ReferLinkedList<Type>(*this);
+    }
+
+    inline Iterator<Type>* iterator() const override {
+        return Iterable<Type>::template getIterator<ReferLinkedListIterator>(ReferLinkedListImpl::iterator, this);
+    }
+
+    NoIgnoreRet
+    inline typename Iterable<Type>::ForeachIterator begin() const override {
+        return List<Type>::begin();
+    }
+
+    NoIgnoreRet
+    inline byte end() const override {
+        return List<Type>::end();
+    }
+
+    NoIgnoreRet
+    inline Type& getLast() const override {
+        return (Type&) getLast0();
+    }
+
+    NoIgnoreRet
+    inline Type& getFirst() const override {
+        return (Type&) getFirst0();
+    }
+
+    NoIgnoreRet
+    inline Type& get(sizetype index) const override {
+        return (Type&) get0(index);
+    }
+
+    NoIgnoreRet
+    inline Type& operator[](sizetype index) const override {
+        return (Type&) get0(index);
+    }
+
+    inline void addLast(const Type& element) override {
+        addLast0((Generic&) element);
+    }
+
+    inline Type removeLast() override {
+        Type value = getLast();
+        removeLast0();
+        return value;
+    }
+
+    inline void addFirst(const Type& element) override {
+        addFirst0((Generic&) element);
+    }
+
+    inline Type removeFirst() override {
+        Type value = getFirst();
+        removeFirst0();
+        return value;
+    }
+
+    inline void add(const Type& element) override {
+        addLast(element);
+    }
+
+    inline Type remove() override {
+        return removeLast();
+    }
+
+    inline void push(const Type& element) override {
+        addFirst(element);
+    }
+
+    inline Type popup() override {
+        return removeFirst();
+    }
+};
+
+NAMESPACE_L4_END
 
 #endif

@@ -20,20 +20,20 @@
 #include <enhanced/core/assert.h>
 #include <enhanced/core/memory.h>
 
-void arraySet(void* array, Size count, int64 value, Size sizeOfType) {
+void arraySet(void* array, sizetype count, int64 value, sizetype sizeOfType) {
     arraySetPtr(array, count, &value, sizeOfType);
 }
 
-void arraySetPtr(void* array, Size count, void* valuePtr, Size sizeOfType) {
+void arraySetPtr(void* array, sizetype count, void* valuePtr, sizetype sizeOfType) {
     assert(array != null), assert(count > 0), assert(sizeOfType > 0);
 
-    Size size = count * sizeOfType;
+    sizetype size = count * sizeOfType;
 
-    for (Size index = 0; index < size; ++index) {
+    for (sizetype index = 0; index < size; ++index) {
         ((byte*) array)[index] = ((byte*) valuePtr)[index % sizeOfType];
     }
 }
 
-void arrayCopy(void* destArray, void* srcArray, Size count, Size sizeOfType) {
+void arrayCopy(void* destArray, void* srcArray, sizetype count, sizetype sizeOfType) {
     memoryCopy(destArray, srcArray, count * sizeOfType);
 }

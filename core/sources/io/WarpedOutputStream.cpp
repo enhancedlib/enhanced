@@ -13,25 +13,48 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/io/InputStream.h>
+#include <enhanced/core/io/WarpedOutputStream.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
-using enhanced::core::io::InputStream;
-using enhanced::core::String;
+using enhanced::core::io::WarpedOutputStream;
 
-byte InputStream::get() const {
+void WarpedOutputStream::print(int8 i8) {
     NOT_IMPLEMENTED();
 }
 
-void InputStream::read(byte *buffer, sizetype size) const {
+void WarpedOutputStream::print(int16 i16) {
     NOT_IMPLEMENTED();
 }
 
-String InputStream::readLine() const {
+void WarpedOutputStream::print(int32 i32) {
+    NOT_IMPLEMENTED();
+}
+
+void WarpedOutputStream::print(int64 i64) {
+    NOT_IMPLEMENTED();
+}
+
+void WarpedOutputStream::print(float32 i32) {
+    NOT_IMPLEMENTED();
+}
+
+void WarpedOutputStream::print(float64 i64) {
+    NOT_IMPLEMENTED();
+}
+
+void WarpedOutputStream::print(const String& message) {
+    NOT_IMPLEMENTED();
+}
+
+void WarpedOutputStream::close() const {
+    NOT_IMPLEMENTED();
+}
+
+void WarpedOutputStream::flush() const {
     NOT_IMPLEMENTED();
 }

@@ -29,9 +29,11 @@ EXTERN_C_END
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core {
-    using ::processExit;
-    using ::processAbort;
-}
+NAMESPACE_L2_BEGIN(enhanced, core)
+
+using ::processExit;
+using ::processAbort;
+
+NAMESPACE_L2_END
 
 #endif

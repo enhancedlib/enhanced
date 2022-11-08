@@ -21,13 +21,15 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::io {
-    class ENHANCED_CORE_API BufferOutputStream : public OutputStream {
-    public:
-        void write(char ch) const override;
+NAMESPACE_L3_BEGIN(enhanced, core, io)
 
-        void write(const char* message) const override;
-    };
-}
+class ENHANCED_CORE_API BufferOutputStream : public OutputStream {
+public:
+    void write(byte ch) const override;
+
+    void write(byte* buffer, sizetype size) const override;
+};
+
+NAMESPACE_L3_END
 
 #endif

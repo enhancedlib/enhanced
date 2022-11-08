@@ -1,10 +1,14 @@
 # Enhanced
 
-***（开发中）***
+***开发中***
 
-更强大的C/C++开发框架
+更强大的开发框架
 
 此软件遵循[Enhanced Software License](../LICENSE)。
+
+请在[GitHub Issues](https://github.com/sharedwonder/enhanced/issues)提交bug。
+
+[Enhanced Neat Edition](https://github.com/sharedwonder/enhanced-ne/)
 
 [其它语言](LANGUAGES.md) | [版权声明](../COPYRIGHT) | [网站](https://sharedwonder.github.io/enhanced/) | [GitHub仓库](https://github.com/sharedwonder/enhanced/)
 
@@ -28,7 +32,7 @@
 1. 实用的类和函数
 2. 更强大的异常处理（包括C语言的支持）
 3. 封装的数据类型，比如：String（仅C++）
-4. 容器 （集合、组、图等）
+4. 集合/容器 （列表、组等）
 5. 线程
 6. 数据处理
 
@@ -38,12 +42,12 @@
 
 环境：
 
-- 编译器：[Clang](https://clang.llvm.org/)、[Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU C/C++ Compiler](https://gcc.gnu.org/)
-- 操作系统：Microsoft Windows操作系统、基于Linux内核的操作系统
+- 编译器：[Clang](https://clang.llvm.org/)、[Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU Compiler Collections](https://gcc.gnu.org/)
+- 操作系统：Microsoft Windows操作系统、基于Linux内核的操作系统、Apple macOS
 - 处理器：x86、amd64 (x86_64)
 - 构建系统: [XMake](https://xmake.io/#/zh-cn/)、[CMake](https://cmake.org/)
-- C标准: C17
-- C++标准: C++20
+- C标准: C17或更高标准
+- C++标准: C++20或更高标准
 
 ## 愿望
 
@@ -59,10 +63,8 @@
 
 答：是的，这个软件免费并且开源。但使用此软件必须遵守[许可协议（Enhanced Software License）](../LICENSE)，否则，你不得使用此软件。
 
-## 关于
+## 关于作者
 
-- *版本*：0.0.1 Build-0.1 Dev 1
-- *网站*： <https://sharedwonder.github.io/enhanced/>
 - *作者*：刘柏豪
-- *作者职业*：中学生
-- *作者邮箱*：<liubaihaohello@outlook.com>
+- *职业*：中学生
+- *邮箱*：<liubaihaohello@outlook.com>

@@ -16,7 +16,7 @@
 #pragma once
 
 // Detect current using which compiler to compile
-#if defined(__clang__) // Clang
+#ifdef __clang__ // Clang
 #define COMPILER_CLANG __clang__
 #elif defined(_MSC_VER) // Microsoft Visual C++
 #define COMPILER_MSVC _MSC_VER
@@ -42,7 +42,9 @@
 // Detect the operating system
 #if defined(_WIN32) || defined(_WIN64) // Microsoft Windows
 #define WINDOWS_OS
-#elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__)) // Unix-style operating systems
+
+#elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__))
+// Unix-style operating systems
 #define UNIX_STYLE_OS
 
 #if defined(__linux__) || defined(__linux) || defined(linux) // Operating systems based on Linux kernel
@@ -60,7 +62,7 @@
 #ifdef BSD // BSD operating systems
 #define BSD_OS
 
-#if defined(__FreeBSD__) // FreeBSD
+#ifdef __FreeBSD__ // FreeBSD
 #define FREE_BSD_OS
 #elif defined(__NetBSD__) // NetBSD
 #define NET_BSD_OS
@@ -95,17 +97,17 @@
 #endif
 
 #if CXX_LANGUAGE >= 199711L // C++98 or more
-#define CXX_98_OR_MORE
+#define CXX_98_OR_LATER
 #if CXX_LANGUAGE >= 201103L // C++11 or more
-#define CXX_11_OR_MORE
+#define CXX_11_OR_LATER
 #if CXX_LANGUAGE >= 201402L // C++14 or more
-#define CXX_14_OR_MORE
+#define CXX_14_OR_LATER
 #if CXX_LANGUAGE >= 201703L // C++17 or more
-#define CXX_17_OR_MORE
+#define CXX_17_OR_LATER
 #if CXX_LANGUAGE >= 202002L // C++20 or more
-#define CXX_20_OR_MORE
+#define CXX_20_OR_LATER
 #if CXX_LANGUAGE > 202002L // C++23 or more
-#define CXX_23_OR_MORE
+#define CXX_23_OR_LATER
 #else // C++20
 #define CXX_20
 #endif
@@ -134,13 +136,13 @@
 #endif
 
 #if C_LANGUAGE >= 199409L // C89 or more
-#define C_89_OR_MORE
+#define C_89_OR_LATER
 #if C_LANGUAGE >= 199901L // C99 or more
-#define C_99_OR_MORE
+#define C_99_OR_LATER
 #if C_LANGUAGE >= 201112L // C11 or more
-#define C_11_OR_MORE
+#define C_11_OR_LATER
 #if C_LANGUAGE >= 201710L // C17 or more
-#define C_17_OR_MORE
+#define C_17_OR_LATER
 #if C_LANGUAGE == 201710L // C17
 #define C_17
 #endif
@@ -163,14 +165,93 @@
 #define DEBUG
 #endif
 
+#if defined(__CHAR_UNSIGNED__) || defined(_CHAR_UNSIGNED)
+#define CHAR_IS_UNSIGNED_CHAR
+#endif
+
+#ifdef WINDOWS_OS
+#define SAL_SUPPORTED
+#endif
+
+#ifdef _WCHAR_T_DEFINED
+#define WCHAR_IS_BUILTIN_TYPE
+#endif
+
 #ifdef CXX_LANGUAGE
+#ifdef __cpp_char8_t
+#define CXX_U8CHAR_SUPPORTED
+#endif
+
+#ifndef CXX_11_OR_LATER
+#define noexcept throw()
+#define constexpr const
+#define final
+#define override
+
+#define NOEXCEPT_EXT(condition)
+#define DEFAULT_CONS {}
+#define DEFAULT_DEST {}
+#else
+#define NOEXCEPT_EXT(condition) noexcept(condition)
+#define DEFAULT_CONS = default
+#define DEFAULT_DEST = default
+#endif
+
+#ifndef CXX_17_OR_LATER
+
+#define INLINE_VAR
+
+#define NAMESPACE_L1_BEGIN(level1) namespace level1 {
+#define NAMESPACE_L1_END }
+
+#define NAMESPACE_L2_BEGIN(level1, level2) namespace level1 { namespace level2 {
+#define NAMESPACE_L2_END } }
+
+#define NAMESPACE_L3_BEGIN(level1, level2, level3) namespace level1 { namespace level2 { namespace level3 {
+#define NAMESPACE_L3_END } } }
+
+#define NAMESPACE_L4_BEGIN(level1, level2, level3, level4) namespace level1 { namespace level2 { namespace level3 { namespace level4 {
+#define NAMESPACE_L4_END } } } }
+
+#define NAMESPACE_L5_BEGIN(level1, level2, level3, level4, level5) namespace level1 { namespace level2 { namespace level3 { namespace level4 { \
+                                                                   namespace level5 {
+#define NAMESPACE_L5_END } } } } }
+
+#else
+
+#define INLINE_VAR inline
+
+#define NAMESPACE_L1_BEGIN(level1) namespace level1 {
+#define NAMESPACE_L1_END }
+
+#define NAMESPACE_L2_BEGIN(level1, level2) namespace level1::level2 {
+#define NAMESPACE_L2_END }
+
+#define NAMESPACE_L3_BEGIN(level1, level2, level3) namespace level1::level2::level3 {
+#define NAMESPACE_L3_END }
+
+#define NAMESPACE_L4_BEGIN(level1, level2, level3, level4) namespace level1::level2::level3::level4 {
+#define NAMESPACE_L4_END }
+
+#define NAMESPACE_L5_BEGIN(level1, level2, level3, level4, level5) namespace level1::level2::level3::level4::level5 {
+#define NAMESPACE_L5_END }
+
+#endif
+
+#ifndef CXX_20_OR_LATER
+#define consteval constexpr
+#endif
+
 #define EXTERN_C extern "C"
 #define EXTERN_C_START EXTERN_C {
 #define EXTERN_C_END }
+
 #else
+
 #define EXTERN_C extern
 #define EXTERN_C_START
 #define EXTERN_C_END
+
 #endif
 
 #define CURRENT_FILE __FILE__
@@ -183,3 +264,11 @@
 
 #define COMPILING_DATE __DATE__
 #define COMPILING_TIME __TIME__
+
+#ifdef ENHANCED_BUILDING
+#if defined(CXX_LANGUAGE) && !defined(CXX_20_OR_LATER)
+#error To build this software, please use the C++ 20 standard or later.
+#elif defined(C_LANGUAGE) && !defined(C_17_OR_LATER)
+#error To build this software, please use the C 17 standard or later.
+#endif
+#endif

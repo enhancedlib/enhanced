@@ -21,45 +21,47 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core {
-    template <typename Type>
-    struct AbstractClass Iterator {
-        virtual ~Iterator() noexcept = default;
+NAMESPACE_L2_BEGIN(enhanced, core)
 
-        /*!
-         * Determines if there are still elements can iterate over.
-         */
-        RetCannotIgnored
-        virtual bool hasNext() const = 0;
+template <typename Type>
+struct AbstractClass Iterator {
+    virtual ~Iterator() noexcept DEFAULT_CONS;
 
-        /*!
-         * Let the iterator pointer return to the next element.
-         */
-        virtual const Iterator<Type>* next() const = 0;
+    /*!
+     * Determines if there are still elements can iterate over.
+     */
+    NoIgnoreRet
+    virtual bool hasNext() const = 0;
 
-        /*!
-         * Usage: while (<list>.each())
-         */
-        RetCannotIgnored
-        virtual bool each() const = 0;
+    /*!
+     * Let the iterator pointer return to the next element.
+     */
+    virtual const Iterator<Type>* next() const = 0;
 
-        /*!
-         * Gets the current element.
-         */
-        RetCannotIgnored
-        virtual Type& get() const = 0;
+    /*!
+     * Usage: while (<list>.each())
+     */
+    NoIgnoreRet
+    virtual bool each() const = 0;
 
-        /*!
-         * Let the iterator pointer return to the first element.
-         */
-        virtual void reset() const = 0;
+    /*!
+     * Gets the current element.
+     */
+    NoIgnoreRet
+    virtual Type& get() const = 0;
 
-        /*!
-         * Gets the number of elements.
-         */
-        RetCannotIgnored
-        virtual Size count() const = 0;
-    };
-}
+    /*!
+     * Let the iterator pointer return to the first element.
+     */
+    virtual void reset() const = 0;
+
+    /*!
+     * Gets the number of elements.
+     */
+    NoIgnoreRet
+    virtual sizetype count() const = 0;
+};
+
+NAMESPACE_L2_END
 
 #endif

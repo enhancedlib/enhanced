@@ -24,7 +24,7 @@
 #include <enhanced/core/types.h>
 
 MustInspectResult RetNullable RetRequiresRelease
-void* memoryAlloc(Size size) {
+void* memoryAlloc(sizetype size) {
     assert(size > 0);
 
     return malloc(size);
@@ -36,27 +36,27 @@ void memoryFree(void* pointer) {
     }
 }
 
-void memorySet(void* ptr, byte aByte, Size size) {
+void memorySet(void* ptr, byte aByte, sizetype size) {
     assert(ptr != null), assert(size > 0);
 
-    for (Size index = 0; index < size; ++index) {
+    for (sizetype index = 0; index < size; ++index) {
         ((byte*) ptr)[index] = aByte;
     }
 }
 
-void memoryCopy(void* destination, const void* source, Size size) {
+void memoryCopy(void* destination, const void* source, sizetype size) {
     assert(destination != null), assert(source != null);
 
     if (size == 0) return;
 
-    Size countBlock = size / sizeof(qword);
-    Size countByte = size % sizeof(qword);
+    sizetype countBlock = size / sizeof(qword);
+    sizetype countByte = size % sizeof(qword);
 
-    for (Size index = 0; index < countBlock; ++index) {
+    for (sizetype index = 0; index < countBlock; ++index) {
         ((qword*) destination)[index] = ((qword*) source)[index];
     }
 
-    for (Size index = size - countByte; index < size; ++index) {
+    for (sizetype index = size - countByte; index < size; ++index) {
         ((byte*) destination)[index] = ((byte*) source)[index];
     }
 }

@@ -18,20 +18,19 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-
 #include <enhanced/core/exception/Error.h>
 
-#ifdef C_LANGUAGE
+ENHANCED_CORE_API extern const CExceptionType CMemoryAllocationError;
 
-ENHANCED_CORE_API extern const ExceptionType MemoryAllocationError;
+#ifdef CXX_LANGUAGE
 
-#else
+NAMESPACE_L3_BEGIN(enhanced, core, exception)
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API MemoryAllocationError : public Error {
-    public:
-        explicit MemoryAllocationError(const String& message = "") noexcept;
-    };
-}
+class ENHANCED_CORE_API MemoryAllocationError : public Error {
+public:
+    explicit MemoryAllocationError(const String& message = "") noexcept;
+};
+
+NAMESPACE_L3_END
 
 #endif

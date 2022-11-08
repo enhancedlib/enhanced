@@ -5,7 +5,7 @@ add_rules("mode.release", "mode.debug", "mode.releasedbg", "mode.minsizerel")
 set_languages("c17", "c++20")
 set_allowedmodes("debug", "release", "releasedbg", "minsizerel")
 
-if get_config("toolchain") == "msvc" or get_config("clang-cl") then
+if get_config("toolchain") == "msvc" or get_config("toolchain") == "clang-cl" then
     if is_mode("debug") or is_mode("releasedbg") then
         add_cxflags("/MDd")
     else

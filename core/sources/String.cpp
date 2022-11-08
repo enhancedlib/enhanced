@@ -31,13 +31,13 @@ using enhanced::core::collections::List;
 using enhanced::core::collections::ArrayList;
 
 template <typename CharType>
-BasicString<CharType>::BasicString(NotNull CharType* value, Size length) noexcept : CharSequence<CharType>(value, length)  {}
+BasicString<CharType>::BasicString(CharType* value, sizetype length) noexcept : CharSequence<CharType>(value, length)  {}
 
 template <typename CharType>
-BasicString<CharType>::BasicString(NotNull const CharType* value) noexcept : BasicString(const_cast<CharType*>(value)) {}
+BasicString<CharType>::BasicString(const CharType* value) noexcept : BasicString(const_cast<CharType*>(value)) {}
 
 template <typename CharType>
-BasicString<CharType>::BasicString(NotNull CharType* value) noexcept : CharSequence<CharType>(value, tstringLength(value)) {}
+BasicString<CharType>::BasicString(CharType* value) noexcept : CharSequence<CharType>(value, tstringLength(value)) {}
 
 template <typename CharType>
 BasicString<CharType>::BasicString(const BasicString& other) noexcept = default;
@@ -46,23 +46,23 @@ template <typename CharType>
 BasicString<CharType>::BasicString(BasicString&& other) noexcept = default;
 
 template <typename CharType>
-RetCannotIgnored
-Size BasicString<CharType>::indexOf(const CharType ch) const noexcept {
-    for (Size index = 0; index < this->length; ++index) {
+NoIgnoreRet
+sizetype BasicString<CharType>::indexOf(const CharType ch) const noexcept {
+    for (sizetype index = 0; index < this->length; ++index) {
         if (this->value[index] == ch) {
             return index;
         }
     }
 
-    return SIZE_MAX;
+    return SIZE_TYPE_MAX;
 }
 
 template <typename CharType>
-RetCannotIgnored
-Size BasicString<CharType>::indexOf(const BasicString& string) const noexcept {
-    Size substringIndex = 0;
+NoIgnoreRet
+sizetype BasicString<CharType>::indexOf(const BasicString& string) const noexcept {
+    sizetype substringIndex = 0;
 
-    for (Size index = 0; index < this->length; ++index) {
+    for (sizetype index = 0; index < this->length; ++index) {
         if (this->value[index] == string[substringIndex]) {
             ++substringIndex;
         } else {
@@ -74,15 +74,15 @@ Size BasicString<CharType>::indexOf(const BasicString& string) const noexcept {
         }
     }
 
-    return SIZE_MAX;
+    return SIZE_TYPE_MAX;
 }
 
 template <typename CharType>
-RetCannotIgnored
-Size BasicString<CharType>::indexOf(const CharType ch, const Size getN) const noexcept {
-    Size indexN = 0;
+NoIgnoreRet
+sizetype BasicString<CharType>::indexOf(const CharType ch, const sizetype getN) const noexcept {
+    sizetype indexN = 0;
 
-    for (Size index = 0; index < this->length; ++index) {
+    for (sizetype index = 0; index < this->length; ++index) {
         if (this->value[index] == ch) {
             if (getN == indexN) {
                 return index;
@@ -92,16 +92,16 @@ Size BasicString<CharType>::indexOf(const CharType ch, const Size getN) const no
         }
     }
 
-    return SIZE_MAX;
+    return SIZE_TYPE_MAX;
 }
 
 template <typename CharType>
-RetCannotIgnored
-Size BasicString<CharType>::indexOf(const BasicString& string, const Size getN) const noexcept {
-    Size indexN = 0;
-    Size substringIndex = 0;
+NoIgnoreRet
+sizetype BasicString<CharType>::indexOf(const BasicString& string, const sizetype getN) const noexcept {
+    sizetype indexN = 0;
+    sizetype substringIndex = 0;
 
-    for (Size index = 0; index < this->length; ++index) {
+    for (sizetype index = 0; index < this->length; ++index) {
         if (this->value[index] == string[substringIndex]) {
             ++substringIndex;
         } else {
@@ -117,13 +117,13 @@ Size BasicString<CharType>::indexOf(const BasicString& string, const Size getN) 
         }
     }
 
-    return SIZE_MAX;
+    return SIZE_TYPE_MAX;
 }
 
 template <typename CharType>
-RetCannotIgnored
-Size BasicString<CharType>::lastIndexOf(const CharType ch) const noexcept {
-    for (Size index = this->length - 1;; --index) {
+NoIgnoreRet
+sizetype BasicString<CharType>::lastIndexOf(const CharType ch) const noexcept {
+    for (sizetype index = this->length - 1;; --index) {
         if (this->value[index] == ch) {
             return index;
         }
@@ -133,15 +133,15 @@ Size BasicString<CharType>::lastIndexOf(const CharType ch) const noexcept {
         }
     }
 
-    return SIZE_MAX;
+    return SIZE_TYPE_MAX;
 }
 
 template <typename CharType>
-RetCannotIgnored
-Size BasicString<CharType>::lastIndexOf(const BasicString& string) const noexcept {
-    Size substringIndex = string.length - 1;
+NoIgnoreRet
+sizetype BasicString<CharType>::lastIndexOf(const BasicString& string) const noexcept {
+    sizetype substringIndex = string.length - 1;
 
-    for (Size index = this->length - 1;; --index) {
+    for (sizetype index = this->length - 1;; --index) {
         if (this->value[index] == string[substringIndex]) {
             --substringIndex;
         } else {
@@ -157,15 +157,15 @@ Size BasicString<CharType>::lastIndexOf(const BasicString& string) const noexcep
         }
     }
 
-    return SIZE_MAX;
+    return SIZE_TYPE_MAX;
 }
 
 template <typename CharType>
-RetCannotIgnored
-Size BasicString<CharType>::lastIndexOf(const CharType ch, const Size getN) const noexcept {
-    Size indexN = 0;
+NoIgnoreRet
+sizetype BasicString<CharType>::lastIndexOf(const CharType ch, const sizetype getN) const noexcept {
+    sizetype indexN = 0;
 
-    for (Size index = this->length - 1;; --index) {
+    for (sizetype index = this->length - 1;; --index) {
         if (this->value[index] == ch) {
             if (getN == indexN) {
                 return index;
@@ -179,16 +179,16 @@ Size BasicString<CharType>::lastIndexOf(const CharType ch, const Size getN) cons
         }
     }
 
-    return SIZE_MAX;
+    return SIZE_TYPE_MAX;
 }
 
 template <typename CharType>
-RetCannotIgnored
-Size BasicString<CharType>::lastIndexOf(const BasicString& string, const Size getN) const noexcept {
-    Size indexN = 0;
-    Size substringIndex = string.length - 1;
+NoIgnoreRet
+sizetype BasicString<CharType>::lastIndexOf(const BasicString& string, const sizetype getN) const noexcept {
+    sizetype indexN = 0;
+    sizetype substringIndex = string.length - 1;
 
-    for (Size index = this->length - 1;; --index) {
+    for (sizetype index = this->length - 1;; --index) {
         if (this->value[index] == string[substringIndex]) {
             --substringIndex;
         } else {
@@ -208,15 +208,15 @@ Size BasicString<CharType>::lastIndexOf(const BasicString& string, const Size ge
         }
     }
 
-    return SIZE_MAX;
+    return SIZE_TYPE_MAX;
 }
 
 template <typename CharType>
 RetRequiresRelease
-ArrayList<Size> BasicString<CharType>::indexOfAll(const CharType ch) const noexcept {
-    ArrayList<Size> allIndexes;
+ArrayList<sizetype> BasicString<CharType>::indexOfAll(const CharType ch) const noexcept {
+    ArrayList<sizetype> allIndexes;
 
-    for (Size index = 0; index < this->length; ++index) {
+    for (sizetype index = 0; index < this->length; ++index) {
         if (this->value[index] == ch) {
             allIndexes.add(index);
         }
@@ -227,11 +227,11 @@ ArrayList<Size> BasicString<CharType>::indexOfAll(const CharType ch) const noexc
 
 template <typename CharType>
 RetRequiresRelease
-ArrayList<Size> BasicString<CharType>::indexOfAll(const BasicString& string) const noexcept {
-    ArrayList<Size> allIndexes;
-    Size substringIndex = 0;
+ArrayList<sizetype> BasicString<CharType>::indexOfAll(const BasicString& string) const noexcept {
+    ArrayList<sizetype> allIndexes;
+    sizetype substringIndex = 0;
 
-    for (Size index = 0; index < this->length; ++index) {
+    for (sizetype index = 0; index < this->length; ++index) {
         if (this->value[index] == string[substringIndex]) {
             ++substringIndex;
         } else {
@@ -247,25 +247,25 @@ ArrayList<Size> BasicString<CharType>::indexOfAll(const BasicString& string) con
 }
 
 template <typename CharType>
-RetCannotIgnored
+NoIgnoreRet
 MutableBasicString<CharType> BasicString<CharType>::replace(CharType oldChar, CharType newChar) const {
     return MutableBasicString<CharType>(this->value).replaceTo(oldChar, newChar);
 }
 
 template <typename CharType>
-RetCannotIgnored
+NoIgnoreRet
 MutableBasicString<CharType> BasicString<CharType>::replace(const BasicString& oldSubstring, const BasicString& newSubstring) const {
     return MutableBasicString<CharType>(this->value).replaceTo(oldSubstring, newSubstring);
 }
 
 template <typename CharType>
-RetCannotIgnored
+NoIgnoreRet
 MutableBasicString<CharType> BasicString<CharType>::replace(CharType oldChar, const BasicString& newSubstring) const {
     return MutableBasicString<CharType>(this->value).replaceTo(oldChar, newSubstring);
 }
 
 template <typename CharType>
-RetCannotIgnored
+NoIgnoreRet
 MutableBasicString<CharType> BasicString<CharType>::replace(const BasicString& oldSubstring, CharType newChar) const {
     return MutableBasicString<CharType>(this->value).replaceTo(oldSubstring, newChar);
 }
@@ -282,13 +282,14 @@ MutableBasicString<CharType> BasicString<CharType>::lowercase() const {
 
 template <typename CharType>
 bool BasicString<CharType>::operator==(const BasicString& string) const noexcept {
+    if (this->length != string.length) return false;
     return tstringEqual(this->value, string.value);
 }
 
 template <typename CharType>
-RetCannotIgnored
+NoIgnoreRet
 MutableBasicString<CharType> BasicString<CharType>::operator+(const BasicString& string) const {
-    Size newLength = this->length + string.length;
+    sizetype newLength = this->length + string.length;
     MutableBasicString<CharType> newString(newLength);
 
     memoryCopy(newString.value, this->value, newLength);
@@ -305,3 +306,7 @@ BasicString<CharType>& BasicString<CharType>::operator=(BasicString&& other) noe
 
 template class enhanced::core::BasicString<char>;
 template class enhanced::core::BasicString<wchar>;
+template class enhanced::core::BasicString<ushort>;
+template class enhanced::core::BasicString<u8char>;
+template class enhanced::core::BasicString<u16char>;
+template class enhanced::core::BasicString<u32char>;

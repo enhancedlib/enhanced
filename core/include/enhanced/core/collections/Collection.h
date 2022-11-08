@@ -23,25 +23,27 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::collections {
-    template <typename Type>
-    struct AbstractClass Collection : Iterable<Type> {
-        virtual ~Collection() noexcept = default;
+NAMESPACE_L3_BEGIN(enhanced, core, collections)
 
-        RetCannotIgnored
-        virtual Size getSize() const = 0;
+template <typename Type>
+struct AbstractClass Collection : Iterable<Type> {
+    virtual ~Collection() noexcept DEFAULT_CONS;
 
-        RetCannotIgnored
-        virtual bool isEmpty() const = 0;
+    NoIgnoreRet
+    virtual sizetype getSize() const = 0;
 
-        RetCannotIgnored
-        virtual bool contain(const Type& value) const = 0;
+    NoIgnoreRet
+    virtual bool isEmpty() const = 0;
 
-        RetRequiresRelease
-        virtual Collection<Type>* copy() const = 0;
-    };
+    NoIgnoreRet
+    virtual bool contain(const Type& value) const = 0;
 
-    ENHANCED_CORE_API extern Size ARRAY_INIT_SIZE; // Default value: 255
-}
+    RetRequiresRelease
+    virtual Collection<Type>* copy() const = 0;
+};
+
+ENHANCED_CORE_API extern sizetype ARRAY_INIT_SIZE; // Default value: 255
+
+NAMESPACE_L3_END
 
 #endif

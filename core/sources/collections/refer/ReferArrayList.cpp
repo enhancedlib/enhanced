@@ -27,7 +27,7 @@
 using enhanced_internal::core::collections::refer::ReferArrayListImpl;
 using enhanced::core::exception::UnsupportedOperationException;
 
-ReferArrayListImpl::ReferArrayListImpl(const Size capacity, const GenericOperator genericOperator) :
+ReferArrayListImpl::ReferArrayListImpl(const sizetype capacity, const GenericOperator genericOperator) :
     elements(new void* [capacity]), size(0), capacity(capacity),
     genericOperator(genericOperator), iterator(null) {}
 
@@ -35,7 +35,7 @@ ReferArrayListImpl::ReferArrayListImpl(const ReferArrayListImpl& other) :
     elements(new void* [other.capacity]), size(other.size), capacity(other.capacity),
     genericOperator(other.genericOperator), iterator(null) {
     assert(other.capacity >= other.size);
-    for (Size index = 0; index < other.size; ++index) {
+    for (sizetype index = 0; index < other.size; ++index) {
         elements[index] = other.elements[index];
     }
 }
@@ -45,24 +45,24 @@ ReferArrayListImpl::~ReferArrayListImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored
-Size ReferArrayListImpl::getSize0() const {
+NoIgnoreRet
+sizetype ReferArrayListImpl::getSize0() const {
     return size;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool ReferArrayListImpl::isEmpty0() const {
     return size == 0;
 }
 
-RetCannotIgnored
-Generic& ReferArrayListImpl::get0(const Size index) const {
+NoIgnoreRet
+Generic& ReferArrayListImpl::get0(const sizetype index) const {
     return GET_GENERIC_VALUE(elements[index]);
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool ReferArrayListImpl::contain0(Generic& value) const {
-    for (Size index = 0; index < size; ++index) {
+    for (sizetype index = 0; index < size; ++index) {
         if (genericOperator.equals(GET_GENERIC_VALUE(elements[index]), value)) {
             return true;
         }
@@ -86,8 +86,8 @@ void ReferArrayListImpl::remove0() {
     --size;
 }
 
-void ReferArrayListImpl::expand0(const Size size) {
-    Size count = capacity + size;
+void ReferArrayListImpl::expand0(const sizetype size) {
+    sizetype count = capacity + size;
     void** array = new void* [count];
 
     arrayCopy(array, elements, size, sizeof(void*));
@@ -97,8 +97,8 @@ void ReferArrayListImpl::expand0(const Size size) {
     capacity = count;
 }
 
-void ReferArrayListImpl::shrink0(const Size size) {
-    Size count = capacity - size;
+void ReferArrayListImpl::shrink0(const sizetype size) {
+    sizetype count = capacity - size;
     if (count < size) throw UnsupportedOperationException("Cannot shrink because the size is larger than the new capacity");
 
     void** array = new void* [count];
@@ -117,7 +117,7 @@ ReferArrayListIteratorImpl(const ReferArrayListImpl* referenceArrayList) :
 
 ReferArrayListImpl::ReferArrayListIteratorImpl::~ReferArrayListIteratorImpl() noexcept = default;
 
-RetCannotIgnored
+NoIgnoreRet
 bool ReferArrayListImpl::ReferArrayListIteratorImpl::hasNext0() const {
     return indexer != end;
 }
@@ -126,7 +126,7 @@ void ReferArrayListImpl::ReferArrayListIteratorImpl::next0() const {
     ++indexer;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool ReferArrayListImpl::ReferArrayListIteratorImpl::each0() const {
     if (isFirst) {
         isFirst = false;
@@ -137,7 +137,7 @@ bool ReferArrayListImpl::ReferArrayListIteratorImpl::each0() const {
     return hasNext0();
 }
 
-RetCannotIgnored
+NoIgnoreRet
 Generic& ReferArrayListImpl::ReferArrayListIteratorImpl::get0() const {
     return GET_GENERIC_VALUE(*indexer);
 }
@@ -147,7 +147,7 @@ void ReferArrayListImpl::ReferArrayListIteratorImpl::reset0() const {
     indexer = referenceArrayList->elements;
 }
 
-RetCannotIgnored
-Size ReferArrayListImpl::ReferArrayListIteratorImpl::count0() const {
+NoIgnoreRet
+sizetype ReferArrayListImpl::ReferArrayListIteratorImpl::count0() const {
     return referenceArrayList->getSize0();
 }

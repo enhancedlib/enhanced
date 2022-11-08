@@ -13,28 +13,34 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/util/SharedPointer.h>
+#include <enhanced/core/util/SharedPtr.h>
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/memory.h>
 
-using enhanced_internal::core::util::SharedPointerImpl;
+using enhanced_internal::core::util::SharedPtrImpl;
 
-SharedPointerImpl::SharedPointerImpl(void* ptr, SharedPointerImpl::GenericOperator genericOperator) :
-    referenceCount(new Size(1)), pointer(ptr), genericOperator(genericOperator) {}
+SharedPtrImpl::SharedPtrImpl(void* ptr, SharedPtrImpl::GenericOperator genericOperator) :
+    referenceCount(new sizetype(1)), pointer(ptr), genericOperator(genericOperator) {}
 
-SharedPointerImpl::SharedPointerImpl(const SharedPointerImpl& other) :
+SharedPtrImpl::SharedPtrImpl(const SharedPtrImpl& other) noexcept :
     referenceCount(other.referenceCount), pointer(other.pointer), genericOperator(other.genericOperator) {
     ++(*other.referenceCount);
 }
 
-SharedPointerImpl::~SharedPointerImpl() noexcept {
+SharedPtrImpl::SharedPtrImpl(SharedPtrImpl&& other) noexcept :
+    referenceCount(other.referenceCount), pointer(other.pointer), genericOperator(other.genericOperator) {
+    other.referenceCount = null;
+    other.pointer = null;
+}
+
+SharedPtrImpl::~SharedPtrImpl() noexcept {
     release0();
 }
 
-void SharedPointerImpl::release0() noexcept {
+void SharedPtrImpl::release0() noexcept {
     if ((--(*referenceCount)) == 0) {
         genericOperator.destroy(pointer);
         pointer = null;
@@ -42,15 +48,24 @@ void SharedPointerImpl::release0() noexcept {
     }
 }
 
-void SharedPointerImpl::assign0(void* value) noexcept {
+void SharedPtrImpl::assign0(void* value) noexcept {
     release0();
-    referenceCount = new Size(1);
+    referenceCount = new sizetype(1);
     pointer = value;
 }
 
-void SharedPointerImpl::assign0(const SharedPointerImpl& other) noexcept {
+void SharedPtrImpl::assign0(const SharedPtrImpl& other) noexcept {
     release0();
     pointer = other.pointer;
     referenceCount = other.referenceCount;
     ++(*referenceCount);
+}
+
+void SharedPtrImpl::assign0(SharedPtrImpl&& other) noexcept {
+    release0();
+    pointer = other.pointer;
+    referenceCount = other.referenceCount;
+
+    other.pointer = null;
+    other.referenceCount = null;
 }

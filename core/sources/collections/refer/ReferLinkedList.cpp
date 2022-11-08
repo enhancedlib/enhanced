@@ -39,14 +39,14 @@ ReferLinkedListImpl::ReferLinkedListImpl(const GenericOperator genericOperator) 
 ReferLinkedListImpl::ReferLinkedListImpl(const ReferLinkedListImpl& other) :
     first(null), last(null), indexer(null), size(0), genericOperator(other.genericOperator), iterator(null) {
     indexer = other.first;
-    for (Size count = 0; count < other.size; ++count) {
+    for (sizetype count = 0; count < other.size; ++count) {
         addLast0(GET_GENERIC_VALUE(indexer->value));
         nextNode(indexer);
     }
 }
 
 ReferLinkedListImpl::~ReferLinkedListImpl() noexcept {
-    for (Size count = 1; count < size; ++count) {
+    for (sizetype count = 1; count < size; ++count) {
         prevNode(last);
         delete last->next;
     }
@@ -55,36 +55,36 @@ ReferLinkedListImpl::~ReferLinkedListImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored
-Size ReferLinkedListImpl::getSize0() const {
+NoIgnoreRet
+sizetype ReferLinkedListImpl::getSize0() const {
     return size;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool ReferLinkedListImpl::isEmpty0() const {
     return size == 0;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 Generic& ReferLinkedListImpl::getLast0() const {
     return GET_GENERIC_VALUE(last->value);
 }
 
-RetCannotIgnored
+NoIgnoreRet
 Generic& ReferLinkedListImpl::getFirst0() const {
     return GET_GENERIC_VALUE(first->value);
 }
 
-RetCannotIgnored
-Generic& ReferLinkedListImpl::get0(const Size index) const {
+NoIgnoreRet
+Generic& ReferLinkedListImpl::get0(const sizetype index) const {
     if (index < (size >> 1)) {
         indexer = first;
-        for (Size count = 0; count < index; ++count) {
+        for (sizetype count = 0; count < index; ++count) {
             nextNode(indexer);
         }
     } else {
         indexer = last;
-        for (Size count = size - 1; count > index; --count) {
+        for (sizetype count = size - 1; count > index; --count) {
             prevNode(indexer);
         }
     }
@@ -92,10 +92,10 @@ Generic& ReferLinkedListImpl::get0(const Size index) const {
     return GET_GENERIC_VALUE(indexer->value);
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool ReferLinkedListImpl::contain0(Generic& value) const {
     indexer = first;
-    for (Size count = 0; count < size; ++count) {
+    for (sizetype count = 0; count < size; ++count) {
         if (genericOperator.equals(GET_GENERIC_VALUE(indexer->value), value)) {
             return true;
         }
@@ -171,7 +171,7 @@ ReferLinkedListIteratorImpl(const ReferLinkedListImpl* referLinkedList) :
 
 ReferLinkedListImpl::ReferLinkedListIteratorImpl::~ReferLinkedListIteratorImpl() noexcept = default;
 
-RetCannotIgnored
+NoIgnoreRet
 bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::hasNext0() const {
     if (isFirst) {
         isFirst = false;
@@ -185,7 +185,7 @@ void ReferLinkedListImpl::ReferLinkedListIteratorImpl::next0() const {
     nextNode(referLinkedList->indexer);
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::each0() const {
     if (isFirst) {
         isFirst = false;
@@ -196,7 +196,7 @@ bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::each0() const {
     return hasNext0();
 }
 
-RetCannotIgnored
+NoIgnoreRet
 Generic& ReferLinkedListImpl::ReferLinkedListIteratorImpl::get0() const {
     return GET_GENERIC_VALUE(referLinkedList->indexer->value);
 }
@@ -206,7 +206,7 @@ void ReferLinkedListImpl::ReferLinkedListIteratorImpl::reset0() const {
     referLinkedList->indexer = referLinkedList->first;
 }
 
-RetCannotIgnored
-Size ReferLinkedListImpl::ReferLinkedListIteratorImpl::count0() const {
+NoIgnoreRet
+sizetype ReferLinkedListImpl::ReferLinkedListIteratorImpl::count0() const {
     return referLinkedList->getSize0();
 }

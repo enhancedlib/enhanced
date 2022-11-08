@@ -35,74 +35,72 @@ ENHANCED_CORE_API extern bool enableExceptions;
  */
 ENHANCED_CORE_API extern bool enableExceptionsTraceback;
 
-#ifdef C_LANGUAGE
-
-typedef struct ExceptionType {
-    struct ExceptionType* parent;
+typedef struct CExceptionType {
+    struct CExceptionType* parent;
     uint64 code;
-} ExceptionType;
+} CExceptionType;
 
-typedef struct ExceptionInstance {
+typedef struct CExceptionInstance {
     const char* message;
-    ExceptionType type;
+    CExceptionType type;
 
-    char* (*const getTraceback)(struct ExceptionInstance* self);
-} ExceptionInstance;
+    char* (*const getTraceback)(struct CExceptionInstance* self);
+} CExceptionInstance;
 
-typedef enum TryBlockStatus {
+typedef enum CTryBlockStatus {
     TryBlockInto,
     TryBlockNoException,
     TryBlockExceptionOccurred,
     TryBlockExceptionCapture,
     TryBlockInterrupted,
     TryBlockFunctionReturn
-} TryBlockStatus;
+} CTryBlockStatus;
 
-typedef struct ExceptionContext {
-    ExceptionInstance* exception;
+typedef struct CExceptionContext {
+    CExceptionInstance* exception;
     Snapshot snapshot;
     bool inFinally;
-    TryBlockStatus status;
-    struct ExceptionContext* link;
-} ExceptionContext;
+    CTryBlockStatus status;
+    struct CExceptionContext* link;
+} CExceptionContext;
 
-ENHANCED_CORE_API extern const ExceptionType Exception;
+ENHANCED_CORE_API extern const CExceptionType CException;
 
-ENHANCED_CORE_API ExceptionInstance newException(ExceptionType type, const char* message);
+ENHANCED_CORE_API CExceptionInstance newException(CExceptionType type, const char* message);
 
-ENHANCED_CORE_API void exceptionContextStackPush(ExceptionContext* exceptionContext);
+ENHANCED_CORE_API void exceptionContextStackPush(CExceptionContext* exceptionContext);
 
 ENHANCED_CORE_API void exceptionContextStackPopup();
 
 ENHANCED_CORE_API bool exceptionContextStackIsEmpty();
 
-ENHANCED_CORE_API bool exceptionInstanceOf(ExceptionInstance* exception, ExceptionType type);
+ENHANCED_CORE_API bool exceptionInstanceOf(CExceptionInstance* exception, CExceptionType type);
 
-ENHANCED_CORE_API void exceptionThrow(ExceptionInstance exception);
+ENHANCED_CORE_API void exceptionThrow(CExceptionInstance exception);
 
-#define TRY \
+#define C_TRY \
     { \
-        ExceptionContext _CONTEXT; \
+        CExceptionContext _CONTEXT; \
         exceptionContextStackPush(&_CONTEXT); \
         _CONTEXT.status = TAKE_SNAPSHOT(_CONTEXT.snapshot); \
         if (_CONTEXT.status == TryBlockInto) { \
             _CONTEXT.status = TryBlockNoException;
 
-#define CATCH(exceptionType, variable) \
+#define C_CATCH(exceptionType, variable) \
         } else if (_CONTEXT.status == TryBlockExceptionOccurred && exceptionInstanceOf(_CONTEXT.exception, (exceptionType))) { \
-            ExceptionInstance* (variable) = _CONTEXT.exception; \
+            CExceptionInstance* (variable) = _CONTEXT.exception; \
             _CONTEXT.status = TryBlockExceptionCapture;
 
-#define PASSED \
+#define C_PASSED \
         } \
         if (_CONTEXT.status == TryBlockNoException) {
 
-#define FINALLY \
+#define C_FINALLY \
         } \
         _CONTEXT.inFinally = true; \
         {
 
-#define END_TRY \
+#define C_END_TRY \
         } \
             exceptionContextStackPopup(); \
             if (_CONTEXT.status == TryBlockInterrupted) { \
@@ -114,7 +112,7 @@ ENHANCED_CORE_API void exceptionThrow(ExceptionInstance exception);
     } \
     (void) 0
 
-#define RETURN_IN_TRY(value) \
+#define C_RETURN_IN_TRY(value) \
     { \
         if (_CONTEXT.inFinally) { \
             exceptionContextStackPopup(); \
@@ -130,37 +128,39 @@ ENHANCED_CORE_API void exceptionThrow(ExceptionInstance exception);
     } \
     (void) 0
 
-#define THROW exceptionThrow
+#define C_THROW exceptionThrow
 
-#define THROW_NEW(type, message) exceptionThrow(newException(type, message))
+#define C_THROW_NEW(type, message) exceptionThrow(newException(type, message))
 
-#else
+#ifdef CXX_LANGUAGE
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API Exception {
-    protected:
-        const String message;
+NAMESPACE_L3_BEGIN(enhanced, core, exception)
 
-        const Exception* cause;
+class ENHANCED_CORE_API Exception {
+protected:
+    const String message;
 
-    public:
-        explicit Exception(const String& message = "") noexcept;
+    const Exception* cause;
 
-        explicit Exception(const Exception* cause) noexcept;
+public:
+    explicit Exception(const String& message = "") noexcept;
 
-        Exception(const String&, const Exception* cause) noexcept;
+    explicit Exception(const Exception* cause) noexcept;
 
-        virtual ~Exception() noexcept;
+    Exception(const String&, const Exception* cause) noexcept;
 
-        RetCannotIgnored
-        virtual const String& getTraceback() const noexcept;
+    virtual ~Exception() noexcept;
 
-        RetCannotIgnored
-        virtual const Exception* getCause() const noexcept;
+    NoIgnoreRet
+    virtual const String& getTraceback() const noexcept;
 
-        RetCannotIgnored
-        virtual const String& getMessage() const noexcept;
-    };
-}
+    NoIgnoreRet
+    virtual const Exception* getCause() const noexcept;
+
+    NoIgnoreRet
+    virtual const String& getMessage() const noexcept;
+};
+
+NAMESPACE_L3_END
 
 #endif

@@ -28,13 +28,13 @@ using enhanced::core::MutableBasicString;
 using enhanced::core::BasicString;
 
 template <typename CharType>
-MutableBasicString<CharType>::MutableBasicString(const NotNull CharType* value) : BasicString<CharType>(tstringCopy(value)) {}
+MutableBasicString<CharType>::MutableBasicString(const CharType* value) : BasicString<CharType>(tstringCopy(value)) {}
 
 template <typename CharType>
-MutableBasicString<CharType>::MutableBasicString(NotNull CharType* value) : BasicString<CharType>(tstringCopy(value)) {}
+MutableBasicString<CharType>::MutableBasicString(CharType* value) : BasicString<CharType>(tstringCopy(value)) {}
 
 template <typename CharType>
-MutableBasicString<CharType>::MutableBasicString(Size length) : BasicString<CharType>(tstringNew<CharType>(length)) {}
+MutableBasicString<CharType>::MutableBasicString(sizetype length) : BasicString<CharType>(tstringNew<CharType>(length)) {}
 
 template <typename CharType>
 MutableBasicString<CharType>::MutableBasicString(const MutableBasicString<CharType>& other) : BasicString<CharType>(tstringCopy(other.value)) {}
@@ -51,12 +51,12 @@ MutableBasicString<CharType>::~MutableBasicString() noexcept {
 }
 
 template <typename CharType>
-CharType& MutableBasicString<CharType>::at(Size index) const noexcept {
+CharType& MutableBasicString<CharType>::at(sizetype index) const noexcept {
     return this->value[index];
 }
 
 template <typename CharType>
-CharType& MutableBasicString<CharType>::operator[](Size index) const noexcept {
+CharType& MutableBasicString<CharType>::operator[](sizetype index) const noexcept {
     return this->value[index];
 }
 
@@ -68,7 +68,7 @@ MutableBasicString<CharType>& MutableBasicString<CharType>::append(const BasicSt
         return *this;
     }
 
-    Size newLength = this->length + string.length;
+    sizetype newLength = this->length + string.length;
     auto newString = new CharType[newLength + 1];
     newString[newLength] = '\0';
 
@@ -89,7 +89,8 @@ MutableBasicString<CharType>& MutableBasicString<CharType>::replaceTo(const Char
 }
 
 template <typename CharType>
-MutableBasicString<CharType>& MutableBasicString<CharType>::replaceTo(const BasicString<CharType>& oldSubstring, const BasicString<CharType>& newSubstring) {
+MutableBasicString<CharType>& MutableBasicString<CharType>::replaceTo(const BasicString<CharType>& oldSubstring,
+                                                                      const BasicString<CharType>& newSubstring) {
     NOT_IMPLEMENTED();
 }
 
@@ -105,7 +106,7 @@ MutableBasicString<CharType>& MutableBasicString<CharType>::replaceTo(const Basi
 
 template <typename CharType>
 MutableBasicString<CharType>& MutableBasicString<CharType>::toUppercase() {
-    for (Size index = 0; index < this->length; ++index) {
+    for (sizetype index = 0; index < this->length; ++index) {
         if (this->value[index] >= 'a' && this->value[index] <= 'z') {
             (this->value[index] -= 'a') += 'A';
         }
@@ -115,7 +116,7 @@ MutableBasicString<CharType>& MutableBasicString<CharType>::toUppercase() {
 
 template <typename CharType>
 MutableBasicString<CharType>& MutableBasicString<CharType>::toLowercase() {
-    for (Size index = 0; index < this->length; ++index) {
+    for (sizetype index = 0; index < this->length; ++index) {
         if (this->value[index] >= 'A' && this->value[index] <= 'Z') {
             (this->value[index] -= 'A') += 'a';
         }
@@ -136,3 +137,7 @@ MutableBasicString<CharType>& MutableBasicString<CharType>::operator+=(const Bas
 
 template class enhanced::core::MutableBasicString<char>;
 template class enhanced::core::MutableBasicString<wchar>;
+template class enhanced::core::MutableBasicString<ushort>;
+template class enhanced::core::MutableBasicString<u8char>;
+template class enhanced::core::MutableBasicString<u16char>;
+template class enhanced::core::MutableBasicString<u32char>;

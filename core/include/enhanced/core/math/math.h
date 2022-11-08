@@ -19,13 +19,13 @@
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 
-#ifdef C_LANGUAGE
+#ifdef CXX_LANGUAGE
 
-#else
+NAMESPACE_L3_BEGIN(enhanced, core, math)
 
-namespace enhanced::core::math {
-    template <typename NumberType>
-    ENHANCED_CORE_API NumberType abs(NumberType number);
-}
+template <typename NumberType>
+ENHANCED_CORE_API NumberType abs(NumberType number);
+
+NAMESPACE_L3_END
 
 #endif

@@ -23,9 +23,12 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::collections::refer {
+NAMESPACE_L4_BEGIN(enhanced, core, collections, refer)
+
+template <typename Type>
+struct AbstractClass ReferDeque :
 /*
- * When you build project with Microsoft Visual C++ Compiler,
+ * When you build project with Microsoft Visual C++ compiler,
  * If you don't explicitly extend the "Collection" class, you will see an error in compiling.
  * The compiler thinks the return type of virtual function 'copy' isn't
  * covariant with the return type the super method.
@@ -38,34 +41,31 @@ namespace enhanced::core::collections::refer {
 #ifdef COMPILER_MSVC
 #pragma warning(push)
 #pragma warning(disable: 4584)
-    template <typename Type>
-    struct AbstractClass ReferDeque : Collection<Type>, Queue<Type>, Deque<Type>, ReferQueue<Type> {
-#else
-    template <typename Type>
-    struct AbstractClass ReferDeque : Deque<Type>, ReferQueue<Type> {
+    Collection<Type>,
 #endif
-        RetCannotIgnored
-        virtual Size getSize() const = 0;
+    Deque<Type>, ReferQueue<Type> {
+        NoIgnoreRet
+        virtual sizetype getSize() const = 0;
 
-        RetCannotIgnored
+        NoIgnoreRet
         virtual bool isEmpty() const = 0;
 
         virtual Type& getFirst() const = 0;
 
         virtual Type& getLast() const = 0;
 
-        virtual Type& get(Size index) const = 0;
+        virtual Type& get(sizetype index) const = 0;
 
-        virtual Type& operator[](Size index) const = 0;
+        virtual Type& operator[](sizetype index) const = 0;
 
         virtual bool contain(const Type& value) const = 0;
 
-        RetCannotIgnored
+        NoIgnoreRet
         typename Iterable<Type>::ForeachIterator begin() const override {
             return Deque<Type>::begin();
         }
 
-        RetCannotIgnored
+        NoIgnoreRet
         byte end() const override {
             return Deque<Type>::end();
         }
@@ -91,6 +91,6 @@ namespace enhanced::core::collections::refer {
 
         virtual Type popup() = 0;
     };
-}
+NAMESPACE_L4_END
 
 #endif

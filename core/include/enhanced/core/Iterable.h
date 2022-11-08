@@ -23,51 +23,53 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core {
-    template <typename Type>
-    struct AbstractClass Iterable {
-    protected:
-        class ForeachIterator final {
-        private:
-            Iterator<Type>* iterator;
+NAMESPACE_L2_BEGIN(enhanced, core)
 
-        public:
-            explicit ForeachIterator(Iterator<Type>* iterator) : iterator(iterator) {}
-
-            bool operator!=(byte) {
-                return iterator->hasNext();
-            }
-
-            const Iterator<Type>* operator++() {
-                return iterator->next();
-            }
-
-            Type& operator*() {
-                return iterator->get();
-            }
-        };
-
-        template <typename IteratorType, typename IteratorImplType, typename DerivedClass>
-        inline IteratorType* getIterator(IteratorImplType*& iterator, const DerivedClass* derivedClassObject) const {
-            if (iterator == null) iterator = new IteratorType(derivedClassObject);
-            else static_cast<IteratorType*>(iterator)->reset();
-
-            return static_cast<IteratorType*>(iterator);
-        }
+template <typename Type>
+struct AbstractClass Iterable {
+protected:
+    class ForeachIterator final {
+    private:
+        Iterator<Type>* iterator;
 
     public:
-        RetCannotIgnored
-        virtual inline Iterable<Type>::ForeachIterator begin() const {
-            return Iterable<Type>::ForeachIterator(iterator());
+        explicit ForeachIterator(Iterator<Type>* iterator) : iterator(iterator) {}
+
+        bool operator!=(byte) {
+            return iterator->hasNext();
         }
 
-        RetCannotIgnored
-        virtual inline byte end() const {
-            return 0;
+        const Iterator<Type>* operator++() {
+            return iterator->next();
         }
 
-        virtual Iterator<Type>* iterator() const = 0;
+        Type& operator*() {
+            return iterator->get();
+        }
     };
-}
+
+    template <typename IteratorType, typename IteratorImplType, typename DerivedClass>
+    inline IteratorType* getIterator(IteratorImplType*& iterator, const DerivedClass* derivedClassObject) const {
+        if (iterator == null) iterator = new IteratorType(derivedClassObject);
+        else static_cast<IteratorType*>(iterator)->reset();
+
+        return static_cast<IteratorType*>(iterator);
+    }
+
+public:
+    NoIgnoreRet
+    virtual inline Iterable<Type>::ForeachIterator begin() const {
+        return Iterable<Type>::ForeachIterator(iterator());
+    }
+
+    NoIgnoreRet
+    virtual inline byte end() const {
+        return 0;
+    }
+
+    virtual Iterator<Type>* iterator() const = 0;
+};
+
+NAMESPACE_L2_END
 
 #endif

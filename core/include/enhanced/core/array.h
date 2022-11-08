@@ -35,7 +35,7 @@ EXTERN_C_START
  * @param value           A value (can be any integer type, includes "char").
  * @param sizeOfType      The byte size of array type (generally: "sizeof(<array type>)").
  */
-ENHANCED_CORE_API void arraySet(Out void* array, Size count, int64 value, Size sizeOfType);
+ENHANCED_CORE_API void arraySet(Out void* array, sizetype count, int64 value, sizetype sizeOfType);
 
 /*!
  * Sets all the value of an array to the same value (use pointers).
@@ -50,7 +50,7 @@ ENHANCED_CORE_API void arraySet(Out void* array, Size count, int64 value, Size s
  * @param valuePtr        A pointer to the value.
  * @param sizeOfType      The byte size of array type (generally: "sizeof(<array type>)").
  */
-ENHANCED_CORE_API void arraySetPtr(Out void* array, Size count, void* valuePtr, Size sizeOfType);
+ENHANCED_CORE_API void arraySetPtr(Out void* array, sizetype count, void* valuePtr, sizetype sizeOfType);
 
 /*!
  * Copies an array to a new array of the same count.
@@ -63,16 +63,18 @@ ENHANCED_CORE_API void arraySetPtr(Out void* array, Size count, void* valuePtr, 
  * @param count          The count of the original array.
  * @param sizeOfType     The byte size of array type (generally: "sizeof(<array type>)").
  */
-ENHANCED_CORE_API void arrayCopy(Out void* destArray, void* srcArray, Size count, Size sizeOfType);
+ENHANCED_CORE_API void arrayCopy(Out void* destArray, void* srcArray, sizetype count, sizetype sizeOfType);
 
 EXTERN_C_END
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core {
-    using ::arraySet;
-    using ::arraySetPtr;
-    using ::arrayCopy;
-}
+NAMESPACE_L2_BEGIN(enhanced, core)
+
+using ::arraySet;
+using ::arraySetPtr;
+using ::arrayCopy;
+
+NAMESPACE_L2_END
 
 #endif

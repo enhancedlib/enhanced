@@ -18,24 +18,23 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-
 #include <enhanced/core/exception/Exception.h>
 
-#ifdef C_LANGUAGE
+ENHANCED_CORE_API extern const CExceptionType CError;
 
-ENHANCED_CORE_API extern const ExceptionType Error;
+#ifdef CXX_LANGUAGE
 
-#else
+NAMESPACE_L3_BEGIN(enhanced, core, exception)
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API Error : public Exception {
-    public:
-        explicit Error(const String& message = "") noexcept;
+class ENHANCED_CORE_API Error : public Exception {
+public:
+    explicit Error(const String& message = "") noexcept;
 
-        explicit Error(const Exception* cause) noexcept;
+    explicit Error(const Exception* cause) noexcept;
 
-        Error(const String& message, const Exception* cause) noexcept;
-    };
-}
+    Error(const String& message, const Exception* cause) noexcept;
+};
+
+NAMESPACE_L3_END
 
 #endif

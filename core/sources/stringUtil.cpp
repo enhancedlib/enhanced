@@ -23,7 +23,7 @@
 namespace enhanced::core {
     template <typename CharType>
     RetRequiresRelease
-    CharType* tstringNew(const Size length) {
+    CharType* tstringNew(const sizetype length) {
         auto str = new CharType[length + 1];
         str[length] = 0;
         return str;
@@ -31,13 +31,13 @@ namespace enhanced::core {
 
     template <typename CharType>
     RetRequiresRelease
-    CharType* tstringCopy(NotNull const CharType* source) {
+    CharType* tstringCopy(const CharType* source) {
         return tstringCopyExt(source, tstringLength(source));
     }
 
     template <typename CharType>
     RetRequiresRelease
-    CharType* tstringCopyExt(NotNull const CharType* source, const Size length) {
+    CharType* tstringCopyExt(const CharType* source, const sizetype length) {
         assert(source != null);
 
         auto copy = tstringNew<CharType>(length);
@@ -48,7 +48,7 @@ namespace enhanced::core {
 
     template <typename CharType>
     RetRequiresRelease
-    CharType* tstringCopyResize(NotNull const CharType* source, Size oldSize, Size newSize) {
+    CharType* tstringCopyResize(const CharType* source, sizetype oldSize, sizetype newSize) {
         assert(source != null);
 
         auto copy = tstringNew<CharType>(newSize);
@@ -58,63 +58,69 @@ namespace enhanced::core {
     }
 
     template <typename CharType>
-    Size tstringLength(NotNull const CharType* string) noexcept {
-        assert(string != null);
+    sizetype tstringLength(const CharType* string) noexcept {
+        if (string == null) return SIZE_TYPE_MAX;
 
-        Size length;
+        sizetype length;
         for (length = 0; string[length] != 0; ++length) {}
 
         return length;
     }
 
     template <typename CharType>
-    RetCannotIgnored
+    NoIgnoreRet
     bool tstringEqual(const CharType* string1, const CharType* string2) noexcept {
-        Size length;
-
         if (string1 == string2) {
             return true;
         } else if (string1 == null || string2 == null) {
             return false;
-        } else if ((length = tstringLength(string1)) == tstringLength(string2)) {
-            for (Size index = 0; index < length; ++index) {
+        } else {
+            for (sizetype index = 0;; ++index) {
+                if ((string1[index] == 0) ^ (string2[index] == 0)) return false;
                 if (string1[index] != string2[index]) return false;
             }
-            return true;
         }
-
-        return false;
     }
 
-    template <typename CharType>
-    RetCannotIgnored
-    bool tstringEqualExt(const CharType* string1, const Size length1, const CharType* string2, Size length2) noexcept {
-        if (string1 == string2) {
-            return true;
-        } else if (string1 == null || string2 == null) {
-            return false;
-        } else if (length1 == length2) {
-            for (Size index = 0; index < length1; ++index) {
-                if (string1[index] != string2[index]) return false;
-            }
-            return true;
-        }
+    template char* tstringNew(sizetype length);
+    template wchar* tstringNew(sizetype length);
+    template ushort* tstringNew(sizetype length);
+    template u8char* tstringNew(sizetype length);
+    template u16char* tstringNew(sizetype length);
+    template u32char* tstringNew(sizetype length);
 
-        return false;
-    }
+    template char* tstringCopy(const char* source);
+    template wchar* tstringCopy(const wchar* source);
+    template ushort* tstringCopy(const ushort* source);
+    template u8char* tstringCopy(const u8char* source);
+    template u16char* tstringCopy(const u16char* source);
+    template u32char* tstringCopy(const u32char* source);
 
-    template char* tstringNew(Size length);
-    template wchar* tstringNew(Size length);
-    template char* tstringCopy(NotNull const char* source);
-    template wchar* tstringCopy(NotNull const wchar* source);
-    template char* tstringCopyExt(NotNull const char* source, Size length);
-    template wchar* tstringCopyExt(NotNull const wchar* source, Size length);
-    template char* tstringCopyResize(NotNull const char* source, Size oldSize, Size newSize);
-    template wchar* tstringCopyResize(NotNull const wchar* source, Size oldSize, Size newSize);
-    template Size tstringLength(NotNull const char* string) noexcept;
-    template Size tstringLength(NotNull const wchar* string) noexcept;
+    template char* tstringCopyExt(const char* source, sizetype length);
+    template wchar* tstringCopyExt(const wchar* source, sizetype length);
+    template ushort* tstringCopyExt(const ushort* source, sizetype length);
+    template u8char* tstringCopyExt(const u8char* source, sizetype length);
+    template u16char* tstringCopyExt(const u16char* source, sizetype length);
+    template u32char* tstringCopyExt(const u32char* source, sizetype length);
+
+    template char* tstringCopyResize(const char* source, sizetype oldSize, sizetype newSize);
+    template wchar* tstringCopyResize(const wchar* source, sizetype oldSize, sizetype newSize);
+    template ushort* tstringCopyResize(const ushort* source, sizetype oldSize, sizetype newSize);
+    template u8char* tstringCopyResize(const u8char* source, sizetype oldSize, sizetype newSize);
+    template u16char* tstringCopyResize(const u16char* source, sizetype oldSize, sizetype newSize);
+    template u32char* tstringCopyResize(const u32char* source, sizetype oldSize, sizetype newSize);
+
+    template sizetype tstringLength(const char* string) noexcept;
+    template sizetype tstringLength(const wchar* string) noexcept;
+    template sizetype tstringLength(const ushort* string) noexcept;
+    template sizetype tstringLength(const u8char* string) noexcept;
+    template sizetype tstringLength(const u16char* string) noexcept;
+    template sizetype tstringLength(const u32char* string) noexcept;
+
     template bool tstringEqual(const char* string1, const char* string2) noexcept;
     template bool tstringEqual(const wchar* string1, const wchar* string2) noexcept;
-    template bool tstringEqualExt(const char* string1, Size length1, const char* string2, Size length2) noexcept;
-    template bool tstringEqualExt(const wchar* string1, Size length1, const wchar* string2, Size length2) noexcept;
+    template bool tstringEqual(const ushort* string1, const ushort* string2) noexcept;
+    template bool tstringEqual(const u8char* string1, const u8char* string2) noexcept;
+    template bool tstringEqual(const u16char* string1, const u16char* string2) noexcept;
+    template bool tstringEqual(const u32char* string1, const u32char* string2) noexcept;
 }

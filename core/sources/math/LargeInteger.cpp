@@ -30,7 +30,7 @@ LargeInteger LargeInteger::from(NumberType number) {
 }
 
 LargeInteger::LargeInteger(uint64 number) : storage(0), isNegative(number < 0) {
-    Size count = 1;
+    sizetype count = 1;
     for (uint64 value = number; value > 0; value /= 10) ++count;
 
     length = count;
@@ -38,7 +38,7 @@ LargeInteger::LargeInteger(uint64 number) : storage(0), isNegative(number < 0) {
 }
 
 LargeInteger::LargeInteger(const String& number) : storage(number.getLength() + 1), isNegative(false), length(number.getLength()) {
-    Size index;
+    sizetype index;
     if (number[0] == '-') {
         index = 1;
         isNegative = true;
@@ -74,7 +74,7 @@ LargeInteger LargeInteger::operator%(LargeInteger& number) const {
 }
 
 LargeInteger& LargeInteger::add(LargeInteger& number) {
-    for (Size index = 0; index < length; ++index) {
+    for (sizetype index = 0; index < length; ++index) {
         storage[index] += number.storage[index];
         if (storage[index] >= 10) {
             storage[index] -= 10;

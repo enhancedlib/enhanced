@@ -11,6 +11,8 @@ function (setup_module MODULE_NAME)
     file(GLOB_RECURSE SOURCES sources/*.cpp sources/*.c)
     file(GLOB_RECURSE HEADERS include/*.h)
 
+    string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
+
     if (DEPENDENT_MODULES)
         message("${PROMPT} Dependent modules: ${DEPENDENT_MODULES}")
     else ()
@@ -36,6 +38,8 @@ function (setup_module MODULE_NAME)
     endif ()
     target_include_directories(${MODULE_NAME}-static PRIVATE ${INCLUDE_DIRECTORIES})
 
+    target_compile_definitions(${MODULE_NAME}-static PRIVATE ENHANCED_${MODULE_NAME_UPPER}_BUILDING)
+
     set_target_properties(${MODULE_NAME}-static PROPERTIES OUTPUT_NAME enhanced-${MODULE_NAME})
     if (WIN32)
         set_target_properties(${MODULE_NAME}-static PROPERTIES PREFIX "lib")
@@ -59,8 +63,6 @@ function (setup_module MODULE_NAME)
     else ()
         target_compile_definitions(${MODULE_NAME}-shared PUBLIC NDEBUG)
     endif ()
-
-    string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
 
     target_compile_definitions(${MODULE_NAME}-shared PRIVATE ENHANCED_${MODULE_NAME_UPPER}_BUILDING)
     target_compile_definitions(${MODULE_NAME}-shared PUBLIC ENHANCED_${MODULE_NAME_UPPER}_SHARED_LIB)

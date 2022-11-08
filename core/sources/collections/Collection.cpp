@@ -20,5 +20,5 @@
 #include <enhanced/core/annotations.h>
 
 namespace enhanced::core::collections {
-    Size ARRAY_INIT_SIZE = 255;
+    sizetype ARRAY_INIT_SIZE = 255;
 }

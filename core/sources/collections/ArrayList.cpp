@@ -27,13 +27,13 @@
 using enhanced_internal::core::collections::ArrayListImpl;
 using enhanced::core::exception::UnsupportedOperationException;
 
-ArrayListImpl::ArrayListImpl(const Size capacity, const GenericOperator genericOperator) :
+ArrayListImpl::ArrayListImpl(const sizetype capacity, const GenericOperator genericOperator) :
     elements(new void*[capacity]), size(0), capacity(capacity), genericOperator(genericOperator), iterator(null) {}
 
 ArrayListImpl::ArrayListImpl(const ArrayListImpl& other) :
     elements(new void*[other.capacity]), size(other.size), capacity(other.capacity), genericOperator(other.genericOperator), iterator(null) {
     assert(other.capacity >= other.size);
-    for (Size index = 0; index < other.size; ++index) {
+    for (sizetype index = 0; index < other.size; ++index) {
         elements[index] = genericOperator.allocate(GET_GENERIC_VALUE(other.elements[index]));
     }
 }
@@ -46,24 +46,24 @@ ArrayListImpl::~ArrayListImpl() noexcept {
     delete iterator;
 }
 
-RetCannotIgnored
-Size ArrayListImpl::getSize0() const {
+NoIgnoreRet
+sizetype ArrayListImpl::getSize0() const {
     return size;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool ArrayListImpl::isEmpty0() const {
     return size == 0;
 }
 
-RetCannotIgnored
-Generic& ArrayListImpl::get0(Size index) const {
+NoIgnoreRet
+Generic& ArrayListImpl::get0(sizetype index) const {
     return GET_GENERIC_VALUE(elements[index]);
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool ArrayListImpl::contain0(Generic& value) const {
-    for (Size index = 0; index < size; ++index) {
+    for (sizetype index = 0; index < size; ++index) {
         if (genericOperator.equals(GET_GENERIC_VALUE(elements[index]), value)) {
             return true;
         }
@@ -87,8 +87,8 @@ void ArrayListImpl::remove0() {
     genericOperator.destroy(elements[--size]);
 }
 
-void ArrayListImpl::expand0(const Size size) {
-    Size count = capacity + size;
+void ArrayListImpl::expand0(const sizetype size) {
+    sizetype count = capacity + size;
     void** array = new void*[count];
 
     arrayCopy(array, elements, size, sizeof(void*));
@@ -98,8 +98,8 @@ void ArrayListImpl::expand0(const Size size) {
     capacity = count;
 }
 
-void ArrayListImpl::shrink0(const Size size) {
-    Size count = capacity - size;
+void ArrayListImpl::shrink0(const sizetype size) {
+    sizetype count = capacity - size;
     if (count < size) throw UnsupportedOperationException("Cannot shrink because the size is larger than the new capacity");
 
     void** array = new void*[count];
@@ -116,7 +116,7 @@ ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl*
 
 ArrayListImpl::ArrayListIteratorImpl::~ArrayListIteratorImpl() noexcept = default;
 
-RetCannotIgnored
+NoIgnoreRet
 bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
     return indexer != end;
 }
@@ -125,7 +125,7 @@ void ArrayListImpl::ArrayListIteratorImpl::next0() const {
     ++indexer;
 }
 
-RetCannotIgnored
+NoIgnoreRet
 bool ArrayListImpl::ArrayListIteratorImpl::each0() const {
     if (isFirst) {
         isFirst = false;
@@ -136,7 +136,7 @@ bool ArrayListImpl::ArrayListIteratorImpl::each0() const {
     return hasNext0();
 }
 
-RetCannotIgnored
+NoIgnoreRet
 Generic& ArrayListImpl::ArrayListIteratorImpl::get0() const {
     return GET_GENERIC_VALUE(*indexer);
 }
@@ -146,7 +146,7 @@ void ArrayListImpl::ArrayListIteratorImpl::reset0() const {
     indexer = arrayList->elements;
 }
 
-RetCannotIgnored
-Size ArrayListImpl::ArrayListIteratorImpl::count0() const {
+NoIgnoreRet
+sizetype ArrayListImpl::ArrayListIteratorImpl::count0() const {
     return arrayList->getSize0();
 }

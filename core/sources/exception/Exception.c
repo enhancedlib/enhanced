@@ -25,19 +25,19 @@
 bool enableExceptions = true;
 bool enableExceptionsTraceback = true;
 
-const ExceptionType Exception = {
+const CExceptionType CException = {
     .parent = null,
     .code = 0xFFFFFFFFFFFFFFFF
 };
 
-static ExceptionContext* exceptionContextStack = null;
+static CExceptionContext* exceptionContextStack = null;
 
-static char* getTraceback(ExceptionInstance* self) {
+static char* getTraceback(CExceptionInstance* self) {
     return (char*) self->message;
 }
 
-ExceptionInstance newException(const ExceptionType type, const char* message) {
-    ExceptionInstance exception = {
+CExceptionInstance newException(const CExceptionType type, const char* message) {
+    CExceptionInstance exception = {
         .message = message,
         .type = type,
         .getTraceback = getTraceback
@@ -45,7 +45,7 @@ ExceptionInstance newException(const ExceptionType type, const char* message) {
     return exception;
 }
 
-void exceptionContextStackPush(ExceptionContext* exceptionContext) {
+void exceptionContextStackPush(CExceptionContext* exceptionContext) {
     exceptionContext->exception = null;
     exceptionContext->inFinally = false;
     exceptionContext->link = exceptionContextStack;
@@ -60,12 +60,12 @@ bool exceptionContextStackIsEmpty() {
     return exceptionContextStack == null;
 }
 
-bool exceptionInstanceOf(ExceptionInstance* exception, ExceptionType type) {
-    if (exception->type.code == type.code || type.code == Exception.code) {
+bool exceptionInstanceOf(CExceptionInstance* exception, CExceptionType type) {
+    if (exception->type.code == type.code || type.code == CException.code) {
         return true;
     }
 
-    ExceptionType* parent = exception->type.parent;
+    CExceptionType* parent = exception->type.parent;
     while (parent != null) {
         if (parent->code == type.code) {
             return true;
@@ -75,7 +75,7 @@ bool exceptionInstanceOf(ExceptionInstance* exception, ExceptionType type) {
     return false;
 }
 
-void exceptionThrow(ExceptionInstance exception) {
+void exceptionThrow(CExceptionInstance exception) {
     if (exceptionContextStackIsEmpty()) {
         fprintf(stderr, "%s\n", exception.getTraceback(&exception));
         processAbort();

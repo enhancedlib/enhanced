@@ -17,15 +17,16 @@
 
 #include <enhanced/core/defines.h>
 
-
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core {
-    template <typename FirstType, typename SecondType>
-    struct Pair {
-        FirstType first;
-        SecondType second;
-    };
-}
+NAMESPACE_L3_BEGIN(enhanced, core, util)
+
+template <typename FirstType, typename SecondType>
+struct Pair final {
+    FirstType first;
+    SecondType second;
+};
+
+NAMESPACE_L3_END
 
 #endif

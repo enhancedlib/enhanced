@@ -13,39 +13,20 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/io/PrintStream.h>
+#include <enhanced/core/io/WarpedInputStream.h>
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/export.h>
+#include <enhanced/core/String.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
-using enhanced::core::io::PrintStream;
+using enhanced::core::io::WarpedInputStream;
 
-void PrintStream::print(int8 i8) {
+void WarpedInputStream::close() const {
     NOT_IMPLEMENTED();
 }
 
-void PrintStream::print(int16 i16) {
-    NOT_IMPLEMENTED();
-}
-
-void PrintStream::print(int32 i32) {
-    NOT_IMPLEMENTED();
-}
-
-void PrintStream::print(int64 i64) {
-    NOT_IMPLEMENTED();
-}
-
-void PrintStream::print(float32 i32) {
-    NOT_IMPLEMENTED();
-}
-
-void PrintStream::print(float64 i64) {
-    NOT_IMPLEMENTED();
-}
-
-void PrintStream::close() {
+void WarpedInputStream::flush() const {
     NOT_IMPLEMENTED();
 }

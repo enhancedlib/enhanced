@@ -18,24 +18,23 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-
 #include <enhanced/core/exception/Exception.h>
 
-#ifdef C_LANGUAGE
+ENHANCED_CORE_API extern const CExceptionType CInvalidArgumentException;
 
-ENHANCED_CORE_API extern const ExceptionType InvalidArgumentException;
+#ifdef CXX_LANGUAGE
 
-#else
+NAMESPACE_L3_BEGIN(enhanced, core, exception)
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API InvalidArgumentException : public Exception {
-    public:
-        explicit InvalidArgumentException(const String& message = "") noexcept;
+class ENHANCED_CORE_API InvalidArgumentException : public Exception {
+public:
+    explicit InvalidArgumentException(const String& message = "") noexcept;
 
-        explicit InvalidArgumentException(const Exception* cause) noexcept;
+    explicit InvalidArgumentException(const Exception* cause) noexcept;
 
-        InvalidArgumentException(const String& message, const Exception* cause) noexcept;
-    };
-}
+    InvalidArgumentException(const String& message, const Exception* cause) noexcept;
+};
+
+NAMESPACE_L3_END
 
 #endif

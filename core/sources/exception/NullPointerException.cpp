@@ -13,4 +13,11 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <enhanced/core/exception/NullPointerException.h>
+
+#include <enhanced/core/exception/Exception.h>
+
+using enhanced::core::exception::NullPointerException;
+using enhanced::core::exception::Exception;
+
+NullPointerException::NullPointerException(const String& message) noexcept : Exception(message) {}

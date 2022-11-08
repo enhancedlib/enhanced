@@ -15,7 +15,6 @@
 
 #pragma once
 
-#include "enhanced/core/util/SharedPointer.h"
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
@@ -24,53 +23,55 @@
 
 #ifdef CXX_LANGUAGE
 
-namespace enhanced::core::math {
-    class ENHANCED_CORE_API LargeInteger {
-    private:
-        collections::ArrayList<byte> storage;
+NAMESPACE_L3_BEGIN(enhanced, core, math)
 
-        bool isNegative;
+class ENHANCED_CORE_API LargeInteger {
+private:
+    collections::ArrayList<byte> storage;
 
-        Size length;
+    bool isNegative;
 
-        LargeInteger(uint64 number);
+    sizetype length;
 
-    public:
-        template <typename NumberType>
-        static LargeInteger from(NumberType number);
+    LargeInteger(uint64 number);
 
-        LargeInteger(const enhanced::core::String& number);
+public:
+    template <typename NumberType>
+    static LargeInteger from(NumberType number);
 
-        LargeInteger operator+(LargeInteger& number) const;
+    LargeInteger(const enhanced::core::String& number);
 
-        LargeInteger operator-(LargeInteger& number) const;
+    LargeInteger operator+(LargeInteger& number) const;
 
-        LargeInteger operator*(LargeInteger& number) const;
+    LargeInteger operator-(LargeInteger& number) const;
 
-        LargeInteger operator/(LargeInteger& number) const;
+    LargeInteger operator*(LargeInteger& number) const;
 
-        LargeInteger operator%(LargeInteger& number) const;
+    LargeInteger operator/(LargeInteger& number) const;
 
-        LargeInteger& add(LargeInteger& number);
+    LargeInteger operator%(LargeInteger& number) const;
 
-        LargeInteger& sub(LargeInteger& number);
+    LargeInteger& add(LargeInteger& number);
 
-        LargeInteger& mul(LargeInteger& number);
+    LargeInteger& sub(LargeInteger& number);
 
-        LargeInteger& div(LargeInteger& number);
+    LargeInteger& mul(LargeInteger& number);
 
-        LargeInteger& mod(LargeInteger& number);
+    LargeInteger& div(LargeInteger& number);
 
-        LargeInteger& operator+=(LargeInteger& number);
+    LargeInteger& mod(LargeInteger& number);
 
-        LargeInteger& operator-=(LargeInteger& number);
+    LargeInteger& operator+=(LargeInteger& number);
 
-        LargeInteger& operator*=(LargeInteger& number);
+    LargeInteger& operator-=(LargeInteger& number);
 
-        LargeInteger& operator/=(LargeInteger& number);
+    LargeInteger& operator*=(LargeInteger& number);
 
-        LargeInteger& operator%=(LargeInteger& number);
-    };
-}
+    LargeInteger& operator/=(LargeInteger& number);
+
+    LargeInteger& operator%=(LargeInteger& number);
+};
+
+NAMESPACE_L3_END
 
 #endif
