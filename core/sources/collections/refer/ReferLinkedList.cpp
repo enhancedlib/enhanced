@@ -16,13 +16,15 @@
 #include <enhanced/core/collections/refer/ReferLinkedList.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
+#include <enhanced/core/types.h>
 #include <enhanced/core/memory.h>
 #include <enhanced/core/generic.h>
+#include <enhanced/core/exception/IndexOutOfBoundsException.h>
 #include <enhanced/core/exception/UnsupportedOperationException.h>
 
 using enhanced_internal::core::collections::refer::ReferLinkedListImpl;
+using enhanced::core::exception::IndexOutOfBoundsException;
 using enhanced::core::exception::UnsupportedOperationException;
 
 ReferLinkedListImpl::Node*& ReferLinkedListImpl::prevNode(Node*& node) {
@@ -34,25 +36,24 @@ ReferLinkedListImpl::Node*& ReferLinkedListImpl::nextNode(Node*& node) {
 }
 
 ReferLinkedListImpl::ReferLinkedListImpl(const GenericOperator genericOperator) :
-    first(null), last(null), indexer(null), size(0), genericOperator(genericOperator), iterator(null) {}
+    first(null), last(null), size(0), genericOperator(genericOperator) {}
 
 ReferLinkedListImpl::ReferLinkedListImpl(const ReferLinkedListImpl& other) :
-    first(null), last(null), indexer(null), size(0), genericOperator(other.genericOperator), iterator(null) {
-    indexer = other.first;
-    for (sizetype count = 0; count < other.size; ++count) {
+    first(null), last(null), size(0), genericOperator(other.genericOperator) {
+    Node* indexer = other.first;
+    for (sizetype _ = 0; _ < other.size; ++_) {
         addLast0(GET_GENERIC_VALUE(indexer->value));
         nextNode(indexer);
     }
 }
 
 ReferLinkedListImpl::~ReferLinkedListImpl() noexcept {
-    for (sizetype count = 1; count < size; ++count) {
+    for (sizetype _ = 1; _ < size; ++_) {
         prevNode(last);
         delete last->next;
     }
 
     delete last;
-    delete iterator;
 }
 
 NoIgnoreRet
@@ -77,14 +78,17 @@ Generic& ReferLinkedListImpl::getFirst0() const {
 
 NoIgnoreRet
 Generic& ReferLinkedListImpl::get0(const sizetype index) const {
+    if (index >= size) throw IndexOutOfBoundsException("Index out of bounds"); // TODO
+
+    Node* indexer;
     if (index < (size >> 1)) {
         indexer = first;
-        for (sizetype count = 0; count < index; ++count) {
+        for (sizetype _ = 0; _ < index; ++_) {
             nextNode(indexer);
         }
     } else {
         indexer = last;
-        for (sizetype count = size - 1; count > index; --count) {
+        for (sizetype _ = size - 1; _ > index; --_) {
             prevNode(indexer);
         }
     }
@@ -94,8 +98,8 @@ Generic& ReferLinkedListImpl::get0(const sizetype index) const {
 
 NoIgnoreRet
 bool ReferLinkedListImpl::contain0(Generic& value) const {
-    indexer = first;
-    for (sizetype count = 0; count < size; ++count) {
+    Node* indexer = first;
+    for (sizetype _ = 0; _ < size; ++_) {
         if (genericOperator.equals(GET_GENERIC_VALUE(indexer->value), value)) {
             return true;
         }
@@ -163,47 +167,27 @@ void ReferLinkedListImpl::removeFirst0() {
     --size;
 }
 
-ReferLinkedListImpl::ReferLinkedListIteratorImpl::
-ReferLinkedListIteratorImpl(const ReferLinkedListImpl* referLinkedList) :
-    referLinkedList(referLinkedList), isFirst(true) {
-    referLinkedList->indexer = referLinkedList->first;
-}
+ReferLinkedListImpl::ReferLinkedListIteratorImpl::ReferLinkedListIteratorImpl(const ReferLinkedListImpl* referLinkedList) :
+    referLinkedList(referLinkedList), indexer(referLinkedList->first) {}
 
 ReferLinkedListImpl::ReferLinkedListIteratorImpl::~ReferLinkedListIteratorImpl() noexcept = default;
 
 NoIgnoreRet
 bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::hasNext0() const {
-    if (isFirst) {
-        isFirst = false;
-        return true;
-    } else {
-        return referLinkedList->indexer != null;
-    }
+    return indexer != null;
 }
 
 void ReferLinkedListImpl::ReferLinkedListIteratorImpl::next0() const {
-    nextNode(referLinkedList->indexer);
-}
-
-NoIgnoreRet
-bool ReferLinkedListImpl::ReferLinkedListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !referLinkedList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
+    nextNode(indexer);
 }
 
 NoIgnoreRet
 Generic& ReferLinkedListImpl::ReferLinkedListIteratorImpl::get0() const {
-    return GET_GENERIC_VALUE(referLinkedList->indexer->value);
+    return GET_GENERIC_VALUE(indexer->value);
 }
 
 void ReferLinkedListImpl::ReferLinkedListIteratorImpl::reset0() const {
-    isFirst = true;
-    referLinkedList->indexer = referLinkedList->first;
+    indexer = referLinkedList->first;
 }
 
 NoIgnoreRet

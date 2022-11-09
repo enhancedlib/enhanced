@@ -16,10 +16,11 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
 #include <enhanced/core/CharSequence.h>
+#include <enhanced/core/InitializerList.h>
 #include <enhanced/core/collections/ArrayList.h>
 
 #ifdef CXX_LANGUAGE
@@ -35,6 +36,15 @@ protected:
     BasicString(CharType* value, sizetype length) noexcept;
 
 public:
+    template <sizetype count>
+    inline static MutableBasicString<CharType> join(BasicString strings[count]) {
+        return join(count, strings);
+    }
+
+    static MutableBasicString<CharType> join(InitializerList<BasicString> list);
+
+    static MutableBasicString<CharType> join(const BasicString* strings, sizetype count);
+
     BasicString(const CharType* value) noexcept;
 
     BasicString(CharType* value) noexcept;

@@ -19,10 +19,11 @@
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/String.h>
+#include <enhanced/core/MutableString.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
 using enhanced::core::io::InputStream;
-using enhanced::core::String;
+using enhanced::core::MutableString;
 
 byte InputStream::get() const {
     NOT_IMPLEMENTED();
@@ -32,6 +33,6 @@ void InputStream::read(byte *buffer, sizetype size) const {
     NOT_IMPLEMENTED();
 }
 
-String InputStream::readLine() const {
+MutableString InputStream::readLine() const {
     NOT_IMPLEMENTED();
 }

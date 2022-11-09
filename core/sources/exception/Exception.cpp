@@ -20,9 +20,8 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/process.h>
 #include <enhanced/core/String.h>
-#include <enhanced/core/io/stdio.h>
+#include <enhanced/core/io/iostream.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
 using enhanced::core::exception::Exception;
@@ -38,9 +37,7 @@ static void terminateHandler() {
         errstream->print(exception.getTraceback());
     } catch (const std::exception& exception) {
         errstream->print(exception.what());
-    } catch (...) {
-        processAbort();
-    }
+    } catch (...) {}
 }
 
 static TerminateHandler setupTerminateHandler() noexcept {

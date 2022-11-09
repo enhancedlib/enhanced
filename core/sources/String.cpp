@@ -22,13 +22,34 @@
 #include <enhanced/core/stringUtil.h>
 #include <enhanced/core/CharSequence.h>
 #include <enhanced/core/MutableString.h>
-#include <enhanced/core/collections/List.h>
+#include <enhanced/core/InitializerList.h>
 #include <enhanced/core/collections/ArrayList.h>
 
 using enhanced::core::BasicString;
 using enhanced::core::MutableBasicString;
-using enhanced::core::collections::List;
 using enhanced::core::collections::ArrayList;
+
+template <typename CharType>
+MutableBasicString<CharType> BasicString<CharType>::join(InitializerList<BasicString> list) {
+    return join(list.toArray(), list.count());
+}
+
+template <typename CharType>
+MutableBasicString<CharType> BasicString<CharType>::join(const BasicString* strings, sizetype count) {
+    sizetype length = 0;
+    for (sizetype index = 0; index < count; ++index) {
+        length += strings[index].length;
+    }
+
+    auto newString = MutableBasicString<CharType>(length);
+
+    memoryCopy(newString.value, strings[0].value, strings[0].length * sizeof(CharType));
+    for (sizetype index = 1; index < count; ++index) {
+        memoryCopy(newString.value + strings[index - 1].length, strings[index].value, strings[index].length * sizeof(CharType));
+    }
+
+    return newString;
+}
 
 template <typename CharType>
 BasicString<CharType>::BasicString(CharType* value, sizetype length) noexcept : CharSequence<CharType>(value, length)  {}
@@ -306,7 +327,6 @@ BasicString<CharType>& BasicString<CharType>::operator=(BasicString&& other) noe
 
 template class enhanced::core::BasicString<char>;
 template class enhanced::core::BasicString<wchar>;
-template class enhanced::core::BasicString<ushort>;
 template class enhanced::core::BasicString<u8char>;
 template class enhanced::core::BasicString<u16char>;
 template class enhanced::core::BasicString<u32char>;

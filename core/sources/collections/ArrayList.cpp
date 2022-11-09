@@ -28,10 +28,10 @@ using enhanced_internal::core::collections::ArrayListImpl;
 using enhanced::core::exception::UnsupportedOperationException;
 
 ArrayListImpl::ArrayListImpl(const sizetype capacity, const GenericOperator genericOperator) :
-    elements(new void*[capacity]), size(0), capacity(capacity), genericOperator(genericOperator), iterator(null) {}
+    elements(new void*[capacity]), size(0), capacity(capacity), genericOperator(genericOperator) {}
 
-ArrayListImpl::ArrayListImpl(const ArrayListImpl& other) :
-    elements(new void*[other.capacity]), size(other.size), capacity(other.capacity), genericOperator(other.genericOperator), iterator(null) {
+ArrayListImpl::ArrayListImpl(const ArrayListImpl& other) : elements(new void*[other.capacity]), size(other.size),
+    capacity(other.capacity), genericOperator(other.genericOperator) {
     assert(other.capacity >= other.size);
     for (sizetype index = 0; index < other.size; ++index) {
         elements[index] = genericOperator.allocate(GET_GENERIC_VALUE(other.elements[index]));
@@ -43,7 +43,6 @@ ArrayListImpl::~ArrayListImpl() noexcept {
         genericOperator.destroy(elements[--size]);
     }
     delete[] elements;
-    delete iterator;
 }
 
 NoIgnoreRet
@@ -112,28 +111,17 @@ void ArrayListImpl::shrink0(const sizetype size) {
 }
 
 ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList) :
-    arrayList(arrayList), indexer(arrayList->elements), isFirst(true), end(arrayList->elements + arrayList->getSize0()) {}
+    arrayList(arrayList), indexer(arrayList->elements) {}
 
 ArrayListImpl::ArrayListIteratorImpl::~ArrayListIteratorImpl() noexcept = default;
 
 NoIgnoreRet
 bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
-    return indexer != end;
+    return indexer != (arrayList->elements + arrayList->getSize0());
 }
 
 void ArrayListImpl::ArrayListIteratorImpl::next0() const {
     ++indexer;
-}
-
-NoIgnoreRet
-bool ArrayListImpl::ArrayListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !arrayList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
 }
 
 NoIgnoreRet
@@ -142,7 +130,6 @@ Generic& ArrayListImpl::ArrayListIteratorImpl::get0() const {
 }
 
 void ArrayListImpl::ArrayListIteratorImpl::reset0() const {
-    isFirst = true;
     indexer = arrayList->elements;
 }
 

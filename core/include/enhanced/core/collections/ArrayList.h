@@ -46,17 +46,13 @@ protected:
         bool (*equals)(Generic&, Generic&);
     };
 
-    class ArrayListIteratorImpl {
+    class ENHANCED_CORE_API ArrayListIteratorImpl {
         friend class ArrayListImpl;
 
     private:
         const ArrayListImpl* arrayList;
 
         mutable void** indexer;
-
-        mutable bool isFirst;
-
-        void** end;
 
     protected:
         explicit ArrayListIteratorImpl(const ArrayListImpl* arrayList);
@@ -69,9 +65,6 @@ protected:
         void next0() const;
 
         NoIgnoreRet
-        bool each0() const;
-
-        NoIgnoreRet
         Generic& get0() const;
 
         void reset0() const;
@@ -81,8 +74,6 @@ protected:
     };
 
     GenericOperator genericOperator;
-
-    mutable ArrayListIteratorImpl* iterator;
 
     ArrayListImpl(sizetype capacity, GenericOperator genericOperator);
 
@@ -120,8 +111,8 @@ class ENHANCED_CORE_API ArrayList final : public List<Type>, public RandomAccess
 private:
     using ArrayListImpl = enhanced_internal::core::collections::ArrayListImpl;
 
-    class ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
-        friend struct Iterable<Type>;
+    class ENHANCED_CORE_API ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
+        friend class ArrayList<Type>;
 
     public:
         inline explicit ArrayListIterator(const ArrayList<Type>* arrayList) : ArrayListIteratorImpl(arrayList) {}
@@ -134,11 +125,6 @@ private:
         inline const Iterator<Type>* next() const override {
             next0();
             return this;
-        }
-
-        NoIgnoreRet
-        inline bool each() const override {
-            return each0();
         }
 
         NoIgnoreRet
@@ -170,6 +156,8 @@ private:
         return ((Type&) element) == ((Type&) value);
     }
 
+    ArrayListIterator iter = ArrayListIterator(this);
+
 public:
     inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE, {allocate, destroy, equals}) {}
 
@@ -198,8 +186,9 @@ public:
     }
 
     NoIgnoreRet
-    inline Iterator<Type>* iterator() const override {
-        return Iterable<Type>::template getIterator<ArrayListIterator>(ArrayListImpl::iterator, this);
+    inline const Iterator<Type>& iterator() const override {
+        iter.reset();
+        return iter;
     }
 
     NoIgnoreRet

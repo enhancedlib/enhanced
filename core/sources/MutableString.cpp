@@ -137,7 +137,6 @@ MutableBasicString<CharType>& MutableBasicString<CharType>::operator+=(const Bas
 
 template class enhanced::core::MutableBasicString<char>;
 template class enhanced::core::MutableBasicString<wchar>;
-template class enhanced::core::MutableBasicString<ushort>;
 template class enhanced::core::MutableBasicString<u8char>;
 template class enhanced::core::MutableBasicString<u16char>;
 template class enhanced::core::MutableBasicString<u32char>;

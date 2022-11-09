@@ -13,25 +13,16 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <enhanced/core/exception/IOException.h>
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
-#include <enhanced/core/io/WarpedInputStream.h>
-#include <enhanced/core/io/WarpedOutputStream.h>
+#include <enhanced/core/types.h>
 
-#ifdef CXX_LANGUAGE
+using enhanced::core::exception::IOException;
 
-NAMESPACE_L3_BEGIN(enhanced, core, io)
+IOException::IOException(const String& message) noexcept : Exception(message) {}
 
-ENHANCED_CORE_API extern WarpedInputStream* const& instream;
-ENHANCED_CORE_API extern WarpedOutputStream* const& outstream;
-ENHANCED_CORE_API extern WarpedOutputStream* const& errstream;
+IOException::IOException(const Exception* cause) noexcept : Exception(cause) {}
 
-ENHANCED_CORE_API void setIn(InputStream* in);
-ENHANCED_CORE_API void setOut(WarpedOutputStream* out);
-ENHANCED_CORE_API void setErr(WarpedOutputStream* err);
-
-NAMESPACE_L3_END
-
-#endif
+IOException::IOException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}

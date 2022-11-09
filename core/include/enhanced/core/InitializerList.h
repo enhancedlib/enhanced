@@ -16,44 +16,38 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
+#include <enhanced/core/export.h>
+#include <enhanced/core/types.h>
+#include <enhanced/core/Iterable.h>
+#include <enhanced/core/ArrayIterator.h>
 
 #ifdef CXX_LANGUAGE
+
+#include <initializer_list>
 
 NAMESPACE_L2_BEGIN(enhanced, core)
 
 template <typename Type>
-struct AbstractClass Iterator {
-    virtual ~Iterator() noexcept DEFAULT_CONS;
+class InitializerList : public Iterable<Type> {
+private:
+    const ArrayIterator<Type> iter;
 
-    /*!
-     * Determines if there are still elements can iterate over.
-     */
-    NoIgnoreRet
-    virtual bool hasNext() const = 0;
+public:
+    constexpr InitializerList(std::initializer_list<Type> list) : iter(ArrayIterator(list.begin(), list.size())) {}
 
-    /*!
-     * Let the iterator pointer return to the next element.
-     */
-    virtual const Iterator<Type>* next() const = 0;
+    inline const Type* toArray() const {
+        return iter.array;
+    }
 
-    /*!
-     * Gets the current element.
-     */
-    NoIgnoreRet
-    virtual Type& get() const = 0;
+    inline const sizetype count() {
+        return iter.count();
+    }
 
-    /*!
-     * Let the iterator pointer return to the first element.
-     */
-    virtual void reset() const = 0;
-
-    /*!
-     * Gets the number of elements.
-     */
-    NoIgnoreRet
-    virtual sizetype count() const = 0;
+    inline constexpr const Iterator<Type>& iterator() const override {
+        iter.reset();
+        return iter;
+    }
 };
 
 NAMESPACE_L2_END

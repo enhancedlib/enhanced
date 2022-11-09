@@ -75,7 +75,11 @@ typedef char32_t u32char;
 #ifdef WCHAR_IS_BUILTIN_TYPE
 typedef wchar_t wchar;
 #else
-typedef ushort wchar;
+#ifdef WCHAR_EQUALS_UINT16
+typedef uint16 wchar;
+#else
+typedef uint32 wchar;
+#endif
 #endif
 
 #ifdef C_LANGUAGE
@@ -92,8 +96,8 @@ typedef uint8 bool;
 #undef true
 #endif
 
-#define false 0
-#define true 1
+#define false ((bool) 0)
+#define true ((bool) 1)
 #endif
 
 #ifdef CXX_LANGUAGE
@@ -110,8 +114,6 @@ typedef decltype(null) NullType;
 #else
 #define null ((void*) 0)
 #endif
-
-// TODO: u8char_MIN, u16char_MIN, u32char_MIN
 
 #ifdef INT8_MIN
 #undef INT8_MIN
@@ -216,14 +218,18 @@ typedef decltype(null) NullType;
 #define UINT32_MIN ((uint32) 0x0)
 #define UINT64_MIN ((uint64) 0x0)
 
-#define FLOAT32_MIN ((float32) 1.17549435082228750796873653722224568e-38)
+#define FLOAT32_MIN ((float32) 1.17549435082228750796873653722224568e-38f)
 #define FLOAT64_MIN ((float64) 2.22507385850720138309023271733240406e-308)
 
-#ifdef CHAR_IS_UNSIGNED_CHAR
+#ifdef CHAR_IS_UNSIGNED
 #define CHAR_MIN UINT8_MIN
 #else
 #define CHAR_MIN INT8_MIN
 #endif
+
+#define U8CHAR_MIN UINT8_MIN
+#define U16CHAR_MIN UINT16_MIN
+#define U32CHAR_MIN UINT32_MIN
 
 #define SHORT_MIN INT16_MIN
 #define INT_MIN INT32_MIN
@@ -258,9 +264,11 @@ typedef decltype(null) NullType;
 #define DWORD_MIN UINT32_MIN
 #define QWORD_MIN UINT64_MIN
 
+#ifdef WCHAR_EQUALS_UINT16
 #define WCHAR_MIN UINT16_MIN
-
-// TODO: u8char_MAX, u16char_MAX, u32char_MAX
+#else
+#define WCHAR_MIN INT32_MIN
+#endif
 
 #ifdef INT8_MAX
 #undef INT8_MAX
@@ -365,18 +373,22 @@ typedef decltype(null) NullType;
 #define UINT32_MAX ((uint32) 0xFFFFFFFF) // 4294967295
 #define UINT64_MAX ((uint64) 0xFFFFFFFFFFFFFFFF) // 18446744073709551615
 
-#define FLOAT32_MAX ((float32) 3.40282346638528859811704183484516925e+38)
+#define FLOAT32_MAX ((float32) 3.40282346638528859811704183484516925e+38f)
 #define FLOAT64_MAX ((float64) 1.79769313486231570814527423731704357e+308)
 
-#ifdef CHAR_IS_UNSIGNED_CHAR
+#ifdef CHAR_IS_UNSIGNED
 #define CHAR_MAX UINT8_MAX
 #else
 #define CHAR_MAX INT8_MAX
 #endif
 
+#define U8CHAR_MAX UINT8_MAX
+#define U16CHAR_MAX UINT16_MAX
+#define U32CHAR_MAX UINT32_MAX
+
 #define SHORT_MAX INT16_MAX
 #define INT_MAX INT32_MAX
-#if defined(WINDOWS_OS) || defined(ARCH_X86)
+#if defined(WINDOWS_OS) || defined(ARCH_X86) || defined(ARCH_ARM32)
 #define LONG_MAX INT32_MAX
 #else
 #define LONG_MAX INT64_MAX
@@ -386,7 +398,7 @@ typedef decltype(null) NullType;
 #define UCHAR_MAX UINT8_MAX
 #define USHORT_MAX UINT16_MAX
 #define UINT_MAX UINT32_MAX
-#if defined(WINDOWS_OS) || defined(ARCH_X86)
+#if defined(WINDOWS_OS) || defined(ARCH_X86) || defined(ARCH_ARM32)
 #define ULONG_MAX UINT32_MAX
 #else
 #define ULONG_MAX UINT64_MAX
@@ -407,7 +419,11 @@ typedef decltype(null) NullType;
 #define DWORD_MAX UINT32_MAX
 #define QWORD_MAX UINT64_MAX
 
+#ifdef WCHAR_EQUALS_UINT16
 #define WCHAR_MAX UINT16_MAX
+#else
+#define WCHAR_MAX INT32_MAX
+#endif
 
 #ifdef POSITIVE_INFINITY
 #undef POSITIVE_INFINITY

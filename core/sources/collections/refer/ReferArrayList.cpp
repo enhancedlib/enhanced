@@ -16,8 +16,8 @@
 #include <enhanced/core/collections/refer/ReferArrayList.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
+#include <enhanced/core/types.h>
 #include <enhanced/core/array.h>
 #include <enhanced/core/assert.h>
 #include <enhanced/core/memory.h>
@@ -28,12 +28,10 @@ using enhanced_internal::core::collections::refer::ReferArrayListImpl;
 using enhanced::core::exception::UnsupportedOperationException;
 
 ReferArrayListImpl::ReferArrayListImpl(const sizetype capacity, const GenericOperator genericOperator) :
-    elements(new void* [capacity]), size(0), capacity(capacity),
-    genericOperator(genericOperator), iterator(null) {}
+    elements(new void*[capacity]), size(0), capacity(capacity), genericOperator(genericOperator) {}
 
 ReferArrayListImpl::ReferArrayListImpl(const ReferArrayListImpl& other) :
-    elements(new void* [other.capacity]), size(other.size), capacity(other.capacity),
-    genericOperator(other.genericOperator), iterator(null) {
+    elements(new void*[other.capacity]), size(other.size), capacity(other.capacity), genericOperator(other.genericOperator) {
     assert(other.capacity >= other.size);
     for (sizetype index = 0; index < other.size; ++index) {
         elements[index] = other.elements[index];
@@ -42,7 +40,6 @@ ReferArrayListImpl::ReferArrayListImpl(const ReferArrayListImpl& other) :
 
 ReferArrayListImpl::~ReferArrayListImpl() noexcept {
     delete[] elements;
-    delete iterator;
 }
 
 NoIgnoreRet
@@ -112,29 +109,17 @@ void ReferArrayListImpl::shrink0(const sizetype size) {
 
 ReferArrayListImpl::ReferArrayListIteratorImpl::
 ReferArrayListIteratorImpl(const ReferArrayListImpl* referenceArrayList) :
-    referenceArrayList(referenceArrayList), indexer(referenceArrayList->elements), isFirst(true),
-    end(referenceArrayList->elements + referenceArrayList->getSize0()) {}
+    referenceArrayList(referenceArrayList), indexer(referenceArrayList->elements) {}
 
 ReferArrayListImpl::ReferArrayListIteratorImpl::~ReferArrayListIteratorImpl() noexcept = default;
 
 NoIgnoreRet
 bool ReferArrayListImpl::ReferArrayListIteratorImpl::hasNext0() const {
-    return indexer != end;
+    return indexer != (referenceArrayList->elements + referenceArrayList->getSize0());
 }
 
 void ReferArrayListImpl::ReferArrayListIteratorImpl::next0() const {
     ++indexer;
-}
-
-NoIgnoreRet
-bool ReferArrayListImpl::ReferArrayListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !referenceArrayList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
 }
 
 NoIgnoreRet
@@ -143,7 +128,6 @@ Generic& ReferArrayListImpl::ReferArrayListIteratorImpl::get0() const {
 }
 
 void ReferArrayListImpl::ReferArrayListIteratorImpl::reset0() const {
-    isFirst = true;
     indexer = referenceArrayList->elements;
 }
 

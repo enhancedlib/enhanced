@@ -16,9 +16,9 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
 
 /*!
  * Creates a new string.
@@ -165,7 +165,7 @@ template <typename CharType>
 ENHANCED_CORE_API CharType* tstringCopyResize(const CharType* source, sizetype oldSize, sizetype newSize);
 
 template <typename CharType>
-ENHANCED_CORE_API sizetype tstringLength(const CharType* string) noexcept;
+ENHANCED_CORE_API sizetype tstringLength(const CharType* string);
 
 template <typename CharType>
 ENHANCED_CORE_API bool tstringEqual(const CharType* string1, const CharType* string2) noexcept;

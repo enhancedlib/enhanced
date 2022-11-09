@@ -44,53 +44,54 @@ struct AbstractClass ReferDeque :
     Collection<Type>,
 #endif
     Deque<Type>, ReferQueue<Type> {
-        NoIgnoreRet
-        virtual sizetype getSize() const = 0;
+    NoIgnoreRet
+    virtual sizetype getSize() const = 0;
 
-        NoIgnoreRet
-        virtual bool isEmpty() const = 0;
+    NoIgnoreRet
+    virtual bool isEmpty() const = 0;
 
-        virtual Type& getFirst() const = 0;
+    virtual Type& getFirst() const = 0;
 
-        virtual Type& getLast() const = 0;
+    virtual Type& getLast() const = 0;
 
-        virtual Type& get(sizetype index) const = 0;
+    virtual Type& get(sizetype index) const = 0;
 
-        virtual Type& operator[](sizetype index) const = 0;
+    virtual Type& operator[](sizetype index) const = 0;
 
-        virtual bool contain(const Type& value) const = 0;
+    virtual bool contain(const Type& value) const = 0;
 
-        NoIgnoreRet
-        typename Iterable<Type>::ForeachIterator begin() const override {
-            return Deque<Type>::begin();
-        }
+    NoIgnoreRet
+    typename Iterable<Type>::ForeachIterator begin() const override {
+        return Deque<Type>::begin();
+    }
 
-        NoIgnoreRet
-        byte end() const override {
-            return Deque<Type>::end();
-        }
+    NoIgnoreRet
+    constexpr byte end() const override {
+        return Deque<Type>::end();
+    }
 
-        virtual Iterator<Type>* iterator() const = 0;
+    virtual const Iterator<Type>& iterator() const = 0;
 
-        RetRequiresRelease
-        virtual ReferDeque<Type>* copy() const = 0;
+    RetRequiresRelease
+    virtual ReferDeque<Type>* copy() const = 0;
 
-        virtual void addLast(const Type& element) = 0;
+    virtual void addLast(const Type& element) = 0;
 
-        virtual Type removeLast() = 0;
+    virtual Type removeLast() = 0;
 
-        virtual void addFirst(const Type& element) = 0;
+    virtual void addFirst(const Type& element) = 0;
 
-        virtual Type removeFirst() = 0;
+    virtual Type removeFirst() = 0;
 
-        virtual void add(const Type& element) = 0;
+    virtual void add(const Type& element) = 0;
 
-        virtual Type remove() = 0;
+    virtual Type remove() = 0;
 
-        virtual void push(const Type& element) = 0;
+    virtual void push(const Type& element) = 0;
 
-        virtual Type popup() = 0;
-    };
+    virtual Type popup() = 0;
+};
+
 NAMESPACE_L4_END
 
 #endif

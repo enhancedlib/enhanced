@@ -16,9 +16,9 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
 #include <enhanced/core/Iterable.h>
 #include <enhanced/core/Iterator.h>
 #include <enhanced/core/generic.h>
@@ -43,8 +43,6 @@ private:
 
     Node* last;
 
-    mutable Node* indexer;
-
     sizetype size;
 
     static Node*& prevNode(Node*& node);
@@ -66,7 +64,7 @@ protected:
     private:
         const LinkedListImpl* linkedList;
 
-        mutable bool isFirst;
+        mutable Node* indexer;
 
     protected:
         explicit LinkedListIteratorImpl(const LinkedListImpl* linkedList);
@@ -79,9 +77,6 @@ protected:
         void next0() const;
 
         NoIgnoreRet
-        bool each0() const;
-
-        NoIgnoreRet
         Generic& get0() const;
 
         void reset0() const;
@@ -91,8 +86,6 @@ protected:
     };
 
     GenericOperator genericOperator;
-
-    mutable LinkedListIteratorImpl* iterator;
 
     explicit LinkedListImpl(GenericOperator genericOperator);
 
@@ -154,8 +147,8 @@ class ENHANCED_CORE_API LinkedList :
 private:
     using LinkedListImpl = enhanced_internal::core::collections::LinkedListImpl;
 
-    class LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
-        friend struct Iterable<Type>;
+    class ENHANCED_CORE_API LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
+        friend class LinkedList<Type>;
 
     public:
         inline explicit LinkedListIterator(const LinkedList<Type>* linkedList) : LinkedListIteratorImpl(linkedList) {}
@@ -168,11 +161,6 @@ private:
         inline const Iterator<Type>* next() const override {
             next0();
             return this;
-        }
-
-        NoIgnoreRet
-        inline bool each() const override {
-            return each0();
         }
 
         NoIgnoreRet
@@ -204,6 +192,8 @@ private:
         return ((Type&) element) == ((Type&) value);
     }
 
+    LinkedListIterator iter = LinkedListIterator(this);
+
 public:
     inline LinkedList() : LinkedListImpl({allocate, destroy, equals}) {}
 
@@ -230,8 +220,9 @@ public:
     }
 
     NoIgnoreRet
-    inline Iterator<Type>* iterator() const override {
-        return List<Type>::template getIterator<LinkedListIterator>(LinkedListImpl::iterator, this);
+    inline const Iterator<Type>& iterator() const override {
+        iter.reset();
+        return iter;
     }
 
     NoIgnoreRet
@@ -240,7 +231,7 @@ public:
     }
 
     NoIgnoreRet
-    inline byte end() const override {
+    inline constexpr byte end() const override {
         return List<Type>::end();
     }
 

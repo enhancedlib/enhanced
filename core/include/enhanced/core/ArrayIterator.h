@@ -26,40 +26,45 @@
 NAMESPACE_L2_BEGIN(enhanced, core)
 
 template <typename Type>
-struct AbstractClass Iterable {
+class ArrayIterator : public Iterator<Type> {
 protected:
-    class ForeachIterator final {
-    private:
-        const Iterator<Type>& iterator;
+    mutable Type* indexer;
 
-    public:
-        explicit ForeachIterator(const Iterator<Type>& iterator) : iterator(iterator) {}
+    const Type* end;
 
-        bool operator!=(byte) const {
-            return iterator.hasNext();
-        }
-
-        const Iterator<Type>* operator++() const {
-            return iterator.next();
-        }
-
-        Type& operator*() const {
-            return iterator.get();
-        }
-    };
+    const sizetype size;
 
 public:
+    const Type* array;
+
+    template <sizetype size>
+    inline ArrayIterator(const Type array[size]) : array(array), end(array + size), size(size) {}
+
+    inline ArrayIterator(const Type* array, sizetype size) : array(array), end(array + size), size(size) {}
+
     NoIgnoreRet
-    virtual inline Iterable<Type>::ForeachIterator begin() const {
-        return Iterable<Type>::ForeachIterator(iterator());
+    inline bool hasNext() const override {
+        return indexer != end;
+    }
+
+    inline const Iterator<Type>* next() const override {
+        ++indexer;
+        return this;
     }
 
     NoIgnoreRet
-    virtual inline constexpr byte end() const {
-        return 0;
+    Type& get() const override {
+        return *indexer;
     }
 
-    virtual const Iterator<Type>& iterator() const = 0;
+    void reset() const override {
+        indexer = const_cast<Type*>(array);
+    }
+
+    NoIgnoreRet
+    sizetype count() const override {
+        return size;
+    }
 };
 
 NAMESPACE_L2_END

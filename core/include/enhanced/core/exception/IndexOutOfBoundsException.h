@@ -21,19 +21,19 @@
 #include <enhanced/core/exception/Exception.h>
 #include <enhanced/core/exception/RuntimeException.h>
 
-ENHANCED_CORE_API extern const CExceptionType CInvalidArgumentException;
+ENHANCED_CORE_API extern const CExceptionType CIndexOutOfBoundsException;
 
 #ifdef CXX_LANGUAGE
 
 NAMESPACE_L3_BEGIN(enhanced, core, exception)
 
-class ENHANCED_CORE_API InvalidArgumentException : public RuntimeException {
+class ENHANCED_CORE_API IndexOutOfBoundsException : public RuntimeException {
 public:
-    explicit InvalidArgumentException(const String& message = "") noexcept;
+    explicit IndexOutOfBoundsException(const String& message = "") noexcept;
 
-    explicit InvalidArgumentException(const Exception* cause) noexcept;
+    explicit IndexOutOfBoundsException(const Exception* cause) noexcept;
 
-    InvalidArgumentException(const String& message, const Exception* cause) noexcept;
+    IndexOutOfBoundsException(const String& message, const Exception* cause) noexcept;
 };
 
 NAMESPACE_L3_END

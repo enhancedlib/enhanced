@@ -16,9 +16,9 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
 #include <enhanced/core/Iterable.h>
 #include <enhanced/core/Iterator.h>
 #include <enhanced/core/generic.h>
@@ -43,8 +43,6 @@ private:
 
     Node* last;
 
-    mutable Node* indexer;
-
     sizetype size;
 
     static Node*& prevNode(Node*& node);
@@ -62,7 +60,7 @@ protected:
     private:
         const ReferLinkedListImpl* referLinkedList;
 
-        mutable bool isFirst;
+        mutable Node* indexer;
 
     protected:
         explicit ReferLinkedListIteratorImpl(const ReferLinkedListImpl* referLinkedList);
@@ -75,9 +73,6 @@ protected:
         void next0() const;
 
         NoIgnoreRet
-        bool each0() const;
-
-        NoIgnoreRet
         Generic& get0() const;
 
         void reset0() const;
@@ -87,8 +82,6 @@ protected:
     };
 
     GenericOperator genericOperator;
-
-    mutable ReferLinkedListIteratorImpl* iterator;
 
     explicit ReferLinkedListImpl(GenericOperator genericOperator);
 
@@ -150,8 +143,8 @@ class ENHANCED_CORE_API ReferLinkedList final :
 private:
     using ReferLinkedListImpl = enhanced_internal::core::collections::refer::ReferLinkedListImpl;
 
-    class ReferLinkedListIterator : public Iterator<Type>, private ReferLinkedListIteratorImpl {
-        friend struct Iterable<Type>;
+    class ENHANCED_CORE_API ReferLinkedListIterator : public Iterator<Type>, private ReferLinkedListIteratorImpl {
+        friend class ReferLinkedList<Type>;
 
     public:
         inline explicit ReferLinkedListIterator(const ReferLinkedList<Type>* referenceLinkedList) :
@@ -165,11 +158,6 @@ private:
         inline const Iterator<Type>* next() const override {
             next0();
             return this;
-        }
-
-        NoIgnoreRet
-        inline bool each() const override {
-            return each0();
         }
 
         NoIgnoreRet
@@ -192,10 +180,12 @@ private:
         return ((Type&) (element)) == ((Type&) value);
     }
 
+    ReferLinkedListIterator iter = ReferLinkedListIterator(this);
+
 public:
     inline ReferLinkedList() : ReferLinkedListImpl({equals}) {}
 
-    ReferLinkedList(const ReferLinkedList<Type>& other) : ReferLinkedList(other) {}
+    ReferLinkedList(const ReferLinkedList<Type>& other) : ReferLinkedListImpl(other) {}
 
     NoIgnoreRet
     inline sizetype getSize() const override {
@@ -217,8 +207,9 @@ public:
         return new ReferLinkedList<Type>(*this);
     }
 
-    inline Iterator<Type>* iterator() const override {
-        return Iterable<Type>::template getIterator<ReferLinkedListIterator>(ReferLinkedListImpl::iterator, this);
+    inline const Iterator<Type>& iterator() const override {
+        iter.reset();
+        return iter;
     }
 
     NoIgnoreRet
@@ -227,7 +218,7 @@ public:
     }
 
     NoIgnoreRet
-    inline byte end() const override {
+    inline constexpr byte end() const override {
         return List<Type>::end();
     }
 

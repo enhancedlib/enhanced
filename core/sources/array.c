@@ -17,7 +17,6 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/assert.h>
 #include <enhanced/core/memory.h>
 
 void arraySet(void* array, sizetype count, int64 value, sizetype sizeOfType) {
@@ -25,7 +24,7 @@ void arraySet(void* array, sizetype count, int64 value, sizetype sizeOfType) {
 }
 
 void arraySetPtr(void* array, sizetype count, void* valuePtr, sizetype sizeOfType) {
-    assert(array != null), assert(count > 0), assert(sizeOfType > 0);
+    if (array == null || count == 0 || sizeOfType == 0) return;
 
     sizetype size = count * sizeOfType;
 

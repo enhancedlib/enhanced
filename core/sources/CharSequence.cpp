@@ -77,7 +77,6 @@ CharSequence<CharType>::operator CharType*() const noexcept {
 
 template class enhanced::core::CharSequence<char>;
 template class enhanced::core::CharSequence<wchar>;
-template class enhanced::core::CharSequence<ushort>;
 template class enhanced::core::CharSequence<u8char>;
 template class enhanced::core::CharSequence<u16char>;
 template class enhanced::core::CharSequence<u32char>;

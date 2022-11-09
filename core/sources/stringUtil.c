@@ -17,15 +17,12 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/assert.h>
 #include <enhanced/core/memory.h>
 
 RetRequiresRelease RetNullable MustInspectResult
 char* stringNew(const sizetype length) {
     char* str = (char*) memoryAlloc((length + 1) * sizeof(char));
-    if (str == null) {
-        return null;
-    }
+    if (str == null) return null;
     str[length] = '\0';
 
     return str;
@@ -38,12 +35,10 @@ char* stringCopy(const char* source) {
 
 RetRequiresRelease RetNullable MustInspectResult
 char* stringCopyExt(const char* source, sizetype length) {
-    assert(source != null);
+    if (source == null) return null;
 
     char* copy = stringNew(length);
-    if (copy == null) {
-        return null;
-    }
+    if (copy == null) return null;
 
     memoryCopy(copy, source, length);
 
@@ -52,12 +47,10 @@ char* stringCopyExt(const char* source, sizetype length) {
 
 RetRequiresRelease RetNullable MustInspectResult
 char* stringCopyResize(const char* string, sizetype oldSize, sizetype newSize) {
-    assert(string != null);
+    if (string == null) return null;
 
     char* copy = stringNew(newSize);
-    if (copy == null) {
-        return null;
-    }
+    if (copy == null) return null;
 
     memoryCopy(copy, string, (newSize > oldSize) ? oldSize : newSize);
 
@@ -66,7 +59,7 @@ char* stringCopyResize(const char* string, sizetype oldSize, sizetype newSize) {
 
 NoIgnoreRet
 sizetype stringLength(const char* string) {
-    assert(string != null);
+    if (string == null) return SIZE_TYPE_MAX;
 
     sizetype length;
     for (length = 0; string[length] != '\0'; ++length) {}
@@ -106,12 +99,10 @@ wchar* wstringCopy(const wchar* source) {
 
 RetRequiresRelease RetNullable MustInspectResult
 wchar* wstringCopyExt(const wchar* source, sizetype length) {
-    assert(source != null);
+    if (source == null) return null;
 
     wchar* copy = wstringNew(length);
-    if (copy == null) {
-        return null;
-    }
+    if (copy == null) return null;
 
     memoryCopy(copy, source, length);
 
@@ -120,12 +111,10 @@ wchar* wstringCopyExt(const wchar* source, sizetype length) {
 
 RetRequiresRelease RetNullable MustInspectResult
 wchar* wstringCopyResize(const wchar* wstring, sizetype oldSize, sizetype newSize) {
-    assert(wstring != null);
+    if (wstring == null) return null;
 
     wchar* copy = wstringNew(newSize);
-    if (copy == null) {
-        return null;
-    }
+    if (copy == null) return null;
 
     memoryCopy(copy, wstring, (newSize > oldSize) ? oldSize : newSize);
 
@@ -134,7 +123,7 @@ wchar* wstringCopyResize(const wchar* wstring, sizetype oldSize, sizetype newSiz
 
 NoIgnoreRet
 sizetype wstringLength(const wchar* wstring) {
-    assert(wstring != null);
+    if (wstring == null) return SIZE_TYPE_MAX;
 
     sizetype length;
     for (length = 0; wstring[length] != L'\0'; ++length) {}

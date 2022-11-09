@@ -39,19 +39,19 @@ struct RemoveVolatileImpl<volatile RawType> final {
 };
 
 template <typename RawType>
-struct RemoveModifersImpl final {
+struct RemoveQualifierImpl final {
     using Type = RawType;
 };
 template <typename RawType>
-struct RemoveModifersImpl<const RawType> final {
+struct RemoveQualifierImpl<const RawType> final {
     using Type = RawType;
 };
 template <typename RawType>
-struct RemoveModifersImpl<volatile RawType> final {
+struct RemoveQualifierImpl<volatile RawType> final {
     using Type = RawType;
 };
 template <typename RawType>
-struct RemoveModifersImpl<const volatile RawType> final {
+struct RemoveQualifierImpl<const volatile RawType> final {
     using Type = RawType;
 };
 
@@ -118,7 +118,7 @@ template <typename Type>
 using RemoveVolatile = typename enhanced_internal::core::util::traits::RemoveVolatileImpl<Type>::Type;
 
 template <typename Type>
-using RemoveModifers = typename enhanced_internal::core::util::traits::RemoveModifersImpl<Type>::Type;
+using RemoveQualifier = typename enhanced_internal::core::util::traits::RemoveQualifierImpl<Type>::Type;
 
 template <typename Type>
 using RemoveRef = typename enhanced_internal::core::util::traits::RemoveRefImpl<Type>::Type;
@@ -220,10 +220,10 @@ template <typename Type>
 INLINE_VAR constexpr bool isEmptyType = __is_empty(Type);
 
 template <typename Type>
-INLINE_VAR constexpr bool isVoidType = isSame<RemoveModifers<Type>, void>;
+INLINE_VAR constexpr bool isVoidType = isSame<RemoveQualifier<Type>, void>;
 
 template <typename Type>
-INLINE_VAR constexpr bool isNullType = isSame<RemoveModifers<Type>, NullType>;
+INLINE_VAR constexpr bool isNullType = isSame<RemoveQualifier<Type>, NullType>;
 
 template <typename Type>
 INLINE_VAR constexpr bool isBasicType = isArithmeticType<Type> || isVoidType<Type> || isNullType<Type>;

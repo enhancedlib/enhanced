@@ -18,14 +18,13 @@
 #include <enhanced/core/memory.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
-#include <enhanced/core/assert.h>
+#include <enhanced/core/types.h>
 #include <enhanced/core/types.h>
 
 MustInspectResult RetNullable RetRequiresRelease
 void* memoryAlloc(sizetype size) {
-    assert(size > 0);
+    if (size == 0) return null;
 
     return malloc(size);
 }
@@ -37,7 +36,7 @@ void memoryFree(void* pointer) {
 }
 
 void memorySet(void* ptr, byte aByte, sizetype size) {
-    assert(ptr != null), assert(size > 0);
+    if (ptr == null || size == 0) return;
 
     for (sizetype index = 0; index < size; ++index) {
         ((byte*) ptr)[index] = aByte;
@@ -45,9 +44,7 @@ void memorySet(void* ptr, byte aByte, sizetype size) {
 }
 
 void memoryCopy(void* destination, const void* source, sizetype size) {
-    assert(destination != null), assert(source != null);
-
-    if (size == 0) return;
+    if (destination == null || source == null || size == 0) return;
 
     sizetype countBlock = size / sizeof(qword);
     sizetype countByte = size % sizeof(qword);

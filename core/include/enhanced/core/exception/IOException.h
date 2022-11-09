@@ -19,21 +19,20 @@
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/exception/Exception.h>
-#include <enhanced/core/exception/RuntimeException.h>
 
-ENHANCED_CORE_API extern const CExceptionType CInvalidArgumentException;
+ENHANCED_CORE_API extern const CExceptionType CIOException;
 
 #ifdef CXX_LANGUAGE
 
 NAMESPACE_L3_BEGIN(enhanced, core, exception)
 
-class ENHANCED_CORE_API InvalidArgumentException : public RuntimeException {
+class ENHANCED_CORE_API IOException : public Exception {
 public:
-    explicit InvalidArgumentException(const String& message = "") noexcept;
+    explicit IOException(const String& message = "") noexcept;
 
-    explicit InvalidArgumentException(const Exception* cause) noexcept;
+    explicit IOException(const Exception* cause) noexcept;
 
-    InvalidArgumentException(const String& message, const Exception* cause) noexcept;
+    IOException(const String& message, const Exception* cause) noexcept;
 };
 
 NAMESPACE_L3_END

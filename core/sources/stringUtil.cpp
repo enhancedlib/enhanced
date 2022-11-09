@@ -16,14 +16,17 @@
 #include <enhanced/core/stringUtil.h>
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/assert.h>
 #include <enhanced/core/memory.h>
+#include <enhanced/core/exception/NullPointerException.h>
+
+using enhanced::core::exception::NullPointerException;
 
 namespace enhanced::core {
     template <typename CharType>
     RetRequiresRelease
-    CharType* tstringNew(const sizetype length) {
+    CharType* tstringNew(sizetype length) {
         auto str = new CharType[length + 1];
         str[length] = 0;
         return str;
@@ -37,8 +40,8 @@ namespace enhanced::core {
 
     template <typename CharType>
     RetRequiresRelease
-    CharType* tstringCopyExt(const CharType* source, const sizetype length) {
-        assert(source != null);
+    CharType* tstringCopyExt(const CharType* source, sizetype length) {
+        if (source == null) throw NullPointerException("The given argument 'source' is null");
 
         auto copy = tstringNew<CharType>(length);
         memoryCopy(copy, source, length);
@@ -49,7 +52,7 @@ namespace enhanced::core {
     template <typename CharType>
     RetRequiresRelease
     CharType* tstringCopyResize(const CharType* source, sizetype oldSize, sizetype newSize) {
-        assert(source != null);
+        if (source == null) throw NullPointerException("The given argument 'source' is null");
 
         auto copy = tstringNew<CharType>(newSize);
         memoryCopy(copy, source, (newSize > oldSize) ? oldSize : newSize);
@@ -58,8 +61,8 @@ namespace enhanced::core {
     }
 
     template <typename CharType>
-    sizetype tstringLength(const CharType* string) noexcept {
-        if (string == null) return SIZE_TYPE_MAX;
+    sizetype tstringLength(const CharType* string) {
+        if (string == null) throw NullPointerException("The given argument 'string' is null");
 
         sizetype length;
         for (length = 0; string[length] != 0; ++length) {}
@@ -84,42 +87,36 @@ namespace enhanced::core {
 
     template char* tstringNew(sizetype length);
     template wchar* tstringNew(sizetype length);
-    template ushort* tstringNew(sizetype length);
     template u8char* tstringNew(sizetype length);
     template u16char* tstringNew(sizetype length);
     template u32char* tstringNew(sizetype length);
 
     template char* tstringCopy(const char* source);
     template wchar* tstringCopy(const wchar* source);
-    template ushort* tstringCopy(const ushort* source);
     template u8char* tstringCopy(const u8char* source);
     template u16char* tstringCopy(const u16char* source);
     template u32char* tstringCopy(const u32char* source);
 
     template char* tstringCopyExt(const char* source, sizetype length);
     template wchar* tstringCopyExt(const wchar* source, sizetype length);
-    template ushort* tstringCopyExt(const ushort* source, sizetype length);
     template u8char* tstringCopyExt(const u8char* source, sizetype length);
     template u16char* tstringCopyExt(const u16char* source, sizetype length);
     template u32char* tstringCopyExt(const u32char* source, sizetype length);
 
     template char* tstringCopyResize(const char* source, sizetype oldSize, sizetype newSize);
     template wchar* tstringCopyResize(const wchar* source, sizetype oldSize, sizetype newSize);
-    template ushort* tstringCopyResize(const ushort* source, sizetype oldSize, sizetype newSize);
     template u8char* tstringCopyResize(const u8char* source, sizetype oldSize, sizetype newSize);
     template u16char* tstringCopyResize(const u16char* source, sizetype oldSize, sizetype newSize);
     template u32char* tstringCopyResize(const u32char* source, sizetype oldSize, sizetype newSize);
 
-    template sizetype tstringLength(const char* string) noexcept;
-    template sizetype tstringLength(const wchar* string) noexcept;
-    template sizetype tstringLength(const ushort* string) noexcept;
-    template sizetype tstringLength(const u8char* string) noexcept;
-    template sizetype tstringLength(const u16char* string) noexcept;
-    template sizetype tstringLength(const u32char* string) noexcept;
+    template sizetype tstringLength(const char* string);
+    template sizetype tstringLength(const wchar* string);
+    template sizetype tstringLength(const u8char* string);
+    template sizetype tstringLength(const u16char* string);
+    template sizetype tstringLength(const u32char* string);
 
     template bool tstringEqual(const char* string1, const char* string2) noexcept;
     template bool tstringEqual(const wchar* string1, const wchar* string2) noexcept;
-    template bool tstringEqual(const ushort* string1, const ushort* string2) noexcept;
     template bool tstringEqual(const u8char* string1, const u8char* string2) noexcept;
     template bool tstringEqual(const u16char* string1, const u16char* string2) noexcept;
     template bool tstringEqual(const u32char* string1, const u32char* string2) noexcept;

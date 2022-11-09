@@ -165,16 +165,22 @@
 #define DEBUG
 #endif
 
-#if defined(__CHAR_UNSIGNED__) || defined(_CHAR_UNSIGNED)
-#define CHAR_IS_UNSIGNED_CHAR
-#endif
-
 #ifdef WINDOWS_OS
 #define SAL_SUPPORTED
 #endif
 
-#ifdef _WCHAR_T_DEFINED
+#if defined(__CHAR_UNSIGNED__) || (defined(COMPILER_MSVC) && defined(_CHAR_UNSIGNED))
+#define CHAR_IS_UNSIGNED
+#endif
+
+#if (defined(COMPILER_MSVC) && defined(_NATIVE_WCHAR_T_DEFINED)) || (!defined(COMPILER_MSVC) && defined(CXX_LANGUAGE))
 #define WCHAR_IS_BUILTIN_TYPE
+#endif
+
+#if defined(COMPILER_MSVC) || (__SIZEOF_WCHAR_T__ == 2)
+#define WCHAR_EQUALS_UINT16
+#else
+#define WCHAR_EQUALS_INT32
 #endif
 
 #ifdef CXX_LANGUAGE
@@ -256,7 +262,7 @@
 
 #define CURRENT_FILE __FILE__
 #define CURRENT_LINE __LINE__
-#ifdef __func__
+#if defined(C_99_OR_LATER) || defined(CXX_11_OR_LATER)
 #define CURRENT_FUNC __func__
 #else
 #define CURRENT_FUNC __FUNCTION__

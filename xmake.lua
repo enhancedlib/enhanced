@@ -19,7 +19,7 @@ includes("**/xmake.lua")
 
 target("test")
     set_kind("binary")
-    add_deps("core-shared")
+    add_deps("core-static")
     add_files("test/*.c", "test/*.cpp")
     add_headerfiles("test/*.h")
     add_includedirs("test")

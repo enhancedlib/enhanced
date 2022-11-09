@@ -50,10 +50,6 @@ protected:
 
         mutable void** indexer;
 
-        mutable bool isFirst;
-
-        void** end;
-
     protected:
         explicit ReferArrayListIteratorImpl(const ReferArrayListImpl* referenceArrayList);
 
@@ -65,9 +61,6 @@ protected:
         void next0() const;
 
         NoIgnoreRet
-        bool each0() const;
-
-        NoIgnoreRet
         Generic& get0() const;
 
         void reset0() const;
@@ -77,8 +70,6 @@ protected:
     };
 
     GenericOperator genericOperator;
-
-    mutable ReferArrayListIteratorImpl* iterator;
 
     ReferArrayListImpl(sizetype capacity, GenericOperator genericOperator);
 
@@ -113,12 +104,12 @@ NAMESPACE_L4_BEGIN(enhanced, core, collections, refer)
 
 template <typename Type>
 class ENHANCED_CORE_API ReferArrayList final : public ReferList<Type>, public RandomAccess,
-                                                private enhanced_internal::core::collections::refer::ReferArrayListImpl {
+                                               private enhanced_internal::core::collections::refer::ReferArrayListImpl {
 private:
     using ReferArrayListImpl = enhanced_internal::core::collections::refer::ReferArrayListImpl;
 
-    class ReferArrayListIterator : public Iterator<Type>, private ReferArrayListImpl::ReferArrayListIteratorImpl {
-        friend struct Iterable<Type>;
+    class ENHANCED_CORE_API ReferArrayListIterator : public Iterator<Type>, private ReferArrayListImpl::ReferArrayListIteratorImpl {
+        friend class ReferArrayList<Type>;
 
     public:
         inline explicit ReferArrayListIterator(const ReferArrayList<Type>* referArrayList) : ReferArrayListIteratorImpl(referArrayList) {}
@@ -131,11 +122,6 @@ private:
         inline const Iterator<Type>* next() const override {
             next0();
             return this;
-        }
-
-        NoIgnoreRet
-        inline bool each() const override {
-            return each0();
         }
 
         NoIgnoreRet
@@ -157,6 +143,8 @@ private:
     static bool equals(Generic& element, Generic& value) {
         return ((Type&) element) == ((Type&) (value));
     }
+
+    ReferArrayListIterator iter = ReferArrayListIterator(this);
 
 public:
     inline ReferArrayList() : ReferArrayListImpl(ARRAY_INIT_SIZE, {equals}) {};
@@ -185,8 +173,9 @@ public:
         return new ReferArrayList<Type>(*this);
     }
 
-    inline Iterator<Type>* iterator() const override {
-        return Iterable<Type>::template getIterator<ReferArrayListIterator>(ReferArrayListImpl::iterator, this);
+    inline const Iterator<Type>& iterator() const override {
+        iter.reset();
+        return iter;
     }
 
     NoIgnoreRet

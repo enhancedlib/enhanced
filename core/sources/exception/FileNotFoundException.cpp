@@ -13,29 +13,15 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <enhanced/core/exception/FileNotFoundException.h>
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/Exception.h>
-#include <enhanced/core/exception/RuntimeException.h>
+#include <enhanced/core/String.h>
+#include <enhanced/core/MutableString.h>
 
-ENHANCED_CORE_API extern const CExceptionType CInvalidArgumentException;
+using enhanced::core::exception::FileNotFoundException;
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, exception)
-
-class ENHANCED_CORE_API InvalidArgumentException : public RuntimeException {
-public:
-    explicit InvalidArgumentException(const String& message = "") noexcept;
-
-    explicit InvalidArgumentException(const Exception* cause) noexcept;
-
-    InvalidArgumentException(const String& message, const Exception* cause) noexcept;
-};
-
-NAMESPACE_L3_END
-
-#endif
+FileNotFoundException::FileNotFoundException(const String& name) noexcept :
+    IOException(String::join({"File or directory '", name, "' not found"})) {}

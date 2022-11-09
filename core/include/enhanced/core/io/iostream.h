@@ -17,24 +17,20 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/exception/Exception.h>
-#include <enhanced/core/exception/RuntimeException.h>
-
-ENHANCED_CORE_API extern const CExceptionType CInvalidArgumentException;
+#include <enhanced/core/io/WarpedInputStream.h>
+#include <enhanced/core/io/WarpedOutputStream.h>
 
 #ifdef CXX_LANGUAGE
 
-NAMESPACE_L3_BEGIN(enhanced, core, exception)
+NAMESPACE_L3_BEGIN(enhanced, core, io)
 
-class ENHANCED_CORE_API InvalidArgumentException : public RuntimeException {
-public:
-    explicit InvalidArgumentException(const String& message = "") noexcept;
+ENHANCED_CORE_API extern WarpedInputStream* const& instream;
+ENHANCED_CORE_API extern WarpedOutputStream* const& outstream;
+ENHANCED_CORE_API extern WarpedOutputStream* const& errstream;
 
-    explicit InvalidArgumentException(const Exception* cause) noexcept;
-
-    InvalidArgumentException(const String& message, const Exception* cause) noexcept;
-};
+ENHANCED_CORE_API void setIn(WarpedInputStream* in);
+ENHANCED_CORE_API void setOut(WarpedOutputStream* out);
+ENHANCED_CORE_API void setErr(WarpedOutputStream* err);
 
 NAMESPACE_L3_END
 

@@ -13,15 +13,15 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/InvalidArgumentException.h>
+#include <enhanced/core/exception/IndexOutOfBoundsException.h>
 
 #include <enhanced/core/exception/RuntimeException.h>
 
-using enhanced::core::exception::InvalidArgumentException;
+using enhanced::core::exception::IndexOutOfBoundsException;
 using enhanced::core::exception::RuntimeException;
 
-InvalidArgumentException::InvalidArgumentException(const String& message) noexcept : RuntimeException(message) {}
+IndexOutOfBoundsException::IndexOutOfBoundsException(const String& message) noexcept : RuntimeException(message) {}
 
-InvalidArgumentException::InvalidArgumentException(const Exception* cause) noexcept : RuntimeException(cause) {}
+IndexOutOfBoundsException::IndexOutOfBoundsException(const Exception* cause) noexcept : RuntimeException(cause) {}
 
-InvalidArgumentException::InvalidArgumentException(const String& message, const Exception* cause) noexcept : RuntimeException(message, cause) {}
+IndexOutOfBoundsException::IndexOutOfBoundsException(const String& message, const Exception* cause) noexcept : RuntimeException(message, cause) {}

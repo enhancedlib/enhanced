@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * Licensed under the Enhanced Software License, latest version.
+ * Licensed under the Enhanced Software License.
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -13,26 +13,16 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/TypeInfo.h>
+#include <enhanced/core/exception/RuntimeException.h>
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/String.h>
 
-using enhanced::core::TypeInfo;
-using enhanced::core::String;
+using enhanced::core::exception::RuntimeException;
 
-NoIgnoreRet
-String TypeInfo::getName() const {
-    return info.name();
-}
+RuntimeException::RuntimeException(const String& message) noexcept : Exception(message) {}
 
-NoIgnoreRet
-String TypeInfo::getRawName() const {
-    return info.raw_name();
-}
+RuntimeException::RuntimeException(const Exception* cause) noexcept : Exception(cause) {}
 
-NoIgnoreRet
-sizetype TypeInfo::hashCode() const {
-    return info.hash_code();
-}
+RuntimeException::RuntimeException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}

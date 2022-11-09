@@ -19,7 +19,7 @@
 #include <enhanced/core/export.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/String.h>
+#include <enhanced/core/MutableString.h>
 #include <enhanced/core/io/Closeable.h>
 #include <enhanced/core/io/Flushable.h>
 
@@ -34,7 +34,7 @@ struct AbstractClass ENHANCED_CORE_API InputStream : public Closeable, Flushable
     virtual void read(byte* buffer, sizetype size) const;
 
     NoIgnoreRet
-    virtual String readLine() const = 0;
+    virtual MutableString readLine() const;
 };
 
 NAMESPACE_L3_END

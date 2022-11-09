@@ -27,7 +27,7 @@ Do not use in production environment. ***Otherwise, do so at your own risk!***
 This software is a library for the C/C++ language.
 It contains many useful modules with a powerful variety of classes and functions:
 
-Note: many of the functions have not been developed yet, and will be gradually added in the future.
+Note: many of the features have not been developed yet, and will be gradually added in the future.
 
 1. Useful classes and functions
 2. More powerful exception handling (including C language support)

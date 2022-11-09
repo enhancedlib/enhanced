@@ -16,13 +16,15 @@
 #include <enhanced/core/collections/LinkedList.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
+#include <enhanced/core/types.h>
 #include <enhanced/core/memory.h>
 #include <enhanced/core/generic.h>
+#include <enhanced/core/exception/IndexOutOfBoundsException.h>
 #include <enhanced/core/exception/UnsupportedOperationException.h>
 
 using enhanced_internal::core::collections::LinkedListImpl;
+using enhanced::core::exception::IndexOutOfBoundsException;
 using enhanced::core::exception::UnsupportedOperationException;
 
 LinkedListImpl::Node*& LinkedListImpl::prevNode(Node*& node) {
@@ -33,22 +35,18 @@ LinkedListImpl::Node*& LinkedListImpl::nextNode(Node*& node) {
     return node = node->next;
 }
 
-LinkedListImpl::LinkedListImpl(const GenericOperator genericOperator) :
-    first(null), last(null), indexer(null), size(0),
-    genericOperator(genericOperator), iterator(null) {}
+LinkedListImpl::LinkedListImpl(const GenericOperator genericOperator) : first(null), last(null), size(0), genericOperator(genericOperator) {}
 
-LinkedListImpl::LinkedListImpl(const LinkedListImpl& other) :
-    first(null), last(null), indexer(null), size(0),
-    genericOperator(other.genericOperator), iterator(null) {
-    indexer = other.first;
-    for (sizetype count = 0; count < other.size; ++count) {
+LinkedListImpl::LinkedListImpl(const LinkedListImpl& other) : first(null), last(null), size(0), genericOperator(other.genericOperator) {
+    Node* indexer = other.first;
+    for (sizetype _ = 0; _ < other.size; ++_) {
         addLast0(GET_GENERIC_VALUE(indexer->value));
         nextNode(indexer);
     }
 }
 
 LinkedListImpl::~LinkedListImpl() noexcept {
-    for (sizetype count = 1; count < size; ++count) {
+    for (sizetype _ = 1; _ < size; ++_) {
         prevNode(last);
 
         genericOperator.destroy(last->next->value);
@@ -58,7 +56,6 @@ LinkedListImpl::~LinkedListImpl() noexcept {
     if (!isEmpty0()) genericOperator.destroy(last->value);
 
     delete last;
-    delete iterator;
 }
 
 NoIgnoreRet
@@ -83,14 +80,17 @@ Generic& LinkedListImpl::getLast0() const {
 
 NoIgnoreRet
 Generic& LinkedListImpl::get0(const sizetype index) const {
+    if (index >= size) throw IndexOutOfBoundsException("Index out of bounds"); // TODO
+
+    Node* indexer;
     if (index < (size >> 1)) {
         indexer = first;
-        for (sizetype count = 0; count < index; ++count) {
+        for (sizetype _ = 0; _ < index; ++_) {
             nextNode(indexer);
         }
     } else {
         indexer = last;
-        for (sizetype count = size - 1; count > index; --count) {
+        for (sizetype _ = size - 1; _ > index; --_) {
             prevNode(indexer);
         }
     }
@@ -100,8 +100,8 @@ Generic& LinkedListImpl::get0(const sizetype index) const {
 
 NoIgnoreRet
 bool LinkedListImpl::contain0(Generic& value) const {
-    indexer = first;
-    for (sizetype count = 0; count < size; ++count) {
+    Node* indexer = first;
+    for (sizetype _ = 0; _ < size; ++_) {
         if (genericOperator.equals(indexer->value, const_cast<void*&>(value))) {
             return true;
         }
@@ -174,45 +174,26 @@ void LinkedListImpl::removeFirst0() {
 }
 
 LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl* linkedList) :
-    linkedList(linkedList), isFirst(true) {
-    linkedList->indexer = linkedList->first;
-}
+    linkedList(linkedList), indexer(linkedList->first) {}
 
 LinkedListImpl::LinkedListIteratorImpl::~LinkedListIteratorImpl() noexcept = default;
 
 NoIgnoreRet
 bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
-    if (isFirst) {
-        isFirst = false;
-        return true;
-    } else {
-        return linkedList->indexer != null;
-    }
+    return indexer != null;
 }
 
 void LinkedListImpl::LinkedListIteratorImpl::next0() const {
-    nextNode(linkedList->indexer);
-}
-
-NoIgnoreRet
-bool LinkedListImpl::LinkedListIteratorImpl::each0() const {
-    if (isFirst) {
-        isFirst = false;
-        return !linkedList->isEmpty0();
-    }
-
-    next0();
-    return hasNext0();
+    nextNode(indexer);
 }
 
 NoIgnoreRet
 Generic& LinkedListImpl::LinkedListIteratorImpl::get0() const {
-    return GET_GENERIC_VALUE(linkedList->indexer->value);
+    return GET_GENERIC_VALUE(indexer->value);
 }
 
 void LinkedListImpl::LinkedListIteratorImpl::reset0() const {
-    isFirst = true;
-    linkedList->indexer = linkedList->first;
+    indexer = linkedList->first;
 }
 
 NoIgnoreRet
