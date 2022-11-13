@@ -16,52 +16,45 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/Iterator.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core {
+    template <typename Type>
+    interface Iterable {
+    protected:
+        class ForeachIterator final {
+        private:
+            const Iterator<Type>& iterator;
 
-NAMESPACE_L2_BEGIN(enhanced, core)
+        public:
+            explicit ForeachIterator(const Iterator<Type>& iterator) : iterator(iterator) {}
 
-template <typename Type>
-struct AbstractClass Iterable {
-protected:
-    class ForeachIterator final {
-    private:
-        const Iterator<Type>& iterator;
+            func operator!=(byte) const -> bool {
+                return iterator.hasNext();
+            }
+
+            func operator++() const -> const Iterator<Type>* {
+                return iterator.next();
+            }
+
+            func operator*() const -> Type& {
+                return iterator.get();
+            }
+        };
 
     public:
-        explicit ForeachIterator(const Iterator<Type>& iterator) : iterator(iterator) {}
-
-        bool operator!=(byte) const {
-            return iterator.hasNext();
+        $(NoIgnoreReturn)
+        virtual inline func begin() const -> Iterable<Type>::ForeachIterator {
+            return Iterable<Type>::ForeachIterator(iterator());
         }
 
-        const Iterator<Type>* operator++() const {
-            return iterator.next();
+        $(NoIgnoreReturn)
+        virtual inline constexpr func end() const -> byte {
+            return 0;
         }
 
-        Type& operator*() const {
-            return iterator.get();
-        }
+        virtual func iterator() const -> const Iterator<Type>& = abstract;
     };
-
-public:
-    NoIgnoreRet
-    virtual inline Iterable<Type>::ForeachIterator begin() const {
-        return Iterable<Type>::ForeachIterator(iterator());
-    }
-
-    NoIgnoreRet
-    virtual inline constexpr byte end() const {
-        return 0;
-    }
-
-    virtual const Iterator<Type>& iterator() const = 0;
-};
-
-NAMESPACE_L2_END
-
-#endif
+}

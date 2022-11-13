@@ -16,23 +16,22 @@
 #include <enhanced/core/io/InputStream.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/String.h>
-#include <enhanced/core/MutableString.h>
+#include <enhanced/core/MutString.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
 using enhanced::core::io::InputStream;
-using enhanced::core::MutableString;
+using enhanced::core::MutString;
 
-byte InputStream::get() const {
+func InputStream::get() const -> byte {
     NOT_IMPLEMENTED();
 }
 
-void InputStream::read(byte *buffer, sizetype size) const {
+func InputStream::read(byte *buffer, sizetype size) const -> void {
     NOT_IMPLEMENTED();
 }
 
-MutableString InputStream::readLine() const {
+func InputStream::readLine() const -> MutString {
     NOT_IMPLEMENTED();
 }

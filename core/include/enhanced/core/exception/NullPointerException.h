@@ -16,21 +16,12 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/exception/Exception.h>
 
-ENHANCED_CORE_API extern const CExceptionType CNullPointerException;
-
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, exception)
-
-class ENHANCED_CORE_API NullPointerException : public Exception {
-public:
-    explicit NullPointerException(const String& message = "") noexcept;
-};
-
-NAMESPACE_L3_END
-
-#endif
+namespace enhanced::core::exception {
+    class ENHANCED_CORE_API NullPointerException : public Exception {
+    public:
+        explicit NullPointerException(const String& message = "") noexcept;
+    };
+}

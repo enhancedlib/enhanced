@@ -20,16 +20,10 @@
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/collections/Queue.h>
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, collections)
-
-template <typename Type>
-class CircularQueue : public Queue<Type> {
-public:
-    // TODO
-};
-
-NAMESPACE_L3_END
-
-#endif
+namespace enhanced::core::collections {
+    template <typename Type>
+    class CircularQueue : public Queue<Type> {
+    public:
+        // TODO
+    };
+}

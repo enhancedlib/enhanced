@@ -17,44 +17,43 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
 using enhanced::core::io::WarpedOutputStream;
 
-void WarpedOutputStream::print(int8 i8) {
+func WarpedOutputStream::print(int8 i8) -> void {
     NOT_IMPLEMENTED();
 }
 
-void WarpedOutputStream::print(int16 i16) {
+func WarpedOutputStream::print(int16 i16) -> void {
     NOT_IMPLEMENTED();
 }
 
-void WarpedOutputStream::print(int32 i32) {
+func WarpedOutputStream::print(int32 i32) -> void {
     NOT_IMPLEMENTED();
 }
 
-void WarpedOutputStream::print(int64 i64) {
+func WarpedOutputStream::print(int64 i64) -> void {
     NOT_IMPLEMENTED();
 }
 
-void WarpedOutputStream::print(float32 i32) {
+func WarpedOutputStream::print(float32 i32) -> void {
     NOT_IMPLEMENTED();
 }
 
-void WarpedOutputStream::print(float64 i64) {
+func WarpedOutputStream::print(float64 i64) -> void {
     NOT_IMPLEMENTED();
 }
 
-void WarpedOutputStream::print(const String& message) {
+func WarpedOutputStream::print(const String& message) -> void {
     NOT_IMPLEMENTED();
 }
 
-void WarpedOutputStream::close() const {
+func WarpedOutputStream::close() const -> void {
     NOT_IMPLEMENTED();
 }
 
-void WarpedOutputStream::flush() const {
+func WarpedOutputStream::flush() const -> void {
     NOT_IMPLEMENTED();
 }

@@ -25,7 +25,7 @@ using enhanced::core::String;
 using enhanced::core::exception::InvalidArgumentException;
 
 template <typename NumberType>
-LargeInteger LargeInteger::from(NumberType number) {
+func LargeInteger::from(NumberType number) -> LargeInteger {
     return LargeInteger(number);
 }
 
@@ -73,7 +73,7 @@ LargeInteger LargeInteger::operator%(LargeInteger& number) const {
     NOT_IMPLEMENTED();
 }
 
-LargeInteger& LargeInteger::add(LargeInteger& number) {
+func LargeInteger::add(LargeInteger& number) -> LargeInteger& {
     for (sizetype index = 0; index < length; ++index) {
         storage[index] += number.storage[index];
         if (storage[index] >= 10) {
@@ -89,34 +89,34 @@ LargeInteger& LargeInteger::add(LargeInteger& number) {
     return *this;
 }
 
-LargeInteger& LargeInteger::sub(LargeInteger& number) {
+func LargeInteger::sub(LargeInteger& number) -> LargeInteger& {
     NOT_IMPLEMENTED();
 }
 
-LargeInteger& LargeInteger::mul(LargeInteger& number) {
+func LargeInteger::mul(LargeInteger& number) -> LargeInteger& {
     NOT_IMPLEMENTED();
 }
 
-LargeInteger& LargeInteger::div(LargeInteger& number) {
+func LargeInteger::div(LargeInteger& number) -> LargeInteger& {
     NOT_IMPLEMENTED();
 }
 
-LargeInteger& LargeInteger::operator+=(LargeInteger& number) {
+func LargeInteger::operator+=(LargeInteger& number) -> LargeInteger& {
     NOT_IMPLEMENTED();
 }
 
-LargeInteger& LargeInteger::operator-=(LargeInteger& number) {
+func LargeInteger::operator-=(LargeInteger& number) -> LargeInteger& {
     NOT_IMPLEMENTED();
 }
 
-LargeInteger& LargeInteger::operator*=(LargeInteger& number) {
+func LargeInteger::operator*=(LargeInteger& number) -> LargeInteger& {
     NOT_IMPLEMENTED();
 }
 
-LargeInteger& LargeInteger::operator/=(LargeInteger& number) {
+func LargeInteger::operator/=(LargeInteger& number) -> LargeInteger& {
     NOT_IMPLEMENTED();
 }
 
-LargeInteger& LargeInteger::operator%=(LargeInteger& number) {
+func LargeInteger::operator%=(LargeInteger& number) -> LargeInteger& {
     NOT_IMPLEMENTED();
 }

@@ -16,25 +16,16 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/exception/Exception.h>
 
-ENHANCED_CORE_API extern const CExceptionType CError;
+namespace enhanced::core::exception {
+    class ENHANCED_CORE_API Error : public Exception {
+    public:
+        explicit Error(const String& message = "") noexcept;
 
-#ifdef CXX_LANGUAGE
+        explicit Error(const Exception* cause) noexcept;
 
-NAMESPACE_L3_BEGIN(enhanced, core, exception)
-
-class ENHANCED_CORE_API Error : public Exception {
-public:
-    explicit Error(const String& message = "") noexcept;
-
-    explicit Error(const Exception* cause) noexcept;
-
-    Error(const String& message, const Exception* cause) noexcept;
-};
-
-NAMESPACE_L3_END
-
-#endif
+        Error(const String& message, const Exception* cause) noexcept;
+    };
+}

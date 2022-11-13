@@ -16,53 +16,49 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core {
+    template <typename CharType>
+    class ENHANCED_CORE_API CharSequence {
+        template <typename>
+        friend class TMutString;
 
-NAMESPACE_L2_BEGIN(enhanced, core)
+    protected:
+        CharType* value;
 
-template <typename CharType>
-class ENHANCED_CORE_API CharSequence {
-protected:
-    CharType* value;
+        sizetype length;
 
-    sizetype length;
+    public:
+        CharSequence(const CharType* value, sizetype length);
 
-public:
-    CharSequence(CharType* value, sizetype length);
+        CharSequence(const CharSequence& other) noexcept;
 
-    CharSequence(const CharSequence& other) noexcept;
+        CharSequence(CharSequence&& other) noexcept;
 
-    CharSequence(CharSequence&& other) noexcept;
+        virtual ~CharSequence() noexcept;
 
-    virtual ~CharSequence() noexcept;
+        $(NoIgnoreReturn)
+        func getLength() const noexcept -> sizetype;
 
-    NoIgnoreRet
-    sizetype getLength() const noexcept;
+        $(NoIgnoreReturn)
+        func isEmpty() const noexcept -> bool;
 
-    NoIgnoreRet
-    bool isEmpty() const noexcept;
+        $(NoIgnoreReturn)
+        func getChars() const noexcept -> CharType*;
 
-    NoIgnoreRet
-    CharType* getChars() const noexcept;
+        $(NoIgnoreReturn)
+        func at(sizetype index) const noexcept -> const CharType;
 
-    NoIgnoreRet
-    const CharType at(sizetype index) const noexcept;
+        $(NoIgnoreReturn)
+        func operator[](sizetype index) const noexcept -> const CharType;
 
-    NoIgnoreRet
-    const CharType operator[](sizetype index) const noexcept;
+        func operator=(const CharSequence& other) noexcept -> CharSequence&;
 
-    CharSequence& operator=(const CharSequence& other) noexcept;
+        func operator=(CharSequence&& other) noexcept -> CharSequence&;
 
-    CharSequence& operator=(CharSequence&& other) noexcept;
-
-    NoIgnoreRet
-    operator CharType*() const noexcept;
-};
-
-NAMESPACE_L2_END
-
-#endif
+        $(NoIgnoreReturn)
+        operator CharType*() const noexcept;
+    };
+}

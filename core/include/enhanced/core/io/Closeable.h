@@ -16,16 +16,11 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, io)
-
-struct AbstractClass Closeable {
-    virtual void close() const = 0;
-};
-
-NAMESPACE_L3_END
-
-#endif
+namespace enhanced::core::io {
+    interface Closeable {
+        virtual func close() const -> void = abstract;
+    };
+}

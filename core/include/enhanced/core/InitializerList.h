@@ -15,41 +15,34 @@
 
 #pragma once
 
+#include <initializer_list>
+
 #include <enhanced/core/defines.h>
-#include <enhanced/core/annotations.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/Iterable.h>
 #include <enhanced/core/ArrayIterator.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core {
+    template <typename Type>
+    class InitializerList : public Iterable<Type> {
+    private:
+        const ArrayIterator<Type> iter;
 
-#include <initializer_list>
+    public:
+        constexpr InitializerList(std::initializer_list<Type> list) : iter(ArrayIterator(list.begin(), list.size())) {}
 
-NAMESPACE_L2_BEGIN(enhanced, core)
+        inline func toArray() const {
+            return iter.array;
+        }
 
-template <typename Type>
-class InitializerList : public Iterable<Type> {
-private:
-    const ArrayIterator<Type> iter;
+        inline func count() {
+            return iter.count();
+        }
 
-public:
-    constexpr InitializerList(std::initializer_list<Type> list) : iter(ArrayIterator(list.begin(), list.size())) {}
-
-    inline const Type* toArray() const {
-        return iter.array;
-    }
-
-    inline const sizetype count() {
-        return iter.count();
-    }
-
-    inline constexpr const Iterator<Type>& iterator() const override {
-        iter.reset();
-        return iter;
-    }
-};
-
-NAMESPACE_L2_END
-
-#endif
+        inline constexpr func iterator() const -> const Iterator<Type>& override {
+            iter.reset();
+            return iter;
+        }
+    };
+}

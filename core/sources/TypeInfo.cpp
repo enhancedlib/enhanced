@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * Licensed under the Enhanced Software License.
+ * Licensed under the Enhanced Software License, latest version.
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -13,16 +13,21 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <stdio.h>
-
-#include <enhanced/core/assert.h>
+#include <enhanced/core/TypeInfo.h>
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/stringUtil.h>
-#include <enhanced/core/process.h>
+#include <enhanced/core/String.h>
 
-void assertionFailedImpl(const char* message, const char* file, uint line) {
-    fprintf(stderr, "Failed to assert: %s, file \"%s\", line %d", message, file, line);
-    processAbort();
+using enhanced::core::TypeInfo;
+using enhanced::core::String;
+
+$(NoIgnoreReturn)
+func TypeInfo::getName() const -> String {
+    return info.name();
+}
+
+$(NoIgnoreReturn)
+func TypeInfo::hashCode() const -> sizetype {
+    return info.hash_code();
 }

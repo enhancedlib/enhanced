@@ -17,53 +17,52 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/io/OutputStream.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::io {
+    class ENHANCED_CORE_API WarpedOutputStream : public OutputStream {
+    public:
+        func print(char ch) -> void;
 
-NAMESPACE_L3_BEGIN(enhanced, core, io)
+    #ifdef WCHAR_IS_BUILTIN_TYPE
+        func print(wchar wch) -> void;
+    #endif
 
-class ENHANCED_CORE_API WarpedOutputStream : public OutputStream {
-public:
-    void print(char ch);
+    #ifdef CXX_U8CHAR_SUPPORTED
+        func print(u8char u8ch) -> void;
+    #endif
 
-    void print(wchar wch);
+        func print(u16char u16ch) -> void;
 
-#ifdef WCHAR_IS_BUILTIN_TYPE
-    void print(ushort wch);
-#endif
+        func print(u32char u32ch) -> void;
 
-#ifdef CXX_U8CHAR_SUPPORTED
-    void print(u8char u8ch);
-#endif
+        func print(bool boolean) -> void;
 
-#ifdef CXX_11_OR_LATER
-    void print(u16char u16ch);
+        func print(int8 i8) -> void;
 
-    void print(u32char u32ch);
-#endif
+        func print(uint8 wch) -> void;
 
-    void print(int8 i8);
+        func print(int16 i16) -> void;
 
-    void print(int16 i16);
+        func print(uint16 i16) -> void;
 
-    void print(int32 i32);
+        func print(int32 i32) -> void;
 
-    void print(int64 i64);
+        func print(uint32 i16) -> void;
 
-    void print(float32 i32);
+        func print(int64 i64) -> void;
 
-    void print(float64 i64);
+        func print(uint64 i16) -> void;
 
-    void print(const String& message);
+        func print(float32 i32) -> void;
 
-    void close() const override;
+        func print(float64 i64) -> void;
 
-    void flush() const override;
-};
+        func print(const String& message) -> void;
 
-NAMESPACE_L3_END
+        func close() const -> void override;
 
-#endif
+        func flush() const -> void override;
+    };
+}

@@ -19,12 +19,6 @@
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, collections)
-
-struct RandomAccess {};
-
-NAMESPACE_L3_END
-
-#endif
+namespace enhanced::core::collections {
+    struct RandomAccess {};
+}

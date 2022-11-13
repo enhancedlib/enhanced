@@ -16,18 +16,19 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/String.h>
 
-EXTERN_C_START
-
-ENHANCED_CORE_API void assertionFailedImpl(const char* message, const char* file, uint line);
+namespace enhanced::core {
+    $(NoReturn)
+    ENHANCED_CORE_API func assertionFailedImpl(const String& message, const String& file, sizetype line) -> void;
+}
 
 #ifdef assert
 #undef assert
 #endif
 
-#define DYNAMIC_ASSERT(expression) ((expression) || (assertionFailedImpl(#expression, __FILE__, __LINE__), 0))
+#define DYNAMIC_ASSERT(expression) ((expression) || (enhanced::core::assertionFailedImpl(#expression, __FILE__, __LINE__), 0))
 
 #define dynamic_assert DYNAMIC_ASSERT
 
@@ -36,5 +37,3 @@ ENHANCED_CORE_API void assertionFailedImpl(const char* message, const char* file
 #else
 #define assert(expression) (void) 0
 #endif
-
-EXTERN_C_END

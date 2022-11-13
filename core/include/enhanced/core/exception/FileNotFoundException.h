@@ -16,21 +16,12 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/exception/IOException.h>
 
-ENHANCED_CORE_API extern const CExceptionType CFileNotFoundException;
-
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, exception)
-
-class ENHANCED_CORE_API FileNotFoundException : public IOException {
-public:
-    explicit FileNotFoundException(const String& name) noexcept;
-};
-
-NAMESPACE_L3_END
-
-#endif
+namespace enhanced::core::exception {
+    class ENHANCED_CORE_API FileNotFoundException : public IOException {
+    public:
+        explicit FileNotFoundException(const String& name) noexcept;
+    };
+}

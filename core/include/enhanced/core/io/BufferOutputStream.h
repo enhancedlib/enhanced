@@ -16,20 +16,13 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/io/OutputStream.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::io {
+    class ENHANCED_CORE_API BufferOutputStream : public OutputStream {
+    public:
+        func write(byte ch) const -> void override;
 
-NAMESPACE_L3_BEGIN(enhanced, core, io)
-
-class ENHANCED_CORE_API BufferOutputStream : public OutputStream {
-public:
-    void write(byte ch) const override;
-
-    void write(byte* buffer, sizetype size) const override;
-};
-
-NAMESPACE_L3_END
-
-#endif
+        func write(byte* buffer, sizetype size) const -> void override;
+    };
+}

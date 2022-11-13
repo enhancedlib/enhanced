@@ -16,62 +16,55 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/collections/ArrayList.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::math {
+    class ENHANCED_CORE_API LargeInteger {
+    private:
+        collections::ArrayList<byte> storage;
 
-NAMESPACE_L3_BEGIN(enhanced, core, math)
+        bool isNegative;
 
-class ENHANCED_CORE_API LargeInteger {
-private:
-    collections::ArrayList<byte> storage;
+        sizetype length;
 
-    bool isNegative;
+        LargeInteger(uint64 number);
 
-    sizetype length;
+    public:
+        template <typename NumberType>
+        static func from(NumberType number) -> LargeInteger;
 
-    LargeInteger(uint64 number);
+        LargeInteger(const enhanced::core::String& number);
 
-public:
-    template <typename NumberType>
-    static LargeInteger from(NumberType number);
+        func operator+(LargeInteger& number) const -> LargeInteger;
 
-    LargeInteger(const enhanced::core::String& number);
+        func operator-(LargeInteger& number) const -> LargeInteger;
 
-    LargeInteger operator+(LargeInteger& number) const;
+        func operator*(LargeInteger& number) const -> LargeInteger;
 
-    LargeInteger operator-(LargeInteger& number) const;
+        func operator/(LargeInteger& number) const -> LargeInteger;
 
-    LargeInteger operator*(LargeInteger& number) const;
+        func operator%(LargeInteger& number) const -> LargeInteger;
 
-    LargeInteger operator/(LargeInteger& number) const;
+        func add(LargeInteger& number) -> LargeInteger&;
 
-    LargeInteger operator%(LargeInteger& number) const;
+        func sub(LargeInteger& number) -> LargeInteger&;
 
-    LargeInteger& add(LargeInteger& number);
+        func mul(LargeInteger& number) -> LargeInteger&;
 
-    LargeInteger& sub(LargeInteger& number);
+        func div(LargeInteger& number) -> LargeInteger&;
 
-    LargeInteger& mul(LargeInteger& number);
+        func mod(LargeInteger& number) -> LargeInteger&;
 
-    LargeInteger& div(LargeInteger& number);
+        func operator+=(LargeInteger& number) -> LargeInteger&;
 
-    LargeInteger& mod(LargeInteger& number);
+        func operator-=(LargeInteger& number) -> LargeInteger&;
 
-    LargeInteger& operator+=(LargeInteger& number);
+        func operator*=(LargeInteger& number) -> LargeInteger&;
 
-    LargeInteger& operator-=(LargeInteger& number);
+        func operator/=(LargeInteger& number) -> LargeInteger&;
 
-    LargeInteger& operator*=(LargeInteger& number);
-
-    LargeInteger& operator/=(LargeInteger& number);
-
-    LargeInteger& operator%=(LargeInteger& number);
-};
-
-NAMESPACE_L3_END
-
-#endif
+        func operator%=(LargeInteger& number) -> LargeInteger&;
+    };
+}

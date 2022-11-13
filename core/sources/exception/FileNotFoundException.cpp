@@ -16,10 +16,9 @@
 #include <enhanced/core/exception/FileNotFoundException.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/String.h>
-#include <enhanced/core/MutableString.h>
+#include <enhanced/core/MutString.h>
 
 using enhanced::core::exception::FileNotFoundException;
 

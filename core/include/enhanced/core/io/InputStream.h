@@ -16,27 +16,21 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/MutableString.h>
+#include <enhanced/core/MutString.h>
 #include <enhanced/core/io/Closeable.h>
 #include <enhanced/core/io/Flushable.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::io {
+    abstractclass ENHANCED_CORE_API InputStream : public Closeable, Flushable {
+    public:
+        $(NoIgnoreReturn)
+        virtual func get() const -> byte;
 
-NAMESPACE_L3_BEGIN(enhanced, core, io)
+        virtual func read(byte* buffer, sizetype size) const -> void;
 
-struct AbstractClass ENHANCED_CORE_API InputStream : public Closeable, Flushable {
-    NoIgnoreRet
-    virtual byte get() const;
-
-    virtual void read(byte* buffer, sizetype size) const;
-
-    NoIgnoreRet
-    virtual MutableString readLine() const;
-};
-
-NAMESPACE_L3_END
-
-#endif
+        $(NoIgnoreReturn)
+        virtual func readLine() const -> MutString;
+    };
+}

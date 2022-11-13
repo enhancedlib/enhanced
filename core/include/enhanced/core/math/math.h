@@ -16,16 +16,8 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, math)
-
-template <typename NumberType>
-ENHANCED_CORE_API NumberType abs(NumberType number);
-
-NAMESPACE_L3_END
-
-#endif
+namespace enhanced::core::math {
+    ENHANCED_CORE_API func abs(int64 number) -> uint64;
+}

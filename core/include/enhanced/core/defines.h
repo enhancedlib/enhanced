@@ -15,6 +15,10 @@
 
 #pragma once
 
+#ifndef __cplusplus
+#error Please use the C++ language
+#endif
+
 // Detect current using which compiler to compile
 #ifdef __clang__ // Clang
 #define COMPILER_CLANG __clang__
@@ -89,19 +93,12 @@
 #endif
 
 // Detect the current language and its standard
-#ifdef __cplusplus // C++ language
-#ifdef COMPILER_MSVC
-#define CXX_LANGUAGE _MSVC_LANG
-#else
+#ifndef COMPILER_MSVC
 #define CXX_LANGUAGE __cplusplus
+#else
+#define CXX_LANGUAGE _MSVC_LANG
 #endif
 
-#if CXX_LANGUAGE >= 199711L // C++98 or more
-#define CXX_98_OR_LATER
-#if CXX_LANGUAGE >= 201103L // C++11 or more
-#define CXX_11_OR_LATER
-#if CXX_LANGUAGE >= 201402L // C++14 or more
-#define CXX_14_OR_LATER
 #if CXX_LANGUAGE >= 201703L // C++17 or more
 #define CXX_17_OR_LATER
 #if CXX_LANGUAGE >= 202002L // C++20 or more
@@ -114,66 +111,23 @@
 #else // C++17
 #define CXX_17
 #endif
-#else // C++14
-#define CXX_14
-#endif
-#else // C++11
-#define CXX_11
-#endif
-#else // C++98
-#define CXX_98
-#endif
 #else // Unknown
-#error Unknown C++ standard
+#error Unsupported C++ standard, please use least C++17 standard.
 #endif
 
-#else // C language
-
-#if defined(COMPILER_MSVC) && !defined(__STDC_VERSION__)
-#define C_LANGUAGE 199409L
-#else
-#define C_LANGUAGE __STDC_VERSION__
-#endif
-
-#if C_LANGUAGE >= 199409L // C89 or more
-#define C_89_OR_LATER
-#if C_LANGUAGE >= 199901L // C99 or more
-#define C_99_OR_LATER
-#if C_LANGUAGE >= 201112L // C11 or more
-#define C_11_OR_LATER
-#if C_LANGUAGE >= 201710L // C17 or more
-#define C_17_OR_LATER
-#if C_LANGUAGE == 201710L // C17
-#define C_17
-#endif
-#else // C11
-#define C_11
-#endif
-#else // C99
-#define C_99
-#endif
-#else // C89
-#define C_89
-#endif
-#else // Unknown
-#error Unknown C standard
-#endif
-
+#if defined(ENHANCED_BUILDING) && !defined(CXX_20_OR_LATER)
+#error To build this software, please use the C++20 standard or later.
 #endif
 
 #if (defined(_DEBUG) || defined(DBG)) && !defined(NDEBUG) && !defined(DEBUG)
 #define DEBUG
 #endif
 
-#ifdef WINDOWS_OS
-#define SAL_SUPPORTED
-#endif
-
 #if defined(__CHAR_UNSIGNED__) || (defined(COMPILER_MSVC) && defined(_CHAR_UNSIGNED))
 #define CHAR_IS_UNSIGNED
 #endif
 
-#if (defined(COMPILER_MSVC) && defined(_NATIVE_WCHAR_T_DEFINED)) || (!defined(COMPILER_MSVC) && defined(CXX_LANGUAGE))
+#if !defined(COMPILER_MSVC) || defined(_NATIVE_WCHAR_T_DEFINED)
 #define WCHAR_IS_BUILTIN_TYPE
 #endif
 
@@ -183,98 +137,34 @@
 #define WCHAR_EQUALS_INT32
 #endif
 
-#ifdef CXX_LANGUAGE
 #ifdef __cpp_char8_t
 #define CXX_U8CHAR_SUPPORTED
-#endif
-
-#ifndef CXX_11_OR_LATER
-#define noexcept throw()
-#define constexpr const
-#define final
-#define override
-
-#define NOEXCEPT_EXT(condition)
-#define DEFAULT_CONS {}
-#define DEFAULT_DEST {}
-#else
-#define NOEXCEPT_EXT(condition) noexcept(condition)
-#define DEFAULT_CONS = default
-#define DEFAULT_DEST = default
-#endif
-
-#ifndef CXX_17_OR_LATER
-
-#define INLINE_VAR
-
-#define NAMESPACE_L1_BEGIN(level1) namespace level1 {
-#define NAMESPACE_L1_END }
-
-#define NAMESPACE_L2_BEGIN(level1, level2) namespace level1 { namespace level2 {
-#define NAMESPACE_L2_END } }
-
-#define NAMESPACE_L3_BEGIN(level1, level2, level3) namespace level1 { namespace level2 { namespace level3 {
-#define NAMESPACE_L3_END } } }
-
-#define NAMESPACE_L4_BEGIN(level1, level2, level3, level4) namespace level1 { namespace level2 { namespace level3 { namespace level4 {
-#define NAMESPACE_L4_END } } } }
-
-#define NAMESPACE_L5_BEGIN(level1, level2, level3, level4, level5) namespace level1 { namespace level2 { namespace level3 { namespace level4 { \
-                                                                   namespace level5 {
-#define NAMESPACE_L5_END } } } } }
-
-#else
-
-#define INLINE_VAR inline
-
-#define NAMESPACE_L1_BEGIN(level1) namespace level1 {
-#define NAMESPACE_L1_END }
-
-#define NAMESPACE_L2_BEGIN(level1, level2) namespace level1::level2 {
-#define NAMESPACE_L2_END }
-
-#define NAMESPACE_L3_BEGIN(level1, level2, level3) namespace level1::level2::level3 {
-#define NAMESPACE_L3_END }
-
-#define NAMESPACE_L4_BEGIN(level1, level2, level3, level4) namespace level1::level2::level3::level4 {
-#define NAMESPACE_L4_END }
-
-#define NAMESPACE_L5_BEGIN(level1, level2, level3, level4, level5) namespace level1::level2::level3::level4::level5 {
-#define NAMESPACE_L5_END }
-
-#endif
-
-#ifndef CXX_20_OR_LATER
-#define consteval constexpr
 #endif
 
 #define EXTERN_C extern "C"
 #define EXTERN_C_START EXTERN_C {
 #define EXTERN_C_END }
 
-#else
-
-#define EXTERN_C extern
-#define EXTERN_C_START
-#define EXTERN_C_END
-
-#endif
-
+#define CURRENT_FUNC __func__
 #define CURRENT_FILE __FILE__
 #define CURRENT_LINE __LINE__
-#if defined(C_99_OR_LATER) || defined(CXX_11_OR_LATER)
-#define CURRENT_FUNC __func__
-#else
-#define CURRENT_FUNC __FUNCTION__
-#endif
-
 #define COMPILING_DATE __DATE__
 #define COMPILING_TIME __TIME__
 
-#ifdef ENHANCED_BUILDING
-#if defined(CXX_LANGUAGE) && !defined(CXX_20_OR_LATER)
-#error To build this software, please use the C++ 20 standard or later.
-#elif defined(C_LANGUAGE) && !defined(C_17_OR_LATER)
-#error To build this software, please use the C 17 standard or later.
+#define scopedenum enum class
+#define abstractclass class
+#define interface struct
+#define func auto
+#define let auto
+#define val const auto
+#define abstract 0
+
+#if defined(WINDOWS_OS) && defined(ENHANCED_CORE_SHARED_LIB)
+#ifdef ENHANCED_CORE_BUILDING
+#define ENHANCED_CORE_API __declspec(dllexport)
+#else
+#define ENHANCED_CORE_API __declspec(dllimport)
 #endif
+#else
+#define ENHANCED_CORE_API
 #endif

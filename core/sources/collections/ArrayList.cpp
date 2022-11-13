@@ -21,10 +21,12 @@
 #include <enhanced/core/array.h>
 #include <enhanced/core/assert.h>
 #include <enhanced/core/memory.h>
-#include <enhanced/core/generic.h>
+#include <enhanced/core/exception/IndexOutOfBoundsException.h>
 #include <enhanced/core/exception/UnsupportedOperationException.h>
 
 using enhanced_internal::core::collections::ArrayListImpl;
+using enhanced::core::arrayCopy;
+using enhanced::core::exception::IndexOutOfBoundsException;
 using enhanced::core::exception::UnsupportedOperationException;
 
 ArrayListImpl::ArrayListImpl(const sizetype capacity, const GenericOperator genericOperator) :
@@ -34,7 +36,7 @@ ArrayListImpl::ArrayListImpl(const ArrayListImpl& other) : elements(new void*[ot
     capacity(other.capacity), genericOperator(other.genericOperator) {
     assert(other.capacity >= other.size);
     for (sizetype index = 0; index < other.size; ++index) {
-        elements[index] = genericOperator.allocate(GET_GENERIC_VALUE(other.elements[index]));
+        elements[index] = genericOperator.allocate(other.elements[index]);
     }
 }
 
@@ -45,25 +47,17 @@ ArrayListImpl::~ArrayListImpl() noexcept {
     delete[] elements;
 }
 
-NoIgnoreRet
-sizetype ArrayListImpl::getSize0() const {
-    return size;
+$(NoIgnoreReturn)
+func ArrayListImpl::get0(sizetype index) const -> void* {
+    if (index >= size) throw IndexOutOfBoundsException(index, size);
+
+    return elements[index];
 }
 
-NoIgnoreRet
-bool ArrayListImpl::isEmpty0() const {
-    return size == 0;
-}
-
-NoIgnoreRet
-Generic& ArrayListImpl::get0(sizetype index) const {
-    return GET_GENERIC_VALUE(elements[index]);
-}
-
-NoIgnoreRet
-bool ArrayListImpl::contain0(Generic& value) const {
+$(NoIgnoreReturn)
+func ArrayListImpl::contain0(void* value) const -> bool {
     for (sizetype index = 0; index < size; ++index) {
-        if (genericOperator.equals(GET_GENERIC_VALUE(elements[index]), value)) {
+        if (genericOperator.equals(elements[index], value)) {
             return true;
         }
     }
@@ -71,7 +65,7 @@ bool ArrayListImpl::contain0(Generic& value) const {
     return false;
 }
 
-void ArrayListImpl::add0(Generic& element) {
+func ArrayListImpl::add0(void* element) -> void {
     if (size == capacity) {
         expand0(capacity);
     }
@@ -80,34 +74,34 @@ void ArrayListImpl::add0(Generic& element) {
     ++size;
 }
 
-void ArrayListImpl::remove0() {
-    if (isEmpty0()) throw UnsupportedOperationException("The list is empty");
+func ArrayListImpl::remove0() -> void {
+    if (size == 0) throw UnsupportedOperationException("The list is empty");
 
     genericOperator.destroy(elements[--size]);
 }
 
-void ArrayListImpl::expand0(const sizetype size) {
-    sizetype count = capacity + size;
-    void** array = new void*[count];
+func ArrayListImpl::expand0(const sizetype expSize) -> void {
+    sizetype newCapacity = capacity + expSize;
+    void** array = new void*[newCapacity];
 
     arrayCopy(array, elements, size, sizeof(void*));
     delete[] elements;
 
     elements = array;
-    capacity = count;
+    capacity = newCapacity;
 }
 
-void ArrayListImpl::shrink0(const sizetype size) {
-    sizetype count = capacity - size;
-    if (count < size) throw UnsupportedOperationException("Cannot shrink because the size is larger than the new capacity");
+func ArrayListImpl::shrink0(const sizetype shrSize) -> void {
+    sizetype newCapacity = capacity - shrSize;
+    if (newCapacity < size) throw UnsupportedOperationException("Cannot shrink because the size is larger than the new capacity");
 
-    void** array = new void*[count];
+    void** array = new void*[newCapacity];
 
-    arrayCopy(array, elements, count, sizeof(void*));
+    arrayCopy(array, elements, size, sizeof(void*));
     delete[] elements;
 
     elements = array;
-    capacity = count;
+    capacity = newCapacity;
 }
 
 ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList) :
@@ -115,25 +109,24 @@ ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl*
 
 ArrayListImpl::ArrayListIteratorImpl::~ArrayListIteratorImpl() noexcept = default;
 
-NoIgnoreRet
-bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
-    return indexer != (arrayList->elements + arrayList->getSize0());
+$(NoIgnoreReturn)
+func ArrayListImpl::ArrayListIteratorImpl::hasNext0() const -> bool {
+    return indexer != (arrayList->elements + arrayList->size);
 }
 
-void ArrayListImpl::ArrayListIteratorImpl::next0() const {
+func ArrayListImpl::ArrayListIteratorImpl::next0() const -> void {
+    if (!hasNext0()) throw UnsupportedOperationException("The iterator is at the end of the list");
+
     ++indexer;
 }
 
-NoIgnoreRet
-Generic& ArrayListImpl::ArrayListIteratorImpl::get0() const {
-    return GET_GENERIC_VALUE(*indexer);
+$(NoIgnoreReturn)
+func ArrayListImpl::ArrayListIteratorImpl::get0() const -> void* {
+    if (arrayList->size == 0) throw UnsupportedOperationException("The list is empty");
+
+    return *indexer;
 }
 
-void ArrayListImpl::ArrayListIteratorImpl::reset0() const {
+func ArrayListImpl::ArrayListIteratorImpl::reset0() const -> void {
     indexer = arrayList->elements;
-}
-
-NoIgnoreRet
-sizetype ArrayListImpl::ArrayListIteratorImpl::count0() const {
-    return arrayList->getSize0();
 }

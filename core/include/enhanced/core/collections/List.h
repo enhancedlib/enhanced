@@ -20,24 +20,15 @@
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/collections/Collection.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::collections {
+    template <typename Type>
+    interface List : Collection<Type> {
+        virtual func get(sizetype index) const -> Type& = abstract;
 
-NAMESPACE_L3_BEGIN(enhanced, core, collections)
+        virtual func operator[](sizetype index) const -> Type& = abstract;
 
-template <typename Type>
-struct AbstractClass List : Collection<Type> {
-    virtual Type& get(sizetype index) const = 0;
+        virtual func add(const Type& element) -> void = abstract;
 
-    virtual Type& operator[](sizetype index) const = 0;
-
-    RetRequiresRelease
-    virtual List<Type>* copy() const = 0;
-
-    virtual void add(const Type& element) = 0;
-
-    virtual Type remove() = 0;
-};
-
-NAMESPACE_L3_END
-
-#endif
+        virtual func remove() -> Type = abstract;
+    };
+}

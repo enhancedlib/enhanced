@@ -16,22 +16,15 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/io/WarpedInputStream.h>
 #include <enhanced/core/io/WarpedOutputStream.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::io {
+    ENHANCED_CORE_API extern WarpedInputStream* const& instream;
+    ENHANCED_CORE_API extern WarpedOutputStream* const& outstream;
+    ENHANCED_CORE_API extern WarpedOutputStream* const& errstream;
 
-NAMESPACE_L3_BEGIN(enhanced, core, io)
-
-ENHANCED_CORE_API extern WarpedInputStream* const& instream;
-ENHANCED_CORE_API extern WarpedOutputStream* const& outstream;
-ENHANCED_CORE_API extern WarpedOutputStream* const& errstream;
-
-ENHANCED_CORE_API void setIn(WarpedInputStream* in);
-ENHANCED_CORE_API void setOut(WarpedOutputStream* out);
-ENHANCED_CORE_API void setErr(WarpedOutputStream* err);
-
-NAMESPACE_L3_END
-
-#endif
+    ENHANCED_CORE_API func setIn(WarpedInputStream* in) -> void;
+    ENHANCED_CORE_API func setOut(WarpedOutputStream* out) -> void;
+    ENHANCED_CORE_API func setErr(WarpedOutputStream* err) -> void;
+}

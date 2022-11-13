@@ -16,16 +16,11 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, io)
-
-struct AbstractClass Flushable {
-    virtual void flush() const = 0;
-};
-
-NAMESPACE_L3_END
-
-#endif
+namespace enhanced::core::io {
+    interface Flushable {
+        virtual func flush() const -> void = abstract;
+    };
+}

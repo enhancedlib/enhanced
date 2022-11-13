@@ -20,16 +20,10 @@
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/collections/Deque.h>
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, collections)
-
-template <typename Type>
-class ArrayDeque : public Deque<Type> {
-public:
-    // TODO
-};
-
-NAMESPACE_L3_END
-
-#endif
+namespace enhanced::core::collections {
+    template <typename Type>
+    class ArrayDeque : public Deque<Type> {
+    public:
+        // TODO
+    };
+}

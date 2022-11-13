@@ -18,14 +18,16 @@
 #include <enhanced/core/exception/Exception.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/annotations.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/io/iostream.h>
 #include <enhanced/core/exception/NotImplementedError.h>
+#include <enhanced/core/util/traits.h>
 
 using enhanced::core::exception::Exception;
 using enhanced::core::String;
+using enhanced::core::util::traits::move;
 using enhanced::core::io::errstream;
 
 using TerminateHandler = void(*)();
@@ -36,7 +38,7 @@ static void terminateHandler() {
     } catch (const Exception& exception) {
         errstream->print(exception.getTraceback());
     } catch (const std::exception& exception) {
-        errstream->print(exception.what());
+        errstream->print(String::from(exception.what()));
     } catch (...) {}
 }
 
@@ -47,11 +49,11 @@ static TerminateHandler setupTerminateHandler() noexcept {
 
 const TerminateHandler terminateHandlerFunc = setupTerminateHandler();
 
-Exception::Exception(const String& message) noexcept : message((String&&) message), cause(null) {}
+Exception::Exception(const String& message) noexcept : message(move(message)), cause(null) {}
 
 Exception::Exception(const Exception* cause) noexcept : message(""), cause(cause) {}
 
-Exception::Exception(const String& message, const Exception* cause) noexcept : message((String&&) message), cause(cause) {}
+Exception::Exception(const String& message, const Exception* cause) noexcept : message(move(message)), cause(cause) {}
 
 Exception::~Exception() noexcept = default;
 

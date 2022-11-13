@@ -17,103 +17,68 @@
 
 #include <enhanced/core/defines.h>
 
-typedef signed char schar;
+using llong = long long;
+using ldouble = long double;
 
-typedef long long llong;
+using schar = signed char;
 
-typedef long double ldouble;
+using uchar = unsigned char;
+using ushort = unsigned short;
+using uint = unsigned int;
+using ulong = unsigned long;
+using ullong = unsigned long long;
 
-typedef unsigned char uchar;
-typedef unsigned short ushort;
-typedef unsigned int uint;
-typedef unsigned long ulong;
-typedef unsigned long long ullong;
-
-typedef schar int8;
-typedef short int16;
-typedef int int32;
+using int8 = schar;
+using int16 = short;
+using int32 = int;
 #if defined(WINDOWS_OS) || defined(ARCH_X86) || defined(ARCH_ARM32)
-typedef llong int64;
+using int64 = llong;
 #else
-typedef long int64;
+using int64 = long;
 #endif
 
-typedef uchar uint8;
-typedef ushort uint16;
-typedef uint uint32;
+using uint8 = uchar;
+using uint16 = ushort;
+using uint32 = uint;
 #if defined(WINDOWS_OS) || defined(ARCH_X86) || defined(ARCH_ARM32)
-typedef ullong uint64;
+using uint64 = ullong;
 #else
-typedef ulong uint64;
+using uint64 = ulong;
 #endif
 
-typedef float float32;
-typedef double float64;
+using float32 = float;
+using float64 = double;
 
 // The name "sizetype" is used instead of "size" because "size" is often used as a variable/function name.
 #if defined(ARCH_X86) || defined(ARCH_ARM32)
-typedef uint32 sizetype;
+using sizetype = uint32;
 #else
-typedef uint64 sizetype;
+using sizetype = uint64;
 #endif
 
-typedef uint8 byte;
-typedef uint16 word;
-typedef uint32 dword;
-typedef uint64 qword;
+using byte = uint8;
+using word = uint16;
+using dword = uint32;
+using qword = uint64;
 
-#ifdef CXX_LANGUAGE
 #ifdef CXX_U8CHAR_SUPPORTED
-typedef char8_t u8char;
+using u8char = char8_t;
 #endif
-#ifdef CXX_11_OR_LATER
-typedef char16_t u16char;
-typedef char32_t u32char;
-#endif
-#endif
+using u16char = char16_t;
+using u32char = char32_t;
 
 #ifdef WCHAR_IS_BUILTIN_TYPE
-typedef wchar_t wchar;
+using wchar = wchar_t;
 #else
 #ifdef WCHAR_EQUALS_UINT16
-typedef uint16 wchar;
+using wchar = uint16;
 #else
-typedef uint32 wchar;
+using wchar = int32;
 #endif
 #endif
 
-#ifdef C_LANGUAGE
-#ifdef C_99_OR_LATER
-typedef _Bool bool;
-#else
-typedef uint8 bool;
-#endif
-
-#ifdef false
-#undef false
-#endif
-#ifdef true
-#undef true
-#endif
-
-#define false ((bool) 0)
-#define true ((bool) 1)
-#endif
-
-#ifdef CXX_LANGUAGE
-#ifdef CXX_11_OR_LATER
 #define null nullptr
-typedef decltype(null) NullType;
-#else
-#if defined(WINDOWS_OS) && defined(ARCH_X64)
-#define null 0LL
-#else
-#define null 0
-#endif
-#endif
-#else
-#define null ((void*) 0)
-#endif
+using nulltype = decltype(null);
 
 #ifdef INT8_MIN
 #undef INT8_MIN
@@ -439,7 +404,6 @@ typedef decltype(null) NullType;
 #endif
 
 #ifdef COMPILER_MSVC
-// Microsoft Visual C++ compiler isn't supported division by 0.0.
 #define POSITIVE_INFINITY ((double) (1e+300 * 1e+300))
 #define NEGATIVE_INFINITY (-POSITIVE_INFINITY)
 #define INFINITY POSITIVE_INFINITY

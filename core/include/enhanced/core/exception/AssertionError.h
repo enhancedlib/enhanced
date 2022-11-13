@@ -13,14 +13,16 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <process.h>
+#pragma once
 
-#include <enhanced/core/process.h>
+#include <enhanced/core/defines.h>
+#include <enhanced/core/types.h>
+#include <enhanced/core/String.h>
+#include <enhanced/core/exception/Error.h>
 
-void processExit(int status) {
-    exit(status);
-}
-
-void processAbort() {
-    abort();
+namespace enhanced::core::exception {
+    class ENHANCED_CORE_API AssertionError : public Error {
+    public:
+        AssertionError(const String& message) noexcept;
+    };
 }

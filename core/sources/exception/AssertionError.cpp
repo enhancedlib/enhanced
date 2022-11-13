@@ -13,23 +13,11 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <enhanced/core/exception/AssertionError.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
-#include <enhanced/core/collections/Collection.h>
-#include <enhanced/core/collections/List.h>
+#include <enhanced/core/exception/Error.h>
 
-#ifdef CXX_LANGUAGE
+using enhanced::core::exception::AssertionError;
+using enhanced::core::exception::Error;
 
-NAMESPACE_L4_BEGIN(enhanced, core, collections, refer)
-
-template <typename Type>
-struct AbstractClass ReferList : List<Type> {
-    virtual ReferList<Type>* copy() const = 0;
-};
-
-NAMESPACE_L4_END
-
-#endif
+AssertionError::AssertionError(const String& message) noexcept : Error(message) {}

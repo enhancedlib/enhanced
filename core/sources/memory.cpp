@@ -13,6 +13,8 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
+#include <malloc.h>
+
 #include <enhanced/core/memory.h>
 
 #include <enhanced/core/defines.h>
@@ -23,7 +25,44 @@ using enhanced::core::memoryAlloc;
 using enhanced::core::memoryFree;
 using enhanced::core::exception::MemoryAllocationError;
 
-void* operator new(sizetype size) {
+namespace enhanced::core {
+    $(MustInspectResult RetNullable RetRequiresRelease)
+    func memoryAlloc(sizetype size) -> void* {
+        if (size == 0) return null;
+
+        return malloc(size);
+    }
+
+    func memoryFree(void* pointer) -> void {
+        free(pointer);
+    }
+
+    func memorySet(void* ptr, byte aByte, sizetype size) -> void {
+        if (ptr == null || size == 0) return;
+
+        for (sizetype index = 0; index < size; ++index) {
+            ((byte*) ptr)[index] = aByte;
+        }
+    }
+
+    func memoryCopy(void* destination, const void* source, sizetype size) -> void {
+        if (destination == null || source == null || size == 0) return;
+
+        sizetype countBlock = size / sizeof(qword);
+        sizetype countByte = size % sizeof(qword);
+
+        for (sizetype index = 0; index < countBlock; ++index) {
+            ((qword*) destination)[index] = ((qword*) source)[index];
+        }
+
+        for (sizetype index = size - countByte; index < size; ++index) {
+            ((byte*) destination)[index] = ((byte*) source)[index];
+        }
+    }
+}
+
+$(RetRequiresRelease)
+func operator new(sizetype size) -> void* {
     void* space = memoryAlloc(size);
     if (space == null) {
         throw MemoryAllocationError("Cannot allocate memory");
@@ -31,14 +70,15 @@ void* operator new(sizetype size) {
     return space;
 }
 
-void operator delete(void* pointer) noexcept {
+func operator delete(void* pointer) noexcept -> void {
     memoryFree(pointer);
 }
 
-void* operator new[](sizetype size) {
+$(RetRequiresRelease)
+func operator new[](sizetype size) -> void* {
     return operator new(size);
 }
 
-void operator delete[](void* pointer) noexcept {
+func operator delete[](void* pointer) noexcept -> void {
     operator delete(pointer);
 }

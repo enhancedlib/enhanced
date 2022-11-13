@@ -13,16 +13,19 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <stdio.h>
+
+#include <enhanced/core/assert.h>
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/types.h>
+#include <enhanced/core/process.h>
+#include <enhanced/core/String.h>
 
-#if defined(WINDOWS_OS) && defined(ENHANCED_CORE_SHARED_LIB)
-#ifdef ENHANCED_CORE_BUILDING
-#define ENHANCED_CORE_API __declspec(dllexport)
-#else
-#define ENHANCED_CORE_API __declspec(dllimport)
-#endif
-#else
-#define ENHANCED_CORE_API
-#endif
+namespace enhanced::core {
+    $(NoReturn)
+    func assertionFailedImpl(const String& message, const String& file, sizetype line) -> void {
+        fprintf(stderr, "Failed to assert: %s, file \"%s\", line %llu", message.getChars(), file.getChars(), line);
+        processAbort();
+    }
+}

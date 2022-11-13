@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * Licensed under the Enhanced Software License, latest version.
+ * Licensed under the Enhanced Software License.
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,112 +16,158 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/annotations.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/CharSequence.h>
 #include <enhanced/core/InitializerList.h>
+#include <enhanced/core/util/traits.h>
 #include <enhanced/core/collections/ArrayList.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core {
+    template <typename CharType>
+    class TMutString;
 
-NAMESPACE_L2_BEGIN(enhanced, core)
+    template <typename CharType>
+    class ENHANCED_CORE_API TString : public CharSequence<CharType> {
+    protected:
+        TString(CharType* value, sizetype length) noexcept;
 
-template <typename CharType>
-class MutableBasicString;
+    public:
+        $(RetRequiresRelease)
+        static func make(sizetype length) -> CharType*;
 
-template <typename CharType>
-class ENHANCED_CORE_API BasicString : public CharSequence<CharType> {
-protected:
-    BasicString(CharType* value, sizetype length) noexcept;
+        $(RetRequiresRelease)
+        static func copy(const CharType* source) -> CharType*;
 
-public:
-    template <sizetype count>
-    inline static MutableBasicString<CharType> join(BasicString strings[count]) {
-        return join(count, strings);
-    }
+        $(RetRequiresRelease)
+        static func copy(const CharType* source, sizetype length) -> CharType*;
 
-    static MutableBasicString<CharType> join(InitializerList<BasicString> list);
+        $(RetRequiresRelease)
+        static func copy(const CharType* source, sizetype oldLength, sizetype newLength) -> CharType*;
 
-    static MutableBasicString<CharType> join(const BasicString* strings, sizetype count);
+        $(NoIgnoreReturn)
+        static func calcLength(const CharType* string) -> sizetype;
 
-    BasicString(const CharType* value) noexcept;
+        $(NoIgnoreReturn)
+        static func isEqual(const CharType* string1, const CharType* string2) noexcept -> bool;
 
-    BasicString(CharType* value) noexcept;
+        static func from(const CharType* value) -> TString;
 
-    BasicString(const BasicString& other) noexcept;
+        template <sizetype count>
+        static inline func join(TString strings[count]) -> TMutString<CharType> {
+            return join(count, strings);
+        }
 
-    BasicString(BasicString&& other) noexcept;
+        static func join(InitializerList<TString> list) -> TMutString<CharType>;
 
-    NoIgnoreRet
-    sizetype indexOf(CharType ch) const noexcept;
+        static func join(const TString* strings, sizetype count) -> TMutString<CharType>;
 
-    NoIgnoreRet
-    sizetype indexOf(CharType ch, sizetype getN) const noexcept;
+        TString() noexcept;
 
-    NoIgnoreRet
-    sizetype indexOf(const BasicString& string) const noexcept;
+        template <sizetype size>
+        inline TString(const CharType(&value)[size]) noexcept : TString((CharType*) value, size) {}
 
-    NoIgnoreRet
-    sizetype indexOf(const BasicString& string, sizetype getN) const noexcept;
+        TString(const CharType* value);
 
-    NoIgnoreRet
-    sizetype lastIndexOf(const BasicString& string) const noexcept;
+        TString(CharType* value);
 
-    NoIgnoreRet
-    sizetype lastIndexOf(const BasicString& string, sizetype getN) const noexcept;
+        TString(const TString& other) noexcept;
 
-    NoIgnoreRet
-    sizetype lastIndexOf(CharType ch) const noexcept;
+        TString(TString&& other) noexcept;
 
-    NoIgnoreRet
-    sizetype lastIndexOf(CharType ch, sizetype getN) const noexcept;
+        $(NoIgnoreReturn)
+        func indexOf(CharType ch) const noexcept -> sizetype;
 
-    RetRequiresRelease
-    collections::ArrayList<sizetype> indexOfAll(CharType ch) const noexcept;
+        $(NoIgnoreReturn)
+        func indexOf(CharType ch, sizetype getN) const noexcept -> sizetype;
 
-    RetRequiresRelease
-    collections::ArrayList<sizetype> indexOfAll(const BasicString& string) const noexcept;
+        $(NoIgnoreReturn)
+        func indexOf(const TString& string) const noexcept -> sizetype;
 
-    NoIgnoreRet
-    MutableBasicString<CharType> replace(CharType oldChar, CharType newChar) const;
+        $(NoIgnoreReturn)
+        func indexOf(const TString& string, sizetype getN) const noexcept -> sizetype;
 
-    NoIgnoreRet
-    MutableBasicString<CharType> replace(const BasicString& oldSubstring, const BasicString& newSubstring) const;
+        $(NoIgnoreReturn)
+        func indexOfLast(const TString& string) const noexcept -> sizetype;
 
-    NoIgnoreRet
-    MutableBasicString<CharType> replace(CharType oldChar, const BasicString& newSubstring) const;
+        $(NoIgnoreReturn)
+        func indexOfLast(const TString& string, sizetype getN) const noexcept -> sizetype;
 
-    NoIgnoreRet
-    MutableBasicString<CharType> replace(const BasicString& oldSubstring, CharType newChar) const;
+        $(NoIgnoreReturn)
+        func indexOfLast(CharType ch) const noexcept -> sizetype;
 
-    NoIgnoreRet
-    MutableBasicString<CharType> uppercase() const;
+        $(NoIgnoreReturn)
+        func indexOfLast(CharType ch, sizetype getN) const noexcept -> sizetype;
 
-    NoIgnoreRet
-    MutableBasicString<CharType> lowercase() const;
+        $(RetRequiresRelease)
+        func indexOfAll(CharType ch) const noexcept -> collections::ArrayList<sizetype>;
 
-    NoIgnoreRet
-    bool operator==(const BasicString& string) const noexcept;
+        $(RetRequiresRelease)
+        func indexOfAll(const TString& string) const noexcept -> collections::ArrayList<sizetype>;
 
-    NoIgnoreRet
-    MutableBasicString<CharType> operator+(const BasicString& string) const;
+        $(NoIgnoreReturn)
+        func replace(sizetype start, sizetype end, CharType newChar) const -> TMutString<CharType>;
 
-    BasicString& operator=(const BasicString& other) noexcept;
+        $(NoIgnoreReturn)
+        func replace(sizetype start, sizetype end, const TString& newSubstring) const -> TMutString<CharType>;
 
-    BasicString& operator=(BasicString&& other) noexcept;
-};
+        $(NoIgnoreReturn)
+        func replace(CharType oldChar, CharType newChar) const -> TMutString<CharType>;
 
-using String = BasicString<char>;
-using WideString = BasicString<wchar>;
+        $(NoIgnoreReturn)
+        func replace(const TString& oldSubstring, const TString& newSubstring) const -> TMutString<CharType>;
+
+        $(NoIgnoreReturn)
+        func replace(CharType oldChar, const TString& newSubstring) const -> TMutString<CharType>;
+
+        $(NoIgnoreReturn)
+        func replace(const TString& oldSubstring, CharType newChar) const -> TMutString<CharType>;
+
+        $(NoIgnoreReturn)
+        func replaceAll(CharType oldChar, CharType newChar) const -> TMutString<CharType>;;
+
+        $(NoIgnoreReturn)
+        func replaceAll(const TString& oldSubstring, const TString& newSubstring) const -> TMutString<CharType>;;
+
+        $(NoIgnoreReturn)
+        func replaceAll(CharType oldChar, const TString& newSubstring) const -> TMutString<CharType>;;
+
+        $(NoIgnoreReturn)
+        func replaceAll(const TString& oldSubstring, CharType newChar) const -> TMutString<CharType>;;
+
+        $(NoIgnoreReturn)
+        func uppercase() const -> TMutString<CharType>;;
+
+        $(NoIgnoreReturn)
+        func lowercase() const -> TMutString<CharType>;;
+
+        $(NoIgnoreReturn)
+        func operator==(const TString& string) const noexcept -> bool;
+
+        $(NoIgnoreReturn)
+        func operator==(const CharType* string) const noexcept -> bool;
+
+        $(NoIgnoreReturn)
+        func operator+(const TString& string) const -> TMutString<CharType>;;
+
+        func operator=(const TString& other) noexcept -> TString&;
+
+        func operator=(TString&& other) noexcept -> TString&;
+    };
+
+    using String = TString<char>;
+    using WideString = TString<wchar>;
+    #ifdef CXX_U8CHAR_SUPPORTED
+    using U8String = TString<u8char>;
+    #endif
+    using U16String = TString<u16char>;
+    using U32String = TString<u32char>;
+}
+
 #ifdef CXX_U8CHAR_SUPPORTED
-using U8String = BasicString<u8char>;
-#endif
-#ifdef CXX_11_OR_LATER
-using U16String = BasicString<u16char>;
-using U32String = BasicString<u32char>;
-#endif
-
-NAMESPACE_L2_END
-
+#define TSTRING(type, string) enhanced::core::util::traits::templateSwitch<const type(&)[sizeof(string) / sizeof(char)]> \
+    (string, WIDE_TEXT(string), U8_TEXT(string), U16_TEXT(string), U32_TEXT(string))
+#else
+#define TSTRING(type, string) enhanced::core::util::traits::templateSwitch<type><const type(&)[sizeof(string) / sizeof(char)]> \
+    (string, WIDE_TEXT(string), U16_TEXT(string), U32_TEXT(string))
 #endif

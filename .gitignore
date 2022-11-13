@@ -7,9 +7,6 @@
 # CLion configurations
 .idea/
 
-# XMake cache
-.xmake/
-
 # build folder
 build/
 

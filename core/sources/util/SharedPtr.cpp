@@ -22,46 +22,40 @@
 
 using enhanced_internal::core::util::SharedPtrImpl;
 
-SharedPtrImpl::SharedPtrImpl(void* ptr, SharedPtrImpl::GenericOperator genericOperator) :
-    referenceCount(new sizetype(1)), pointer(ptr), genericOperator(genericOperator) {}
+SharedPtrImpl::SharedPtrImpl(void* ptr, GenericOperator genericOperator) :
+    referenceCount(ptr != null ? new sizetype(1) : null), pointer(ptr), genericOperator(genericOperator) {}
 
 SharedPtrImpl::SharedPtrImpl(const SharedPtrImpl& other) noexcept :
     referenceCount(other.referenceCount), pointer(other.pointer), genericOperator(other.genericOperator) {
-    ++(*other.referenceCount);
+    if (other.referenceCount != null) ++(*other.referenceCount);
 }
 
 SharedPtrImpl::SharedPtrImpl(SharedPtrImpl&& other) noexcept :
     referenceCount(other.referenceCount), pointer(other.pointer), genericOperator(other.genericOperator) {
-    other.referenceCount = null;
     other.pointer = null;
+    other.referenceCount = null;
 }
 
 SharedPtrImpl::~SharedPtrImpl() noexcept {
     release0();
 }
 
-void SharedPtrImpl::release0() noexcept {
-    if ((--(*referenceCount)) == 0) {
+func SharedPtrImpl::release0() noexcept -> void {
+    if (referenceCount != null && (--(*referenceCount)) == 0) {
         genericOperator.destroy(pointer);
         pointer = null;
         delete referenceCount;
     }
 }
 
-void SharedPtrImpl::assign0(void* value) noexcept {
-    release0();
-    referenceCount = new sizetype(1);
-    pointer = value;
-}
-
-void SharedPtrImpl::assign0(const SharedPtrImpl& other) noexcept {
+func SharedPtrImpl::assign0(const SharedPtrImpl& other) noexcept -> void {
     release0();
     pointer = other.pointer;
     referenceCount = other.referenceCount;
     ++(*referenceCount);
 }
 
-void SharedPtrImpl::assign0(SharedPtrImpl&& other) noexcept {
+func SharedPtrImpl::assign0(SharedPtrImpl&& other) noexcept -> void {
     release0();
     pointer = other.pointer;
     referenceCount = other.referenceCount;

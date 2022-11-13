@@ -20,40 +20,31 @@
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/collections/Collection.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::collections {
+    template <typename Type>
+    interface Queue : Collection<Type> {
+        $(NoIgnoreReturn)
+        virtual func getFirst() const -> Type& = abstract;
 
-NAMESPACE_L3_BEGIN(enhanced, core, collections)
+        $(NoIgnoreReturn)
+        virtual func getLast() const -> Type& = abstract;
 
-template <typename Type>
-struct AbstractClass Queue : Collection<Type> {
-    NoIgnoreRet
-    virtual Type& getFirst() const = 0;
+        $(NoIgnoreReturn)
+        virtual func get(sizetype index) const -> Type& = abstract;
 
-    NoIgnoreRet
-    virtual Type& getLast() const = 0;
+        $(NoIgnoreReturn)
+        virtual func operator[](sizetype index) const -> Type& = abstract;
 
-    NoIgnoreRet
-    virtual Type& get(sizetype index) const = 0;
+        virtual func addLast(const Type& element) -> void = abstract;
 
-    NoIgnoreRet
-    virtual Type& operator[](sizetype index) const = 0;
+        virtual func removeFirst() -> Type = abstract;
 
-    RetRequiresRelease
-    virtual Queue<Type>* copy() const = 0;
+        virtual func add(const Type& element) -> void = abstract;
 
-    virtual void addLast(const Type& element) = 0;
+        virtual func remove() -> Type = abstract;
 
-    virtual Type removeFirst() = 0;
+        virtual func push(const Type& element) -> void = abstract;
 
-    virtual void add(const Type& element) = 0;
-
-    virtual Type remove() = 0;
-
-    virtual void push(const Type& element) = 0;
-
-    virtual Type popup() = 0;
-};
-
-NAMESPACE_L3_END
-
-#endif
+        virtual func popup() -> Type = abstract;
+    };
+}

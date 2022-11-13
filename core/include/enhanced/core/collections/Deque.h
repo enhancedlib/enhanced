@@ -20,36 +20,27 @@
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/collections/Queue.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::collections {
+    template <typename Type>
+    interface Deque : Queue<Type> {
+        virtual func getFirst() const -> Type& = abstract;
 
-NAMESPACE_L3_BEGIN(enhanced, core, collections)
+        virtual func getLast() const -> Type& = abstract;
 
-template <typename Type>
-struct AbstractClass Deque : Queue<Type> {
-    virtual Type& getFirst() const = 0;
+        virtual void addLast(const Type& element) = abstract;
 
-    virtual Type& getLast() const = 0;
+        virtual func removeLast() -> Type = abstract;
 
-    RetRequiresRelease
-    virtual Deque<Type>* copy() const = 0;
+        virtual void addFirst(const Type& element) = abstract;
 
-    virtual void addLast(const Type& element) = 0;
+        virtual func removeFirst() -> Type = abstract;
 
-    virtual Type removeLast() = 0;
+        virtual void add(const Type& element) = abstract;
 
-    virtual void addFirst(const Type& element) = 0;
+        virtual func remove() -> Type = abstract;
 
-    virtual Type removeFirst() = 0;
+        virtual void push(const Type& element) = abstract;
 
-    virtual void add(const Type& element) = 0;
-
-    virtual Type remove() = 0;
-
-    virtual void push(const Type& element) = 0;
-
-    virtual Type popup() = 0;
-};
-
-NAMESPACE_L3_END
-
-#endif
+        virtual func popup() -> Type = abstract;
+    };
+}

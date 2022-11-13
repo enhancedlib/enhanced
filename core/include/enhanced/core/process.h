@@ -16,24 +16,13 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/annotations.h>
 
-EXTERN_C_START
+namespace enhanced::core {
+    $(NoReturn)
+    ENHANCED_CORE_API func processExit(int status) -> void;
 
-ENHANCED_CORE_API void processExit(int status);
-
-ENHANCED_CORE_API void processAbort();
-
-EXTERN_C_END
-
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L2_BEGIN(enhanced, core)
-
-using ::processExit;
-using ::processAbort;
-
-NAMESPACE_L2_END
-
-#endif
+    $(NoReturn)
+    ENHANCED_CORE_API func processAbort() -> void;
+}

@@ -16,57 +16,50 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/Iterator.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core {
+    template <typename Type>
+    class ArrayIterator : public Iterator<Type> {
+    protected:
+        mutable Type* indexer;
 
-NAMESPACE_L2_BEGIN(enhanced, core)
+        const Type* end;
 
-template <typename Type>
-class ArrayIterator : public Iterator<Type> {
-protected:
-    mutable Type* indexer;
+        const sizetype size;
 
-    const Type* end;
+    public:
+        const Type* array;
 
-    const sizetype size;
+        template <sizetype size>
+        inline ArrayIterator(const Type array[size]) : array(array), end(array + size), size(size) {}
 
-public:
-    const Type* array;
+        inline ArrayIterator(const Type* array, sizetype size) : array(array), end(array + size), size(size) {}
 
-    template <sizetype size>
-    inline ArrayIterator(const Type array[size]) : array(array), end(array + size), size(size) {}
+        $(NoIgnoreReturn)
+        inline func hasNext() const -> bool override {
+            return indexer != end;
+        }
 
-    inline ArrayIterator(const Type* array, sizetype size) : array(array), end(array + size), size(size) {}
+        inline func next() const -> const Iterator<Type>* override {
+            ++indexer;
+            return this;
+        }
 
-    NoIgnoreRet
-    inline bool hasNext() const override {
-        return indexer != end;
-    }
+        $(NoIgnoreReturn)
+        func get() const -> Type& override {
+            return *indexer;
+        }
 
-    inline const Iterator<Type>* next() const override {
-        ++indexer;
-        return this;
-    }
+        func reset() const -> void override {
+            indexer = const_cast<Type*>(array);
+        }
 
-    NoIgnoreRet
-    Type& get() const override {
-        return *indexer;
-    }
-
-    void reset() const override {
-        indexer = const_cast<Type*>(array);
-    }
-
-    NoIgnoreRet
-    sizetype count() const override {
-        return size;
-    }
-};
-
-NAMESPACE_L2_END
-
-#endif
+        $(NoIgnoreReturn)
+        func count() const -> sizetype override {
+            return size;
+        }
+    };
+}

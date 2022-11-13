@@ -1,3 +1,16 @@
+# Copyright (C) 2022 Liu Baihao. All rights reserved.
+#
+# Licensed under the Enhanced Software License.
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://sharedwonder.github.io/enhanced/LICENSE.txt
+#
+# UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+# THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
+# WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+
 cmake_minimum_required(VERSION 3.0)
 
 project("Enhanced")
@@ -8,7 +21,7 @@ function (setup_module MODULE_NAME)
     message("${PROMPT} Configuring module: ${MODULE_NAME}")
     message("${PROMPT} Module path: \"${CMAKE_CURRENT_SOURCE_DIR}\"")
 
-    file(GLOB_RECURSE SOURCES sources/*.cpp sources/*.c)
+    file(GLOB_RECURSE SOURCES sources/*.cpp)
     file(GLOB_RECURSE HEADERS include/*.h)
 
     string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
@@ -38,6 +51,7 @@ function (setup_module MODULE_NAME)
     endif ()
     target_include_directories(${MODULE_NAME}-static PRIVATE ${INCLUDE_DIRECTORIES})
 
+    target_compile_definitions(${MODULE_NAME}-static PRIVATE ENHANCED_BUILDING)
     target_compile_definitions(${MODULE_NAME}-static PRIVATE ENHANCED_${MODULE_NAME_UPPER}_BUILDING)
 
     set_target_properties(${MODULE_NAME}-static PROPERTIES OUTPUT_NAME enhanced-${MODULE_NAME})
@@ -64,6 +78,7 @@ function (setup_module MODULE_NAME)
         target_compile_definitions(${MODULE_NAME}-shared PUBLIC NDEBUG)
     endif ()
 
+    target_compile_definitions(${MODULE_NAME}-shared PRIVATE ENHANCED_BUILDING)
     target_compile_definitions(${MODULE_NAME}-shared PRIVATE ENHANCED_${MODULE_NAME_UPPER}_BUILDING)
     target_compile_definitions(${MODULE_NAME}-shared PUBLIC ENHANCED_${MODULE_NAME_UPPER}_SHARED_LIB)
 
@@ -100,7 +115,7 @@ function (setup_module_test)
     endforeach ()
     message("${PROMPT} Included directories: ${INCLUDE_DIRECTORIES}")
 
-    file(GLOB_RECURSE SOURCES test/*.cpp test/*.c)
+    file(GLOB_RECURSE SOURCES test/*.cpp)
     file(GLOB_RECURSE HEADERS test/*.h)
 
     add_executable(test ${SOURCES} ${HEADERS})
@@ -124,10 +139,6 @@ if (!${CMAKE_BUILD_TYPE})
     endif ()
 endif ()
 
-if (!${CMAKE_C_COMPILER})
-    set(CMAKE_C_COMPILER 17)
-endif ()
-
 if (!${CMAKE_CXX_COMPILER})
     set(CMAKE_CXX_COMPILER 20)
 endif ()
@@ -138,9 +149,7 @@ message("${PROMPT} CMake version: ${CMAKE_VERSION}")
 message("${PROMPT} Project path: \"${CMAKE_SOURCE_DIR}\"")
 message("${PROMPT} Build directory: \"${CMAKE_BINARY_DIR}\"")
 message("${PROMPT} Installation directory: \"${CMAKE_INSTALL_PREFIX}\"")
-message("${PROMPT} C Compiler path: \"${CMAKE_C_COMPILER}\"")
 message("${PROMPT} C++ Compiler path: \"${CMAKE_CXX_COMPILER}\"")
-message("${PROMPT} C standard: ${CMAKE_C_STANDARD}")
 message("${PROMPT} C++ standard: ${CMAKE_CXX_STANDARD}")
 message("${PROMPT} Build type: ${CMAKE_BUILD_TYPE}")
 message("${PROMPT} All modules: ${MODULES}")

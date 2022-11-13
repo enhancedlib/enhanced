@@ -15,11 +15,15 @@
 
 #pragma once
 
-#include <setjmp.h>
-
 #include <enhanced/core/defines.h>
+#include <enhanced/core/types.h>
+#include <enhanced/core/exception/Error.h>
 
-typedef jmp_buf Snapshot;
+namespace enhanced::core::exception {
+    class ENHANCED_CORE_API UnreachableError : public Error {
+    public:
+        UnreachableError() noexcept;
+    };
+}
 
-#define TAKE_SNAPSHOT setjmp
-#define JUMP_TO longjmp
+#define UNREACHABLE_CODE throw enhanced::core::exception::UnreachableError

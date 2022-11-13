@@ -19,43 +19,37 @@
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core {
+    template <typename Type>
+    interface Iterator {
+        virtual ~Iterator() noexcept = default;
 
-NAMESPACE_L2_BEGIN(enhanced, core)
+        /*!
+        * Determines if there are still elements can iterate over.
+        */
+        $(NoIgnoreReturn)
+        virtual func hasNext() const -> bool = abstract;
 
-template <typename Type>
-struct AbstractClass Iterator {
-    virtual ~Iterator() noexcept DEFAULT_CONS;
+        /*!
+        * Let the iterator pointer return to the next element.
+        */
+        virtual func next() const -> const Iterator<Type>* = abstract;
 
-    /*!
-     * Determines if there are still elements can iterate over.
-     */
-    NoIgnoreRet
-    virtual bool hasNext() const = 0;
+        /*!
+        * Gets the current element.
+        */
+        $(NoIgnoreReturn)
+        virtual func get() const -> Type& = abstract;
 
-    /*!
-     * Let the iterator pointer return to the next element.
-     */
-    virtual const Iterator<Type>* next() const = 0;
+        /*!
+        * Let the iterator pointer return to the first element.
+        */
+        virtual func reset() const -> void = abstract;
 
-    /*!
-     * Gets the current element.
-     */
-    NoIgnoreRet
-    virtual Type& get() const = 0;
-
-    /*!
-     * Let the iterator pointer return to the first element.
-     */
-    virtual void reset() const = 0;
-
-    /*!
-     * Gets the number of elements.
-     */
-    NoIgnoreRet
-    virtual sizetype count() const = 0;
-};
-
-NAMESPACE_L2_END
-
-#endif
+        /*!
+        * Gets the number of elements.
+        */
+        $(NoIgnoreReturn)
+        virtual func count() const -> sizetype = abstract;
+    };
+}

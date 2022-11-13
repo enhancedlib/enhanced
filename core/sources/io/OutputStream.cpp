@@ -16,20 +16,19 @@
 #include <enhanced/core/io/OutputStream.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
 using enhanced::core::io::OutputStream;
 
-void OutputStream::write(byte b) const {
+func OutputStream::write(byte b) const -> void {
     NOT_IMPLEMENTED();
 }
 
-void OutputStream::write(byte* buffer, sizetype size) const {
+func OutputStream::write(byte* buffer, sizetype size) const -> void {
     NOT_IMPLEMENTED();
 }
 
-void OutputStream::writeLine(const String& string) const {
+func OutputStream::writeLine(const String& string) const -> void {
     NOT_IMPLEMENTED();
 }

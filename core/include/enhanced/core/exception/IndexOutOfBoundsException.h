@@ -16,26 +16,15 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/exception/Exception.h>
 #include <enhanced/core/exception/RuntimeException.h>
 
-ENHANCED_CORE_API extern const CExceptionType CIndexOutOfBoundsException;
+namespace enhanced::core::exception {
+    class ENHANCED_CORE_API IndexOutOfBoundsException : public RuntimeException {
+    public:
+        explicit IndexOutOfBoundsException(const String& message = "") noexcept;
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, exception)
-
-class ENHANCED_CORE_API IndexOutOfBoundsException : public RuntimeException {
-public:
-    explicit IndexOutOfBoundsException(const String& message = "") noexcept;
-
-    explicit IndexOutOfBoundsException(const Exception* cause) noexcept;
-
-    IndexOutOfBoundsException(const String& message, const Exception* cause) noexcept;
-};
-
-NAMESPACE_L3_END
-
-#endif
+        IndexOutOfBoundsException(sizetype index, sizetype size) noexcept;
+    };
+}

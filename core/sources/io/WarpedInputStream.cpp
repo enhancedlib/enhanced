@@ -17,16 +17,15 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
 using enhanced::core::io::WarpedInputStream;
 
-void WarpedInputStream::close() const {
+func WarpedInputStream::close() const -> void {
     NOT_IMPLEMENTED();
 }
 
-void WarpedInputStream::flush() const {
+func WarpedInputStream::flush() const -> void {
     NOT_IMPLEMENTED();
 }

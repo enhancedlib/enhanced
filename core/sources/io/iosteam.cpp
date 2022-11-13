@@ -28,17 +28,17 @@ namespace enhanced::core::io {
     WarpedOutputStream* const& outstream = _outstream;
     WarpedOutputStream* const& errstream = _errstream;
 
-    void setIn(WarpedInputStream* in) {
+    func setIn(WarpedInputStream* in) -> void {
         instream->flush();
         _instream = in;
     }
 
-    void setOut(WarpedOutputStream* out) {
+    func setOut(WarpedOutputStream* out) -> void {
         outstream->flush();
         _outstream = out;
     }
 
-    void setErr(WarpedOutputStream* err) {
+    func setErr(WarpedOutputStream* err) -> void {
         errstream->flush();
         _errstream = err;
     }

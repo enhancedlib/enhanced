@@ -17,21 +17,14 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/io/InputStream.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::io {
+    class ENHANCED_CORE_API WarpedInputStream : public InputStream {
+    public:
+        func close() const -> void override;
 
-NAMESPACE_L3_BEGIN(enhanced, core, io)
-
-class ENHANCED_CORE_API WarpedInputStream : public InputStream {
-public:
-    void close() const override;
-
-    void flush() const override;
-};
-
-NAMESPACE_L3_END
-
-#endif
+        func flush() const -> void override;
+    };
+}

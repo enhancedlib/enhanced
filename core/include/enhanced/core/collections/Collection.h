@@ -16,34 +16,24 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/Iterable.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::collections {
+    template <typename Type>
+    interface Collection : Iterable<Type> {
+        virtual ~Collection() noexcept = default;
 
-NAMESPACE_L3_BEGIN(enhanced, core, collections)
+        $(NoIgnoreReturn)
+        virtual func getSize() const -> sizetype = abstract;
 
-template <typename Type>
-struct AbstractClass Collection : Iterable<Type> {
-    virtual ~Collection() noexcept DEFAULT_CONS;
+        $(NoIgnoreReturn)
+        virtual func isEmpty() const -> bool = abstract;
 
-    NoIgnoreRet
-    virtual sizetype getSize() const = 0;
+        $(NoIgnoreReturn)
+        virtual func contain(const Type& value) const -> bool = abstract;
+    };
 
-    NoIgnoreRet
-    virtual bool isEmpty() const = 0;
-
-    NoIgnoreRet
-    virtual bool contain(const Type& value) const = 0;
-
-    RetRequiresRelease
-    virtual Collection<Type>* copy() const = 0;
-};
-
-ENHANCED_CORE_API extern sizetype ARRAY_INIT_SIZE; // Default value: 255
-
-NAMESPACE_L3_END
-
-#endif
+    ENHANCED_CORE_API extern sizetype ARRAY_INIT_SIZE; // Default value: 255
+}

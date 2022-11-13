@@ -16,10 +16,9 @@
 #include <enhanced/core/collections/LinkedList.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/annotations.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/annotations.h>
 #include <enhanced/core/memory.h>
-#include <enhanced/core/generic.h>
 #include <enhanced/core/exception/IndexOutOfBoundsException.h>
 #include <enhanced/core/exception/UnsupportedOperationException.h>
 
@@ -27,11 +26,11 @@ using enhanced_internal::core::collections::LinkedListImpl;
 using enhanced::core::exception::IndexOutOfBoundsException;
 using enhanced::core::exception::UnsupportedOperationException;
 
-LinkedListImpl::Node*& LinkedListImpl::prevNode(Node*& node) {
+func LinkedListImpl::prevNode(Node*& node) -> LinkedListImpl::Node*& {
     return node = node->prev;
 }
 
-LinkedListImpl::Node*& LinkedListImpl::nextNode(Node*& node) {
+func LinkedListImpl::nextNode(Node*& node) -> LinkedListImpl::Node*& {
     return node = node->next;
 }
 
@@ -40,7 +39,7 @@ LinkedListImpl::LinkedListImpl(const GenericOperator genericOperator) : first(nu
 LinkedListImpl::LinkedListImpl(const LinkedListImpl& other) : first(null), last(null), size(0), genericOperator(other.genericOperator) {
     Node* indexer = other.first;
     for (sizetype _ = 0; _ < other.size; ++_) {
-        addLast0(GET_GENERIC_VALUE(indexer->value));
+        addLast0(indexer->value);
         nextNode(indexer);
     }
 }
@@ -53,34 +52,28 @@ LinkedListImpl::~LinkedListImpl() noexcept {
         delete last->next;
     }
 
-    if (!isEmpty0()) genericOperator.destroy(last->value);
+    if (size != 0) genericOperator.destroy(last->value);
 
     delete last;
 }
 
-NoIgnoreRet
-sizetype LinkedListImpl::getSize0() const {
-    return size;
+$(NoIgnoreReturn)
+func LinkedListImpl::getFirst0() const -> void* {
+    if (size == 0) throw UnsupportedOperationException("The list is empty");
+
+    return first->value;
 }
 
-NoIgnoreRet
-bool LinkedListImpl::isEmpty0() const {
-    return size == 0;
+$(NoIgnoreReturn)
+func LinkedListImpl::getLast0() const -> void* {
+    if (size == 0) throw UnsupportedOperationException("The list is empty");
+
+    return last->value;
 }
 
-NoIgnoreRet
-Generic& LinkedListImpl::getFirst0() const {
-    return GET_GENERIC_VALUE(first->value);
-}
-
-NoIgnoreRet
-Generic& LinkedListImpl::getLast0() const {
-    return GET_GENERIC_VALUE(last->value);
-}
-
-NoIgnoreRet
-Generic& LinkedListImpl::get0(const sizetype index) const {
-    if (index >= size) throw IndexOutOfBoundsException("Index out of bounds"); // TODO
+$(NoIgnoreReturn)
+func LinkedListImpl::get0(const sizetype index) const -> void* {
+    if (index >= size) throw IndexOutOfBoundsException(index, size);
 
     Node* indexer;
     if (index < (size >> 1)) {
@@ -95,14 +88,14 @@ Generic& LinkedListImpl::get0(const sizetype index) const {
         }
     }
 
-    return GET_GENERIC_VALUE(indexer->value);
+    return indexer->value;
 }
 
-NoIgnoreRet
-bool LinkedListImpl::contain0(Generic& value) const {
+$(NoIgnoreReturn)
+func LinkedListImpl::contain0(void* value) const -> bool {
     Node* indexer = first;
     for (sizetype _ = 0; _ < size; ++_) {
-        if (genericOperator.equals(indexer->value, const_cast<void*&>(value))) {
+        if (genericOperator.equals(indexer->value, value)) {
             return true;
         }
         nextNode(indexer);
@@ -111,8 +104,8 @@ bool LinkedListImpl::contain0(Generic& value) const {
     return false;
 }
 
-void LinkedListImpl::addLast0(Generic& element) {
-    if (isEmpty0()) {
+func LinkedListImpl::addLast0(void* element) -> void {
+    if (size == 0) {
         last = new Node();
         last->value = genericOperator.allocate(element);
         first = last;
@@ -126,8 +119,8 @@ void LinkedListImpl::addLast0(Generic& element) {
     ++size;
 }
 
-void LinkedListImpl::removeLast0() {
-    if (isEmpty0()) throw UnsupportedOperationException("The list is empty");
+func LinkedListImpl::removeLast0() -> void {
+    if (size == 0) throw UnsupportedOperationException("The list is empty");
 
     if (size > 1) {
         prevNode(last);
@@ -142,8 +135,8 @@ void LinkedListImpl::removeLast0() {
     --size;
 }
 
-void LinkedListImpl::addFirst0(Generic& element) {
-    if (isEmpty0()) {
+func LinkedListImpl::addFirst0(void* element) -> void {
+    if (size == 0) {
         first = new Node();
         first->value = genericOperator.allocate(element);
         last = first;
@@ -157,8 +150,8 @@ void LinkedListImpl::addFirst0(Generic& element) {
     ++size;
 }
 
-void LinkedListImpl::removeFirst0() {
-    if (isEmpty0()) throw UnsupportedOperationException("The list is empty");
+func LinkedListImpl::removeFirst0() -> void {
+    if (size == 0) throw UnsupportedOperationException("The list is empty");
 
     if (size > 1) {
         nextNode(first);
@@ -178,25 +171,20 @@ LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListI
 
 LinkedListImpl::LinkedListIteratorImpl::~LinkedListIteratorImpl() noexcept = default;
 
-NoIgnoreRet
-bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
+$(NoIgnoreReturn)
+func LinkedListImpl::LinkedListIteratorImpl::hasNext0() const -> bool {
     return indexer != null;
 }
 
-void LinkedListImpl::LinkedListIteratorImpl::next0() const {
+func LinkedListImpl::LinkedListIteratorImpl::next0() const -> void {
     nextNode(indexer);
 }
 
-NoIgnoreRet
-Generic& LinkedListImpl::LinkedListIteratorImpl::get0() const {
-    return GET_GENERIC_VALUE(indexer->value);
+$(NoIgnoreReturn)
+func LinkedListImpl::LinkedListIteratorImpl::get0() const -> void* {
+    return indexer->value;
 }
 
-void LinkedListImpl::LinkedListIteratorImpl::reset0() const {
+func LinkedListImpl::LinkedListIteratorImpl::reset0() const -> void {
     indexer = linkedList->first;
-}
-
-NoIgnoreRet
-sizetype LinkedListImpl::LinkedListIteratorImpl::count0() const {
-    return linkedList->getSize0();
 }

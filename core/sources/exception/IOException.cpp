@@ -16,7 +16,6 @@
 #include <enhanced/core/exception/IOException.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 
 using enhanced::core::exception::IOException;

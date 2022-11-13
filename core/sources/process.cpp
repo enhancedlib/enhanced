@@ -13,15 +13,18 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <process.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
+#include <enhanced/core/process.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core {
+    $(NoReturn)
+    void processExit(int status) {
+        exit(status);
+    }
 
-using Generic = void*; // The type 'void*' is unmeaningful, it's not a really pointer.
-
-#define GET_GENERIC_VALUE(pointer) *reinterpret_cast<Generic*>(pointer)
-
-#endif
+    $(NoReturn)
+    void processAbort() {
+        abort();
+    }
+}

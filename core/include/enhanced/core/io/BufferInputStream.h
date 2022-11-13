@@ -16,21 +16,14 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/io/InputStream.h>
 
-#ifdef CXX_LANGUAGE
+namespace enhanced::core::io {
+    class ENHANCED_CORE_API BufferInputStream : public InputStream {
+    public:
+        $(NoIgnoreReturn)
+        func get() const -> byte override;
 
-NAMESPACE_L3_BEGIN(enhanced, core, io)
-
-class ENHANCED_CORE_API BufferInputStream : public InputStream {
-public:
-    NoIgnoreRet
-    byte get() const override;
-
-    void read(byte* buffer, sizetype size) const override;
-};
-
-NAMESPACE_L3_END
-
-#endif
+        func read(byte* buffer, sizetype size) const -> void override;
+    };
+}

@@ -16,282 +16,240 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/annotations.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/annotations.h>
+#include <enhanced/core/memory.h>
 #include <enhanced/core/Iterable.h>
 #include <enhanced/core/Iterator.h>
-#include <enhanced/core/generic.h>
 #include <enhanced/core/collections/List.h>
 #include <enhanced/core/collections/Deque.h>
+#include <enhanced/core/util/traits.h>
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced_internal, core, collections)
-
-class ENHANCED_CORE_API LinkedListImpl {
-private:
-    struct Node {
-        void* value;
-
-        Node* prev;
-
-        Node* next;
-    };
-
-    Node* first;
-
-    Node* last;
-
-    sizetype size;
-
-    static Node*& prevNode(Node*& node);
-
-    static Node*& nextNode(Node*& node);
-
-protected:
-    struct GenericOperator {
-        void* (*allocate)(Generic&);
-
-        void (*destroy)(void*);
-
-        bool (*equals)(Generic&, Generic&);
-    };
-
-    class ENHANCED_CORE_API LinkedListIteratorImpl {
-        friend class LinkedListImpl;
-
-    private:
-        const LinkedListImpl* linkedList;
-
-        mutable Node* indexer;
-
+namespace enhanced_internal::core::collections {
+    class ENHANCED_CORE_API LinkedListImpl {
     protected:
-        explicit LinkedListIteratorImpl(const LinkedListImpl* linkedList);
+        struct Node {
+            void* value;
 
-        virtual ~LinkedListIteratorImpl() noexcept;
+            Node* prev;
 
-        NoIgnoreRet
-        bool hasNext0() const;
+            Node* next;
+        };
 
-        void next0() const;
+        Node* first;
 
-        NoIgnoreRet
-        Generic& get0() const;
+        Node* last;
 
-        void reset0() const;
+        sizetype size;
 
-        NoIgnoreRet
-        sizetype count0() const;
+        static func prevNode(Node*& node) -> Node*&;
+
+        static func nextNode(Node*& node) -> Node*&;
+
+        struct GenericOperator {
+            func (*allocate)(void*) -> void*;
+
+            func (*destroy)(void*) -> void;
+
+            func (*equals)(void*, void*) -> bool;
+        };
+
+        class ENHANCED_CORE_API LinkedListIteratorImpl {
+            friend class LinkedListImpl;
+
+        protected:
+            const LinkedListImpl* linkedList;
+
+            mutable Node* indexer;
+
+            explicit LinkedListIteratorImpl(const LinkedListImpl* linkedList);
+
+            virtual ~LinkedListIteratorImpl() noexcept;
+
+            $(NoIgnoreReturn)
+            func hasNext0() const -> bool;
+
+            func next0() const -> void;
+
+            $(NoIgnoreReturn)
+            func get0() const -> void*;
+
+            func reset0() const -> void;
+        };
+
+        GenericOperator genericOperator;
+
+        explicit LinkedListImpl(GenericOperator genericOperator);
+
+        LinkedListImpl(const LinkedListImpl& other);
+
+        virtual ~LinkedListImpl() noexcept;
+
+        $(NoIgnoreReturn)
+        func getLast0() const -> void*;
+
+        $(NoIgnoreReturn)
+        func getFirst0() const -> void*;
+
+        $(NoIgnoreReturn)
+        func get0(sizetype index) const -> void*;
+
+        $(NoIgnoreReturn)
+        func contain0(void* value) const -> bool;
+
+        func addLast0(void* element) -> void;
+
+        func removeLast0() -> void;
+
+        func addFirst0(void* element) -> void;
+
+        func removeFirst0() -> void;
     };
+}
 
-    GenericOperator genericOperator;
+namespace enhanced::core::collections {
+    template <typename Type>
+    class ENHANCED_CORE_API LinkedList : public List<Type>, public Deque<Type>, private enhanced_internal::core::collections::LinkedListImpl {
+    private:
+        using LinkedListImpl = enhanced_internal::core::collections::LinkedListImpl;
 
-    explicit LinkedListImpl(GenericOperator genericOperator);
+        class ENHANCED_CORE_API LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
+            friend class LinkedList<Type>;
 
-    LinkedListImpl(const LinkedListImpl& other);
+        public:
+            inline explicit LinkedListIterator(const LinkedList<Type>* linkedList) : LinkedListIteratorImpl(linkedList) {}
 
-    virtual ~LinkedListImpl() noexcept;
+            $(NoIgnoreReturn)
+            inline func hasNext() const -> bool override {
+                return hasNext0();
+            }
 
-    NoIgnoreRet
-    sizetype getSize0() const;
+            inline func next() const -> const Iterator<Type>* override {
+                next0();
+                return this;
+            }
 
-    NoIgnoreRet
-    bool isEmpty0() const;
+            $(NoIgnoreReturn)
+            inline func get() const -> Type& override {
+                return *reinterpret_cast<Type*>(get0());
+            }
 
-    NoIgnoreRet
-    Generic& getLast0() const;
+            inline func reset() const -> void override {
+                reset0();
+            }
 
-    NoIgnoreRet
-    Generic& getFirst0() const;
+            $(NoIgnoreReturn)
+            inline func count() const -> sizetype override {
+                return static_cast<const LinkedList<Type>*>(linkedList)->size;
+            }
+        };
 
-    NoIgnoreRet
-    Generic& get0(sizetype index) const;
+        $(RetRequiresRelease)
+        static func allocate(void* element) -> void* {
+            return new Type(*reinterpret_cast<Type*>(element));
+        }
 
-    NoIgnoreRet
-    bool contain0(Generic& value) const;
+        static func destroy(void* element) -> void {
+            delete reinterpret_cast<Type*>(element);
+        }
 
-    void addLast0(Generic& element);
+        $(NoIgnoreReturn)
+        static func equals(void* element, void* value) -> bool {
+            return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
+        }
 
-    void removeLast0();
-
-    void addFirst0(Generic& element);
-
-    void removeFirst0();
-};
-
-NAMESPACE_L3_END
-
-NAMESPACE_L3_BEGIN(enhanced, core, collections)
-
-template <typename Type>
-class ENHANCED_CORE_API LinkedList :
-/*
- * When you build project with Microsoft Visual C++ compiler,
- * If you don't explicitly extend the "Collection" class, you will see an error in compiling.
- * The compiler thinks the return type of virtual function 'copy' isn't
- * covariant with the return type the super method.
- * So the class must explicitly extend the "Collection" class.
- *
- * But when the class explicitly extend the "Collection" class,
- * The compiler show a warning (C4584), it thinks the class already extended "Collection" class.
- * So I use "#pragma warning(disable: 4584)" to disable the warning.
- */
-#ifdef COMPILER_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4584)
-    public Collection<Type>,
-#pragma warning(pop)
-#endif
-    public List<Type>, public Deque<Type>, private enhanced_internal::core::collections::LinkedListImpl {
-private:
-    using LinkedListImpl = enhanced_internal::core::collections::LinkedListImpl;
-
-    class ENHANCED_CORE_API LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
-        friend class LinkedList<Type>;
+        LinkedListIterator iter = LinkedListIterator(this);
 
     public:
-        inline explicit LinkedListIterator(const LinkedList<Type>* linkedList) : LinkedListIteratorImpl(linkedList) {}
+        inline LinkedList() : LinkedListImpl({allocate, destroy, equals}) {}
 
-        NoIgnoreRet
-        inline bool hasNext() const override {
-            return hasNext0();
+        inline LinkedList(const LinkedList<Type>& other) : LinkedListImpl(other) {}
+
+        $(NoIgnoreReturn)
+        inline func getSize() const -> sizetype override {
+            return this->size;
         }
 
-        inline const Iterator<Type>* next() const override {
-            next0();
-            return this;
+        $(NoIgnoreReturn)
+        inline func isEmpty() const -> bool override {
+            return this->size == 0;
         }
 
-        NoIgnoreRet
-        inline Type& get() const override {
-            return (Type&) get0();
+        $(NoIgnoreReturn)
+        inline func contain(const Type& value) const -> bool override {
+            return contain0(util::traits::removePtrConst(&value));
         }
 
-        inline void reset() const override {
-            reset0();
+        $(NoIgnoreReturn)
+        inline func iterator() const -> const Iterator<Type>& override {
+            iter.reset();
+            return iter;
         }
 
-        NoIgnoreRet
-        inline sizetype count() const override {
-            return count0();
+        $(NoIgnoreReturn)
+        inline func begin() const -> typename Iterable<Type>::ForeachIterator override {
+            return List<Type>::begin();
+        }
+
+        $(NoIgnoreReturn)
+        inline constexpr func end() const -> byte override {
+            return List<Type>::end();
+        }
+
+        $(NoIgnoreReturn)
+        inline func getLast() const -> Type& override {
+            return *reinterpret_cast<Type*>(getLast0());
+        }
+
+        $(NoIgnoreReturn)
+        inline func getFirst() const -> Type& override {
+            return *reinterpret_cast<Type*>(getFirst0());
+        }
+
+        $(NoIgnoreReturn)
+        inline func get(sizetype index) const -> Type& override {
+            return *reinterpret_cast<Type*>(get0(index));
+        }
+
+        $(NoIgnoreReturn)
+        inline func operator[](sizetype index) const -> Type& override {
+            return *reinterpret_cast<Type*>(get0(index));
+        }
+
+        inline func addLast(const Type& element) -> void override {
+            addLast0(util::traits::removePtrConst(&element));
+        }
+
+        inline func removeLast() -> Type override {
+            Type value = getLast();
+            removeLast0();
+            return value;
+        }
+
+        inline func addFirst(const Type& element) -> void override {
+            addFirst0(util::traits::removePtrConst(&element));
+        }
+
+        inline func removeFirst() -> Type override {
+            Type value = getFirst();
+            removeFirst0();
+            return value;
+        }
+
+        inline func add(const Type& element) -> void override {
+            addLast(element);
+        }
+
+        inline func remove() -> Type override {
+            return removeLast();
+        }
+
+        inline func push(const Type& element) -> void override {
+            addFirst(element);
+        }
+
+        inline func popup() -> Type override {
+            return removeFirst();
         }
     };
-
-    RetRequiresRelease
-    static void* allocate(Generic& element) {
-        return new Type((Type&) element);
-    }
-
-    static void destroy(void* element) {
-        delete (Type*) element;
-    }
-
-    NoIgnoreRet
-    static bool equals(Generic& element, Generic& value) {
-        return ((Type&) element) == ((Type&) value);
-    }
-
-    LinkedListIterator iter = LinkedListIterator(this);
-
-public:
-    inline LinkedList() : LinkedListImpl({allocate, destroy, equals}) {}
-
-    inline LinkedList(const LinkedList<Type>& other) : LinkedListImpl(other) {}
-
-    NoIgnoreRet
-    inline sizetype getSize() const override {
-        return getSize0();
-    }
-
-    NoIgnoreRet
-    inline bool isEmpty() const override {
-        return isEmpty0();
-    }
-
-    NoIgnoreRet
-    inline bool contain(const Type& value) const override {
-        return contain0((Generic&) value);
-    }
-
-    RetRequiresRelease
-    inline LinkedList<Type>* copy() const override {
-        return new LinkedList<Type>(*this);
-    }
-
-    NoIgnoreRet
-    inline const Iterator<Type>& iterator() const override {
-        iter.reset();
-        return iter;
-    }
-
-    NoIgnoreRet
-    inline typename Iterable<Type>::ForeachIterator begin() const override {
-        return List<Type>::begin();
-    }
-
-    NoIgnoreRet
-    inline constexpr byte end() const override {
-        return List<Type>::end();
-    }
-
-    NoIgnoreRet
-    inline Type& getLast() const override {
-        return (Type&) getLast0();
-    }
-
-    NoIgnoreRet
-    inline Type& getFirst() const override {
-        return (Type&) getFirst0();
-    }
-
-    NoIgnoreRet
-    inline Type& get(sizetype index) const override {
-        return (Type&) get0(index);
-    }
-
-    NoIgnoreRet
-    inline Type& operator[](sizetype index) const override {
-        return (Type&) get0(index);
-    }
-
-    inline void addLast(const Type& element) override {
-        addLast0((Generic&) element);
-    }
-
-    inline Type removeLast() override{
-        Type value = getLast();
-        removeLast0();
-        return value;
-    }
-
-    inline void addFirst(const Type& element) override {
-        addFirst0((Generic&) element);
-    }
-
-    inline Type removeFirst() override {
-        Type value = getFirst();
-        removeFirst0();
-        return value;
-    }
-
-    inline void add(const Type& element) override {
-        addLast(element);
-    }
-
-    inline Type remove() override {
-        return removeLast();
-    }
-
-    inline void push(const Type& element) override {
-        addFirst(element);
-    }
-
-    inline Type popup() override {
-        return removeFirst();
-    }
-};
-
-NAMESPACE_L3_END
-
-#endif
+}

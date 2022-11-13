@@ -18,11 +18,13 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
+#include <enhanced/core/util/traits.h>
 
 using enhanced::core::CharSequence;
+using enhanced::core::util::traits::removePtrConst;
 
 template <typename CharType>
-CharSequence<CharType>::CharSequence(CharType* value, const sizetype length) : value(value), length(length) {}
+CharSequence<CharType>::CharSequence(const CharType* value, const sizetype length) : value(removePtrConst(value)), length(length) {}
 
 template <typename CharType>
 CharSequence<CharType>::CharSequence(const CharSequence& other) noexcept = default;
@@ -34,43 +36,43 @@ template <typename CharType>
 CharSequence<CharType>::~CharSequence() noexcept = default;
 
 template <typename CharType>
-NoIgnoreRet
-bool CharSequence<CharType>::isEmpty() const noexcept {
+$(NoIgnoreReturn)
+func CharSequence<CharType>::isEmpty() const noexcept -> bool {
     return length == 0;
 }
 
 template <typename CharType>
-NoIgnoreRet
-sizetype CharSequence<CharType>::getLength() const noexcept {
+$(NoIgnoreReturn)
+func CharSequence<CharType>::getLength() const noexcept -> sizetype {
     return length;
 }
 
 template <typename CharType>
-NoIgnoreRet
-CharType* CharSequence<CharType>::getChars() const noexcept {
+$(NoIgnoreReturn)
+func CharSequence<CharType>::getChars() const noexcept -> CharType* {
     return value;
 }
 
 template <typename CharType>
-NoIgnoreRet
-const CharType CharSequence<CharType>::at(sizetype index) const noexcept {
+$(NoIgnoreReturn)
+func CharSequence<CharType>::at(sizetype index) const noexcept -> const CharType {
     return value[index];
 }
 
 template <typename CharType>
-NoIgnoreRet
-const CharType CharSequence<CharType>::operator[](const sizetype index) const noexcept {
+$(NoIgnoreReturn)
+func CharSequence<CharType>::operator[](const sizetype index) const noexcept -> const CharType {
     return value[index];
 }
 
 template <typename CharType>
-CharSequence<CharType>& CharSequence<CharType>::operator=(const CharSequence& other) noexcept = default;
+func CharSequence<CharType>::operator=(const CharSequence& other) noexcept -> CharSequence<CharType>& = default;
 
 template <typename CharType>
-CharSequence<CharType>& CharSequence<CharType>::operator=(CharSequence&& other) noexcept = default;
+func CharSequence<CharType>::operator=(CharSequence&& other) noexcept -> CharSequence<CharType>& = default;
 
 template <typename CharType>
-NoIgnoreRet
+$(NoIgnoreReturn)
 CharSequence<CharType>::operator CharType*() const noexcept {
     return value;
 }

@@ -16,210 +16,191 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
+#include <enhanced/core/memory.h>
 #include <enhanced/core/Iterable.h>
 #include <enhanced/core/Iterator.h>
-#include <enhanced/core/generic.h>
 #include <enhanced/core/collections/List.h>
 #include <enhanced/core/collections/RandomAccess.h>
+#include <enhanced/core/util/traits.h>
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced_internal, core, collections)
-
-class ENHANCED_CORE_API ArrayListImpl {
-private:
-    void** elements;
-
-    sizetype size;
-
-    sizetype capacity;
-
-protected:
-    struct GenericOperator {
-        void* (*allocate)(Generic&);
-
-        void (*destroy)(void*);
-
-        bool (*equals)(Generic&, Generic&);
-    };
-
-    class ENHANCED_CORE_API ArrayListIteratorImpl {
-        friend class ArrayListImpl;
-
-    private:
-        const ArrayListImpl* arrayList;
-
-        mutable void** indexer;
-
+namespace enhanced_internal::core::collections {
+    class ENHANCED_CORE_API ArrayListImpl {
     protected:
-        explicit ArrayListIteratorImpl(const ArrayListImpl* arrayList);
+        void** elements;
 
-        virtual ~ArrayListIteratorImpl() noexcept;
+        sizetype size;
 
-        NoIgnoreRet
-        bool hasNext0() const;
+        sizetype capacity;
 
-        void next0() const;
+        struct GenericOperator {
+            void* (*allocate)(void*);
 
-        NoIgnoreRet
-        Generic& get0() const;
+            void (*destroy)(void*);
 
-        void reset0() const;
+            bool (*equals)(void*, void*);
+        };
 
-        NoIgnoreRet
-        sizetype count0() const;
+        class ENHANCED_CORE_API ArrayListIteratorImpl {
+            friend class ArrayListImpl;
+
+        protected:
+            const ArrayListImpl* arrayList;
+
+            mutable void** indexer;
+
+            explicit ArrayListIteratorImpl(const ArrayListImpl* arrayList);
+
+            virtual ~ArrayListIteratorImpl() noexcept;
+
+            $(NoIgnoreReturn)
+            func hasNext0() const -> bool;
+
+            func next0() const -> void;
+
+            $(NoIgnoreReturn)
+            func get0() const -> void*;
+
+            func reset0() const -> void;
+        };
+
+        GenericOperator genericOperator;
+
+        ArrayListImpl(sizetype capacity, GenericOperator genericOperator);
+
+        ArrayListImpl(const ArrayListImpl& other);
+
+        virtual ~ArrayListImpl() noexcept;
+
+        $(NoIgnoreReturn)
+        func get0(sizetype index) const -> void*;
+
+        $(NoIgnoreReturn)
+        func contain0(void* value) const -> bool;
+
+        func add0(void* element) -> void;
+
+        func remove0() -> void;
+
+        func expand0(sizetype size) -> void;
+
+        func shrink0(sizetype size) -> void;
     };
+}
 
-    GenericOperator genericOperator;
+namespace enhanced::core::collections {
+    template <typename Type>
+    class ENHANCED_CORE_API ArrayList final : public List<Type>, public RandomAccess, private enhanced_internal::core::collections::ArrayListImpl {
+    private:
+        using ArrayListImpl = enhanced_internal::core::collections::ArrayListImpl;
 
-    ArrayListImpl(sizetype capacity, GenericOperator genericOperator);
+        class ENHANCED_CORE_API ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
+            friend class ArrayList<Type>;
 
-    ArrayListImpl(const ArrayListImpl& other);
+        public:
+            inline explicit ArrayListIterator(const ArrayList<Type>* arrayList) : ArrayListIteratorImpl(arrayList) {}
 
-    virtual ~ArrayListImpl() noexcept;
+            $(NoIgnoreReturn)
+            inline func hasNext() const -> bool override {
+                return hasNext0();
+            }
 
-    NoIgnoreRet
-    sizetype getSize0() const;
+            inline func next() const -> const Iterator<Type>* override {
+                next0();
+                return this;
+            }
 
-    NoIgnoreRet
-    bool isEmpty0() const;
+            $(NoIgnoreReturn)
+            inline func get() const -> Type& override {
+                return *reinterpret_cast<Type*>(get0());
+            }
 
-    NoIgnoreRet
-    Generic& get0(sizetype index) const;
+            inline func reset() const -> void override {
+                reset0();
+            }
 
-    NoIgnoreRet
-    bool contain0(Generic& value) const;
+            $(NoIgnoreReturn)
+            inline func count() const -> sizetype override {
+                return static_cast<const ArrayList<Type>*>(arrayList)->size;
+            }
+        };
 
-    void add0(Generic& element);
+        $(RetRequiresRelease)
+        static func allocate(void* element) -> void* {
+            return new Type(*reinterpret_cast<Type*>(element));
+        }
 
-    void remove0();
+        static func destroy(void* element) -> void {
+            delete reinterpret_cast<Type*>(element);
+        }
 
-    void expand0(sizetype size);
+        $(NoIgnoreReturn)
+        static func equals(void* element, void* value) -> bool {
+            return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
+        }
 
-    void shrink0(sizetype size);
-};
-
-NAMESPACE_L3_END
-
-NAMESPACE_L3_BEGIN(enhanced, core, collections)
-
-template <typename Type>
-class ENHANCED_CORE_API ArrayList final : public List<Type>, public RandomAccess, private enhanced_internal::core::collections::ArrayListImpl {
-private:
-    using ArrayListImpl = enhanced_internal::core::collections::ArrayListImpl;
-
-    class ENHANCED_CORE_API ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
-        friend class ArrayList<Type>;
+        ArrayListIterator iter = ArrayListIterator(this);
 
     public:
-        inline explicit ArrayListIterator(const ArrayList<Type>* arrayList) : ArrayListIteratorImpl(arrayList) {}
+        inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE, {allocate, destroy, equals}) {}
 
-        NoIgnoreRet
-        inline bool hasNext() const override {
-            return hasNext0();
+        inline explicit ArrayList(sizetype capacity) : ArrayListImpl(capacity, {allocate, destroy, equals}) {}
+
+        inline ArrayList(const ArrayList<Type>& other) : ArrayListImpl(other) {}
+
+        $(NoIgnoreReturn)
+        inline func getSize() const -> sizetype override {
+            return this->size;
         }
 
-        inline const Iterator<Type>* next() const override {
-            next0();
-            return this;
+        $(NoIgnoreReturn)
+        inline func isEmpty() const -> bool override {
+            return this->size != 0;
         }
 
-        NoIgnoreRet
-        inline Type& get() const override {
-            return (Type&) get0();
+        $(NoIgnoreReturn)
+        inline func contain(const Type& value) const -> bool override {
+            return contain0(util::traits::removePtrConst(&value));
         }
 
-        inline void reset() const override {
-            reset0();
+        $(NoIgnoreReturn)
+        inline func iterator() const -> const Iterator<Type>& override {
+            iter.reset();
+            return iter;
         }
 
-        NoIgnoreRet
-        inline sizetype count() const override {
-            return count0();
+        $(NoIgnoreReturn)
+        inline func get(sizetype index) const -> Type& override {
+            return *reinterpret_cast<Type*>(get0(index));
+        }
+
+        $(NoIgnoreReturn)
+        inline func operator[](sizetype index) const -> Type& override {
+            return *reinterpret_cast<Type*>(get0(index));
+        }
+
+        inline func add(const Type& element) -> void override {
+            add0(util::traits::removePtrConst(&element));
+        }
+
+        inline func remove() -> Type override {
+            Type value = get(getSize() - 1);
+            remove0();
+            return value;
+        }
+
+        $(NoIgnoreReturn)
+        inline func getCapacity() const -> sizetype {
+            return this->capacity;
+        }
+
+        inline func expand(sizetype size) -> void {
+            expand0(size);
+        }
+
+        inline func shrink(sizetype size) -> void {
+            shrink0(size);
         }
     };
-
-    RetRequiresRelease
-    static void* allocate(Generic& element) {
-        return new Type((Type&) element);
-    }
-
-    static void destroy(void* element) {
-        delete (Type*) element;
-    }
-
-    NoIgnoreRet
-    static bool equals(Generic& element, Generic& value) {
-        return ((Type&) element) == ((Type&) value);
-    }
-
-    ArrayListIterator iter = ArrayListIterator(this);
-
-public:
-    inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE, {allocate, destroy, equals}) {}
-
-    inline explicit ArrayList(sizetype capacity) : ArrayListImpl(capacity, {allocate, destroy, equals}) {}
-
-    inline ArrayList(const ArrayList<Type>& other) : ArrayListImpl(other) {}
-
-    NoIgnoreRet
-    inline sizetype getSize() const override {
-        return getSize0();
-    }
-
-    NoIgnoreRet
-    inline bool isEmpty() const override {
-        return isEmpty0();
-    }
-
-    NoIgnoreRet
-    inline bool contain(const Type& value) const override {
-        return contain0((Generic&) value);
-    }
-
-    RetRequiresRelease
-    inline ArrayList<Type>* copy() const override {
-        return new ArrayList<Type>(*this);
-    }
-
-    NoIgnoreRet
-    inline const Iterator<Type>& iterator() const override {
-        iter.reset();
-        return iter;
-    }
-
-    NoIgnoreRet
-    inline Type& get(sizetype index) const override {
-        return (Type&) get0(index);
-    }
-
-    NoIgnoreRet
-    inline Type& operator[](sizetype index) const override {
-        return (Type&) get0(index);
-    }
-
-    inline void add(const Type& element) override {
-        add0((Generic&) element);
-    }
-
-    inline Type remove() override {
-        Type value = get(getSize() - 1);
-        remove0();
-        return value;
-    }
-
-    inline void expand(sizetype size) {
-        expand0(size);
-    }
-
-    inline void shrink(sizetype size) {
-        shrink0(size);
-    }
-};
-
-NAMESPACE_L3_END
-
-#endif
+}

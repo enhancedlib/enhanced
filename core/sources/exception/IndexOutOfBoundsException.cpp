@@ -22,6 +22,4 @@ using enhanced::core::exception::RuntimeException;
 
 IndexOutOfBoundsException::IndexOutOfBoundsException(const String& message) noexcept : RuntimeException(message) {}
 
-IndexOutOfBoundsException::IndexOutOfBoundsException(const Exception* cause) noexcept : RuntimeException(cause) {}
-
-IndexOutOfBoundsException::IndexOutOfBoundsException(const String& message, const Exception* cause) noexcept : RuntimeException(message, cause) {}
+IndexOutOfBoundsException::IndexOutOfBoundsException(sizetype index, sizetype size) noexcept : RuntimeException("") {} // TODO

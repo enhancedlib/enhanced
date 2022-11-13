@@ -17,15 +17,9 @@
 
 #include <enhanced/core/defines.h>
 
-#ifdef CXX_LANGUAGE
-
-NAMESPACE_L3_BEGIN(enhanced, core, util)
-
-template <typename... Types>
-struct Tuple final {
-    // TODO
-};
-
-NAMESPACE_L3_END
-
-#endif
+namespace enhanced::core::util {
+    template <typename... Types>
+    struct Tuple final {
+        // TODO
+    };
+}

@@ -19,13 +19,7 @@
 #include <enhanced/core/types.h>
 
 namespace enhanced::core::math {
-    template <typename NumberType>
-    NumberType abs(NumberType number) {
+    func abs(int64 number) -> uint64 {
         return (number < 0) ? -number : number;
     }
-
-    template int8 abs(int8 number);
-    template int16 abs(int16 number);
-    template int32 abs(int32 number);
-    template int64 abs(int64 number);
 }

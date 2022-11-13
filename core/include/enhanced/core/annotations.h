@@ -18,91 +18,54 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 
-#ifdef C_LANGUAGE
-#define OnlyC(annotations) annotation
-#define OnlyCpp(annotations)
-#else
-#define OnlyC(annotations)
-#define OnlyCpp(annotations) annotation
-#endif
+#define $(...) __VA_ARGS__
 
-#ifdef SAL_SUPPORTED
+#ifdef WINDOWS_OS
 #include <sal.h>
-
-#ifndef _Notnull_
-#define _Notnull_
-#endif
-
-#ifndef _Maybenull_
-#define _Maybenull_
-#endif
-
-#define NotNull _Notnull_
-#define Nullable _Maybenull_
 
 #define RetNotNull _Ret_notnull_
 #define RetNullable _Ret_maybenull_
 #define MustInspectResult _Must_inspect_result_
-#define SuccessIf(expression) _Success_(expression)
+#define SuccessIf(condition) _Success_(condition)
 
 #define Optional _In_opt_
-#define Out _Out_opt_
-#define InOut _Inout_opt_
-#define OutCannotIgnored _Out_
-#define InOutRequired _Inout_
+#define Out _Out_
+#define InOut _Inout_
+#define OutOptional _Out_opt_
+#define InOutOptional _Inout_opt_
 
-#define When(expression, annotations) _When_(expression, annotations)
+#define When(condition, annotations) _When_(condition, annotations)
 
 #else
-
-#define NotNull
-#define Nullable
 
 #define RetNotNull
 #define RetNullable
 #define MustInspectResult
-#define SuccessIf(expression)
+#define SuccessIf(condition)
 
 #define Optional
 #define Out
 #define InOut
-#define OutCannotIgnored
-#define InOutRequired
+#define OutOptional
+#define InOutOptional
 
-#define When(expression, annotations)
+#define When(condition, annotations)
 
 #endif
 
 #define Unused [[maybe_unused]]
 
-#ifdef CXX_17_OR_LATER
-#define NoIgnoreRet [[nodiscard]]
-#elif defined(SAL_SUPPORTED)
-#define NoIgnoreRet _Check_return_
-#else
-#define NoIgnoreRet
-#endif
+#define NoReturn [[noreturn]]
+#define NoIgnoreReturn [[nodiscard]]
 
 #ifdef CXX_20_OR_LATER
-#define NoIgnoreRetExt(cause) [[nodiscard(cause)]]
-#elif defined(CXX_17_OR_LATER)
-#define NoIgnoreRetExt(cause) [[nodiscard]]
-#elif defined(SAL_SUPPORTED)
-#define NoIgnoreRetExt(cause) _Check_return_
+#define NoIgnoreReturnExt(...) [[nodiscard(__VA_ARGS__)]]
 #else
-#define NoIgnoreRetExt(cause)
+#define NoIgnoreReturnExt(...) [[nodiscard]]
 #endif
 
-#define RetRequiresRelease NoIgnoreRetExt("The return value needs to be released")
+#define RetRequiresRelease NoIgnoreReturnExt("The return value needs to be released")
+#define RetRequiresReleaseExt NoIgnoreReturnExt
 
-#define RetRequiresReleaseExt NoIgnoreRetExt
-
-#ifdef CXX_14_OR_LATER
 #define Deprecated [[deprecated]]
-#define DeprecatedExt(message) [[deprecated(message)]]
-#else
-#define Deprecated
-#define DeprecatedExt(message)
-#endif
-
-#define AbstractClass
+#define DeprecatedExt(...) [[deprecated(__VA_ARGS__)]]
