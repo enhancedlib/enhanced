@@ -15,13 +15,10 @@
 
 #include <enhanced/core/exception/Error.h>
 
-#include <enhanced/core/exception/Exception.h>
+namespace enhanced::core::exception {
+    Error::Error(const String& message) noexcept : Exception(message) {}
 
-using enhanced::core::exception::Error;
-using enhanced::core::exception::Exception;
+    Error::Error(const Exception* cause) noexcept : Exception(cause) {}
 
-Error::Error(const String& message) noexcept : Exception(message) {}
-
-Error::Error(const Exception* cause) noexcept : Exception(cause) {}
-
-Error::Error(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
+    Error::Error(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
+}

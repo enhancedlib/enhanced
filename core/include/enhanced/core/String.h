@@ -29,9 +29,6 @@ namespace enhanced::core {
 
     template <typename CharType>
     class ENHANCED_CORE_API TString : public CharSequence<CharType> {
-    protected:
-        TString(CharType* value, sizetype length) noexcept;
-
     public:
         $(RetRequiresRelease)
         static func make(sizetype length) -> CharType*;
@@ -46,12 +43,13 @@ namespace enhanced::core {
         static func copy(const CharType* source, sizetype oldLength, sizetype newLength) -> CharType*;
 
         $(NoIgnoreReturn)
-        static func calcLength(const CharType* string) -> sizetype;
+        static func calcLength(const CharType* string) noexcept -> sizetype;
 
         $(NoIgnoreReturn)
         static func isEqual(const CharType* string1, const CharType* string2) noexcept -> bool;
 
-        static func from(const CharType* value) -> TString;
+        $(NoIgnoreReturn)
+        static func isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept -> bool;
 
         template <sizetype count>
         static inline func join(TString strings[count]) -> TMutString<CharType> {
@@ -64,12 +62,16 @@ namespace enhanced::core {
 
         TString() noexcept;
 
+        TString(const CharType* value, sizetype length) noexcept;
+
         template <sizetype size>
-        inline TString(const CharType(&value)[size]) noexcept : TString((CharType*) value, size) {}
+        inline TString(const CharType (&value)[size]) noexcept : TString((CharType*) value, size - 1) {}
 
-        TString(const CharType* value);
+        TString(const CharType*& value);
 
-        TString(CharType* value);
+        TString(CharType*& value);
+
+        TString(CharType* const& value);
 
         TString(const TString& other) noexcept;
 
@@ -144,8 +146,14 @@ namespace enhanced::core {
         $(NoIgnoreReturn)
         func operator==(const TString& string) const noexcept -> bool;
 
+        template <sizetype size>
         $(NoIgnoreReturn)
-        func operator==(const CharType* string) const noexcept -> bool;
+        inline func operator==(const CharType (&string)[size]) const noexcept -> bool {
+            return operator==(TString(string));
+        }
+
+        $(NoIgnoreReturn)
+        func operator==(const CharType*& string) const noexcept -> bool;
 
         $(NoIgnoreReturn)
         func operator+(const TString& string) const -> TMutString<CharType>;;
@@ -162,12 +170,36 @@ namespace enhanced::core {
     #endif
     using U16String = TString<u16char>;
     using U32String = TString<u32char>;
+
+    inline namespace stringLiteral {
+        inline func operator""_s(const char* string, sizetype size) -> String {
+            return {string, size};
+        }
+
+        inline func operator""_s(const wchar* string, sizetype size) -> WideString {
+            return {string, size};
+        }
+
+    #ifdef CXX_U8CHAR_SUPPORTED
+        inline func operator""_s(const u8char* string, sizetype size) -> U8String {
+            return {string, size};
+        }
+    #endif
+
+        inline func operator""_s(const u16char* string, sizetype size) -> U16String {
+            return {string, size};
+        }
+
+        inline func operator""_s(const u32char* string, sizetype size) -> U32String {
+            return {string, size};
+        }
+    }
 }
 
 #ifdef CXX_U8CHAR_SUPPORTED
-#define TSTRING(type, string) enhanced::core::util::traits::templateSwitch<const type(&)[sizeof(string) / sizeof(char)]> \
+#define TSTRING(type, string) enhanced::core::util::switchType<const type(&)[sizeof(string) / sizeof(char)]> \
     (string, WIDE_TEXT(string), U8_TEXT(string), U16_TEXT(string), U32_TEXT(string))
 #else
-#define TSTRING(type, string) enhanced::core::util::traits::templateSwitch<type><const type(&)[sizeof(string) / sizeof(char)]> \
+#define TSTRING(type, string) enhanced::core::util::switchType<type><const type(&)[sizeof(string) / sizeof(char)]> \
     (string, WIDE_TEXT(string), U16_TEXT(string), U32_TEXT(string))
 #endif

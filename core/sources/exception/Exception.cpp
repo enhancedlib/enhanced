@@ -25,46 +25,47 @@
 #include <enhanced/core/exception/NotImplementedError.h>
 #include <enhanced/core/util/traits.h>
 
-using enhanced::core::exception::Exception;
-using enhanced::core::String;
-using enhanced::core::util::traits::move;
+using enhanced::core::util::move;
+using enhanced::core::util::removeConst;
 using enhanced::core::io::errstream;
 
-using TerminateHandler = void(*)();
+namespace enhanced::core::exception {
+    using TerminateHandler = void(*)();
 
-static void terminateHandler() {
-    try {
-        std::rethrow_exception(std::current_exception());
-    } catch (const Exception& exception) {
-        errstream->print(exception.getTraceback());
-    } catch (const std::exception& exception) {
-        errstream->print(String::from(exception.what()));
-    } catch (...) {}
-}
+    static void terminateHandler() {
+        try {
+            std::rethrow_exception(std::current_exception());
+        } catch (const Exception& exception) {
+            errstream->print(exception.getTraceback());
+        } catch (const std::exception& exception) {
+            errstream->print(String(removeConst(exception.what())));
+        } catch (...) {}
+    }
 
-static TerminateHandler setupTerminateHandler() noexcept {
-    std::set_terminate(terminateHandler);
-    return terminateHandler;
-}
+    static TerminateHandler setupTerminateHandler() noexcept {
+        std::set_terminate(terminateHandler);
+        return terminateHandler;
+    }
 
-const TerminateHandler terminateHandlerFunc = setupTerminateHandler();
+    const TerminateHandler terminateHandlerFunc = setupTerminateHandler();
 
-Exception::Exception(const String& message) noexcept : message(move(message)), cause(null) {}
+    Exception::Exception(const String& message) noexcept : message(move(message)), cause(null) {}
 
-Exception::Exception(const Exception* cause) noexcept : message(""), cause(cause) {}
+    Exception::Exception(const Exception* cause) noexcept : message(""), cause(cause) {}
 
-Exception::Exception(const String& message, const Exception* cause) noexcept : message(move(message)), cause(cause) {}
+    Exception::Exception(const String& message, const Exception* cause) noexcept : message(move(message)), cause(cause) {}
 
-Exception::~Exception() noexcept = default;
+    Exception::~Exception() noexcept = default;
 
-const String& Exception::getTraceback() const noexcept {
-    return message;
-}
+    const String& Exception::getTraceback() const noexcept {
+        return message;
+    }
 
-const Exception* Exception::getCause() const noexcept {
-    return cause;
-}
+    const Exception* Exception::getCause() const noexcept {
+        return cause;
+    }
 
-const String& Exception::getMessage() const noexcept {
-    return message;
+    const String& Exception::getMessage() const noexcept {
+        return message;
+    }
 }

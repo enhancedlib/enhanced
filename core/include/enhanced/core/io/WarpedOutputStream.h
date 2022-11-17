@@ -61,6 +61,10 @@ namespace enhanced::core::io {
 
         func print(const String& message) -> void;
 
+        func print(void* address) -> void;
+
+        func print(nulltype) -> void;
+
         func close() const -> void override;
 
         func flush() const -> void override;

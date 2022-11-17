@@ -20,12 +20,12 @@
 #include <enhanced/core/String.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
-using enhanced::core::io::WarpedInputStream;
+namespace enhanced::core::io {
+    func WarpedInputStream::close() const -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedInputStream::close() const -> void {
-    NOT_IMPLEMENTED();
-}
-
-func WarpedInputStream::flush() const -> void {
-    NOT_IMPLEMENTED();
+    func WarpedInputStream::flush() const -> void {
+        NOT_IMPLEMENTED();
+    }
 }

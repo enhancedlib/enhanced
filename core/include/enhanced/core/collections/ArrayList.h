@@ -25,7 +25,7 @@
 #include <enhanced/core/collections/RandomAccess.h>
 #include <enhanced/core/util/traits.h>
 
-namespace enhanced_internal::core::collections {
+namespace enhancedInternal::core::collections {
     class ENHANCED_CORE_API ArrayListImpl {
     protected:
         void** elements;
@@ -35,11 +35,13 @@ namespace enhanced_internal::core::collections {
         sizetype capacity;
 
         struct GenericOperator {
-            void* (*allocate)(void*);
+            func (*copy)(void*) -> void*;
 
-            void (*destroy)(void*);
+            func (*move)(void*) -> void*;
 
-            bool (*equals)(void*, void*);
+            func (*destroy)(void*) -> void;
+
+            func (*equals)(void*, void*) -> bool;
         };
 
         class ENHANCED_CORE_API ArrayListIteratorImpl {
@@ -71,6 +73,8 @@ namespace enhanced_internal::core::collections {
 
         ArrayListImpl(const ArrayListImpl& other);
 
+        ArrayListImpl(ArrayListImpl&& other) noexcept;
+
         virtual ~ArrayListImpl() noexcept;
 
         $(NoIgnoreReturn)
@@ -80,6 +84,8 @@ namespace enhanced_internal::core::collections {
         func contain0(void* value) const -> bool;
 
         func add0(void* element) -> void;
+
+        func addMoved0(void* element) -> void;
 
         func remove0() -> void;
 
@@ -91,9 +97,9 @@ namespace enhanced_internal::core::collections {
 
 namespace enhanced::core::collections {
     template <typename Type>
-    class ENHANCED_CORE_API ArrayList final : public List<Type>, public RandomAccess, private enhanced_internal::core::collections::ArrayListImpl {
+    class ENHANCED_CORE_API ArrayList final : public List<Type>, public RandomAccess, private enhancedInternal::core::collections::ArrayListImpl {
     private:
-        using ArrayListImpl = enhanced_internal::core::collections::ArrayListImpl;
+        using ArrayListImpl = enhancedInternal::core::collections::ArrayListImpl;
 
         class ENHANCED_CORE_API ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
             friend class ArrayList<Type>;
@@ -127,8 +133,13 @@ namespace enhanced::core::collections {
         };
 
         $(RetRequiresRelease)
-        static func allocate(void* element) -> void* {
+        static func copy(void* element) -> void* {
             return new Type(*reinterpret_cast<Type*>(element));
+        }
+
+        $(RetRequiresRelease)
+        static func move(void* element) -> void* {
+            return new Type(util::move(*reinterpret_cast<Type*>(element)));
         }
 
         static func destroy(void* element) -> void {
@@ -143,11 +154,13 @@ namespace enhanced::core::collections {
         ArrayListIterator iter = ArrayListIterator(this);
 
     public:
-        inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE, {allocate, destroy, equals}) {}
+        inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE, {copy, move, destroy, equals}) {}
 
-        inline explicit ArrayList(sizetype capacity) : ArrayListImpl(capacity, {allocate, destroy, equals}) {}
+        inline explicit ArrayList(sizetype capacity) : ArrayListImpl(capacity, {copy, move, destroy, equals}) {}
 
         inline ArrayList(const ArrayList<Type>& other) : ArrayListImpl(other) {}
+
+        inline ArrayList(ArrayList<Type>&& other)  noexcept : ArrayListImpl(other) {}
 
         $(NoIgnoreReturn)
         inline func getSize() const -> sizetype override {
@@ -161,7 +174,7 @@ namespace enhanced::core::collections {
 
         $(NoIgnoreReturn)
         inline func contain(const Type& value) const -> bool override {
-            return contain0(util::traits::removePtrConst(&value));
+            return contain0(util::removePtrConst(&value));
         }
 
         $(NoIgnoreReturn)
@@ -181,7 +194,11 @@ namespace enhanced::core::collections {
         }
 
         inline func add(const Type& element) -> void override {
-            add0(util::traits::removePtrConst(&element));
+            add0(util::removePtrConst(&element));
+        }
+
+        inline func add(Type&& element) -> void override {
+            addMoved0(util::removePtrConst(&element));
         }
 
         inline func remove() -> Type override {

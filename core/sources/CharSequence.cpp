@@ -20,65 +20,66 @@
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/util/traits.h>
 
-using enhanced::core::CharSequence;
-using enhanced::core::util::traits::removePtrConst;
+using enhanced::core::util::removePtrConst;
 
-template <typename CharType>
-CharSequence<CharType>::CharSequence(const CharType* value, const sizetype length) : value(removePtrConst(value)), length(length) {}
+namespace enhanced::core {
+    template <typename CharType>
+    CharSequence<CharType>::CharSequence(const CharType* value, const sizetype length) : value(removePtrConst(value)), length(length) {}
 
-template <typename CharType>
-CharSequence<CharType>::CharSequence(const CharSequence& other) noexcept = default;
+    template <typename CharType>
+    CharSequence<CharType>::CharSequence(const CharSequence& other) noexcept = default;
 
-template <typename CharType>
-CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept = default;
+    template <typename CharType>
+    CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept = default;
 
-template <typename CharType>
-CharSequence<CharType>::~CharSequence() noexcept = default;
+    template <typename CharType>
+    CharSequence<CharType>::~CharSequence() noexcept = default;
 
-template <typename CharType>
-$(NoIgnoreReturn)
-func CharSequence<CharType>::isEmpty() const noexcept -> bool {
-    return length == 0;
+    template <typename CharType>
+    $(NoIgnoreReturn)
+    func CharSequence<CharType>::isEmpty() const noexcept -> bool {
+        return length == 0;
+    }
+
+    template <typename CharType>
+    $(NoIgnoreReturn)
+    func CharSequence<CharType>::getLength() const noexcept -> sizetype {
+        return length;
+    }
+
+    template <typename CharType>
+    $(NoIgnoreReturn)
+    func CharSequence<CharType>::getChars() const noexcept -> CharType* {
+        return value;
+    }
+
+    template <typename CharType>
+    $(NoIgnoreReturn)
+    func CharSequence<CharType>::at(sizetype index) const noexcept -> const CharType {
+        return value[index];
+    }
+
+    template <typename CharType>
+    $(NoIgnoreReturn)
+    func CharSequence<CharType>::operator[](const sizetype index) const noexcept -> const CharType {
+        return value[index];
+    }
+
+    template <typename CharType>
+    func CharSequence<CharType>::operator=(const CharSequence& other) noexcept -> CharSequence<CharType>& = default;
+
+    template <typename CharType>
+    func CharSequence<CharType>::operator=(CharSequence&& other) noexcept -> CharSequence<CharType>& = default;
+
+    template <typename CharType>
+    $(NoIgnoreReturn)
+    CharSequence<CharType>::operator CharType*() const noexcept {
+        return value;
+    }
+
+    template class CharSequence<char>;
+    template class CharSequence<wchar>;
+    template class CharSequence<u8char>;
+    template class CharSequence<u16char>;
+    template class CharSequence<u32char>;
 }
-
-template <typename CharType>
-$(NoIgnoreReturn)
-func CharSequence<CharType>::getLength() const noexcept -> sizetype {
-    return length;
-}
-
-template <typename CharType>
-$(NoIgnoreReturn)
-func CharSequence<CharType>::getChars() const noexcept -> CharType* {
-    return value;
-}
-
-template <typename CharType>
-$(NoIgnoreReturn)
-func CharSequence<CharType>::at(sizetype index) const noexcept -> const CharType {
-    return value[index];
-}
-
-template <typename CharType>
-$(NoIgnoreReturn)
-func CharSequence<CharType>::operator[](const sizetype index) const noexcept -> const CharType {
-    return value[index];
-}
-
-template <typename CharType>
-func CharSequence<CharType>::operator=(const CharSequence& other) noexcept -> CharSequence<CharType>& = default;
-
-template <typename CharType>
-func CharSequence<CharType>::operator=(CharSequence&& other) noexcept -> CharSequence<CharType>& = default;
-
-template <typename CharType>
-$(NoIgnoreReturn)
-CharSequence<CharType>::operator CharType*() const noexcept {
-    return value;
-}
-
-template class enhanced::core::CharSequence<char>;
-template class enhanced::core::CharSequence<wchar>;
-template class enhanced::core::CharSequence<u8char>;
-template class enhanced::core::CharSequence<u16char>;
-template class enhanced::core::CharSequence<u32char>;

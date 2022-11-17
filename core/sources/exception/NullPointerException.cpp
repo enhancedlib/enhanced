@@ -17,7 +17,6 @@
 
 #include <enhanced/core/exception/Exception.h>
 
-using enhanced::core::exception::NullPointerException;
-using enhanced::core::exception::Exception;
-
-NullPointerException::NullPointerException(const String& message) noexcept : Exception(message) {}
+namespace enhanced::core::exception {
+    NullPointerException::NullPointerException(const String& message) noexcept : Exception(message) {}
+}

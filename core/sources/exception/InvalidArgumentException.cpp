@@ -17,11 +17,10 @@
 
 #include <enhanced/core/exception/RuntimeException.h>
 
-using enhanced::core::exception::InvalidArgumentException;
-using enhanced::core::exception::RuntimeException;
+namespace enhanced::core::exception {
+    InvalidArgumentException::InvalidArgumentException(const String& message) noexcept : RuntimeException(message) {}
 
-InvalidArgumentException::InvalidArgumentException(const String& message) noexcept : RuntimeException(message) {}
+    InvalidArgumentException::InvalidArgumentException(const Exception* cause) noexcept : RuntimeException(cause) {}
 
-InvalidArgumentException::InvalidArgumentException(const Exception* cause) noexcept : RuntimeException(cause) {}
-
-InvalidArgumentException::InvalidArgumentException(const String& message, const Exception* cause) noexcept : RuntimeException(message, cause) {}
+    InvalidArgumentException::InvalidArgumentException(const String& message, const Exception* cause) noexcept : RuntimeException(message, cause) {}
+}

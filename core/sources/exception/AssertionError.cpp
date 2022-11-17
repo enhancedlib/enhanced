@@ -17,7 +17,6 @@
 
 #include <enhanced/core/exception/Error.h>
 
-using enhanced::core::exception::AssertionError;
-using enhanced::core::exception::Error;
-
-AssertionError::AssertionError(const String& message) noexcept : Error(message) {}
+namespace enhanced::core::exception {
+    AssertionError::AssertionError(const String& message) noexcept : Error(message) {}
+}

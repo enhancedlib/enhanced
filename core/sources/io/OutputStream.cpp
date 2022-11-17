@@ -19,16 +19,16 @@
 #include <enhanced/core/String.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
-using enhanced::core::io::OutputStream;
+namespace enhanced::core::io {
+    func OutputStream::write(byte b) const -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func OutputStream::write(byte b) const -> void {
-    NOT_IMPLEMENTED();
-}
+    func OutputStream::write(byte* buffer, sizetype size) const -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func OutputStream::write(byte* buffer, sizetype size) const -> void {
-    NOT_IMPLEMENTED();
-}
-
-func OutputStream::writeLine(const String& string) const -> void {
-    NOT_IMPLEMENTED();
+    func OutputStream::writeLine(const String& string) const -> void {
+        NOT_IMPLEMENTED();
+    }
 }

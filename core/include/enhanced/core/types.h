@@ -408,9 +408,32 @@ using nulltype = decltype(null);
 #define NEGATIVE_INFINITY (-POSITIVE_INFINITY)
 #define INFINITY POSITIVE_INFINITY
 #define NAN ((double) (INFINITY * 0.0))
-#else // Other compilers
+#else
 #define POSITIVE_INFINITY (1.0 / 0.0)
 #define NEGATIVE_INFINITY (-1.0 / 0.0)
 #define INFINITY POSITIVE_INFINITY
 #define NAN (0.0 / 0.0)
 #endif
+
+#ifdef INVALID_SIZE
+#undef INVALID_SIZE
+#endif
+
+#ifdef EXIT_SUCCESS
+#undef EXIT_SUCCESS
+#endif
+
+#ifdef EXIT_FAILURE
+#undef EXIT_FAILURE
+#endif
+
+#ifdef EOF
+#undef EOF
+#endif
+
+#define INVALID_SIZE SIZE_TYPE_MAX
+
+#define EXIT_SUCCESS 0
+#define EXIT_FAILURE 1
+
+#define EOF (-1)

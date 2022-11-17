@@ -20,8 +20,9 @@
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/util/traits.h>
 #include <enhanced/core/exception/NullPointerException.h>
+#include <enhanced/core/exception/NotImplementedError.h>
 
-namespace enhanced_internal::core::util {
+namespace enhancedInternal::core::util {
     class ENHANCED_CORE_API SharedPtrImpl {
     private:
         sizetype* referenceCount;
@@ -55,7 +56,7 @@ namespace enhanced_internal::core::util {
 
 namespace enhanced::core::util {
     template <typename Type>
-    class ENHANCED_CORE_API SharedPtr final : private enhanced_internal::core::util::SharedPtrImpl {
+    class ENHANCED_CORE_API SharedPtr final : private enhancedInternal::core::util::SharedPtrImpl {
     private:
         static func destroy(void* ptr) -> void {
             delete static_cast<Type*>(ptr);
@@ -65,7 +66,7 @@ namespace enhanced::core::util {
             if (pointer == null) throw exception::NullPointerException("The pointer is null");
         }
 
-        SharedPtr(Type* ptr = null) : SharedPtrImpl(static_cast<void*>(ptr), {destroy}) {}
+        SharedPtr(Type* ptr) : SharedPtrImpl(static_cast<void*>(ptr), {destroy}) {}
 
     public:
         template <typename... Args>
@@ -73,10 +74,12 @@ namespace enhanced::core::util {
             return SharedPtr(new Type(args...));
         }
 
-        template <typename... Args>
-        static func makeMulti(sizetype size, Args... args) -> SharedPtr {
-            return SharedPtr(new Type[size] {args...});
+        template <sizetype size, typename... Args>
+        static func make(Args... args) -> SharedPtr {
+            NOT_IMPLEMENTED();
         }
+
+        SharedPtr() : SharedPtrImpl(null, {destroy}) {}
 
         SharedPtr(nulltype ptr) : SharedPtrImpl(static_cast<void*>(ptr), {destroy}) {}
 

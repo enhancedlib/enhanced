@@ -25,7 +25,7 @@
 #include <enhanced/core/collections/Deque.h>
 #include <enhanced/core/util/traits.h>
 
-namespace enhanced_internal::core::collections {
+namespace enhancedInternal::core::collections {
     class ENHANCED_CORE_API LinkedListImpl {
     protected:
         struct Node {
@@ -47,7 +47,9 @@ namespace enhanced_internal::core::collections {
         static func nextNode(Node*& node) -> Node*&;
 
         struct GenericOperator {
-            func (*allocate)(void*) -> void*;
+            func (*copy)(void*) -> void*;
+
+            func (*move)(void*) -> void*;
 
             func (*destroy)(void*) -> void;
 
@@ -99,9 +101,13 @@ namespace enhanced_internal::core::collections {
 
         func addLast0(void* element) -> void;
 
+        func addLastMoved0(void* element) -> void;
+
         func removeLast0() -> void;
 
         func addFirst0(void* element) -> void;
+
+        func addFirstMoved0(void* element) -> void;
 
         func removeFirst0() -> void;
     };
@@ -109,9 +115,9 @@ namespace enhanced_internal::core::collections {
 
 namespace enhanced::core::collections {
     template <typename Type>
-    class ENHANCED_CORE_API LinkedList : public List<Type>, public Deque<Type>, private enhanced_internal::core::collections::LinkedListImpl {
+    class ENHANCED_CORE_API LinkedList : public List<Type>, public Deque<Type>, private enhancedInternal::core::collections::LinkedListImpl {
     private:
-        using LinkedListImpl = enhanced_internal::core::collections::LinkedListImpl;
+        using LinkedListImpl = enhancedInternal::core::collections::LinkedListImpl;
 
         class ENHANCED_CORE_API LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
             friend class LinkedList<Type>;
@@ -145,8 +151,13 @@ namespace enhanced::core::collections {
         };
 
         $(RetRequiresRelease)
-        static func allocate(void* element) -> void* {
+        static func copy(void* element) -> void* {
             return new Type(*reinterpret_cast<Type*>(element));
+        }
+
+        $(RetRequiresRelease)
+        static func move(void* element) -> void* {
+            return new Type(util::move(*reinterpret_cast<Type*>(element)));
         }
 
         static func destroy(void* element) -> void {
@@ -161,7 +172,7 @@ namespace enhanced::core::collections {
         LinkedListIterator iter = LinkedListIterator(this);
 
     public:
-        inline LinkedList() : LinkedListImpl({allocate, destroy, equals}) {}
+        inline LinkedList() : LinkedListImpl({copy, move, destroy, equals}) {}
 
         inline LinkedList(const LinkedList<Type>& other) : LinkedListImpl(other) {}
 
@@ -177,7 +188,7 @@ namespace enhanced::core::collections {
 
         $(NoIgnoreReturn)
         inline func contain(const Type& value) const -> bool override {
-            return contain0(util::traits::removePtrConst(&value));
+            return contain0(util::removePtrConst(&value));
         }
 
         $(NoIgnoreReturn)
@@ -217,7 +228,11 @@ namespace enhanced::core::collections {
         }
 
         inline func addLast(const Type& element) -> void override {
-            addLast0(util::traits::removePtrConst(&element));
+            addLast0(util::removePtrConst(&element));
+        }
+
+        inline func addLast(Type&& element) -> void override {
+            addLastMoved0(util::removePtrConst(&element));
         }
 
         inline func removeLast() -> Type override {
@@ -227,7 +242,11 @@ namespace enhanced::core::collections {
         }
 
         inline func addFirst(const Type& element) -> void override {
-            addFirst0(util::traits::removePtrConst(&element));
+            addFirst0(util::removePtrConst(&element));
+        }
+
+        inline func addFirst(Type&& element) -> void override {
+            addFirstMoved0(util::removePtrConst(&element));
         }
 
         inline func removeFirst() -> Type override {
@@ -240,11 +259,19 @@ namespace enhanced::core::collections {
             addLast(element);
         }
 
+        inline func add(Type&& element) -> void override {
+            addLast(element);
+        }
+
         inline func remove() -> Type override {
             return removeLast();
         }
 
         inline func push(const Type& element) -> void override {
+            addFirst(element);
+        }
+
+        inline func push(Type&& element) -> void override {
             addFirst(element);
         }
 

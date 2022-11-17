@@ -123,7 +123,7 @@
 #define DEBUG
 #endif
 
-#if defined(__CHAR_UNSIGNED__) || (defined(COMPILER_MSVC) && defined(_CHAR_UNSIGNED))
+#if (defined(COMPILER_MSVC) && defined(_CHAR_UNSIGNED)) || defined(__CHAR_UNSIGNED__)
 #define CHAR_IS_UNSIGNED
 #endif
 

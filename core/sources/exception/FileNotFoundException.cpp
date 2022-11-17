@@ -20,7 +20,7 @@
 #include <enhanced/core/String.h>
 #include <enhanced/core/MutString.h>
 
-using enhanced::core::exception::FileNotFoundException;
-
-FileNotFoundException::FileNotFoundException(const String& name) noexcept :
-    IOException(String::join({"File or directory '", name, "' not found"})) {}
+namespace enhanced::core::exception {
+    FileNotFoundException::FileNotFoundException(const String& name) noexcept :
+        IOException(String::join({"File or directory '", name, "' not found"})) {}
+}

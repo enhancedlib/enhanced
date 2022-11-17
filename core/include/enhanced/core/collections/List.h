@@ -29,6 +29,8 @@ namespace enhanced::core::collections {
 
         virtual func add(const Type& element) -> void = abstract;
 
+        virtual func add(Type&& element) -> void = abstract;
+
         virtual func remove() -> Type = abstract;
     };
 }

@@ -20,103 +20,103 @@
 #include <enhanced/core/exception/InvalidArgumentException.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
-using enhanced::core::math::LargeInteger;
-using enhanced::core::String;
 using enhanced::core::exception::InvalidArgumentException;
 
-template <typename NumberType>
-func LargeInteger::from(NumberType number) -> LargeInteger {
-    return LargeInteger(number);
-}
-
-LargeInteger::LargeInteger(uint64 number) : storage(0), isNegative(number < 0) {
-    sizetype count = 1;
-    for (uint64 value = number; value > 0; value /= 10) ++count;
-
-    length = count;
-    storage.expand(length + 1);
-}
-
-LargeInteger::LargeInteger(const String& number) : storage(number.getLength() + 1), isNegative(false), length(number.getLength()) {
-    sizetype index;
-    if (number[0] == '-') {
-        index = 1;
-        isNegative = true;
-    } else if (number[0] == '+') index = 1;
-    else index = 0;
-
-    for (; index < length; ++index) {
-        storage[index] = number[index] - '0';
-        if (storage[index] >= 10) { // Out of the range.
-            throw InvalidArgumentException("Each character in the string must be a number (except the first character can be + or -)");
-        }
+namespace enhanced::core::math {
+    template <typename NumberType>
+    func LargeInteger::from(NumberType number) -> LargeInteger {
+        return LargeInteger(number);
     }
-}
 
-LargeInteger LargeInteger::operator+(LargeInteger& number) const {
-    NOT_IMPLEMENTED();
-}
+    LargeInteger::LargeInteger(uint64 number) : storage(0), isNegative(number < 0) {
+        sizetype count = 1;
+        for (uint64 value = number; value > 0; value /= 10) ++count;
 
-LargeInteger LargeInteger::operator-(LargeInteger& number) const {
-    NOT_IMPLEMENTED();
-}
+        length = count;
+        storage.expand(length + 1);
+    }
 
-LargeInteger LargeInteger::operator*(LargeInteger& number) const {
-    NOT_IMPLEMENTED();
-}
+    LargeInteger::LargeInteger(const String& number) : storage(number.getLength() + 1), isNegative(false), length(number.getLength()) {
+        sizetype index;
+        if (number[0] == '-') {
+            index = 1;
+            isNegative = true;
+        } else if (number[0] == '+') index = 1;
+        else index = 0;
 
-LargeInteger LargeInteger::operator/(LargeInteger& number) const {
-    NOT_IMPLEMENTED();
-}
-
-LargeInteger LargeInteger::operator%(LargeInteger& number) const {
-    NOT_IMPLEMENTED();
-}
-
-func LargeInteger::add(LargeInteger& number) -> LargeInteger& {
-    for (sizetype index = 0; index < length; ++index) {
-        storage[index] += number.storage[index];
-        if (storage[index] >= 10) {
-            storage[index] -= 10;
-            if ((index + 1) == length) {
-                storage.add(1);
-            } else {
-                storage[index + 1] += 1;
+        for (; index < length; ++index) {
+            storage[index] = number[index] - '0';
+            if (storage[index] >= 10) { // Out of the range.
+                throw InvalidArgumentException("Each character in the string must be a number (except the first character can be + or -)");
             }
         }
     }
 
-    return *this;
-}
+    LargeInteger LargeInteger::operator+(LargeInteger& number) const {
+        NOT_IMPLEMENTED();
+    }
 
-func LargeInteger::sub(LargeInteger& number) -> LargeInteger& {
-    NOT_IMPLEMENTED();
-}
+    LargeInteger LargeInteger::operator-(LargeInteger& number) const {
+        NOT_IMPLEMENTED();
+    }
 
-func LargeInteger::mul(LargeInteger& number) -> LargeInteger& {
-    NOT_IMPLEMENTED();
-}
+    LargeInteger LargeInteger::operator*(LargeInteger& number) const {
+        NOT_IMPLEMENTED();
+    }
 
-func LargeInteger::div(LargeInteger& number) -> LargeInteger& {
-    NOT_IMPLEMENTED();
-}
+    LargeInteger LargeInteger::operator/(LargeInteger& number) const {
+        NOT_IMPLEMENTED();
+    }
 
-func LargeInteger::operator+=(LargeInteger& number) -> LargeInteger& {
-    NOT_IMPLEMENTED();
-}
+    LargeInteger LargeInteger::operator%(LargeInteger& number) const {
+        NOT_IMPLEMENTED();
+    }
 
-func LargeInteger::operator-=(LargeInteger& number) -> LargeInteger& {
-    NOT_IMPLEMENTED();
-}
+    func LargeInteger::add(LargeInteger& number) -> LargeInteger& {
+        for (sizetype index = 0; index < length; ++index) {
+            storage[index] += number.storage[index];
+            if (storage[index] >= 10) {
+                storage[index] -= 10;
+                if ((index + 1) == length) {
+                    storage.add(1);
+                } else {
+                    storage[index + 1] += 1;
+                }
+            }
+        }
 
-func LargeInteger::operator*=(LargeInteger& number) -> LargeInteger& {
-    NOT_IMPLEMENTED();
-}
+        return *this;
+    }
 
-func LargeInteger::operator/=(LargeInteger& number) -> LargeInteger& {
-    NOT_IMPLEMENTED();
-}
+    func LargeInteger::sub(LargeInteger& number) -> LargeInteger& {
+        NOT_IMPLEMENTED();
+    }
 
-func LargeInteger::operator%=(LargeInteger& number) -> LargeInteger& {
-    NOT_IMPLEMENTED();
+    func LargeInteger::mul(LargeInteger& number) -> LargeInteger& {
+        NOT_IMPLEMENTED();
+    }
+
+    func LargeInteger::div(LargeInteger& number) -> LargeInteger& {
+        NOT_IMPLEMENTED();
+    }
+
+    func LargeInteger::operator+=(LargeInteger& number) -> LargeInteger& {
+        NOT_IMPLEMENTED();
+    }
+
+    func LargeInteger::operator-=(LargeInteger& number) -> LargeInteger& {
+        NOT_IMPLEMENTED();
+    }
+
+    func LargeInteger::operator*=(LargeInteger& number) -> LargeInteger& {
+        NOT_IMPLEMENTED();
+    }
+
+    func LargeInteger::operator/=(LargeInteger& number) -> LargeInteger& {
+        NOT_IMPLEMENTED();
+    }
+
+    func LargeInteger::operator%=(LargeInteger& number) -> LargeInteger& {
+        NOT_IMPLEMENTED();
+    }
 }

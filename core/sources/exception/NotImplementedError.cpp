@@ -17,7 +17,6 @@
 
 #include <enhanced/core/exception/Error.h>
 
-using enhanced::core::exception::NotImplementedError;
-using enhanced::core::exception::Error;
-
-NotImplementedError::NotImplementedError(const String& message) noexcept : Error(message) {}
+namespace enhanced::core::exception {
+    NotImplementedError::NotImplementedError(const String& message) noexcept : Error(message) {}
+}

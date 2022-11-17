@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
- * Licensed under the Enhanced Software License, latest version.
+ * Licensed under the Enhanced Software License.
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,16 +18,18 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/String.h>
+#include <enhanced/core/util/traits.h>
 
-using enhanced::core::TypeInfo;
-using enhanced::core::String;
+using enhanced::core::util::removeConst;
 
-$(NoIgnoreReturn)
-func TypeInfo::getName() const -> String {
-    return info.name();
-}
+namespace enhanced::core {
+    $(NoIgnoreReturn)
+    func TypeInfo::getName() const -> String {
+        return removeConst(info.name());
+    }
 
-$(NoIgnoreReturn)
-func TypeInfo::hashCode() const -> sizetype {
-    return info.hash_code();
+    $(NoIgnoreReturn)
+    func TypeInfo::hashCode() const -> sizetype {
+        return info.hash_code();
+    }
 }

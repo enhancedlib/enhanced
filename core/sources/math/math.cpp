@@ -18,8 +18,4 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 
-namespace enhanced::core::math {
-    func abs(int64 number) -> uint64 {
-        return (number < 0) ? -number : number;
-    }
-}
+namespace enhanced::core::math {}

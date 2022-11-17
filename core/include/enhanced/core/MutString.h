@@ -22,13 +22,20 @@
 
 namespace enhanced::core {
     template <typename CharType>
-    class ENHANCED_CORE_API TMutString : public TString<CharType> {
+    class ENHANCED_CORE_API TMutString final : public TString<CharType> {
     public:
         TMutString();
 
-        TMutString(const CharType* value);
+        TMutString(const CharType* value, sizetype length) noexcept;
 
-        TMutString(CharType* value);
+        template <sizetype size>
+        TMutString(const CharType (&value)[size]) : TMutString<CharType>(value, size - 1) {}
+
+        TMutString(const CharType*& value);
+
+        TMutString(CharType*& value);
+
+        TMutString(CharType* const& value);
 
         explicit TMutString(sizetype length);
 
@@ -80,10 +87,34 @@ namespace enhanced::core {
     };
 
     using MutString = TMutString<char>;
-    using MutWideString = TMutString<wchar>;
+    using WideMutString = TMutString<wchar>;
     #ifdef CXX_U8CHAR_SUPPORTED
     using U8MutString = TMutString<u8char>;
     #endif
     using U16MutString = TMutString<u16char>;
     using U32MutString = TMutString<u32char>;
+
+    inline namespace stringLiteral {
+        inline func operator""_m(const char* string, sizetype size) -> MutString {
+            return {string, size};
+        }
+
+        inline func operator""_m(const wchar* string, sizetype size) -> WideMutString {
+            return {string, size};
+        }
+
+    #ifdef CXX_U8CHAR_SUPPORTED
+        inline func operator""_m(const u8char* string, sizetype size) -> U8MutString {
+            return {string, size};
+        }
+    #endif
+
+        inline func operator""_m(const u16char* string, sizetype size) -> U16MutString {
+            return {string, size};
+        }
+
+        inline func operator""_m(const u32char* string, sizetype size) -> U32MutString {
+            return {string, size};
+        }
+    }
 }

@@ -17,7 +17,21 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/util/traits.h>
 
 namespace enhanced::core::math {
-    ENHANCED_CORE_API func abs(int64 number) -> uint64;
+    template <typename IntegralType>
+    inline func max(IntegralType x, IntegralType y) -> util::EnableIf<util::isIntegralType<IntegralType>, IntegralType> {
+        return (x > y) ? x : y;
+    }
+
+    template <typename IntegralType>
+    inline func min(IntegralType x, IntegralType y) -> util::EnableIf<util::isIntegralType<IntegralType>, IntegralType> {
+        return (x < y) ? x : y;
+    }
+
+    template <typename IntegralType>
+    inline func abs(IntegralType number) -> util::EnableIf<util::isIntegralType<IntegralType>, IntegralType> {
+        return (number >= 0) ? number : -number;
+    }
 }

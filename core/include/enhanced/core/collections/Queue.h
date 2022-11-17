@@ -37,13 +37,19 @@ namespace enhanced::core::collections {
 
         virtual func addLast(const Type& element) -> void = abstract;
 
+        virtual func addLast(Type&& element) -> void = abstract;
+
         virtual func removeFirst() -> Type = abstract;
 
         virtual func add(const Type& element) -> void = abstract;
 
+        virtual func add(Type&& element) -> void = abstract;
+
         virtual func remove() -> Type = abstract;
 
         virtual func push(const Type& element) -> void = abstract;
+
+        virtual func push(Type&& element) -> void = abstract;
 
         virtual func popup() -> Type = abstract;
     };

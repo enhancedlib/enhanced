@@ -18,6 +18,6 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 
-using enhanced::core::exception::UnreachableError;
-
-UnreachableError::UnreachableError() noexcept = default;
+namespace enhanced::core::exception {
+    UnreachableError::UnreachableError() noexcept = default;
+}

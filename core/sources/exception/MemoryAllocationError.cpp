@@ -17,7 +17,6 @@
 
 #include <enhanced/core/exception/Error.h>
 
-using enhanced::core::exception::MemoryAllocationError;
-using enhanced::core::exception::Error;
-
-MemoryAllocationError::MemoryAllocationError(const String& message) noexcept : Error(message) {}
+namespace enhanced::core::exception {
+    MemoryAllocationError::MemoryAllocationError(const String& message) noexcept : Error(message) {}
+}

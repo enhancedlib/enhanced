@@ -17,9 +17,8 @@
 
 #include <enhanced/core/exception/RuntimeException.h>
 
-using enhanced::core::exception::IndexOutOfBoundsException;
-using enhanced::core::exception::RuntimeException;
+namespace enhanced::core::exception {
+    IndexOutOfBoundsException::IndexOutOfBoundsException(const String& message) noexcept : RuntimeException(message) {}
 
-IndexOutOfBoundsException::IndexOutOfBoundsException(const String& message) noexcept : RuntimeException(message) {}
-
-IndexOutOfBoundsException::IndexOutOfBoundsException(sizetype index, sizetype size) noexcept : RuntimeException("") {} // TODO
+    IndexOutOfBoundsException::IndexOutOfBoundsException(sizetype index, sizetype size) noexcept : RuntimeException("") {} // TODO
+}

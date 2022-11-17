@@ -18,10 +18,10 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 
-using enhanced::core::exception::RuntimeException;
+namespace enhanced::core::exception {
+    RuntimeException::RuntimeException(const String& message) noexcept : Exception(message) {}
 
-RuntimeException::RuntimeException(const String& message) noexcept : Exception(message) {}
+    RuntimeException::RuntimeException(const Exception* cause) noexcept : Exception(cause) {}
 
-RuntimeException::RuntimeException(const Exception* cause) noexcept : Exception(cause) {}
-
-RuntimeException::RuntimeException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
+    RuntimeException::RuntimeException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
+}

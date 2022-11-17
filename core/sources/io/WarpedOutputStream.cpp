@@ -20,40 +20,72 @@
 #include <enhanced/core/String.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
-using enhanced::core::io::WarpedOutputStream;
+namespace enhanced::core::io {
+    func WarpedOutputStream::print(char ch) -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedOutputStream::print(int8 i8) -> void {
-    NOT_IMPLEMENTED();
-}
+    func WarpedOutputStream::print(wchar wch) -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedOutputStream::print(int16 i16) -> void {
-    NOT_IMPLEMENTED();
-}
+    func WarpedOutputStream::print(u8char u8ch) -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedOutputStream::print(int32 i32) -> void {
-    NOT_IMPLEMENTED();
-}
+    func WarpedOutputStream::print(u16char u16ch) -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedOutputStream::print(int64 i64) -> void {
-    NOT_IMPLEMENTED();
-}
+    func WarpedOutputStream::print(u32char u32ch) -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedOutputStream::print(float32 i32) -> void {
-    NOT_IMPLEMENTED();
-}
+    func WarpedOutputStream::print(bool boolean) -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedOutputStream::print(float64 i64) -> void {
-    NOT_IMPLEMENTED();
-}
+    func WarpedOutputStream::print(int8 i8) -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedOutputStream::print(const String& message) -> void {
-    NOT_IMPLEMENTED();
-}
+    func WarpedOutputStream::print(int16 i16) -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedOutputStream::close() const -> void {
-    NOT_IMPLEMENTED();
-}
+    func WarpedOutputStream::print(int32 i32) -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func WarpedOutputStream::flush() const -> void {
-    NOT_IMPLEMENTED();
+    func WarpedOutputStream::print(int64 i64) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::print(float32 i32) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::print(float64 i64) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::print(const String& message) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::print(void* address) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::print(nulltype) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::close() const -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::flush() const -> void {
+        NOT_IMPLEMENTED();
+    }
 }

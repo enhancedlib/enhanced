@@ -21,17 +21,16 @@
 #include <enhanced/core/MutString.h>
 #include <enhanced/core/exception/NotImplementedError.h>
 
-using enhanced::core::io::InputStream;
-using enhanced::core::MutString;
+namespace enhanced::core::io {
+    func InputStream::get() const -> byte {
+        NOT_IMPLEMENTED();
+    }
 
-func InputStream::get() const -> byte {
-    NOT_IMPLEMENTED();
-}
+    func InputStream::read(byte *buffer, sizetype size) const -> void {
+        NOT_IMPLEMENTED();
+    }
 
-func InputStream::read(byte *buffer, sizetype size) const -> void {
-    NOT_IMPLEMENTED();
-}
-
-func InputStream::readLine() const -> MutString {
-    NOT_IMPLEMENTED();
+    func InputStream::readLine() const -> MutString {
+        NOT_IMPLEMENTED();
+    }
 }

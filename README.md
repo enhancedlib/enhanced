@@ -37,7 +37,7 @@ Note: many of the features have not been developed yet, and will be gradually ad
 
 - And more...
 
-For using this library, you should use least C++17 standard.
+To use this library, you should use at least the C++17 standard.
 
 ## Build
 

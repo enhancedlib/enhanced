@@ -15,10 +15,11 @@
 
 #pragma once
 
+#include "enhanced/core/util/traits.h"
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 
-namespace enhanced_internal::core::util::traits {
+namespace enhancedInternal::core::util::traits {
     template <typename RawType>
     struct RemoveConstImpl final {
         using Type = RawType;
@@ -130,38 +131,38 @@ namespace enhanced_internal::core::util::traits {
     };
 }
 
-namespace enhanced ::core ::util ::traits {
+namespace enhanced::core::util::inline traits {
     // Functions whose names begin with "__" are compiler internal macro functions.
 
     template <typename Type>
-    using RemoveConst = typename enhanced_internal::core::util::traits::RemoveConstImpl<Type>::Type;
+    using RemoveConst = typename enhancedInternal::core::util::traits::RemoveConstImpl<Type>::Type;
 
     template <typename Type>
-    using RemoveVolatile = typename enhanced_internal::core::util::traits::RemoveVolatileImpl<Type>::Type;
+    using RemoveVolatile = typename enhancedInternal::core::util::traits::RemoveVolatileImpl<Type>::Type;
 
     template <typename Type>
-    using RemoveQualifier = RemoveConst<RemoveVolatile<Type>>;
+    using RemoveCvQualifier = RemoveConst<RemoveVolatile<Type>>;
 
     template <typename Type>
-    using RemoveRef = typename enhanced_internal::core::util::traits::RemoveRefImpl<Type>::Type;
+    using RemoveRef = typename enhancedInternal::core::util::traits::RemoveRefImpl<Type>::Type;
 
     template <typename Type>
-    using RemovePointer = typename enhanced_internal::core::util::traits::RemovePointerImpl<Type>::Type;
+    using RemovePointer = typename enhancedInternal::core::util::traits::RemovePointerImpl<Type>::Type;
 
     template <typename Type>
-    using RemovePtrConst = typename enhanced_internal::core::util::traits::RemovePtrConstImpl<Type>::Type;
+    using RemovePtrConst = typename enhancedInternal::core::util::traits::RemovePtrConstImpl<Type>::Type;
 
     template <typename Type>
-    using RemovePtrVolatile = typename enhanced_internal::core::util::traits::RemovePtrVolatileImpl<Type>::Type;
+    using RemovePtrVolatile = typename enhancedInternal::core::util::traits::RemovePtrVolatileImpl<Type>::Type;
 
     template <typename Type>
-    using RemovePtrQualifier = RemovePtrConst<RemovePtrVolatile<Type>>;
+    using RemovePtrCvQualifier = RemovePtrConst<RemovePtrVolatile<Type>>;
 
     template <bool condition, typename Type = void>
-    using EnableIf = typename enhanced_internal::core::util::traits::EnableIfImpl<condition, Type>::Type;
+    using EnableIf = typename enhancedInternal::core::util::traits::EnableIfImpl<condition, Type>::Type;
 
     template <bool condition, typename Type1, typename Type2>
-    using Conditional = typename enhanced_internal::core::util::traits::ConditionalImpl<condition, Type1, Type2>::Type;
+    using Conditional = typename enhancedInternal::core::util::traits::ConditionalImpl<condition, Type1, Type2>::Type;
 
     template <bool first, bool... conditions>
     inline constexpr bool allOfTrue = first;
@@ -175,16 +176,16 @@ namespace enhanced ::core ::util ::traits {
     template <bool next, bool... conditions>
     inline constexpr bool anyOfTrue<false, next, conditions...> = anyOfTrue<next, conditions...>;
 
-    #ifdef COMPILER_MSVC
+#ifdef COMPILER_MSVC
     template <typename, typename>
     inline constexpr bool isSame = false;
 
     template <typename Type>
     inline constexpr bool isSame<Type, Type> = true;
-    #else
+#else
     template <typename Type1, typename Type2>
     inline constexpr bool isSame = __is_same(Type1, Type2);
-    #endif
+#endif
 
     template <typename Type, typename... OthersType>
     inline constexpr bool isAnyOf = anyOfTrue<isSame<Type, OthersType>...>;
@@ -231,9 +232,6 @@ namespace enhanced ::core ::util ::traits {
     inline constexpr bool isReference<Type&&> = true;
 
     template <typename Type>
-    inline constexpr bool isMemberPointer = false; // TODO
-
-    template <typename Type>
     inline constexpr bool isIntegralType =
         isAnyOf<Type, bool, char, schar, uchar, wchar,
     #ifdef CXX_U8CHAR_SUPPORTED
@@ -251,13 +249,69 @@ namespace enhanced ::core ::util ::traits {
     inline constexpr bool isEmptyType = __is_empty(Type);
 
     template <typename Type>
-    inline constexpr bool isVoidType = isSame<RemoveQualifier<Type>, void>;
+    inline constexpr bool isVoidType = isSame<RemoveCvQualifier<Type>, void>;
 
     template <typename Type>
-    inline constexpr bool isNullType = isSame<RemoveQualifier<Type>, nulltype>;
+    inline constexpr bool isNullType = isSame<RemoveCvQualifier<Type>, nulltype>;
 
     template <typename Type>
     inline constexpr bool isBasicType = isArithmeticType<Type> || isVoidType<Type> || isNullType<Type>;
+
+    // Only function types and reference types cannot be const qualified.
+
+    template <typename Type>
+    inline constexpr bool isObjectType = isConst<const Type> && !isVoidType<Type>;
+
+    template <typename Type>
+    inline constexpr bool isFunctionType = !isConst<const Type> && !isReference<Type>;
+
+#ifndef COMPILER_CLANG
+}
+
+namespace enhancedInternal::core::util::traits {
+    template <typename Type>
+    inline constexpr bool isMemberObjectPointerImpl = false;
+
+    template <typename Type, typename Class>
+    inline constexpr bool isMemberObjectPointerImpl<Type Class::*> = !enhanced::core::util::isFunctionType<Type>;
+}
+
+namespace enhanced::core::util::inline traits {
+
+    template <typename Type>
+    inline constexpr bool isMemberObjectPointer = enhancedInternal::core::util::traits::isMemberObjectPointerImpl<RemoveCvQualifier<Type>>;
+#else
+    template <typename Type>
+    inline constexpr bool isMemberObjectPointer = __is_member_object_pointer(Type);
+#endif
+
+#ifndef COMPILER_CLANG
+}
+
+namespace enhancedInternal::core::util::traits {
+    template <typename Type>
+    inline constexpr bool isMemberFunctionPointerImpl = false;
+
+    template <typename Type, typename Class>
+    inline constexpr bool isMemberFunctionPointerImpl<Type Class::*> = enhanced::core::util::isFunctionType<Type>;
+}
+
+namespace enhanced::core::util::inline traits {
+
+    template <typename Type>
+    inline constexpr bool isMemberFunctionPointer = enhancedInternal::core::util::traits::isMemberFunctionPointerImpl<RemoveCvQualifier<Type>>;
+#else
+    template <typename Type>
+    inline constexpr bool isMemberFunctionPointer = __is_member_function_pointer(Type);
+#endif
+
+#ifndef COMPILER_CLANG
+    template <typename Type>
+    inline constexpr bool isMemberPointer = isMemberObjectPointer<Type> || isMemberFunctionPointer<Type>;
+#else
+    template <typename Type>
+    inline constexpr bool isMemberPointer = __is_member_pointer(Type);
+#endif
 
     template <typename Type>
     inline constexpr bool isEnumType = __is_enum(Type);
@@ -289,13 +343,43 @@ namespace enhanced ::core ::util ::traits {
     }
 
     template <typename Case, typename First, typename... Types>
-    inline constexpr func templateSwitch(First&& first, Types&&... values) -> EnableIf<isSame<Case, First>, Case&> {
+    inline constexpr func switchType(First&& first, Types&&... values) -> EnableIf<isSame<Case, First>, Case&> {
         return first;
     }
 
     template <typename Case, typename First, typename... Types>
-    inline constexpr func templateSwitch(First&& first, Types&&... values) -> EnableIf<!isSame<Case, First>, Case&> {
-        return templateSwitch<Case, Types...>(static_cast<Types&&>(values)...);
+    inline constexpr func switchType(First&& first, Types&&... values) -> EnableIf<!isSame<Case, First>, Case&> {
+        return switchType<Case, Types...>(static_cast<Types&&>(values)...);
+    }
+
+    template <typename Type>
+    inline constexpr func addConst(Type&& value) -> const RemoveRef<Type>& {
+        return const_cast<const RemoveRef<Type>&>(value);
+    }
+
+    template <typename Type>
+    inline constexpr func addVolatile(Type&& value) -> volatile RemoveRef<Type>& {
+        return const_cast<volatile RemoveRef<Type>&>(value);
+    }
+
+    template <typename Type>
+    inline constexpr func addCvQualifier(Type&& value) -> const volatile RemoveRef<Type>& {
+        return const_cast<const volatile RemoveRef<Type>&>(value);
+    }
+
+    template <typename Type>
+    inline constexpr func addPtrConst(Type&& value) -> EnableIf<isPointer<Type>, const RemovePointer<RemoveRef<Type>>*&> {
+        return const_cast<const RemovePointer<RemoveRef<Type>>*&>(value);
+    }
+
+    template <typename Type>
+    inline constexpr func addPtrVolatile(Type&& value) -> EnableIf<isPointer<Type>, volatile RemovePointer<RemoveRef<Type>>*&> {
+        return const_cast<volatile RemovePointer<RemoveRef<Type>>*&>(value);
+    }
+
+    template <typename Type>
+    inline constexpr func addPtrCvQualifier(Type&& value) -> EnableIf<isPointer<Type>, const volatile RemovePointer<RemoveRef<Type>>*&> {
+        return const_cast<const volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
@@ -309,8 +393,8 @@ namespace enhanced ::core ::util ::traits {
     }
 
     template <typename Type>
-    inline constexpr func removeQualifier(Type&& value) -> RemoveQualifier<RemoveRef<Type>>& {
-        return const_cast<RemoveQualifier<RemoveRef<Type>>&>(value);
+    inline constexpr func removeCvQualifier(Type&& value) -> RemoveCvQualifier<RemoveRef<Type>>& {
+        return const_cast<RemoveCvQualifier<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
@@ -324,8 +408,8 @@ namespace enhanced ::core ::util ::traits {
     }
 
     template <typename Type>
-    inline constexpr func removePtrQualifier(Type&& value) -> RemovePtrQualifier<RemoveRef<Type>>& {
-        return const_cast<RemovePtrQualifier<RemoveRef<Type>&>>(value);
+    inline constexpr func removePtrCvQualifier(Type&& value) -> RemovePtrCvQualifier<RemoveRef<Type>>& {
+        return const_cast<RemovePtrCvQualifier<RemoveRef<Type>&>>(value);
     }
 
     template <typename Derived, typename Base>

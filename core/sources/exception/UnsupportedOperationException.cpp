@@ -17,11 +17,10 @@
 
 #include <enhanced/core/exception/Exception.h>
 
-using enhanced::core::exception::UnsupportedOperationException;
-using enhanced::core::exception::Exception;
+namespace enhanced::core::exception {
+    UnsupportedOperationException::UnsupportedOperationException(const String& message) noexcept : Exception(message) {}
 
-UnsupportedOperationException::UnsupportedOperationException(const String& message) noexcept : Exception(message) {}
+    UnsupportedOperationException::UnsupportedOperationException(const Exception* cause) noexcept : Exception(cause) {}
 
-UnsupportedOperationException::UnsupportedOperationException(const Exception* cause) noexcept : Exception(cause) {}
-
-UnsupportedOperationException::UnsupportedOperationException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
+    UnsupportedOperationException::UnsupportedOperationException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
+}
