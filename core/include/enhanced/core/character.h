@@ -19,22 +19,9 @@
 #include <enhanced/core/types.h>
 #include <enhanced/core/util/traits.h>
 
-#define __WIDE_TEXT(quote) L##quote
-#define WIDE_TEXT(quote) __WIDE_TEXT(quote)
+#define WIDE_TEXT(quote) L##quote
+#define U8_TEXT(quote) u8##quote
+#define U16_TEXT(quote) u##quote
+#define U32_TEXT(quote) U##quote
 
-#ifdef CXX_U8CHAR_SUPPORTED
-#define __U8_TEXT(quote) u8##quote
-#define U8_TEXT(quote) __U8_TEXT(quote)
-#endif
-
-#define __U16_TEXT(quote) u##quote
-#define U16_TEXT(quote) __U16_TEXT(quote)
-
-#define __U32_TEXT(quote) U##quote
-#define U32_TEXT(quote) __U32_TEXT(quote)
-
-#ifdef CXX_U8CHAR_SUPPORTED
 #define TCHAR(type, ch) enhanced::core::util::switchType<type>(ch, WIDE_TEXT(ch), U8_TEXT(ch), U16_TEXT(ch), U32_TEXT(ch))
-#else
-#define TCHAR(type, ch) enhanced::core::util::switchType<type>(ch, WIDE_TEXT(ch), U16_TEXT(ch), U32_TEXT(ch))
-#endif

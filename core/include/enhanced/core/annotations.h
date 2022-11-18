@@ -58,11 +58,7 @@
 #define NoReturn [[noreturn]]
 #define NoIgnoreReturn [[nodiscard]]
 
-#ifdef CXX_20_OR_LATER
 #define NoIgnoreReturnExt(...) [[nodiscard(__VA_ARGS__)]]
-#else
-#define NoIgnoreReturnExt(...) [[nodiscard]]
-#endif
 
 #define RetRequiresRelease NoIgnoreReturnExt("The return value needs to be released")
 #define RetRequiresReleaseExt NoIgnoreReturnExt

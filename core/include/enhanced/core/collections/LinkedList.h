@@ -21,6 +21,7 @@
 #include <enhanced/core/memory.h>
 #include <enhanced/core/Iterable.h>
 #include <enhanced/core/Iterator.h>
+#include <enhanced/core/InitializerList.h>
 #include <enhanced/core/collections/List.h>
 #include <enhanced/core/collections/Deque.h>
 #include <enhanced/core/util/traits.h>
@@ -173,6 +174,12 @@ namespace enhanced::core::collections {
 
     public:
         inline LinkedList() : LinkedListImpl({copy, move, destroy, equals}) {}
+
+        inline LinkedList(InitializerList<Type> list) : LinkedListImpl({copy, move, destroy, equals}) {
+            for (let item : list) {
+                add(item);
+            }
+        }
 
         inline LinkedList(const LinkedList<Type>& other) : LinkedListImpl(other) {}
 

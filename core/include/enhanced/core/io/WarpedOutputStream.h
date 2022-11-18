@@ -29,9 +29,7 @@ namespace enhanced::core::io {
         func print(wchar wch) -> void;
     #endif
 
-    #ifdef CXX_U8CHAR_SUPPORTED
         func print(u8char u8ch) -> void;
-    #endif
 
         func print(u16char u16ch) -> void;
 
@@ -41,29 +39,33 @@ namespace enhanced::core::io {
 
         func print(int8 i8) -> void;
 
-        func print(uint8 wch) -> void;
+        func print(uint8 u8) -> void;
 
         func print(int16 i16) -> void;
 
-        func print(uint16 i16) -> void;
+        func print(uint16 u16) -> void;
 
         func print(int32 i32) -> void;
 
-        func print(uint32 i16) -> void;
+        func print(uint32 u32) -> void;
 
         func print(int64 i64) -> void;
 
-        func print(uint64 i16) -> void;
+        func print(uint64 u64) -> void;
 
         func print(float32 i32) -> void;
 
         func print(float64 i64) -> void;
+
+        func print(const char* message) -> void;
 
         func print(const String& message) -> void;
 
         func print(void* address) -> void;
 
         func print(nulltype) -> void;
+
+        func printf(const String& message, ...) -> void;
 
         func close() const -> void override;
 

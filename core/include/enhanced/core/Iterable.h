@@ -29,17 +29,17 @@ namespace enhanced::core {
             const Iterator<Type>& iterator;
 
         public:
-            explicit ForeachIterator(const Iterator<Type>& iterator) : iterator(iterator) {}
+            inline explicit ForeachIterator(const Iterator<Type>& iterator) : iterator(iterator) {}
 
-            func operator!=(byte) const -> bool {
+            inline func operator!=(byte) const -> bool {
                 return iterator.hasNext();
             }
 
-            func operator++() const -> const Iterator<Type>* {
+            inline func operator++() const -> const Iterator<Type>* {
                 return iterator.next();
             }
 
-            func operator*() const -> Type& {
+            inline func operator*() const -> Type& {
                 return iterator.get();
             }
         };

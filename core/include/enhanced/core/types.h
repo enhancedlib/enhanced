@@ -61,9 +61,7 @@ using word = uint16;
 using dword = uint32;
 using qword = uint64;
 
-#ifdef CXX_U8CHAR_SUPPORTED
 using u8char = char8_t;
-#endif
 using u16char = char16_t;
 using u32char = char32_t;
 
@@ -151,6 +149,9 @@ using nulltype = decltype(null);
 #ifdef DOUBLE_MIN
 #undef DOUBLE_MIN
 #endif
+#ifdef LDOUBLE_MIN
+#undef LDOUBLE_MIN
+#endif
 
 #ifdef SIZE_TYPE_MIN
 #undef SIZE_TYPE_MIN
@@ -217,6 +218,7 @@ using nulltype = decltype(null);
 
 #define FLOAT_MIN FLOAT32_MIN
 #define DOUBLE_MIN FLOAT64_MIN
+#define LDOUBLE_MIN ((ldouble) 3.36210314311209350626267781732175260E-4932)
 
 #if defined(ARCH_X86) || defined(ARCH_ARM32)
 #define SIZE_TYPE_MIN UINT64_MIN
@@ -306,6 +308,9 @@ using nulltype = decltype(null);
 #ifdef DOUBLE_MAX
 #undef DOUBLE_MAX
 #endif
+#ifdef LDOUBLE_MAX
+#undef LDOUBLE_MAX
+#endif
 
 #ifdef SIZE_TYPE_MAX
 #undef SIZE_TYPE_MAX
@@ -372,6 +377,7 @@ using nulltype = decltype(null);
 
 #define FLOAT_MAX FLOAT32_MAX
 #define DOUBLE_MAX FLOAT64_MAX
+#define LDOUBLE_MAX 1.18973149535723176502126385303097021E+4932
 
 #if defined(ARCH_X86) || defined(ARCH_ARM32)
 #define SIZE_TYPE_MAX UINT32_MAX

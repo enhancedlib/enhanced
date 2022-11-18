@@ -21,28 +21,20 @@
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/Iterable.h>
-#include <enhanced/core/ArrayIterator.h>
 
 namespace enhanced::core {
     template <typename Type>
-    class InitializerList : public Iterable<Type> {
-    private:
-        const ArrayIterator<Type> iter;
+    using InitializerList = std::initializer_list<Type>;
 
-    public:
-        constexpr InitializerList(std::initializer_list<Type> list) : iter(ArrayIterator(list.begin(), list.size())) {}
+    template <typename Type>
+    $(NoIgnoreReturn)
+    inline constexpr func initListToArray(InitializerList<Type> list) {
+        return list.begin();
+    }
 
-        inline func toArray() const {
-            return iter.array;
-        }
-
-        inline func count() {
-            return iter.count();
-        }
-
-        inline constexpr func iterator() const -> const Iterator<Type>& override {
-            iter.reset();
-            return iter;
-        }
-    };
+    template <typename Type>
+    $(NoIgnoreReturn)
+    inline constexpr func initListConut(InitializerList<Type> list) {
+        return list.size();
+    }
 }

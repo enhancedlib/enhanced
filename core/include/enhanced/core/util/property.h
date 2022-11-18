@@ -31,15 +31,15 @@
         __VA_ARGS__ \
     } name
 
-#define DeclarePropertyClass(clazz) using __FIELD_CLASS = clazz
+#define PropertyFieldClass(clazz) using __FIELD_CLASS = clazz
 
 #define PropertyField(type, name, getter, setter, ...) \
-    struct name##Property { \
+    struct PropertyField_##name { \
         friend __FIELD_CLASS; \
     private: \
         using Self = type; \
         Self self; \
-        inline name##Property(Self&& value) : self(value) {} \
+        inline PropertyField_##name(Self&& value) : self(value) {} \
         __PROPERTY_GETTER_##getter \
         __PROPERTY_SETTER_##setter \
     public: \

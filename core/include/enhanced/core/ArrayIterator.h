@@ -34,9 +34,9 @@ namespace enhanced::core {
         const Type* array;
 
         template <sizetype size>
-        inline ArrayIterator(const Type array[size]) : array(array), end(array + size), size(size) {}
+        inline constexpr ArrayIterator(const Type array[size]) : end(array + size), size(size), array(array) {}
 
-        inline ArrayIterator(const Type* array, sizetype size) : array(array), end(array + size), size(size) {}
+        inline constexpr ArrayIterator(const Type* array, sizetype size) : end(array + size), size(size), array(array) {}
 
         $(NoIgnoreReturn)
         inline func hasNext() const -> bool override {

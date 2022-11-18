@@ -13,19 +13,20 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <stdio.h>
-
 #include <enhanced/core/assert.h>
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/process.h>
 #include <enhanced/core/String.h>
+#include <enhanced/core/io/iostream.h>
+
+using enhanced::core::io::errstream;
 
 namespace enhanced::core {
     $(NoReturn)
     func assertionFailedImpl(const String& message, const String& file, sizetype line) -> void {
-        fprintf(stderr, "Failed to assert: %s, file \"%s\", line %llu", message.getChars(), file.getChars(), line);
+        errstream->printf("Failed to assert: {}, at {}:{}", message.getChars(), message.getChars(), line);
         processAbort();
     }
 }

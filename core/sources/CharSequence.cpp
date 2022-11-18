@@ -71,12 +71,6 @@ namespace enhanced::core {
     template <typename CharType>
     func CharSequence<CharType>::operator=(CharSequence&& other) noexcept -> CharSequence<CharType>& = default;
 
-    template <typename CharType>
-    $(NoIgnoreReturn)
-    CharSequence<CharType>::operator CharType*() const noexcept {
-        return value;
-    }
-
     template class CharSequence<char>;
     template class CharSequence<wchar>;
     template class CharSequence<u8char>;

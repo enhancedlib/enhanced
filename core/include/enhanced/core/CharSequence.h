@@ -57,8 +57,5 @@ namespace enhanced::core {
         func operator=(const CharSequence& other) noexcept -> CharSequence&;
 
         func operator=(CharSequence&& other) noexcept -> CharSequence&;
-
-        $(NoIgnoreReturn)
-        operator CharType*() const noexcept;
     };
 }

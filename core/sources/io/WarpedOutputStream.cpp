@@ -49,7 +49,15 @@ namespace enhanced::core::io {
         NOT_IMPLEMENTED();
     }
 
+    func WarpedOutputStream::print(uint8 u8) -> void {
+        NOT_IMPLEMENTED();
+    }
+
     func WarpedOutputStream::print(int16 i16) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::print(uint16 u16) -> void {
         NOT_IMPLEMENTED();
     }
 
@@ -57,7 +65,15 @@ namespace enhanced::core::io {
         NOT_IMPLEMENTED();
     }
 
+    func WarpedOutputStream::print(uint32 u32) -> void {
+        NOT_IMPLEMENTED();
+    }
+
     func WarpedOutputStream::print(int64 i64) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::print(uint64 u64) -> void {
         NOT_IMPLEMENTED();
     }
 
@@ -66,6 +82,10 @@ namespace enhanced::core::io {
     }
 
     func WarpedOutputStream::print(float64 i64) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func WarpedOutputStream::print(const char* message) -> void {
         NOT_IMPLEMENTED();
     }
 
@@ -78,6 +98,10 @@ namespace enhanced::core::io {
     }
 
     func WarpedOutputStream::print(nulltype) -> void {
+        NOT_IMPLEMENTED();
+    }
+
+    func printf(const String& message, ...) -> void {
         NOT_IMPLEMENTED();
     }
 

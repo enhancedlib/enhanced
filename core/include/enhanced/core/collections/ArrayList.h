@@ -21,6 +21,7 @@
 #include <enhanced/core/memory.h>
 #include <enhanced/core/Iterable.h>
 #include <enhanced/core/Iterator.h>
+#include <enhanced/core/InitializerList.h>
 #include <enhanced/core/collections/List.h>
 #include <enhanced/core/collections/RandomAccess.h>
 #include <enhanced/core/util/traits.h>
@@ -155,6 +156,12 @@ namespace enhanced::core::collections {
 
     public:
         inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE, {copy, move, destroy, equals}) {}
+
+        inline ArrayList(InitializerList<Type> list) : ArrayListImpl(ARRAY_INIT_SIZE, {copy, move, destroy, equals}) {
+            for (let item : list) {
+                add(item);
+            }
+        }
 
         inline explicit ArrayList(sizetype capacity) : ArrayListImpl(capacity, {copy, move, destroy, equals}) {}
 

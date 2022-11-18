@@ -99,8 +99,6 @@
 #define CXX_LANGUAGE _MSVC_LANG
 #endif
 
-#if CXX_LANGUAGE >= 201703L // C++17 or more
-#define CXX_17_OR_LATER
 #if CXX_LANGUAGE >= 202002L // C++20 or more
 #define CXX_20_OR_LATER
 #if CXX_LANGUAGE > 202002L // C++23 or more
@@ -108,11 +106,8 @@
 #else // C++20
 #define CXX_20
 #endif
-#else // C++17
-#define CXX_17
-#endif
 #else // Unknown
-#error Unsupported C++ standard, please use least C++17 standard.
+#error Unsupported C++ standard, please use least C++20 standard.
 #endif
 
 #if defined(ENHANCED_BUILDING) && !defined(CXX_20_OR_LATER)
@@ -135,10 +130,6 @@
 #define WCHAR_EQUALS_UINT16
 #else
 #define WCHAR_EQUALS_INT32
-#endif
-
-#ifdef __cpp_char8_t
-#define CXX_U8CHAR_SUPPORTED
 #endif
 
 #define EXTERN_C extern "C"

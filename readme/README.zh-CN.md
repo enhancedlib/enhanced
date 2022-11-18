@@ -37,7 +37,7 @@
 
 - 还有更多……
 
-要使用此库，应至少使用C++11标准
+要使用此库，应至少使用C++20标准
 
 ## 构建
 
@@ -45,7 +45,7 @@
 
 - 编译器：[Clang](https://clang.llvm.org/)、[Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU Compiler Collections](https://gcc.gnu.org/)
 - 操作系统：Microsoft Windows、基于Linux内核的操作系统、Apple macOS
-- 处理器：x86、amd64 (x86_64)
+- 处理器：amd64 (x86_64)、x86、arm (arm32)、arm64 (aarch64)
 - 构建系统: [CMake](https://cmake.org/)
 - C++标准: C++20或更高标准
 

@@ -87,10 +87,10 @@ namespace enhanced::core {
     };
 
     using MutString = TMutString<char>;
+    #ifdef WCHAR_IS_BUILTIN_TYPE
     using WideMutString = TMutString<wchar>;
-    #ifdef CXX_U8CHAR_SUPPORTED
-    using U8MutString = TMutString<u8char>;
     #endif
+    using U8MutString = TMutString<u8char>;
     using U16MutString = TMutString<u16char>;
     using U32MutString = TMutString<u32char>;
 
@@ -99,15 +99,15 @@ namespace enhanced::core {
             return {string, size};
         }
 
+    #ifdef WCHAR_IS_BUILTIN_TYPE
         inline func operator""_m(const wchar* string, sizetype size) -> WideMutString {
             return {string, size};
         }
+    #endif
 
-    #ifdef CXX_U8CHAR_SUPPORTED
         inline func operator""_m(const u8char* string, sizetype size) -> U8MutString {
             return {string, size};
         }
-    #endif
 
         inline func operator""_m(const u16char* string, sizetype size) -> U16MutString {
             return {string, size};
@@ -118,3 +118,5 @@ namespace enhanced::core {
         }
     }
 }
+
+#define MUT_STR(quote) quote##_m

@@ -47,7 +47,7 @@ namespace enhanced::core::math {
         for (; index < length; ++index) {
             storage[index] = number[index] - '0';
             if (storage[index] >= 10) { // Out of the range.
-                throw InvalidArgumentException("Each character in the string must be a number (except the first character can be + or -)");
+                throw InvalidArgumentException("Each character in the string must be a number except the first character can be + or -");
             }
         }
     }

@@ -113,7 +113,7 @@ namespace enhanced::core {
 
     template <typename CharType>
     func TString<CharType>::join(InitializerList<TString> list) -> TMutString<CharType> {
-        return join(list.toArray(), list.count());
+        return join(initListToArray(list), initListConut(list));
     }
 
     template <typename CharType>
@@ -387,12 +387,6 @@ namespace enhanced::core {
     $(NoIgnoreReturn)
     func TString<CharType>::operator==(const TString& string) const noexcept -> bool {
         return isEqual(this->value, string.value, this->length, string.length);
-    }
-
-    template <typename CharType>
-    $(NoIgnoreReturn)
-    func TString<CharType>::operator==(const CharType*& string) const noexcept -> bool {
-        return operator==(TString(string));
     }
 
     template <typename CharType>

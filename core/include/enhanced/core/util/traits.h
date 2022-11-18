@@ -15,7 +15,6 @@
 
 #pragma once
 
-#include "enhanced/core/util/traits.h"
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 
@@ -233,14 +232,22 @@ namespace enhanced::core::util::inline traits {
 
     template <typename Type>
     inline constexpr bool isIntegralType =
-        isAnyOf<Type, bool, char, schar, uchar, wchar,
-    #ifdef CXX_U8CHAR_SUPPORTED
-        u8char,
+        isAnyOf<Type, char,
+    #ifdef WCHAR_IS_BUILTIN_TYPE
+        wchar,
     #endif
-        u16char, u32char, short, ushort, int, uint, long, ulong, llong, ullong>;
+        u8char, u16char, u32char, bool, schar, uchar, short, ushort, int, uint, long, ulong, llong, ullong>;
 
     template <typename Type>
     inline constexpr bool isFloatType = isAnyOf<Type, float, double, ldouble>;
+
+    template <typename Type>
+    inline constexpr bool isCharType =
+        isAnyOf<Type, char,
+    #ifdef WCHAR_IS_BUILTIN_TYPE
+        wchar,
+    #endif
+        u8char, u16char, u32char>;
 
     template <typename Type>
     inline constexpr bool isArithmeticType = isIntegralType<Type> || isFloatType<Type>;
@@ -257,13 +264,25 @@ namespace enhanced::core::util::inline traits {
     template <typename Type>
     inline constexpr bool isBasicType = isArithmeticType<Type> || isVoidType<Type> || isNullType<Type>;
 
+    template <typename Type>
+    inline constexpr bool isEnumType = __is_enum(Type);
+
+    template <typename Type>
+    inline constexpr bool isStructType = __is_class(Type);
+
+    template <typename Type>
+    inline constexpr bool isClassType = isStructType<Type>;
+
+    template <typename Type>
+    inline constexpr bool isUnionType = __is_union(Type);
+
     // Only function types and reference types cannot be const qualified.
 
     template <typename Type>
-    inline constexpr bool isObjectType = isConst<const Type> && !isVoidType<Type>;
+    inline constexpr bool isObject = isConst<const Type> && !isVoidType<Type>;
 
     template <typename Type>
-    inline constexpr bool isFunctionType = !isConst<const Type> && !isReference<Type>;
+    inline constexpr bool isFunction = !isConst<const Type> && !isReference<Type>;
 
 #ifndef COMPILER_CLANG
 }
@@ -273,7 +292,7 @@ namespace enhancedInternal::core::util::traits {
     inline constexpr bool isMemberObjectPointerImpl = false;
 
     template <typename Type, typename Class>
-    inline constexpr bool isMemberObjectPointerImpl<Type Class::*> = !enhanced::core::util::isFunctionType<Type>;
+    inline constexpr bool isMemberObjectPointerImpl<Type Class::*> = !enhanced::core::util::isFunction<Type>;
 }
 
 namespace enhanced::core::util::inline traits {
@@ -293,7 +312,7 @@ namespace enhancedInternal::core::util::traits {
     inline constexpr bool isMemberFunctionPointerImpl = false;
 
     template <typename Type, typename Class>
-    inline constexpr bool isMemberFunctionPointerImpl<Type Class::*> = enhanced::core::util::isFunctionType<Type>;
+    inline constexpr bool isMemberFunctionPointerImpl<Type Class::*> = enhanced::core::util::isFunction<Type>;
 }
 
 namespace enhanced::core::util::inline traits {
@@ -312,18 +331,6 @@ namespace enhanced::core::util::inline traits {
     template <typename Type>
     inline constexpr bool isMemberPointer = __is_member_pointer(Type);
 #endif
-
-    template <typename Type>
-    inline constexpr bool isEnumType = __is_enum(Type);
-
-    template <typename Type>
-    inline constexpr bool isStructType = __is_class(Type);
-
-    template <typename Type>
-    inline constexpr bool isClassType = isStructType<Type>;
-
-    template <typename Type>
-    inline constexpr bool isUnionType = __is_union(Type);
 
     template <typename Type>
     inline constexpr bool isScalarType = isArithmeticType<Type> || isEnumType<Type> || isPointer<Type> || isMemberPointer<Type> || isNullType<Type>;
@@ -413,11 +420,14 @@ namespace enhanced::core::util::inline traits {
     }
 
     template <typename Derived, typename Base>
-    inline func isInstanceOf(Base&& value) -> bool {
-        static_assert(!isSame<Derived, RemoveRef<Base>>, "The specified class and the class of the value are the same");
-        static_assert(isBaseOf<RemoveRef<Base>, Derived>, "The specified class must be base of the class of the value");
-        static_assert(isPolymorphicClass<RemoveRef<Base>>, "The class of the value is not polymorphic");
+    requires isPolymorphicClass<RemoveRef<Base>> && isSame<Derived, RemoveRef<Base>>
+    inline constexpr func isInstanceOf(Base&& value) -> bool {
+        return true;
+    }
 
+    template <typename Derived, typename Base>
+    requires isPolymorphicClass<RemoveRef<Base>> && (!isSame<Derived, RemoveRef<Base>> && isBaseOf<RemoveRef<Base>, Derived>)
+    inline func isInstanceOf(Base&& value) -> bool {
         return dynamic_cast<Derived*>(&value) != null;
     }
 }

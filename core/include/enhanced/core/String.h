@@ -146,17 +146,8 @@ namespace enhanced::core {
         $(NoIgnoreReturn)
         func operator==(const TString& string) const noexcept -> bool;
 
-        template <sizetype size>
         $(NoIgnoreReturn)
-        inline func operator==(const CharType (&string)[size]) const noexcept -> bool {
-            return operator==(TString(string));
-        }
-
-        $(NoIgnoreReturn)
-        func operator==(const CharType*& string) const noexcept -> bool;
-
-        $(NoIgnoreReturn)
-        func operator+(const TString& string) const -> TMutString<CharType>;;
+        func operator+(const TString& string) const -> TMutString<CharType>;
 
         func operator=(const TString& other) noexcept -> TString&;
 
@@ -164,10 +155,10 @@ namespace enhanced::core {
     };
 
     using String = TString<char>;
+    #ifdef WCHAR_IS_BUILTIN_TYPE
     using WideString = TString<wchar>;
-    #ifdef CXX_U8CHAR_SUPPORTED
-    using U8String = TString<u8char>;
     #endif
+    using U8String = TString<u8char>;
     using U16String = TString<u16char>;
     using U32String = TString<u32char>;
 
@@ -176,15 +167,15 @@ namespace enhanced::core {
             return {string, size};
         }
 
+    #ifdef WCHAR_IS_BUILTIN_TYPE
         inline func operator""_s(const wchar* string, sizetype size) -> WideString {
             return {string, size};
         }
+    #endif
 
-    #ifdef CXX_U8CHAR_SUPPORTED
         inline func operator""_s(const u8char* string, sizetype size) -> U8String {
             return {string, size};
         }
-    #endif
 
         inline func operator""_s(const u16char* string, sizetype size) -> U16String {
             return {string, size};
@@ -196,10 +187,7 @@ namespace enhanced::core {
     }
 }
 
-#ifdef CXX_U8CHAR_SUPPORTED
 #define TSTRING(type, string) enhanced::core::util::switchType<const type(&)[sizeof(string) / sizeof(char)]> \
     (string, WIDE_TEXT(string), U8_TEXT(string), U16_TEXT(string), U32_TEXT(string))
-#else
-#define TSTRING(type, string) enhanced::core::util::switchType<type><const type(&)[sizeof(string) / sizeof(char)]> \
-    (string, WIDE_TEXT(string), U16_TEXT(string), U32_TEXT(string))
-#endif
+
+#define STR(quote) quote##_s
