@@ -16,17 +16,15 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/exception/Exception.h>
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API RuntimeException : public Exception {
-    public:
-        explicit RuntimeException(const String& message = "") noexcept;
-
-        explicit RuntimeException(const Exception* cause) noexcept;
-
-        RuntimeException(const String& message, const Exception* cause) noexcept;
-    };
-}
+#if defined(WINDOWS_OS) && defined(ENHANCED_CORE_SHARED_LIB)
+#ifdef ENHANCED_CORE_BUILDING
+#define ENHANCED_CORE_API __declspec(dllexport)
+#else
+#define ENHANCED_CORE_API __declspec(dllimport)
+#endif
+#elif defined(COMPILER_GCC) && defined(ENHANCED_CORE_SHARED_LIB)
+#define ENHANCED_CORE_API __attribute__((visibility("default")))
+#else
+#define ENHANCED_CORE_API
+#endif

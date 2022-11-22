@@ -16,6 +16,7 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/memory.h>
@@ -65,9 +66,7 @@ namespace enhancedInternal::core::collections {
 
             mutable Node* indexer;
 
-            explicit LinkedListIteratorImpl(const LinkedListImpl* linkedList);
-
-            virtual ~LinkedListIteratorImpl() noexcept;
+            LinkedListIteratorImpl(const LinkedListImpl* linkedList);
 
             $(NoIgnoreReturn)
             func hasNext0() const -> bool;
@@ -111,6 +110,8 @@ namespace enhancedInternal::core::collections {
         func addFirstMoved0(void* element) -> void;
 
         func removeFirst0() -> void;
+
+        func clear0() -> void;
     };
 }
 
@@ -120,11 +121,12 @@ namespace enhanced::core::collections {
     private:
         using LinkedListImpl = enhancedInternal::core::collections::LinkedListImpl;
 
+    public:
         class ENHANCED_CORE_API LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
             friend class LinkedList<Type>;
 
         public:
-            inline explicit LinkedListIterator(const LinkedList<Type>* linkedList) : LinkedListIteratorImpl(linkedList) {}
+            inline LinkedListIterator(const LinkedList<Type>* linkedList) : LinkedListIteratorImpl(linkedList) {}
 
             $(NoIgnoreReturn)
             inline func hasNext() const -> bool override {
@@ -151,6 +153,7 @@ namespace enhanced::core::collections {
             }
         };
 
+    private:
         $(RetRequiresRelease)
         static func copy(void* element) -> void* {
             return new Type(*reinterpret_cast<Type*>(element));
@@ -170,7 +173,7 @@ namespace enhanced::core::collections {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
 
-        LinkedListIterator iter = LinkedListIterator(this);
+        LinkedListIterator iter = {this};
 
     public:
         inline LinkedList() : LinkedListImpl({copy, move, destroy, equals}) {}
@@ -284,6 +287,10 @@ namespace enhanced::core::collections {
 
         inline func popup() -> Type override {
             return removeFirst();
+        }
+
+        func clear() -> void override {
+            clear0();
         }
     };
 }

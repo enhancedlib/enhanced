@@ -16,14 +16,15 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/Error.h>
+#include <enhanced/core/exception/AssertionError.h>
 
 namespace enhanced::core::exception {
-    class ENHANCED_CORE_API UnreachableError : public Error {
+    class ENHANCED_CORE_API UnreachableError : public AssertionError {
     public:
         UnreachableError() noexcept;
     };
 }
 
-#define UNREACHABLE_CODE throw enhanced::core::exception::UnreachableError
+#define UNREACHABLE_CODE() throw enhanced::core::exception::UnreachableError()

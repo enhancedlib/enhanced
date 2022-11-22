@@ -16,6 +16,7 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/memory.h>
 #include <enhanced/core/process.h>

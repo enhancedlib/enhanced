@@ -16,6 +16,7 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/io/InputStream.h>
 
 namespace enhanced::core::io {

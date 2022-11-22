@@ -31,11 +31,11 @@
         __VA_ARGS__ \
     } name
 
-#define PropertyFieldClass(clazz) using __FIELD_CLASS = clazz
+#define PropertyFieldClass(clazz) using CLASS = clazz
 
 #define PropertyField(type, name, getter, setter, ...) \
     struct PropertyField_##name { \
-        friend __FIELD_CLASS; \
+        friend CLASS; \
     private: \
         using Self = type; \
         Self self; \
@@ -48,22 +48,19 @@
 
 #define __PROPERTY_GETTER_get(accessModifier) \
 accessModifier: \
-    NoIgnoreReturn \
+    $(NoIgnoreReturn) \
     inline func operator->() const -> const Self* { \
         return &self; \
     } \
-    NoIgnoreReturn \
+    $(NoIgnoreReturn) \
     inline operator const Self&() const { \
         return operator()(); \
     } \
-    NoIgnoreReturn \
+    $(NoIgnoreReturn) \
     inline func operator()() const -> const Self&
 
 #define __PROPERTY_SETTER_set(accessModifier) \
 accessModifier: \
-    inline func operator()(const Self& value) -> Self& { \
-        return operator=(value); \
-    } \
     inline func operator=(const Self& value) -> Self&
 
 #define __PROPERTY_GETTER_getdef(accessModifier) \

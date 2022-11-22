@@ -45,15 +45,7 @@ namespace enhancedInternal::core::collections {
     }
 
     LinkedListImpl::~LinkedListImpl() noexcept {
-        for (sizetype _ = 1; _ < size; ++_) {
-            prevNode(last);
-
-            genericOperator.destroy(last->next->value);
-            delete last->next;
-        }
-
-        if (size != 0) genericOperator.destroy(last->value);
-
+        clear0();
         delete last;
     }
 
@@ -196,10 +188,21 @@ namespace enhancedInternal::core::collections {
         --size;
     }
 
+    func LinkedListImpl::clear0() -> void {
+        while (size > 1) {
+            prevNode(last);
+            genericOperator.destroy(last->next->value);
+            delete last->next;
+            --size;
+        }
+
+        genericOperator.destroy(last->value);
+        delete last;
+        last = first = null;
+    }
+
     LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl* linkedList) :
         linkedList(linkedList), indexer(linkedList->first) {}
-
-    LinkedListImpl::LinkedListIteratorImpl::~LinkedListIteratorImpl() noexcept = default;
 
     $(NoIgnoreReturn)
     func LinkedListImpl::LinkedListIteratorImpl::hasNext0() const -> bool {

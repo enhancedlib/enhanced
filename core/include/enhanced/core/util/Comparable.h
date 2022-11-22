@@ -21,48 +21,8 @@
 
 namespace enhanced::core::util {
     interface Comparable {
-        struct CompareResult {
-            scopedenum ResultType {
-                EQUAL, MORE, LESS
-            };
-
-            ResultType type;
-
-            sizetype difference;
-
-            inline CompareResult(ResultType type, sizetype difference) : type(type), difference(difference) {}
-
-            $(NoIgnoreReturn)
-            inline func equal() const -> bool {
-                return type == ResultType::EQUAL;
-            }
-
-            $(NoIgnoreReturn)
-            inline func more() const -> bool {
-                return type == ResultType::MORE;
-            }
-
-            $(NoIgnoreReturn)
-            inline func moreOrEqual() const -> bool {
-                return type == ResultType::MORE || type == ResultType::EQUAL;
-            }
-
-            $(NoIgnoreReturn)
-            inline func less() const -> bool {
-                return type == ResultType::LESS;
-            }
-
-            $(NoIgnoreReturn)
-            inline func lessOrEqual() const -> bool {
-                return type == ResultType::LESS || type == ResultType::EQUAL;
-            }
-        };
-
         $(NoIgnoreReturn)
         virtual func equal(const Comparable& other) const -> bool = abstract;
-
-        $(NoIgnoreReturn)
-        virtual func compare(const Comparable& other) const -> CompareResult = abstract;
 
         $(NoIgnoreReturn)
         inline func operator==(const Comparable& other) const -> bool {
@@ -72,26 +32,6 @@ namespace enhanced::core::util {
         $(NoIgnoreReturn)
         inline func operator!=(const Comparable& other) const -> bool {
             return !equal(other);
-        }
-
-        $(NoIgnoreReturn)
-        inline func operator<=(const Comparable& other) const -> bool {
-            return compare(other).lessOrEqual();
-        }
-
-        $(NoIgnoreReturn)
-        inline func operator>(const Comparable& other) const -> bool {
-            return compare(other).moreOrEqual();
-        }
-
-        $(NoIgnoreReturn)
-        inline func operator>=(const Comparable& other) const -> bool {
-            return compare(other).moreOrEqual();
-        }
-
-        $(NoIgnoreReturn)
-        inline func operator<(const Comparable& other) const -> bool {
-            return compare(other).less();
         }
     };
 }

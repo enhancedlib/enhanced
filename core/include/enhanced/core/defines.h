@@ -24,7 +24,7 @@
 #define COMPILER_CLANG __clang__
 #elif defined(_MSC_VER) // Microsoft Visual C++
 #define COMPILER_MSVC _MSC_VER
-#elif defined(__GNUC__) // GNU C/C++ Compiler
+#elif defined(__GNUC__) // GNU Compiler Collections
 #define COMPILER_GCC __GNUC__
 #else // Unsupported
 #error Unsupported compiler
@@ -149,13 +149,3 @@
 #define let auto
 #define val const auto
 #define abstract 0
-
-#if defined(WINDOWS_OS) && defined(ENHANCED_CORE_SHARED_LIB)
-#ifdef ENHANCED_CORE_BUILDING
-#define ENHANCED_CORE_API __declspec(dllexport)
-#else
-#define ENHANCED_CORE_API __declspec(dllimport)
-#endif
-#else
-#define ENHANCED_CORE_API
-#endif

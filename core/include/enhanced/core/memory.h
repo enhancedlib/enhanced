@@ -16,14 +16,13 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 
 namespace enhanced::core {
     /*!
     * Allocates space in memory. \n
-    *
-    * Note: For C++, use 'new' keyword as well.
     *
     * @example memoryAlloc(100 * sizeof(int))
     *
@@ -35,8 +34,6 @@ namespace enhanced::core {
 
     /*!
     * Frees a memory space to which the pointer points. \n
-    *
-    * Note: For C++, use 'delete' keyword as well.
     *
     * @example memoryFree(pointer)
     *

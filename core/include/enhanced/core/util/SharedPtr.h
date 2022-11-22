@@ -15,9 +15,12 @@
 
 #pragma once
 
+#include "enhanced/core/memory.h"
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
+#include <enhanced/core/array.h>
 #include <enhanced/core/util/traits.h>
 #include <enhanced/core/exception/NullPointerException.h>
 #include <enhanced/core/exception/NotImplementedError.h>
@@ -71,12 +74,17 @@ namespace enhanced::core::util {
     public:
         template <typename... Args>
         static func make(Args... args) -> SharedPtr {
-            return SharedPtr(new Type(args...));
+            return new Type(args...);
         }
 
         template <sizetype size, typename... Args>
         static func make(Args... args) -> SharedPtr {
-            NOT_IMPLEMENTED();
+            let memory = (Type*) memoryAlloc(size);
+            Type instance = {args...};
+            for (sizetype index = 0; index < size; ++index) {
+                memory[index] = instance;
+            }
+            return memory;
         }
 
         SharedPtr() : SharedPtrImpl(null, {destroy}) {}

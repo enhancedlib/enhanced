@@ -16,6 +16,7 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/CharSequence.h>
@@ -162,7 +163,7 @@ namespace enhanced::core {
     using U16String = TString<u16char>;
     using U32String = TString<u32char>;
 
-    inline namespace stringLiteral {
+    inline namespace literals {
         inline func operator""_s(const char* string, sizetype size) -> String {
             return {string, size};
         }

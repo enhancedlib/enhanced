@@ -16,11 +16,12 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/Error.h>
+#include <enhanced/core/exception/AssertionError.h>
 
 namespace enhanced::core::exception {
-    class ENHANCED_CORE_API NotImplementedError : public Error {
+    class ENHANCED_CORE_API NotImplementedError : public AssertionError {
     public:
         explicit NotImplementedError(const String& message = "Not yet implemented") noexcept;
     };

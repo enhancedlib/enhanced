@@ -21,17 +21,20 @@
 
 namespace enhanced::core::math {
     template <typename IntegralType>
-    inline func max(IntegralType x, IntegralType y) -> util::EnableIf<util::isIntegralType<IntegralType>, IntegralType> {
+    requires util::isIntegralType<IntegralType>
+    inline func max(IntegralType x, IntegralType y) -> IntegralType {
         return (x > y) ? x : y;
     }
 
     template <typename IntegralType>
-    inline func min(IntegralType x, IntegralType y) -> util::EnableIf<util::isIntegralType<IntegralType>, IntegralType> {
+    requires util::isIntegralType<IntegralType>
+    inline func min(IntegralType x, IntegralType y) -> IntegralType {
         return (x < y) ? x : y;
     }
 
     template <typename IntegralType>
-    inline func abs(IntegralType number) -> util::EnableIf<util::isIntegralType<IntegralType>, IntegralType> {
+    requires util::isSigned<IntegralType>
+    inline func abs(IntegralType number) -> IntegralType {
         return (number >= 0) ? number : -number;
     }
 }

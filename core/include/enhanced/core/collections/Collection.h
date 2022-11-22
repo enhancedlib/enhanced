@@ -16,6 +16,7 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/Iterable.h>
@@ -33,6 +34,8 @@ namespace enhanced::core::collections {
 
         $(NoIgnoreReturn)
         virtual func contain(const Type& value) const -> bool = abstract;
+
+        virtual func clear() -> void = abstract;
     };
 
     ENHANCED_CORE_API extern sizetype ARRAY_INIT_SIZE; // Default value: 255

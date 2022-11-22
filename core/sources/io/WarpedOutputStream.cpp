@@ -101,7 +101,7 @@ namespace enhanced::core::io {
         NOT_IMPLEMENTED();
     }
 
-    func printf(const String& message, ...) -> void {
+    func WarpedOutputStream::printf(const String& message, ...) -> void {
         NOT_IMPLEMENTED();
     }
 

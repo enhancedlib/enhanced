@@ -48,9 +48,7 @@ namespace enhancedInternal::core::collections {
     }
 
     ArrayListImpl::~ArrayListImpl() noexcept {
-        while (size > 0) {
-            genericOperator.destroy(elements[--size]);
-        }
+        clear0();
         delete[] elements;
     }
 
@@ -120,10 +118,14 @@ namespace enhancedInternal::core::collections {
         capacity = newCapacity;
     }
 
+    func ArrayListImpl::clear0() -> void {
+        while (size > 0) {
+            genericOperator.destroy(elements[--size]);
+        }
+    }
+
     ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList) :
         arrayList(arrayList), indexer(arrayList->elements) {}
-
-    ArrayListImpl::ArrayListIteratorImpl::~ArrayListIteratorImpl() noexcept = default;
 
     $(NoIgnoreReturn)
     func ArrayListImpl::ArrayListIteratorImpl::hasNext0() const -> bool {

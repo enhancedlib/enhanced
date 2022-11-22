@@ -16,6 +16,7 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/memory.h>
@@ -53,9 +54,7 @@ namespace enhancedInternal::core::collections {
 
             mutable void** indexer;
 
-            explicit ArrayListIteratorImpl(const ArrayListImpl* arrayList);
-
-            virtual ~ArrayListIteratorImpl() noexcept;
+            ArrayListIteratorImpl(const ArrayListImpl* arrayList);
 
             $(NoIgnoreReturn)
             func hasNext0() const -> bool;
@@ -93,6 +92,8 @@ namespace enhancedInternal::core::collections {
         func expand0(sizetype size) -> void;
 
         func shrink0(sizetype size) -> void;
+
+        func clear0() -> void;
     };
 }
 
@@ -102,11 +103,12 @@ namespace enhanced::core::collections {
     private:
         using ArrayListImpl = enhancedInternal::core::collections::ArrayListImpl;
 
+    public:
         class ENHANCED_CORE_API ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
             friend class ArrayList<Type>;
 
         public:
-            inline explicit ArrayListIterator(const ArrayList<Type>* arrayList) : ArrayListIteratorImpl(arrayList) {}
+            inline ArrayListIterator(const ArrayList<Type>* arrayList) : ArrayListIteratorImpl(arrayList) {}
 
             $(NoIgnoreReturn)
             inline func hasNext() const -> bool override {
@@ -133,6 +135,7 @@ namespace enhanced::core::collections {
             }
         };
 
+    private:
         $(RetRequiresRelease)
         static func copy(void* element) -> void* {
             return new Type(*reinterpret_cast<Type*>(element));
@@ -152,7 +155,7 @@ namespace enhanced::core::collections {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
 
-        ArrayListIterator iter = ArrayListIterator(this);
+        ArrayListIterator iter = {this};
 
     public:
         inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE, {copy, move, destroy, equals}) {}
@@ -225,6 +228,10 @@ namespace enhanced::core::collections {
 
         inline func shrink(sizetype size) -> void {
             shrink0(size);
+        }
+
+        func clear() -> void override {
+            clear0();
         }
     };
 }

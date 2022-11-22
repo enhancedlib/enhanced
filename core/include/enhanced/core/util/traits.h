@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include "enhanced/core/annotations.h"
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 
@@ -250,6 +251,14 @@ namespace enhanced::core::util::inline traits {
         u8char, u16char, u32char>;
 
     template <typename Type>
+    requires isIntegralType<Type>
+    inline constexpr bool isSigned = static_cast<RemoveCvQualifier<Type>>(-1) < static_cast<Type>(0);
+
+    template <typename Type>
+    requires isIntegralType<Type>
+    inline constexpr bool isUnsigned = static_cast<RemoveCvQualifier<Type>>(-1) >= static_cast<Type>(0);
+
+    template <typename Type>
     inline constexpr bool isArithmeticType = isIntegralType<Type> || isFloatType<Type>;
 
     template <typename Type>
@@ -265,16 +274,16 @@ namespace enhanced::core::util::inline traits {
     inline constexpr bool isBasicType = isArithmeticType<Type> || isVoidType<Type> || isNullType<Type>;
 
     template <typename Type>
-    inline constexpr bool isEnumType = __is_enum(Type);
+    inline constexpr bool isEnum = __is_enum(Type);
 
     template <typename Type>
-    inline constexpr bool isStructType = __is_class(Type);
+    inline constexpr bool isStruct = __is_class(Type);
 
     template <typename Type>
-    inline constexpr bool isClassType = isStructType<Type>;
+    inline constexpr bool isClass = isStruct<Type>;
 
     template <typename Type>
-    inline constexpr bool isUnionType = __is_union(Type);
+    inline constexpr bool isUnion = __is_union(Type);
 
     // Only function types and reference types cannot be const qualified.
 
@@ -333,7 +342,7 @@ namespace enhanced::core::util::inline traits {
 #endif
 
     template <typename Type>
-    inline constexpr bool isScalarType = isArithmeticType<Type> || isEnumType<Type> || isPointer<Type> || isMemberPointer<Type> || isNullType<Type>;
+    inline constexpr bool isScalarType = isArithmeticType<Type> || isEnum<Type> || isPointer<Type> || isMemberPointer<Type> || isNullType<Type>;
 
     template <typename Type>
     inline constexpr bool isPolymorphicClass = __is_polymorphic(Type);
@@ -345,89 +354,94 @@ namespace enhanced::core::util::inline traits {
     inline constexpr bool isFinalClass = __is_final(Type);
 
     template <typename Type>
-    inline constexpr func move(Type&& value) -> RemoveRef<Type>&& {
+    inline constexpr func move(Type&& value) noexcept -> RemoveRef<Type>&& {
         return static_cast<RemoveRef<Type>&&>(value);
     }
 
     template <typename Case, typename First, typename... Types>
-    inline constexpr func switchType(First&& first, Types&&... values) -> EnableIf<isSame<Case, First>, Case&> {
+    requires isSame<Case, First>
+    inline constexpr func switchType(First&& first, Types&&... values) noexcept -> Case& {
         return first;
     }
 
     template <typename Case, typename First, typename... Types>
-    inline constexpr func switchType(First&& first, Types&&... values) -> EnableIf<!isSame<Case, First>, Case&> {
+    requires (!isSame<Case, First>)
+    inline constexpr func switchType(First&& first, Types&&... values) noexcept -> Case& {
         return switchType<Case, Types...>(static_cast<Types&&>(values)...);
     }
 
     template <typename Type>
-    inline constexpr func addConst(Type&& value) -> const RemoveRef<Type>& {
+    inline constexpr func addConst(Type&& value) noexcept -> const RemoveRef<Type>& {
         return const_cast<const RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
-    inline constexpr func addVolatile(Type&& value) -> volatile RemoveRef<Type>& {
+    inline constexpr func addVolatile(Type&& value) noexcept -> volatile RemoveRef<Type>& {
         return const_cast<volatile RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
-    inline constexpr func addCvQualifier(Type&& value) -> const volatile RemoveRef<Type>& {
+    inline constexpr func addCvQualifier(Type&& value) noexcept -> const volatile RemoveRef<Type>& {
         return const_cast<const volatile RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
-    inline constexpr func addPtrConst(Type&& value) -> EnableIf<isPointer<Type>, const RemovePointer<RemoveRef<Type>>*&> {
+    requires isPointer<Type>
+    inline constexpr func addPtrConst(Type&& value) noexcept -> const RemovePointer<RemoveRef<Type>>*& {
         return const_cast<const RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
-    inline constexpr func addPtrVolatile(Type&& value) -> EnableIf<isPointer<Type>, volatile RemovePointer<RemoveRef<Type>>*&> {
+    requires isPointer<Type>
+    inline constexpr func addPtrVolatile(Type&& value) noexcept -> volatile RemovePointer<RemoveRef<Type>>*& {
         return const_cast<volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
-    inline constexpr func addPtrCvQualifier(Type&& value) -> EnableIf<isPointer<Type>, const volatile RemovePointer<RemoveRef<Type>>*&> {
+    requires isPointer<Type>
+    inline constexpr func addPtrCvQualifier(Type&& value) noexcept -> const volatile RemovePointer<RemoveRef<Type>>*& {
         return const_cast<const volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
-    inline constexpr func removeConst(Type&& value) -> RemoveConst<RemoveRef<Type>>& {
+    inline constexpr func removeConst(Type&& value) noexcept -> RemoveConst<RemoveRef<Type>>& {
         return const_cast<RemoveConst<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    inline constexpr func removeVolatile(Type&& value) -> RemoveVolatile<RemoveRef<Type>>& {
+    inline constexpr func removeVolatile(Type&& value) noexcept -> RemoveVolatile<RemoveRef<Type>>& {
         return const_cast<RemoveVolatile<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    inline constexpr func removeCvQualifier(Type&& value) -> RemoveCvQualifier<RemoveRef<Type>>& {
+    inline constexpr func removeCvQualifier(Type&& value) noexcept -> RemoveCvQualifier<RemoveRef<Type>>& {
         return const_cast<RemoveCvQualifier<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    inline constexpr func removePtrConst(Type&& value) -> RemovePtrConst<RemoveRef<Type>>& {
+    inline constexpr func removePtrConst(Type&& value) noexcept -> RemovePtrConst<RemoveRef<Type>>& {
         return const_cast<RemovePtrConst<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    inline constexpr func removePtrVolatile(Type&& value) -> RemovePtrVolatile<RemoveRef<Type>>& {
+    inline constexpr func removePtrVolatile(Type&& value) noexcept -> RemovePtrVolatile<RemoveRef<Type>>& {
         return const_cast<RemovePtrVolatile<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    inline constexpr func removePtrCvQualifier(Type&& value) -> RemovePtrCvQualifier<RemoveRef<Type>>& {
+    inline constexpr func removePtrCvQualifier(Type&& value) noexcept -> RemovePtrCvQualifier<RemoveRef<Type>>& {
         return const_cast<RemovePtrCvQualifier<RemoveRef<Type>&>>(value);
     }
 
     template <typename Derived, typename Base>
     requires isPolymorphicClass<RemoveRef<Base>> && isSame<Derived, RemoveRef<Base>>
-    inline constexpr func isInstanceOf(Base&& value) -> bool {
+    inline constexpr func isInstanceOf(Base&& value) noexcept -> bool {
         return true;
     }
 
     template <typename Derived, typename Base>
     requires isPolymorphicClass<RemoveRef<Base>> && (!isSame<Derived, RemoveRef<Base>> && isBaseOf<RemoveRef<Base>, Derived>)
-    inline func isInstanceOf(Base&& value) -> bool {
+    inline func isInstanceOf(Base&& value) noexcept -> bool {
         return dynamic_cast<Derived*>(&value) != null;
     }
 }

@@ -16,6 +16,7 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/exception/Error.h>
@@ -23,6 +24,6 @@
 namespace enhanced::core::exception {
     class ENHANCED_CORE_API AssertionError : public Error {
     public:
-        AssertionError(const String& message) noexcept;
+        explicit AssertionError(const String& message = "") noexcept;
     };
 }

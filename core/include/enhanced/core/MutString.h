@@ -16,6 +16,7 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/String.h>
@@ -94,7 +95,7 @@ namespace enhanced::core {
     using U16MutString = TMutString<u16char>;
     using U32MutString = TMutString<u32char>;
 
-    inline namespace stringLiteral {
+    inline namespace literals {
         inline func operator""_m(const char* string, sizetype size) -> MutString {
             return {string, size};
         }
