@@ -13,18 +13,14 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <enhanced/core/exceptions/FileNotFoundException.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/AssertionError.h>
+#include <enhanced/core/String.h>
+#include <enhanced/core/MutString.h>
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API UnreachableError : public AssertionError {
-    public:
-        UnreachableError() noexcept;
-    };
+namespace enhanced::core::exceptions {
+    FileNotFoundException::FileNotFoundException(const String& name) noexcept :
+        IOException(String::join({"File or directory '", name, "' not found"})) {}
 }
-
-#define UNREACHABLE_CODE() throw enhanced::core::exception::UnreachableError()

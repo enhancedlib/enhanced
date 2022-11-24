@@ -13,11 +13,11 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/UnsupportedOperationException.h>
+#include <enhanced/core/exceptions/UnsupportedOperationException.h>
 
-#include <enhanced/core/exception/Exception.h>
+#include <enhanced/core/exceptions/Exception.h>
 
-namespace enhanced::core::exception {
+namespace enhanced::core::exceptions {
     UnsupportedOperationException::UnsupportedOperationException(const String& message) noexcept : Exception(message) {}
 
     UnsupportedOperationException::UnsupportedOperationException(const Exception* cause) noexcept : Exception(cause) {}

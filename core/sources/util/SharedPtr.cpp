@@ -21,41 +21,40 @@
 #include <enhanced/core/memory.h>
 
 namespace enhancedInternal::core::util {
-    SharedPtrImpl::SharedPtrImpl(void* ptr, GenericOperator genericOperator) :
-        referenceCount(ptr != null ? new sizetype(1) : null), pointer(ptr), genericOperator(genericOperator) {}
+    SharedPtrImpl::SharedPtrImpl(void* ptr) :
+        referenceCount(ptr != null ? new sizetype(1) : null), pointer(ptr), end(ptr) {}
+
+    SharedPtrImpl::SharedPtrImpl(void* ptr, void* end) :
+        referenceCount(ptr != null ? new sizetype(1) : null), pointer(ptr), end(end) {}
 
     SharedPtrImpl::SharedPtrImpl(const SharedPtrImpl& other) noexcept :
-        referenceCount(other.referenceCount), pointer(other.pointer), genericOperator(other.genericOperator) {
+        referenceCount(other.referenceCount), pointer(other.pointer), end(other.end) {
         if (other.referenceCount != null) ++(*other.referenceCount);
     }
 
     SharedPtrImpl::SharedPtrImpl(SharedPtrImpl&& other) noexcept :
-        referenceCount(other.referenceCount), pointer(other.pointer), genericOperator(other.genericOperator) {
+        referenceCount(other.referenceCount), pointer(other.pointer), end(other.end) {
         other.pointer = null;
         other.referenceCount = null;
     }
 
-    SharedPtrImpl::~SharedPtrImpl() noexcept {
-        release0();
-    }
-
-    func SharedPtrImpl::release0() noexcept -> void {
+    func SharedPtrImpl::release0(OpDestroy opDestroy) const noexcept -> void {
         if (referenceCount != null && (--(*referenceCount)) == 0) {
-            genericOperator.destroy(pointer);
-            pointer = null;
+            opDestroy(pointer, end);
             delete referenceCount;
+            referenceCount = null;
         }
     }
 
-    func SharedPtrImpl::assign0(const SharedPtrImpl& other) noexcept -> void {
-        release0();
+    func SharedPtrImpl::assign0(const SharedPtrImpl& other, OpDestroy opDestroy) noexcept -> void {
+        release0(opDestroy);
         pointer = other.pointer;
         referenceCount = other.referenceCount;
         ++(*referenceCount);
     }
 
-    func SharedPtrImpl::assign0(SharedPtrImpl&& other) noexcept -> void {
-        release0();
+    func SharedPtrImpl::assign0(SharedPtrImpl&& other, OpDestroy opDestroy) noexcept -> void {
+        release0(opDestroy);
         pointer = other.pointer;
         referenceCount = other.referenceCount;
 

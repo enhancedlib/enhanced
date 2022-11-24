@@ -26,7 +26,7 @@
 
 namespace enhanced::core {
     template <typename CharType>
-    class TMutString;
+    class ENHANCED_CORE_API TMutString;
 
     template <typename CharType>
     class ENHANCED_CORE_API TString : public CharSequence<CharType> {

@@ -24,9 +24,10 @@
 #include <enhanced/core/util/traits.h>
 #include <enhanced/core/CharSequence.h>
 #include <enhanced/core/String.h>
-#include <enhanced/core/exception/NotImplementedError.h>
+#include <enhanced/core/exceptions/NotImplementedError.h>
 
 using enhanced::core::util::removeConst;
+using enhanced::core::util::removePtrConst;
 
 namespace enhanced::core {
     template <typename CharType>
@@ -34,28 +35,30 @@ namespace enhanced::core {
         TString<CharType>(TString<CharType>::copy(value, length), length) {}
 
     template <typename CharType>
-    TMutString<CharType>::TMutString() : TString<CharType>(TString<CharType>::make(0)) {}
+    TMutString<CharType>::TMutString() : TString<CharType>(TString<CharType>::make(0), 0) {}
 
     template <typename CharType>
-    TMutString<CharType>::TMutString(const CharType*& value) : TString<CharType>(TString<CharType>::copy(value)) {}
+    TMutString<CharType>::TMutString(const CharType*& value) : TMutString<CharType>(removePtrConst(value)) {}
 
     template <typename CharType>
-    TMutString<CharType>::TMutString(CharType* const& value) : TString<CharType>(removeConst(value)) {}
+    TMutString<CharType>::TMutString(CharType* const& value) : TMutString<CharType>(removeConst(value)) {}
 
     template <typename CharType>
-    TMutString<CharType>::TMutString(CharType*& value) : TString<CharType>(TString<CharType>::copy(value)) {}
+    TMutString<CharType>::TMutString(CharType*& value) :
+        TMutString<CharType>(value, TString<CharType>::calcLength(value)) {}
 
     template <typename CharType>
-    TMutString<CharType>::TMutString(sizetype length) : TString<CharType>(TString<CharType>::make(length)) {}
+    TMutString<CharType>::TMutString(sizetype length) : TString<CharType>(TString<CharType>::make(length), length) {}
 
     template <typename CharType>
-    TMutString<CharType>::TMutString(const TMutString<CharType>& other) : TString<CharType>(TString<CharType>::copy(other.value, other.length)) {}
+    TMutString<CharType>::TMutString(const TMutString& other) :
+        TString<CharType>(TString<CharType>::copy(other.value, other.length), other.length) {}
 
     template <typename CharType>
     TMutString<CharType>::TMutString(TMutString&& other) noexcept : TString<CharType>(other.value) {
         other.value = null;
         other.length = INVALID_SIZE;
-    };
+    }
 
     template <typename CharType>
     TMutString<CharType>::~TMutString() noexcept {
@@ -148,7 +151,7 @@ namespace enhanced::core {
 
     template <typename CharType>
     func TMutString<CharType>::fill(CharType ch) -> TMutString& {
-        arrayFillPtr(this->value, &ch, this->length, sizeof(CharType));
+        arrayFill(this->value, ch, this->length);
 
         return *this;
     }
@@ -174,10 +177,31 @@ namespace enhanced::core {
     }
 
     template <typename CharType>
-    func TMutString<CharType>::operator=(const TMutString& other) -> TMutString& = default;
+    func TMutString<CharType>::operator=(const TMutString& other) -> TMutString& {
+        if (this == &other) return *this;
+
+        delete[] this->value;
+
+        this->value = TString<CharType>::copy(other.value, other.length);
+        this->length = other.length;
+
+        return *this;
+    }
 
     template <typename CharType>
-    func TMutString<CharType>::operator=(TMutString&& other) noexcept -> TMutString& = default;
+    func TMutString<CharType>::operator=(TMutString&& other) noexcept -> TMutString& {
+        if (this == &other) return *this;
+
+        delete[] this->value;
+
+        this->value = other.value;
+        this->length = other.length;
+
+        other.value = null;
+        other.length = INVALID_SIZE;
+
+        return *this;
+    }
 
     template <typename CharType>
     func TMutString<CharType>::operator+=(const TString<CharType>& other) -> TMutString& {

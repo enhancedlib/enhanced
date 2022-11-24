@@ -28,13 +28,13 @@ namespace enhanced::core {
 
     template <typename Type>
     $(NoIgnoreReturn)
-    inline constexpr func initListToArray(InitializerList<Type> list) {
+    inline constexpr func initListToArray(const InitializerList<Type>& list) {
         return list.begin();
     }
 
     template <typename Type>
     $(NoIgnoreReturn)
-    inline constexpr func initListConut(InitializerList<Type> list) {
+    inline constexpr func initListConut(const InitializerList<Type>& list) {
         return list.size();
     }
 }

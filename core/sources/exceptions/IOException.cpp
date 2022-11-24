@@ -13,12 +13,15 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/IndexOutOfBoundsException.h>
+#include <enhanced/core/exceptions/IOException.h>
 
-#include <enhanced/core/exception/RuntimeException.h>
+#include <enhanced/core/defines.h>
+#include <enhanced/core/types.h>
 
-namespace enhanced::core::exception {
-    IndexOutOfBoundsException::IndexOutOfBoundsException(const String& message) noexcept : RuntimeException(message) {}
+namespace enhanced::core::exceptions {
+    IOException::IOException(const String& message) noexcept : Exception(message) {}
 
-    IndexOutOfBoundsException::IndexOutOfBoundsException(sizetype index, sizetype size) noexcept : RuntimeException("") {} // TODO
+    IOException::IOException(const Exception* cause) noexcept : Exception(cause) {}
+
+    IOException::IOException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
 }

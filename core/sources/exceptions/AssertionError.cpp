@@ -13,15 +13,10 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/RuntimeException.h>
+#include <enhanced/core/exceptions/AssertionError.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
+#include <enhanced/core/exceptions/Error.h>
 
-namespace enhanced::core::exception {
-    RuntimeException::RuntimeException(const String& message) noexcept : Exception(message) {}
-
-    RuntimeException::RuntimeException(const Exception* cause) noexcept : Exception(cause) {}
-
-    RuntimeException::RuntimeException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
+namespace enhanced::core::exceptions {
+    AssertionError::AssertionError(const String& message) noexcept : Error(message) {}
 }

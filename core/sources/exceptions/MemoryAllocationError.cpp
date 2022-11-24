@@ -13,15 +13,10 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/IOException.h>
+#include <enhanced/core/exceptions/MemoryAllocationError.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
+#include <enhanced/core/exceptions/Error.h>
 
-namespace enhanced::core::exception {
-    IOException::IOException(const String& message) noexcept : Exception(message) {}
-
-    IOException::IOException(const Exception* cause) noexcept : Exception(cause) {}
-
-    IOException::IOException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
+namespace enhanced::core::exceptions {
+    MemoryAllocationError::MemoryAllocationError(const String& message) noexcept : Error(message) {}
 }

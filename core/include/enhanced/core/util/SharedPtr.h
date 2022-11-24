@@ -15,140 +15,149 @@
 
 #pragma once
 
-#include "enhanced/core/memory.h"
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
+#include <enhanced/core/memory.h>
 #include <enhanced/core/array.h>
 #include <enhanced/core/util/traits.h>
-#include <enhanced/core/exception/NullPointerException.h>
-#include <enhanced/core/exception/NotImplementedError.h>
+#include <enhanced/core/exceptions/NullPointerException.h>
+#include <enhanced/core/exceptions/NotImplementedError.h>
 
 namespace enhancedInternal::core::util {
     class ENHANCED_CORE_API SharedPtrImpl {
     private:
-        sizetype* referenceCount;
+        mutable sizetype* referenceCount;
 
-    protected:
+    public:
         void* pointer;
 
-        struct GenericOperator {
-            func (*destroy)(void* ptr) -> void;
-        };
+        void* end;
 
-        GenericOperator genericOperator;
+        using OpDestroy = func (*)(void* ptr, void* end) -> void;
 
-        SharedPtrImpl(void* ptr, GenericOperator genericOperator);
+        SharedPtrImpl(void* ptr);
+
+        SharedPtrImpl(void* ptr, void* end);
 
         SharedPtrImpl(const SharedPtrImpl& other) noexcept;
 
         SharedPtrImpl(SharedPtrImpl&& other) noexcept;
 
-        virtual ~SharedPtrImpl() noexcept;
+        func release0(OpDestroy opDestroy) const noexcept -> void;
 
-        func release0() noexcept -> void;
+        func assign0(const SharedPtrImpl& other, OpDestroy opDestroy) noexcept -> void;
 
-        func assign0(void* value) noexcept -> void;
-
-        func assign0(const SharedPtrImpl& other) noexcept -> void;
-
-        func assign0(SharedPtrImpl&& other) noexcept -> void;
+        func assign0(SharedPtrImpl&& other, OpDestroy opDestroy) noexcept -> void;
     };
 }
 
 namespace enhanced::core::util {
     template <typename Type>
-    class ENHANCED_CORE_API SharedPtr final : private enhancedInternal::core::util::SharedPtrImpl {
+    class SharedPtr final : private enhancedInternal::core::util::SharedPtrImpl {
     private:
-        static func destroy(void* ptr) -> void {
-            delete static_cast<Type*>(ptr);
+        static func destroy(void* ptr, void* end) -> void {
+            if (ptr == (static_cast<Type*>(end) + 1)) {
+                delete static_cast<Type*>(ptr);
+            } else {
+                if constexpr (isClass<Type>) {
+                    for (Type* item = static_cast<Type*>(ptr); item != static_cast<Type*>(end); ++item) {
+                        item->~Type();
+                    }
+                }
+
+                operator delete(ptr);
+            }
         }
 
         inline func nullPointerCheck() const -> void {
-            if (pointer == null) throw exception::NullPointerException("The pointer is null");
+            if (pointer == null) throw exceptions::NullPointerException("The pointer is null");
         }
 
-        SharedPtr(Type* ptr) : SharedPtrImpl(static_cast<void*>(ptr), {destroy}) {}
+        SharedPtr(Type* ptr) : SharedPtrImpl(static_cast<void*>(ptr)) {}
+
+        SharedPtr(Type* ptr, Type* end) : SharedPtrImpl(static_cast<void*>(ptr), static_cast<void*>(end)) {}
 
     public:
         template <typename... Args>
-        static func make(Args... args) -> SharedPtr {
+        static func make(Args&&... args) -> SharedPtr {
             return new Type(args...);
         }
 
         template <sizetype size, typename... Args>
-        static func make(Args... args) -> SharedPtr {
-            let memory = (Type*) memoryAlloc(size);
-            Type instance = {args...};
-            for (sizetype index = 0; index < size; ++index) {
-                memory[index] = instance;
+        static func make(Args&&... args) -> SharedPtr {
+            let ptr = (Type*) operator new(size * sizeof(Type));
+            let end = ptr + size;
+
+            for (Type* item = ptr; item != end; ++item) {
+                new (item) Type {args...};
             }
-            return memory;
+
+            return {ptr, end};
         }
 
-        SharedPtr() : SharedPtrImpl(null, {destroy}) {}
+        inline SharedPtr() : SharedPtrImpl(null) {}
 
-        SharedPtr(nulltype ptr) : SharedPtrImpl(static_cast<void*>(ptr), {destroy}) {}
+        inline SharedPtr(nulltype ptr) : SharedPtrImpl(static_cast<void*>(ptr)) {}
 
-        SharedPtr(const SharedPtr<Type>& other) noexcept : SharedPtrImpl(other) {}
+        inline SharedPtr(const SharedPtr<Type>& other) noexcept : SharedPtrImpl(other) {}
 
-        SharedPtr(SharedPtr<Type>&& other) noexcept : SharedPtrImpl(other) {}
+        inline SharedPtr(SharedPtr<Type>&& other) noexcept : SharedPtrImpl(other) {}
 
-        func addressOf() const noexcept -> const SharedPtr* {
-            return this;
+        inline ~SharedPtr() noexcept {
+            release();
         }
 
-        func release() noexcept -> void {
-            release0();
+        inline func addressOf() const noexcept -> const SharedPtr* {
+            return &static_cast<Type*>(pointer);
+        }
+
+        inline func release() const noexcept -> void {
+            release0(destroy);
         }
 
         $(NoIgnoreReturn)
-        func operator+(sizetype offset) const noexcept -> Type* {
+        inline func operator+(sizetype offset) const noexcept -> Type* {
             return static_cast<Type*>(pointer) + offset;
         }
 
         $(NoIgnoreReturn)
-        func operator-(sizetype offset) const noexcept -> Type* {
+        inline func operator-(sizetype offset) const noexcept -> Type* {
             return static_cast<Type*>(pointer) - offset;
         }
 
         $(NoIgnoreReturn)
-        func operator&() noexcept -> Type** {
-            return &static_cast<Type*>(pointer);
-        }
-
-        $(NoIgnoreReturn)
-        func operator->() -> Type* {
+        inline func operator->() const -> Type* {
             nullPointerCheck();
             return static_cast<Type*>(pointer);
         }
 
         $(NoIgnoreReturn)
-        func operator*() -> Type& {
+        inline func operator*() const -> Type& {
             nullPointerCheck();
             return *static_cast<Type*>(pointer);
         }
 
         $(NoIgnoreReturn)
-        func operator[](sizetype offset) -> Type& {
+        inline func operator[](sizetype offset) const -> Type& {
             nullPointerCheck();
             return static_cast<Type*>(pointer)[offset];
         }
 
-        func operator=(const SharedPtr<Type>& other) noexcept -> SharedPtr<Type>& {
-            assign0(other);
-            return *this;
-        }
-
-        func operator=(SharedPtr<Type>&& other) noexcept -> SharedPtr<Type>& {
-            assign0(other);
-            return *this;
-        }
-
         $(NoIgnoreReturn)
-        operator Type*() noexcept {
+        inline operator Type*() const noexcept {
             return static_cast<Type*>(pointer);
+        }
+
+        inline func operator=(const SharedPtr<Type>& other) noexcept -> SharedPtr<Type>& {
+            assign0(other, destroy);
+            return *this;
+        }
+
+        inline func operator=(SharedPtr<Type>&& other) noexcept -> SharedPtr<Type>& {
+            assign0(other, destroy);
+            return *this;
         }
     };
 }

@@ -44,23 +44,16 @@ namespace enhancedInternal::core::collections {
 
         sizetype size;
 
+        using OpCopy = func (*)(void*) -> void*;
+        using OpMove = func (*)(void*) -> void*;
+        using OpDestroy = func (*)(void*) -> void;
+        using OpEqual = func (*)(void*, void*) -> bool;
+
         static func prevNode(Node*& node) -> Node*&;
 
         static func nextNode(Node*& node) -> Node*&;
 
-        struct GenericOperator {
-            func (*copy)(void*) -> void*;
-
-            func (*move)(void*) -> void*;
-
-            func (*destroy)(void*) -> void;
-
-            func (*equals)(void*, void*) -> bool;
-        };
-
         class ENHANCED_CORE_API LinkedListIteratorImpl {
-            friend class LinkedListImpl;
-
         protected:
             const LinkedListImpl* linkedList;
 
@@ -79,13 +72,13 @@ namespace enhancedInternal::core::collections {
             func reset0() const -> void;
         };
 
-        GenericOperator genericOperator;
+        LinkedListImpl();
 
-        explicit LinkedListImpl(GenericOperator genericOperator);
+        LinkedListImpl(const LinkedListImpl& other, OpCopy opCopy);
 
-        LinkedListImpl(const LinkedListImpl& other);
+        LinkedListImpl(LinkedListImpl&& other) noexcept;
 
-        virtual ~LinkedListImpl() noexcept;
+        func destruct0(OpDestroy opDestroy) noexcept -> void;
 
         $(NoIgnoreReturn)
         func getLast0() const -> void*;
@@ -97,36 +90,34 @@ namespace enhancedInternal::core::collections {
         func get0(sizetype index) const -> void*;
 
         $(NoIgnoreReturn)
-        func contain0(void* value) const -> bool;
+        func indexOf0(void* value, OpEqual opEqual) const -> sizetype;
 
-        func addLast0(void* element) -> void;
+        func addLast0(void* element, OpCopy opCopy) -> void;
 
-        func addLastMoved0(void* element) -> void;
+        func addLastMoved0(void* element, OpMove opMove) -> void;
 
-        func removeLast0() -> void;
+        func removeLast0(OpDestroy opDestroy) -> void;
 
-        func addFirst0(void* element) -> void;
+        func addFirst0(void* element, OpCopy opCopy) -> void;
 
-        func addFirstMoved0(void* element) -> void;
+        func addFirstMoved0(void* element, OpMove opMove) -> void;
 
-        func removeFirst0() -> void;
+        func removeFirst0(OpDestroy opDestroy) -> void;
 
-        func clear0() -> void;
+        func clear0(OpDestroy opDestroy) -> void;
     };
 }
 
 namespace enhanced::core::collections {
     template <typename Type>
-    class ENHANCED_CORE_API LinkedList : public List<Type>, public Deque<Type>, private enhancedInternal::core::collections::LinkedListImpl {
+    class LinkedList : public List<Type>, public Deque<Type>, private enhancedInternal::core::collections::LinkedListImpl {
     private:
         using LinkedListImpl = enhancedInternal::core::collections::LinkedListImpl;
 
     public:
-        class ENHANCED_CORE_API LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
-            friend class LinkedList<Type>;
-
+        class LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
         public:
-            inline LinkedListIterator(const LinkedList<Type>* linkedList) : LinkedListIteratorImpl(linkedList) {}
+            inline explicit LinkedListIterator(const LinkedList<Type>* linkedList) : LinkedListIteratorImpl(linkedList) {}
 
             $(NoIgnoreReturn)
             inline func hasNext() const -> bool override {
@@ -169,22 +160,28 @@ namespace enhanced::core::collections {
         }
 
         $(NoIgnoreReturn)
-        static func equals(void* element, void* value) -> bool {
+        static func equal(void* element, void* value) -> bool {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
 
-        LinkedListIterator iter = {this};
+        LinkedListIterator iter {this};
 
     public:
-        inline LinkedList() : LinkedListImpl({copy, move, destroy, equals}) {}
+        inline LinkedList() : LinkedListImpl() {}
 
-        inline LinkedList(InitializerList<Type> list) : LinkedListImpl({copy, move, destroy, equals}) {
+        inline LinkedList(InitializerList<Type> list) : LinkedListImpl() {
             for (let item : list) {
                 add(item);
             }
         }
 
-        inline LinkedList(const LinkedList<Type>& other) : LinkedListImpl(other) {}
+        inline LinkedList(const LinkedList<Type>& other) : LinkedListImpl(other, copy) {}
+
+        inline LinkedList(LinkedList<Type>&& other) noexcept : LinkedListImpl(other) {}
+
+        inline ~LinkedList() noexcept {
+            destruct0(destroy);
+        }
 
         $(NoIgnoreReturn)
         inline func getSize() const -> sizetype override {
@@ -198,7 +195,7 @@ namespace enhanced::core::collections {
 
         $(NoIgnoreReturn)
         inline func contain(const Type& value) const -> bool override {
-            return contain0(util::removePtrConst(&value));
+            return indexOf(value) != INVALID_SIZE;
         }
 
         $(NoIgnoreReturn)
@@ -233,35 +230,40 @@ namespace enhanced::core::collections {
         }
 
         $(NoIgnoreReturn)
+        inline func indexOf(const Type& value) const -> sizetype override {
+            return indexOf0(util::removePtrConst(&value), equal);
+        }
+
+        $(NoIgnoreReturn)
         inline func operator[](sizetype index) const -> Type& override {
             return *reinterpret_cast<Type*>(get0(index));
         }
 
         inline func addLast(const Type& element) -> void override {
-            addLast0(util::removePtrConst(&element));
+            addLast0(util::removePtrConst(&element), copy);
         }
 
         inline func addLast(Type&& element) -> void override {
-            addLastMoved0(util::removePtrConst(&element));
+            addLastMoved0(util::removePtrConst(&element), move);
         }
 
         inline func removeLast() -> Type override {
             Type value = getLast();
-            removeLast0();
+            removeLast0(destroy);
             return value;
         }
 
         inline func addFirst(const Type& element) -> void override {
-            addFirst0(util::removePtrConst(&element));
+            addFirst0(util::removePtrConst(&element), copy);
         }
 
         inline func addFirst(Type&& element) -> void override {
-            addFirstMoved0(util::removePtrConst(&element));
+            addFirstMoved0(util::removePtrConst(&element), move);
         }
 
         inline func removeFirst() -> Type override {
             Type value = getFirst();
-            removeFirst0();
+            removeFirst0(destroy);
             return value;
         }
 
@@ -290,7 +292,7 @@ namespace enhanced::core::collections {
         }
 
         func clear() -> void override {
-            clear0();
+            clear0(destroy);
         }
     };
 }

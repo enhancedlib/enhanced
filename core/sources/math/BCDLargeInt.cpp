@@ -18,10 +18,10 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/util/traits.h>
-#include <enhanced/core/exception/InvalidArgumentException.h>
-#include <enhanced/core/exception/NotImplementedError.h>
+#include <enhanced/core/exceptions/InvalidArgumentException.h>
+#include <enhanced/core/exceptions/NotImplementedError.h>
 
-using enhanced::core::exception::InvalidArgumentException;
+using enhanced::core::exceptions::InvalidArgumentException;
 using enhanced::core::util::move;
 
 namespace enhanced::core::math {
@@ -34,7 +34,7 @@ namespace enhanced::core::math {
         else index = 0;
 
         for (; index < length; ++index) {
-            storage[index] = number[index] - '0';
+            storage.add(number[index] - '0');
             if (storage[index] >= 10) { // Out of the range.
                 throw InvalidArgumentException("Each character in the string must be a number except the first character can be + or -");
             }
@@ -46,7 +46,7 @@ namespace enhanced::core::math {
     BCDLargeInt::BCDLargeInt(BCDLargeInt&& number) noexcept :
         storage(move(number.storage)), isNegative(number.isNegative), length(number.length) {}
 
-    func BCDLargeInt::compare(const SizeComparable& other) const -> ComparisonResult {
+    func BCDLargeInt::compare(const Comparable& other) const -> ComparisonResult {
         NOT_IMPLEMENTED();
     }
 

@@ -21,6 +21,13 @@
 #include <enhanced/core/annotations.h>
 
 namespace enhanced::core {
+    template <typename Type>
+    inline func arrayFill($(InOut) Type* array, const Type& value, sizetype count) -> void {
+        for (sizetype index = 0; index < count; ++index) {
+            array[index] = value;
+        }
+    }
+
     /*!
     * Sets elements of an array to the same value. \n
     * \n

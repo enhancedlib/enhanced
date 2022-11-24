@@ -19,7 +19,7 @@
 #include <enhanced/core/types.h>
 #include <enhanced/core/String.h>
 #include <enhanced/core/MutString.h>
-#include <enhanced/core/exception/NotImplementedError.h>
+#include <enhanced/core/exceptions/NotImplementedError.h>
 
 namespace enhanced::core::io {
     func InputStream::get() const -> byte {

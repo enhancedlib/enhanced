@@ -34,9 +34,9 @@ namespace enhanced::core {
 
         TMutString(const CharType*& value);
 
-        TMutString(CharType*& value);
-
         TMutString(CharType* const& value);
+
+        TMutString(CharType*& value);
 
         explicit TMutString(sizetype length);
 

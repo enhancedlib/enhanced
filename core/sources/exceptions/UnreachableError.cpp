@@ -13,10 +13,11 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/AssertionError.h>
+#include <enhanced/core/exceptions/UnreachableError.h>
 
-#include <enhanced/core/exception/Error.h>
+#include <enhanced/core/defines.h>
+#include <enhanced/core/types.h>
 
-namespace enhanced::core::exception {
-    AssertionError::AssertionError(const String& message) noexcept : Error(message) {}
+namespace enhanced::core::exceptions {
+    UnreachableError::UnreachableError() noexcept = default;
 }

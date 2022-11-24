@@ -13,8 +13,10 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/NotImplementedError.h>
+#include <enhanced/core/exceptions/NullPointerException.h>
 
-namespace enhanced::core::exception {
-    NotImplementedError::NotImplementedError(const String& message) noexcept : AssertionError(message) {}
+#include <enhanced/core/exceptions/Exception.h>
+
+namespace enhanced::core::exceptions {
+    NullPointerException::NullPointerException(const String& message) noexcept : Exception(message) {}
 }

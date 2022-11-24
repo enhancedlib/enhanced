@@ -26,12 +26,12 @@
 #include <enhanced/core/MutString.h>
 #include <enhanced/core/InitializerList.h>
 #include <enhanced/core/collections/ArrayList.h>
-#include <enhanced/core/exception/NullPointerException.h>
+#include <enhanced/core/exceptions/NullPointerException.h>
 
-using enhanced::core::collections::ArrayList;
 using enhanced::core::util::removeConst;
 using enhanced::core::util::removePtrConst;
-using enhanced::core::exception::NullPointerException;
+using enhanced::core::collections::ArrayList;
+using enhanced::core::exceptions::NullPointerException;
 
 namespace enhanced::core {
     template <typename CharType>
@@ -125,9 +125,10 @@ namespace enhanced::core {
 
         let newString = TMutString<CharType>(length);
 
-        arrayCopy(newString.value, strings[0].value, strings[0].length, sizeof(CharType));
-        for (sizetype index = 1; index < count; ++index) {
-            arrayCopy(newString.value + strings[index - 1].length, strings[index].value, strings[index].length, sizeof(CharType));
+        sizetype offset = 0;
+        for (sizetype index = 0; index < count; ++index) {
+            arrayCopy(newString.value + offset, strings[index].value, strings[index].length, sizeof(CharType));
+            offset += strings[index].length;
         }
 
         return newString;
@@ -395,8 +396,8 @@ namespace enhanced::core {
         sizetype newLength = this->length + string.length;
         TMutString<CharType> newString(newLength);
 
-        arrayCopy(newString.value, this->value, newLength, sizeof(CharType));
-        arrayCopy(newString.value + this->length, string.value, newLength, sizeof(CharType));
+        arrayCopy(newString.value, this->value, this->length, sizeof(CharType));
+        arrayCopy(newString.value + this->length, string.value, string.length, sizeof(CharType));
 
         return newString;
     }

@@ -18,13 +18,19 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/AssertionError.h>
+#include <enhanced/core/exceptions/Exception.h>
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API NotImplementedError : public AssertionError {
+namespace enhanced::core::exceptions {
+    class ENHANCED_CORE_API UnsupportedOperationException : public Exception {
     public:
-        explicit NotImplementedError(const String& message = "Not yet implemented") noexcept;
+        DEFINE_EXCEPTION_NAME(enhanced::core::exceptions::UnsupportedOperationException)
+
+        explicit UnsupportedOperationException(const String& message = "") noexcept;
+
+        explicit UnsupportedOperationException(const Exception* cause) noexcept;
+
+        UnsupportedOperationException(const String& message, const Exception* cause) noexcept;
     };
 }
 
-#define NOT_IMPLEMENTED throw enhanced::core::exception::NotImplementedError
+#define UNSUPPORTED_OPERATION() throw enhanced::core::exceptions::UnsupportedOperationException()

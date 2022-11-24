@@ -13,16 +13,15 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <enhanced/core/exceptions/RuntimeException.h>
 
 #include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/IOException.h>
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API FileNotFoundException : public IOException {
-    public:
-        explicit FileNotFoundException(const String& name) noexcept;
-    };
+namespace enhanced::core::exceptions {
+    RuntimeException::RuntimeException(const String& message) noexcept : Exception(message) {}
+
+    RuntimeException::RuntimeException(const Exception* cause) noexcept : Exception(cause) {}
+
+    RuntimeException::RuntimeException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
 }

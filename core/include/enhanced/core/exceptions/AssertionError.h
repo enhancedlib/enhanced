@@ -18,14 +18,14 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/Exception.h>
-#include <enhanced/core/exception/RuntimeException.h>
+#include <enhanced/core/String.h>
+#include <enhanced/core/exceptions/Error.h>
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API IndexOutOfBoundsException : public RuntimeException {
+namespace enhanced::core::exceptions {
+    class ENHANCED_CORE_API AssertionError : public Error {
     public:
-        explicit IndexOutOfBoundsException(const String& message = "") noexcept;
+        DEFINE_EXCEPTION_NAME(enhanced::core::exceptions::AssertionError)
 
-        IndexOutOfBoundsException(sizetype index, sizetype size) noexcept;
+        explicit AssertionError(const String& message = "") noexcept;
     };
 }

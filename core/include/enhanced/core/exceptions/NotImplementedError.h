@@ -18,15 +18,15 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/Exception.h>
+#include <enhanced/core/exceptions/AssertionError.h>
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API Error : public Exception {
+namespace enhanced::core::exceptions {
+    class ENHANCED_CORE_API NotImplementedError : public AssertionError {
     public:
-        explicit Error(const String& message = "") noexcept;
+        DEFINE_EXCEPTION_NAME(enhanced::core::exceptions::NotImplementedError)
 
-        explicit Error(const Exception* cause) noexcept;
-
-        Error(const String& message, const Exception* cause) noexcept;
+        explicit NotImplementedError(const String& message = "Not yet implemented") noexcept;
     };
 }
+
+#define NOT_IMPLEMENTED throw enhanced::core::exceptions::NotImplementedError

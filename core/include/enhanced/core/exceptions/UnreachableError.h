@@ -18,12 +18,15 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/String.h>
-#include <enhanced/core/exception/Error.h>
+#include <enhanced/core/exceptions/AssertionError.h>
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API MemoryAllocationError : public Error {
+namespace enhanced::core::exceptions {
+    class ENHANCED_CORE_API UnreachableError : public AssertionError {
     public:
-        explicit MemoryAllocationError(const String& message = "") noexcept;
+        DEFINE_EXCEPTION_NAME(enhanced::core::exceptions::UnreachableError)
+
+        UnreachableError() noexcept;
     };
 }
+
+#define UNREACHABLE_CODE() throw enhanced::core::exceptions::UnreachableError()

@@ -16,9 +16,14 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/collections/List.h>
+#include <enhanced/core/util/traits.h>
 
 namespace enhanced::core::collections {
+    template <template <typename> typename ListType, typename Element>
+    requires util::isBaseOf<List<Element>, ListType<Element>>
+    class ListStream {};
 }

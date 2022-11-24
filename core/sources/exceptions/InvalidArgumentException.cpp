@@ -13,11 +13,11 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/InvalidArgumentException.h>
+#include <enhanced/core/exceptions/InvalidArgumentException.h>
 
-#include <enhanced/core/exception/RuntimeException.h>
+#include <enhanced/core/exceptions/RuntimeException.h>
 
-namespace enhanced::core::exception {
+namespace enhanced::core::exceptions {
     InvalidArgumentException::InvalidArgumentException(const String& message) noexcept : RuntimeException(message) {}
 
     InvalidArgumentException::InvalidArgumentException(const Exception* cause) noexcept : RuntimeException(cause) {}

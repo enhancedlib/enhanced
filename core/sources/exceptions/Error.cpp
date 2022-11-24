@@ -13,10 +13,12 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/NullPointerException.h>
+#include <enhanced/core/exceptions/Error.h>
 
-#include <enhanced/core/exception/Exception.h>
+namespace enhanced::core::exceptions {
+    Error::Error(const String& message) noexcept : Exception(message) {}
 
-namespace enhanced::core::exception {
-    NullPointerException::NullPointerException(const String& message) noexcept : Exception(message) {}
+    Error::Error(const Exception* cause) noexcept : Exception(cause) {}
+
+    Error::Error(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
 }

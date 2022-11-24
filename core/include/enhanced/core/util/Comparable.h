@@ -16,13 +16,25 @@
 #pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
+#include <enhanced/core/util/Pair.h>
+#include <enhanced/core/exceptions/UnsupportedOperationException.h>
 
 namespace enhanced::core::util {
-    interface Comparable {
+    interface ENHANCED_CORE_API Comparable {
+        scopedenum ComparisonResult : uint8 {
+            EQUAL, MORE, LESS
+        };
+
         $(NoIgnoreReturn)
-        virtual func equal(const Comparable& other) const -> bool = abstract;
+        virtual func compare(const Comparable& other) const -> ComparisonResult = abstract;
+
+        $(NoIgnoreReturn)
+        inline func equal(const Comparable& other) const -> bool {
+            return compare(other) == ComparisonResult::EQUAL;
+        }
 
         $(NoIgnoreReturn)
         inline func operator==(const Comparable& other) const -> bool {
@@ -32,6 +44,28 @@ namespace enhanced::core::util {
         $(NoIgnoreReturn)
         inline func operator!=(const Comparable& other) const -> bool {
             return !equal(other);
+        }
+
+        $(NoIgnoreReturn)
+        inline func operator<(const Comparable& other) const -> bool {
+            return compare(other) == ComparisonResult::LESS;
+        }
+
+        $(NoIgnoreReturn)
+        inline func operator>(const Comparable& other) const -> bool {
+            return compare(other) == ComparisonResult::MORE;
+        }
+
+        $(NoIgnoreReturn)
+        inline func operator<=(const Comparable& other) const -> bool {
+            let result = compare(other);
+            return result == ComparisonResult::LESS || result == ComparisonResult::EQUAL;
+        }
+
+        $(NoIgnoreReturn)
+        inline func operator>=(const Comparable& other) const -> bool {
+            let result = compare(other);
+            return result == ComparisonResult::MORE || result == ComparisonResult::EQUAL;
         }
     };
 }

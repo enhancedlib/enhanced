@@ -13,11 +13,18 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exception/UnreachableError.h>
+#pragma once
 
 #include <enhanced/core/defines.h>
+#include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
+#include <enhanced/core/exceptions/Exception.h>
 
-namespace enhanced::core::exception {
-    UnreachableError::UnreachableError() noexcept = default;
+namespace enhanced::core::exceptions {
+    class ENHANCED_CORE_API NullPointerException : public Exception {
+    public:
+        DEFINE_EXCEPTION_NAME(enhanced::core::exceptions::NullPointerException)
+
+        explicit NullPointerException(const String& message = "") noexcept;
+    };
 }

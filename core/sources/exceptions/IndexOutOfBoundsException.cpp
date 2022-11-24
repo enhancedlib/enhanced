@@ -13,20 +13,12 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <enhanced/core/exceptions/IndexOutOfBoundsException.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/export.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/exception/Exception.h>
+#include <enhanced/core/exceptions/RuntimeException.h>
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API RuntimeException : public Exception {
-    public:
-        explicit RuntimeException(const String& message = "") noexcept;
+namespace enhanced::core::exceptions {
+    IndexOutOfBoundsException::IndexOutOfBoundsException(const String& message) noexcept : RuntimeException(message) {}
 
-        explicit RuntimeException(const Exception* cause) noexcept;
-
-        RuntimeException(const String& message, const Exception* cause) noexcept;
-    };
+    IndexOutOfBoundsException::IndexOutOfBoundsException(sizetype index, sizetype size) noexcept : RuntimeException("") {} // TODO
 }

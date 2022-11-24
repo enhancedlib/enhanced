@@ -39,7 +39,7 @@
     private: \
         using Self = type; \
         Self self; \
-        inline PropertyField_##name(Self&& value) : self(value) {} \
+        inline PropertyField_##name(Self value) : self(enhanced::core::util::move(value)) {} \
         __PROPERTY_GETTER_##getter \
         __PROPERTY_SETTER_##setter \
     public: \
@@ -63,12 +63,12 @@ accessModifier: \
 accessModifier: \
     inline func operator=(const Self& value) -> Self&
 
-#define __PROPERTY_GETTER_getdef(accessModifier) \
+#define __PROPERTY_GETTER_getDefault(accessModifier) \
     __PROPERTY_GETTER_get(accessModifier) { \
         return self; \
     }
 
-#define __PROPERTY_SETTER_setdef(accessModifier) \
+#define __PROPERTY_SETTER_setDefault(accessModifier) \
     __PROPERTY_SETTER_set(accessModifier) { \
         return self = value; \
     }

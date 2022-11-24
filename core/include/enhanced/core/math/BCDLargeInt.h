@@ -26,7 +26,12 @@
 namespace enhanced::core::math {
     class ENHANCED_CORE_API BCDLargeInt : public LargeInt {
     private:
+        MSVC_WARNING_PUSH
+        MSVC_WARNING_DISABLE(4251)
+
         collections::ArrayList<byte> storage;
+
+        MSVC_WARNING_POP
 
         bool isNegative;
 
@@ -55,7 +60,7 @@ namespace enhanced::core::math {
 
         BCDLargeInt(BCDLargeInt&& number) noexcept;
 
-        func compare(const SizeComparable& other) const -> ComparisonResult override;
+        func compare(const Comparable& other) const -> ComparisonResult override;
 
         func operator+() const -> BCDLargeInt;
 
@@ -91,10 +96,6 @@ namespace enhanced::core::math {
 
         func operator%=(const BCDLargeInt& number) -> BCDLargeInt&;
     };
-
-    inline namespace literals {
-        func operator""_li(const char* string, sizetype size) -> BCDLargeInt {
-            return {String {string, size}};
-        }
-    }
 }
+
+#define BCD_LARGE_INT(number) enhanced::core::math::BCDLargeInt(#number)

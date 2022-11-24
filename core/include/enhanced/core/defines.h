@@ -136,11 +136,43 @@
 #define EXTERN_C_START EXTERN_C {
 #define EXTERN_C_END }
 
+#define PRAGMA(...) _Pragma(#__VA_ARGS__)
+
 #define CURRENT_FUNC __func__
 #define CURRENT_FILE __FILE__
 #define CURRENT_LINE __LINE__
 #define COMPILING_DATE __DATE__
 #define COMPILING_TIME __TIME__
+
+#ifdef COMPILER_CLANG
+#define CLANG_WARNING_PUSH PRAGMA(clang diagnostic push)
+#define CLANG_WARNING_DISABLE(id) PRAGMA(clang diagnostic warning id)
+#define CLANG_WARNING_POP PRAGMA(clang diagnostic pop)
+#else
+#define CLANG_WARNING_PUSH
+#define CLANG_WARNING_DISABLE
+#define CLANG_WARNING_POP
+#endif
+
+#ifdef COMPILER_MSVC
+#define MSVC_WARNING_PUSH PRAGMA(warning(push))
+#define MSVC_WARNING_DISABLE(id) PRAGMA(warning(disable: id))
+#define MSVC_WARNING_POP PRAGMA(warning(pop))
+#else
+#define MSVC_WARNING_PUSH
+#define MSVC_WARNING_DISABLE(id)
+#define MSVC_WARNING_POP
+#endif
+
+#ifdef COMPILER_GCC
+#define GCC_WARNING_PUSH PRAGMA(gcc diagnostic push)
+#define GCC_WARNING_DISABLE(id) PRAGMA(gcc diagnostic warning id)
+#define GCC_WARNING_POP PRAGMA(gcc diagnostic pop)
+#else
+#define GCC_WARNING_PUSH
+#define GCC_WARNING_DISABLE(id)
+#define GCC_WARNING_POP
+#endif
 
 #define scopedenum enum class
 #define abstractclass class

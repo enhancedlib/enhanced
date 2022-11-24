@@ -19,11 +19,11 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/MemoryAllocationError.h>
+#include <enhanced/core/exceptions/MemoryAllocationError.h>
 
 using enhanced::core::memoryAlloc;
 using enhanced::core::memoryFree;
-using enhanced::core::exception::MemoryAllocationError;
+using enhanced::core::exceptions::MemoryAllocationError;
 
 namespace enhanced::core {
     $(MustInspectResult RetNullable RetRequiresRelease)

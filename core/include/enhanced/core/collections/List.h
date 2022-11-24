@@ -23,8 +23,13 @@
 namespace enhanced::core::collections {
     template <typename Type>
     interface List : Collection<Type> {
+        $(NoIgnoreReturn)
         virtual func get(sizetype index) const -> Type& = abstract;
 
+        $(NoIgnoreReturn)
+        virtual func indexOf(const Type& value) const -> sizetype = abstract;
+
+        $(NoIgnoreReturn)
         virtual func operator[](sizetype index) const -> Type& = abstract;
 
         virtual func add(const Type& element) -> void = abstract;

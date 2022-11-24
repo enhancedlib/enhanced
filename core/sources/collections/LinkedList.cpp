@@ -19,11 +19,11 @@
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/memory.h>
-#include <enhanced/core/exception/IndexOutOfBoundsException.h>
-#include <enhanced/core/exception/UnsupportedOperationException.h>
+#include <enhanced/core/exceptions/IndexOutOfBoundsException.h>
+#include <enhanced/core/exceptions/UnsupportedOperationException.h>
 
-using enhanced::core::exception::IndexOutOfBoundsException;
-using enhanced::core::exception::UnsupportedOperationException;
+using enhanced::core::exceptions::IndexOutOfBoundsException;
+using enhanced::core::exceptions::UnsupportedOperationException;
 
 namespace enhancedInternal::core::collections {
     func LinkedListImpl::prevNode(Node*& node) -> LinkedListImpl::Node*& {
@@ -34,18 +34,24 @@ namespace enhancedInternal::core::collections {
         return node = node->next;
     }
 
-    LinkedListImpl::LinkedListImpl(const GenericOperator genericOperator) : first(null), last(null), size(0), genericOperator(genericOperator) {}
+    LinkedListImpl::LinkedListImpl() : first(null), last(null), size(0) {}
 
-    LinkedListImpl::LinkedListImpl(const LinkedListImpl& other) : first(null), last(null), size(0), genericOperator(other.genericOperator) {
+    LinkedListImpl::LinkedListImpl(const LinkedListImpl& other, OpCopy opCopy) : first(null), last(null), size(0) {
         Node* indexer = other.first;
         for (sizetype _ = 0; _ < other.size; ++_) {
-            addLast0(indexer->value);
+            addLast0(indexer->value, opCopy);
             nextNode(indexer);
         }
     }
 
-    LinkedListImpl::~LinkedListImpl() noexcept {
-        clear0();
+    LinkedListImpl::LinkedListImpl(LinkedListImpl&& other) noexcept : first(other.first), last(other.last), size(other.size) {
+        other.first = null;
+        other.last = null;
+        other.size = INVALID_SIZE;
+    }
+
+    func LinkedListImpl::destruct0(OpDestroy opDestroy) noexcept -> void {
+        clear0(opDestroy);
         delete last;
     }
 
@@ -64,18 +70,18 @@ namespace enhancedInternal::core::collections {
     }
 
     $(NoIgnoreReturn)
-    func LinkedListImpl::get0(const sizetype index) const -> void* {
+    func LinkedListImpl::get0(sizetype index) const -> void* {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
         Node* indexer;
         if (index < (size >> 1)) {
             indexer = first;
-            for (sizetype _ = 0; _ < index; ++_) {
+            while (index-- > 0) {
                 nextNode(indexer);
             }
         } else {
             indexer = last;
-            for (sizetype _ = size - 1; _ > index; --_) {
+            while (++index < size) {
                 prevNode(indexer);
             }
         }
@@ -84,26 +90,26 @@ namespace enhancedInternal::core::collections {
     }
 
     $(NoIgnoreReturn)
-    func LinkedListImpl::contain0(void* value) const -> bool {
+    func LinkedListImpl::indexOf0(void* value, OpEqual opEqual) const -> sizetype {
         Node* indexer = first;
-        for (sizetype _ = 0; _ < size; ++_) {
-            if (genericOperator.equals(indexer->value, value)) {
-                return true;
+        for (sizetype index = 0; index < size; ++index) {
+            if (opEqual(indexer->value, value)) {
+                return index;
             }
             nextNode(indexer);
         }
 
-        return false;
+        return INVALID_SIZE;
     }
 
-    func LinkedListImpl::addLast0(void* element) -> void {
+    func LinkedListImpl::addLast0(void* element, OpCopy opCopy) -> void {
         if (size == 0) {
             last = new Node();
-            last->value = genericOperator.copy(element);
+            last->value = opCopy(element);
             first = last;
         } else {
             last->next = new Node();
-            last->next->value = genericOperator.copy(element);
+            last->next->value = opCopy(element);
             last->next->prev = last;
             nextNode(last);
         }
@@ -111,14 +117,14 @@ namespace enhancedInternal::core::collections {
         ++size;
     }
 
-    func LinkedListImpl::addLastMoved0(void* element) -> void {
+    func LinkedListImpl::addLastMoved0(void* element, OpMove opMove) -> void {
         if (size == 0) {
             last = new Node();
-            last->value = genericOperator.move(element);
+            last->value = opMove(element);
             first = last;
         } else {
             last->next = new Node();
-            last->next->value = genericOperator.move(element);
+            last->next->value = opMove(element);
             last->next->prev = last;
             nextNode(last);
         }
@@ -126,15 +132,15 @@ namespace enhancedInternal::core::collections {
         ++size;
     }
 
-    func LinkedListImpl::removeLast0() -> void {
+    func LinkedListImpl::removeLast0(OpDestroy opDestroy) -> void {
         if (size == 0) throw UnsupportedOperationException("The list is empty");
 
         if (size > 1) {
             prevNode(last);
-            genericOperator.destroy(last->next->value);
+            opDestroy(last->next->value);
             delete last->next;
         } else {
-            genericOperator.destroy(last->value);
+            opDestroy(last->value);
             delete last;
             last = first = null;
         }
@@ -142,14 +148,14 @@ namespace enhancedInternal::core::collections {
         --size;
     }
 
-    func LinkedListImpl::addFirst0(void* element) -> void {
+    func LinkedListImpl::addFirst0(void* element, OpCopy opCopy) -> void {
         if (size == 0) {
             first = new Node();
-            first->value = genericOperator.copy(element);
+            first->value = opCopy(element);
             last = first;
         } else {
             first->prev = new Node();
-            first->prev->value = genericOperator.copy(element);
+            first->prev->value = opCopy(element);
             first->prev->next = first;
             prevNode(first);
         }
@@ -157,14 +163,14 @@ namespace enhancedInternal::core::collections {
         ++size;
     }
 
-    func LinkedListImpl::addFirstMoved0(void* element) -> void {
+    func LinkedListImpl::addFirstMoved0(void* element, OpMove opMove) -> void {
         if (size == 0) {
             first = new Node();
-            first->value = genericOperator.move(element);
+            first->value = opMove(element);
             last = first;
         } else {
             first->prev = new Node();
-            first->prev->value = genericOperator.move(element);
+            first->prev->value = opMove(element);
             first->prev->next = first;
             prevNode(first);
         }
@@ -172,15 +178,15 @@ namespace enhancedInternal::core::collections {
         ++size;
     }
 
-    func LinkedListImpl::removeFirst0() -> void {
+    func LinkedListImpl::removeFirst0(OpDestroy opDestroy) -> void {
         if (size == 0) throw UnsupportedOperationException("The list is empty");
 
         if (size > 1) {
             nextNode(first);
-            genericOperator.destroy(first->prev->value);
+            opDestroy(first->prev->value);
             delete first->prev;
         } else {
-            genericOperator.destroy(first->value);
+            opDestroy(first->value);
             delete first;
             first = last = null;
         }
@@ -188,15 +194,15 @@ namespace enhancedInternal::core::collections {
         --size;
     }
 
-    func LinkedListImpl::clear0() -> void {
+    func LinkedListImpl::clear0(OpDestroy opDestroy) -> void {
         while (size > 1) {
             prevNode(last);
-            genericOperator.destroy(last->next->value);
+            opDestroy(last->next->value);
             delete last->next;
             --size;
         }
 
-        genericOperator.destroy(last->value);
+        opDestroy(last->value);
         delete last;
         last = first = null;
     }

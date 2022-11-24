@@ -18,49 +18,9 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/util/SizeComparable.h>
-#include <enhanced/core/exception/UnsupportedOperationException.h>
+#include <enhanced/core/util/Comparable.h>
+#include <enhanced/core/exceptions/UnsupportedOperationException.h>
 
 namespace enhanced::core::math {
-    interface ENHANCED_CORE_API Number : util::SizeComparable {
-        virtual func add(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-
-        virtual func sub(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-
-        virtual func mul(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-
-        virtual func div(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-
-        virtual func mod(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-
-        virtual func operator+=(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-
-        virtual func operator-=(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-
-        virtual func operator*=(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-
-        virtual func operator/=(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-
-        virtual func operator%=(const Number& number) -> Number& {
-            UNSUPPORTED_OPERATION();
-        }
-    };
+    interface ENHANCED_CORE_API Number : util::Comparable {};
 }

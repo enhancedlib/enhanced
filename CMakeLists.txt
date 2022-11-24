@@ -1,15 +1,15 @@
-# Copyright (C) 2022 Liu Baihao. All rights reserved.
-#
-# Licensed under the Enhanced Software License.
-# You may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://sharedwonder.github.io/enhanced/LICENSE.txt
-#
-# UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
-# THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
-# WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+## Copyright (C) 2022 Liu Baihao. All rights reserved.
+##
+## Licensed under the Enhanced Software License.
+## You may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+##
+##     https://sharedwonder.github.io/enhanced/LICENSE.txt
+##
+## UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+## THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
+## WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+## INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
 
 cmake_minimum_required(VERSION 3.0)
 
@@ -17,12 +17,17 @@ project("Enhanced")
 
 function (setup_module MODULE_NAME)
     set(PROMPT "[Module: ${MODULE_NAME}]")
+    set(MODULE_DIR "${CMAKE_SOURCE_DIR}/${MODULE_NAME}")
 
     message("${PROMPT} Configuring module: ${MODULE_NAME}")
-    message("${PROMPT} Module path: \"${CMAKE_CURRENT_SOURCE_DIR}\"")
+    message("${PROMPT} Module path: \"${MODULE_DIR}\"")
 
-    file(GLOB_RECURSE SOURCES sources/*.cpp)
-    file(GLOB_RECURSE HEADERS include/*.h)
+    if (NOT EXISTS "${MODULE_DIR}")
+        return()
+    endif ()
+
+    file(GLOB_RECURSE SOURCES ${MODULE_DIR}/sources/*.cpp)
+    file(GLOB_RECURSE HEADERS ${MODULE_DIR}/include/*.h)
 
     string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
 
@@ -32,7 +37,7 @@ function (setup_module MODULE_NAME)
         message("${PROMPT} This module doesn't requires other modules")
     endif ()
 
-    set(INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include")
+    set(INCLUDE_DIRECTORIES "${MODULE_DIR}/include")
     foreach (DEPENDENT_MODULE IN ITEMS ${DEPENDENT_MODULES})
         set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${CMAKE_SOURCE_DIR}/${DEPENDENT_MODULE}/include")
     endforeach ()
@@ -54,7 +59,7 @@ function (setup_module MODULE_NAME)
     target_compile_definitions(${MODULE_NAME}-static PRIVATE ENHANCED_BUILDING)
     target_compile_definitions(${MODULE_NAME}-static PRIVATE ENHANCED_${MODULE_NAME_UPPER}_BUILDING)
 
-    set_target_properties(${MODULE_NAME}-static PROPERTIES OUTPUT_NAME enhanced-${MODULE_NAME})
+    set_target_properties(${MODULE_NAME}-static PROPERTIES OUTPUT_NAME enhanced.${MODULE_NAME})
     if (WIN32)
         set_target_properties(${MODULE_NAME}-static PROPERTIES PREFIX "lib")
     endif ()
@@ -84,7 +89,7 @@ function (setup_module MODULE_NAME)
 
     target_include_directories(${MODULE_NAME}-shared PRIVATE ${INCLUDE_DIRECTORIES})
 
-    set_target_properties(${MODULE_NAME}-shared PROPERTIES OUTPUT_NAME enhanced-${MODULE_NAME})
+    set_target_properties(${MODULE_NAME}-shared PROPERTIES OUTPUT_NAME enhanced.${MODULE_NAME})
     if (${CMAKE_BUILD_TYPE} STREQUAL "Debug" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
         set_target_properties(${MODULE_NAME}-shared PROPERTIES POSTFIX "_d")
     endif ()
@@ -125,11 +130,9 @@ function (setup_module_test)
     target_include_directories(test PRIVATE ${INCLUDE_DIRECTORIES})
 
     foreach (DEPENDENT_MODULE IN ITEMS ${DEPENDENT_MODULES})
-        target_link_libraries(test PRIVATE ${DEPENDENT_MODULE}-static)
+        target_link_libraries(test PRIVATE ${DEPENDENT_MODULE}-shared)
     endforeach ()
 endfunction ()
-
-set(PROMPT "[Root CMakeLists]")
 
 if (!${CMAKE_BUILD_TYPE})
     if (!${CMAKE_CONFIGURATION_TYPES})
@@ -139,11 +142,17 @@ if (!${CMAKE_BUILD_TYPE})
     endif ()
 endif ()
 
-if (!${CMAKE_CXX_COMPILER})
-    set(CMAKE_CXX_COMPILER 20)
+if (NOT CMAKE_CXX_STANDARD OR ${CMAKE_CXX_STANDARD} LESS 20)
+    set(CMAKE_CXX_STANDARD 20)
 endif ()
 
-set(MODULES "core")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/targets)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/targets)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/targets)
+
+file(STRINGS ".modules" MODULES)
+
+set(PROMPT "[Root CMakeLists]")
 
 message("${PROMPT} CMake version: ${CMAKE_VERSION}")
 message("${PROMPT} Project path: \"${CMAKE_SOURCE_DIR}\"")
@@ -155,8 +164,9 @@ message("${PROMPT} Build type: ${CMAKE_BUILD_TYPE}")
 message("${PROMPT} All modules: ${MODULES}")
 
 message("${PROMPT} Begins configuring modules")
+
 foreach (MODULE_NAME IN ITEMS ${MODULES})
-    add_subdirectory(${MODULE_NAME})
+    setup_module(${MODULE_NAME})
 endforeach ()
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/test")
@@ -165,7 +175,7 @@ endif ()
 
 message("${PROMPT} Configuring modules done")
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+if (${CMAKE_BUILD_TYPE} STREQUAL "Release" OR ${CMAKE_BUILD_TYPE} STREQUAL "MinSizeRel")
     install(FILES "README.md" DESTINATION ".")
     message("${PROMPT} Set the installation directory for the \"README.md\" file")
     install(FILES "LICENSE" DESTINATION ".")

@@ -24,7 +24,7 @@ namespace enhanced::core {
     template <typename CharType>
     class ENHANCED_CORE_API CharSequence {
         template <typename>
-        friend class TMutString;
+        friend class ENHANCED_CORE_API TMutString;
 
     protected:
         CharType* value;

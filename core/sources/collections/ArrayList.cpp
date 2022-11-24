@@ -21,34 +21,34 @@
 #include <enhanced/core/array.h>
 #include <enhanced/core/assert.h>
 #include <enhanced/core/memory.h>
-#include <enhanced/core/exception/IndexOutOfBoundsException.h>
-#include <enhanced/core/exception/UnsupportedOperationException.h>
+#include <enhanced/core/exceptions/IndexOutOfBoundsException.h>
+#include <enhanced/core/exceptions/UnsupportedOperationException.h>
 
 using enhanced::core::arrayCopy;
-using enhanced::core::exception::IndexOutOfBoundsException;
-using enhanced::core::exception::UnsupportedOperationException;
+using enhanced::core::exceptions::IndexOutOfBoundsException;
+using enhanced::core::exceptions::UnsupportedOperationException;
 
 namespace enhancedInternal::core::collections {
-    ArrayListImpl::ArrayListImpl(const sizetype capacity, const GenericOperator genericOperator) :
-        elements(new void*[capacity]), size(0), capacity(capacity), genericOperator(genericOperator) {}
+    ArrayListImpl::ArrayListImpl(const sizetype capacity) :
+        elements(new void*[capacity]), size(0), capacity(capacity), fallbackExpSize([](sizetype capacity) {return capacity;}) {}
 
-    ArrayListImpl::ArrayListImpl(const ArrayListImpl& other) : elements(new void*[other.capacity]), size(other.size),
-        capacity(other.capacity), genericOperator(other.genericOperator) {
+    ArrayListImpl::ArrayListImpl(const ArrayListImpl& other, OpCopy opCopy) : elements(new void*[other.capacity]), size(other.size),
+        capacity(other.capacity), fallbackExpSize([](sizetype capacity) {return capacity;}) {
         assert(other.capacity >= other.size);
         for (sizetype index = 0; index < other.size; ++index) {
-            elements[index] = genericOperator.copy(other.elements[index]);
+            elements[index] = opCopy(other.elements[index]);
         }
     }
 
     ArrayListImpl::ArrayListImpl(ArrayListImpl&& other) noexcept : elements(other.elements), size(other.size),
-        capacity(other.capacity), genericOperator(other.genericOperator) {
+        capacity(other.capacity), fallbackExpSize([](sizetype capacity) {return capacity;}) {
         other.elements = null;
         other.size = INVALID_SIZE;
         other.capacity = INVALID_SIZE;
     }
 
-    ArrayListImpl::~ArrayListImpl() noexcept {
-        clear0();
+    func ArrayListImpl::destruct0(OpDestroy opDestroy) noexcept -> void {
+        clear0(opDestroy);
         delete[] elements;
     }
 
@@ -60,42 +60,41 @@ namespace enhancedInternal::core::collections {
     }
 
     $(NoIgnoreReturn)
-    func ArrayListImpl::contain0(void* value) const -> bool {
+    func ArrayListImpl::indexOf0(void* value, OpEqual opEqual) const -> sizetype {
         for (sizetype index = 0; index < size; ++index) {
-            if (genericOperator.equals(elements[index], value)) {
-                return true;
+            if (opEqual(elements[index], value)) {
+                return index;
             }
         }
 
-        return false;
+        return INVALID_SIZE;
     }
 
-    func ArrayListImpl::add0(void* element) -> void {
+    func ArrayListImpl::add0(void* element, OpCopy opCopy) -> void {
         if (size == capacity) {
-            expand0(capacity);
+            expand0();
         }
 
-        elements[size] = genericOperator.copy(element);
+        elements[size] = opCopy(element);
         ++size;
     }
 
-    func ArrayListImpl::addMoved0(void* element) -> void {
+    func ArrayListImpl::addMoved0(void* element, OpMove opMove) -> void {
         if (size == capacity) {
-            expand0(capacity);
+            expand0();
         }
 
-        elements[size] = genericOperator.move(element);
+        elements[size] = opMove(element);
         ++size;
     }
 
-    func ArrayListImpl::remove0() -> void {
+    func ArrayListImpl::remove0(OpDestroy opDestroy) -> void {
         if (size == 0) throw UnsupportedOperationException("The list is empty");
 
-        genericOperator.destroy(elements[--size]);
+        opDestroy(elements[--size]);
     }
 
-    func ArrayListImpl::expand0(const sizetype expSize) -> void {
-        sizetype newCapacity = capacity + expSize;
+    func ArrayListImpl::setCapacity0(sizetype newCapacity) -> void {
         void** array = new void*[newCapacity];
 
         arrayCopy(array, elements, size, sizeof(void*));
@@ -105,22 +104,25 @@ namespace enhancedInternal::core::collections {
         capacity = newCapacity;
     }
 
-    func ArrayListImpl::shrink0(const sizetype shrSize) -> void {
-        sizetype newCapacity = capacity - shrSize;
-        if (newCapacity < size) throw UnsupportedOperationException("Cannot shrink because the size is larger than the new capacity");
-
-        void** array = new void*[newCapacity];
-
-        arrayCopy(array, elements, size, sizeof(void*));
-        delete[] elements;
-
-        elements = array;
-        capacity = newCapacity;
+    func ArrayListImpl::expand0() -> void {
+        expand0(fallbackExpSize(capacity));
     }
 
-    func ArrayListImpl::clear0() -> void {
+    func ArrayListImpl::expand0(sizetype expSize) -> void {
+        setCapacity0(capacity + expSize);
+    }
+
+    func ArrayListImpl::shrink0() -> void {
+        setCapacity0(size);
+    }
+
+    func ArrayListImpl::shrink0(sizetype shrSize) -> void {
+        setCapacity0(capacity - shrSize);
+    }
+
+    func ArrayListImpl::clear0(OpDestroy opDestroy) -> void {
         while (size > 0) {
-            genericOperator.destroy(elements[--size]);
+            opDestroy(elements[--size]);
         }
     }
 

@@ -22,7 +22,7 @@
 #include <enhanced/core/process.h>
 #include <enhanced/core/String.h>
 
-namespace enhanced::core::exception {
+namespace enhanced::core::exceptions {
     class ENHANCED_CORE_API Exception {
     protected:
         const String message;
@@ -30,6 +30,11 @@ namespace enhanced::core::exception {
         const Exception* cause;
 
     public:
+        $(NoIgnoreReturn)
+        virtual func getName() const -> const String {
+            return "enhanced::core::exceptions::Exception";
+        }
+
         explicit Exception(const String& message = "") noexcept;
 
         explicit Exception(const Exception* cause) noexcept;
@@ -39,7 +44,7 @@ namespace enhanced::core::exception {
         virtual ~Exception() noexcept;
 
         $(NoIgnoreReturn)
-        virtual func getTraceback() const noexcept -> const String&;
+        virtual func getTraceback() const noexcept -> String;
 
         $(NoIgnoreReturn)
         virtual func getCause() const noexcept -> const Exception*;
@@ -48,3 +53,9 @@ namespace enhanced::core::exception {
         virtual func getMessage() const noexcept -> const String&;
     };
 }
+
+#define DEFINE_EXCEPTION_NAME(name) \
+        $(NoIgnoreReturn) \
+        func getName() const -> const String override { \
+            return #name; \
+        }

@@ -18,15 +18,14 @@
 #include <enhanced/core/defines.h>
 #include <enhanced/core/export.h>
 #include <enhanced/core/types.h>
-#include <enhanced/core/exception/Exception.h>
+#include <enhanced/core/String.h>
+#include <enhanced/core/exceptions/Error.h>
 
-namespace enhanced::core::exception {
-    class ENHANCED_CORE_API IOException : public Exception {
+namespace enhanced::core::exceptions {
+    class ENHANCED_CORE_API MemoryAllocationError : public Error {
     public:
-        explicit IOException(const String& message = "") noexcept;
+        DEFINE_EXCEPTION_NAME(enhanced::core::exceptions::MemoryAllocationError)
 
-        explicit IOException(const Exception* cause) noexcept;
-
-        IOException(const String& message, const Exception* cause) noexcept;
+        explicit MemoryAllocationError(const String& message = "") noexcept;
     };
 }

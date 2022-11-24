@@ -30,7 +30,10 @@ namespace enhanced::core {
     CharSequence<CharType>::CharSequence(const CharSequence& other) noexcept = default;
 
     template <typename CharType>
-    CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept = default;
+    CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept : value(other.value), length(other.length) {
+        other.value = null;
+        other.length = INVALID_SIZE;
+    }
 
     template <typename CharType>
     CharSequence<CharType>::~CharSequence() noexcept = default;
@@ -66,10 +69,27 @@ namespace enhanced::core {
     }
 
     template <typename CharType>
-    func CharSequence<CharType>::operator=(const CharSequence& other) noexcept -> CharSequence<CharType>& = default;
+    func CharSequence<CharType>::operator=(const CharSequence& other) noexcept -> CharSequence<CharType>& {
+        if (this == &other) return *this;
+
+        this->value = other.value;
+        this->length = other.length;
+
+        return *this;
+    }
 
     template <typename CharType>
-    func CharSequence<CharType>::operator=(CharSequence&& other) noexcept -> CharSequence<CharType>& = default;
+    func CharSequence<CharType>::operator=(CharSequence&& other) noexcept -> CharSequence<CharType>& {
+        if (this == &other) return *this;
+
+        this->value = other.value;
+        this->length = other.length;
+
+        other.value = null;
+        other.length = INVALID_SIZE;
+
+        return *this;
+    }
 
     template class CharSequence<char>;
     template class CharSequence<wchar>;

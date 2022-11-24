@@ -36,19 +36,16 @@ namespace enhancedInternal::core::collections {
 
         sizetype capacity;
 
-        struct GenericOperator {
-            func (*copy)(void*) -> void*;
+        using FallbackExpSizeFunc = func (*)(sizetype) -> sizetype;
 
-            func (*move)(void*) -> void*;
+        FallbackExpSizeFunc fallbackExpSize;
 
-            func (*destroy)(void*) -> void;
-
-            func (*equals)(void*, void*) -> bool;
-        };
+        using OpCopy = func (*)(void*) -> void*;
+        using OpMove = func (*)(void*) -> void*;
+        using OpDestroy = func (*)(void*) -> void;
+        using OpEqual = func (*)(void*, void*) -> bool;
 
         class ENHANCED_CORE_API ArrayListIteratorImpl {
-            friend class ArrayListImpl;
-
         protected:
             const ArrayListImpl* arrayList;
 
@@ -67,48 +64,50 @@ namespace enhancedInternal::core::collections {
             func reset0() const -> void;
         };
 
-        GenericOperator genericOperator;
+        ArrayListImpl(sizetype capacity);
 
-        ArrayListImpl(sizetype capacity, GenericOperator genericOperator);
-
-        ArrayListImpl(const ArrayListImpl& other);
+        ArrayListImpl(const ArrayListImpl& other, OpCopy opCopy);
 
         ArrayListImpl(ArrayListImpl&& other) noexcept;
 
-        virtual ~ArrayListImpl() noexcept;
+        func destruct0(OpDestroy opDestroy) noexcept -> void;
 
         $(NoIgnoreReturn)
         func get0(sizetype index) const -> void*;
 
         $(NoIgnoreReturn)
-        func contain0(void* value) const -> bool;
+        func indexOf0(void* value, OpEqual opEqual) const -> sizetype;
 
-        func add0(void* element) -> void;
+        func add0(void* element, OpCopy opCopy) -> void;
 
-        func addMoved0(void* element) -> void;
+        func addMoved0(void* element, OpMove opMove) -> void;
 
-        func remove0() -> void;
+        func remove0(OpDestroy opDestory) -> void;
 
-        func expand0(sizetype size) -> void;
+        func setCapacity0(sizetype newCapacity) -> void;
 
-        func shrink0(sizetype size) -> void;
+        func expand0() -> void;
 
-        func clear0() -> void;
+        func expand0(sizetype expSize) -> void;
+
+        func shrink0() -> void;
+
+        func shrink0(sizetype shrSize) -> void;
+
+        func clear0(OpDestroy opDestory) -> void;
     };
 }
 
 namespace enhanced::core::collections {
     template <typename Type>
-    class ENHANCED_CORE_API ArrayList final : public List<Type>, public RandomAccess, private enhancedInternal::core::collections::ArrayListImpl {
+    class ArrayList final : public List<Type>, public RandomAccess, private enhancedInternal::core::collections::ArrayListImpl {
     private:
         using ArrayListImpl = enhancedInternal::core::collections::ArrayListImpl;
 
     public:
-        class ENHANCED_CORE_API ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
-            friend class ArrayList<Type>;
-
+        class ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
         public:
-            inline ArrayListIterator(const ArrayList<Type>* arrayList) : ArrayListIteratorImpl(arrayList) {}
+            inline explicit ArrayListIterator(const ArrayList<Type>* arrayList) : ArrayListIteratorImpl(arrayList) {}
 
             $(NoIgnoreReturn)
             inline func hasNext() const -> bool override {
@@ -151,26 +150,30 @@ namespace enhanced::core::collections {
         }
 
         $(NoIgnoreReturn)
-        static func equals(void* element, void* value) -> bool {
+        static func equal(void* element, void* value) -> bool {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
 
-        ArrayListIterator iter = {this};
+        ArrayListIterator iter {this};
 
     public:
-        inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE, {copy, move, destroy, equals}) {}
+        inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE) {}
 
-        inline ArrayList(InitializerList<Type> list) : ArrayListImpl(ARRAY_INIT_SIZE, {copy, move, destroy, equals}) {
+        inline ArrayList(InitializerList<Type> list) : ArrayListImpl(initListConut(list) * 2) {
             for (let item : list) {
                 add(item);
             }
         }
 
-        inline explicit ArrayList(sizetype capacity) : ArrayListImpl(capacity, {copy, move, destroy, equals}) {}
+        inline explicit ArrayList(sizetype capacity) : ArrayListImpl(capacity) {}
 
-        inline ArrayList(const ArrayList<Type>& other) : ArrayListImpl(other) {}
+        inline ArrayList(const ArrayList<Type>& other) : ArrayListImpl(other, copy) {}
 
-        inline ArrayList(ArrayList<Type>&& other)  noexcept : ArrayListImpl(other) {}
+        inline ArrayList(ArrayList<Type>&& other)  noexcept : ArrayListImpl(util::move(other)) {}
+
+        inline ~ArrayList() noexcept {
+            destruct0(destroy);
+        }
 
         $(NoIgnoreReturn)
         inline func getSize() const -> sizetype override {
@@ -184,7 +187,7 @@ namespace enhanced::core::collections {
 
         $(NoIgnoreReturn)
         inline func contain(const Type& value) const -> bool override {
-            return contain0(util::removePtrConst(&value));
+            return indexOf(value) != INVALID_SIZE;
         }
 
         $(NoIgnoreReturn)
@@ -199,22 +202,8 @@ namespace enhanced::core::collections {
         }
 
         $(NoIgnoreReturn)
-        inline func operator[](sizetype index) const -> Type& override {
-            return *reinterpret_cast<Type*>(get0(index));
-        }
-
-        inline func add(const Type& element) -> void override {
-            add0(util::removePtrConst(&element));
-        }
-
-        inline func add(Type&& element) -> void override {
-            addMoved0(util::removePtrConst(&element));
-        }
-
-        inline func remove() -> Type override {
-            Type value = get(getSize() - 1);
-            remove0();
-            return value;
+        inline func indexOf(const Type& value) const -> sizetype override {
+            return indexOf0(util::removePtrConst(&value), equal);
         }
 
         $(NoIgnoreReturn)
@@ -222,16 +211,51 @@ namespace enhanced::core::collections {
             return this->capacity;
         }
 
+        $(NoIgnoreReturn)
+        inline func operator[](sizetype index) const -> Type& override {
+            return get(index);
+        }
+
+        inline func add(const Type& element) -> void override {
+            add0(util::removePtrConst(&element), copy);
+        }
+
+        inline func add(Type&& element) -> void override {
+            addMoved0(util::removePtrConst(&element), move);
+        }
+
+        inline func remove() -> Type override {
+            Type value = get(getSize() - 1);
+            remove0(destroy);
+            return value;
+        }
+
+        inline func setCapacity(sizetype newCapacity) -> void {
+            setCapacity0(newCapacity);
+        }
+
+        inline func expandSizeFallback(FallbackExpSizeFunc fallbackExpSize) -> void {
+            this->fallbackExpSize = fallbackExpSize;
+        }
+
+        inline func expand() -> void {
+            expand0();
+        }
+
         inline func expand(sizetype size) -> void {
             expand0(size);
+        }
+
+        inline func shrink() -> void {
+            shrink0();
         }
 
         inline func shrink(sizetype size) -> void {
             shrink0(size);
         }
 
-        func clear() -> void override {
-            clear0();
+        inline func clear() -> void override {
+            clear0(destroy);
         }
     };
 }

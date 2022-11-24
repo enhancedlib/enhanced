@@ -1,11 +1,8 @@
-# Visual Studio cache
-.vs/
+# CLion configurations
+.idea/
 
 # Visual Studio Code configurations
 .vscode/
-
-# CLion configurations
-.idea/
 
 # build folder
 build/
@@ -13,8 +10,5 @@ build/
 # release folder
 release/
 
-# test pragrams folder
+# the test pragram folder
 test/
-
-# CMake settings for Visual Studio
-CMakeSettings.json

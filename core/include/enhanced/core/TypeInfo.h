@@ -27,9 +27,12 @@ namespace enhanced::core {
         template <typename>
         friend constexpr TypeInfo typeInfoOf();
 
+        template <typename Type>
+        friend constexpr TypeInfo typeInfoOf(Type&& value);
+
         const std::type_info& info;
 
-        constexpr TypeInfo(const std::type_info& info) : info(info) {};
+        constexpr TypeInfo(const std::type_info& info) : info(info) {}
 
     public:
         TypeInfo(const TypeInfo& info) = delete;
@@ -46,5 +49,10 @@ namespace enhanced::core {
     template <typename Type>
     inline constexpr func typeInfoOf() -> TypeInfo {
         return typeid(Type);
+    }
+
+    template <typename Type>
+    inline constexpr func typeInfoOf(Type&& value) -> TypeInfo {
+        return typeid(value);
     }
 }

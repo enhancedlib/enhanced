@@ -15,21 +15,22 @@
 
 #include <exception>
 
-#include <enhanced/core/exception/Exception.h>
+#include <enhanced/core/exceptions/Exception.h>
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/types.h>
 #include <enhanced/core/annotations.h>
 #include <enhanced/core/String.h>
+#include <enhanced/core/TypeInfo.h>
 #include <enhanced/core/io/iostream.h>
-#include <enhanced/core/exception/NotImplementedError.h>
 #include <enhanced/core/util/traits.h>
+#include <enhanced/core/exceptions/NotImplementedError.h>
 
 using enhanced::core::util::move;
 using enhanced::core::util::removeConst;
 using enhanced::core::io::errstream;
 
-namespace enhanced::core::exception {
+namespace enhanced::core::exceptions {
     using TerminateHandler = void(*)();
 
     static void terminateHandler() {
@@ -57,8 +58,8 @@ namespace enhanced::core::exception {
 
     Exception::~Exception() noexcept = default;
 
-    const String& Exception::getTraceback() const noexcept {
-        return message;
+    String Exception::getTraceback() const noexcept {
+        return String::join({getName(), ": ", message});
     }
 
     const Exception* Exception::getCause() const noexcept {

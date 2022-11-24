@@ -17,7 +17,7 @@
 
 #include <enhanced/core/defines.h>
 #include <enhanced/core/String.h>
-#include <enhanced/core/exception/NotImplementedError.h>
+#include <enhanced/core/exceptions/NotImplementedError.h>
 
 namespace enhanced::core::io {
     func OutputStream::write(byte b) const -> void {
