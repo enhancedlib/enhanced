@@ -15,15 +15,15 @@
 
 #include <process.h>
 
-#include <enhanced/core/process.h>
+#include <enhanced/Process.h>
 
-namespace enhanced::core {
-    $(NoReturn)
+namespace enhanced {
+    $NoReturn
     void processExit(int status) {
         exit(status);
     }
 
-    $(NoReturn)
+    $NoReturn
     void processAbort() {
         abort();
     }

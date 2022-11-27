@@ -13,10 +13,10 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exceptions/AssertionError.h>
+#include <enhanced/exceptions/AssertionError.h>
 
-#include <enhanced/core/exceptions/Error.h>
+#include <enhanced/exceptions/Error.h>
 
-namespace enhanced::core::exceptions {
+namespace enhanced::exceptions {
     AssertionError::AssertionError(const String& message) noexcept : Error(message) {}
 }

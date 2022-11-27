@@ -13,13 +13,13 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/io/OutputStream.h>
+#include <enhanced/io/OutputStream.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/String.h>
-#include <enhanced/core/exceptions/NotImplementedError.h>
+#include <enhanced/Defines.h>
+#include <enhanced/String.h>
+#include <enhanced/exceptions/NotImplementedError.h>
 
-namespace enhanced::core::io {
+namespace enhanced::io {
     func OutputStream::write(byte b) const -> void {
         NOT_IMPLEMENTED();
     }

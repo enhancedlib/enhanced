@@ -13,11 +13,11 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exceptions/UnreachableError.h>
+#include <enhanced/exceptions/UnreachableError.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
 
-namespace enhanced::core::exceptions {
+namespace enhanced::exceptions {
     UnreachableError::UnreachableError() noexcept = default;
 }

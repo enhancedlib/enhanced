@@ -13,9 +13,9 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exceptions/Error.h>
+#include <enhanced/exceptions/Error.h>
 
-namespace enhanced::core::exceptions {
+namespace enhanced::exceptions {
     Error::Error(const String& message) noexcept : Exception(message) {}
 
     Error::Error(const Exception* cause) noexcept : Exception(cause) {}

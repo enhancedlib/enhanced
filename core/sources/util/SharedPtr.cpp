@@ -13,14 +13,14 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/util/SharedPtr.h>
+#include <enhanced/util/SharedPtr.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
-#include <enhanced/core/memory.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
+#include <enhanced/Memory.h>
 
-namespace enhancedInternal::core::util {
+namespace enhancedInternal::util {
     SharedPtrImpl::SharedPtrImpl(void* ptr) :
         referenceCount(ptr != null ? new sizetype(1) : null), pointer(ptr), end(ptr) {}
 
@@ -35,6 +35,7 @@ namespace enhancedInternal::core::util {
     SharedPtrImpl::SharedPtrImpl(SharedPtrImpl&& other) noexcept :
         referenceCount(other.referenceCount), pointer(other.pointer), end(other.end) {
         other.pointer = null;
+        other.end = null;
         other.referenceCount = null;
     }
 
@@ -48,17 +49,23 @@ namespace enhancedInternal::core::util {
 
     func SharedPtrImpl::assign0(const SharedPtrImpl& other, OpDestroy opDestroy) noexcept -> void {
         release0(opDestroy);
+
         pointer = other.pointer;
+        end = other.end;
         referenceCount = other.referenceCount;
-        ++(*referenceCount);
+
+        if (referenceCount != null) ++(*referenceCount);
     }
 
     func SharedPtrImpl::assign0(SharedPtrImpl&& other, OpDestroy opDestroy) noexcept -> void {
         release0(opDestroy);
+
         pointer = other.pointer;
+        end = other.end;
         referenceCount = other.referenceCount;
 
         other.pointer = null;
+        other.end = null;
         other.referenceCount = null;
     }
 }

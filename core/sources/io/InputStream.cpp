@@ -13,15 +13,15 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/io/InputStream.h>
+#include <enhanced/io/InputStream.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/String.h>
-#include <enhanced/core/MutString.h>
-#include <enhanced/core/exceptions/NotImplementedError.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/String.h>
+#include <enhanced/MutString.h>
+#include <enhanced/exceptions/NotImplementedError.h>
 
-namespace enhanced::core::io {
+namespace enhanced::io {
     func InputStream::get() const -> byte {
         NOT_IMPLEMENTED();
     }

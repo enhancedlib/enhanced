@@ -5,28 +5,12 @@ AlignAfterOpenBracket: DontAlign
 AlignArrayOfStructures: None
 AlignConsecutiveAssignments:
     Enabled: false
-    AcrossEmptyLines: false
-    AcrossComments: false
-    AlignCompound: false
-    PadOperators: false
 AlignConsecutiveBitFields:
     Enabled: false
-    AcrossEmptyLines: false
-    AcrossComments: false
-    AlignCompound: false
-    PadOperators: false
 AlignConsecutiveDeclarations:
     Enabled: false
-    AcrossEmptyLines: false
-    AcrossComments: false
-    AlignCompound: false
-    PadOperators: false
 AlignConsecutiveMacros:
     Enabled: false
-    AcrossEmptyLines: false
-    AcrossComments: false
-    AlignCompound: false
-    PadOperators: false
 AlignEscapedNewlines: DontAlign
 AlignTrailingComments: false
 AlignOperands: DontAlign
@@ -38,7 +22,7 @@ AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 AllowShortLambdasOnASingleLine: All
-AllowShortLoopsOnASingleLine: true
+AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
@@ -46,7 +30,7 @@ BinPackArguments: true
 BinPackParameters: false
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Attach
-BreakBeforeConceptDeclarations: Never
+BreakBeforeConceptDeclarations: Always
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterComma
@@ -74,7 +58,6 @@ InsertBraces: true
 InsertTrailingCommas: None
 KeepEmptyLinesAtTheStartOfBlocks: false
 LambdaBodyIndentation: OuterScope
-MacroBlockBegin: ""
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
 PPIndentWidth: -1

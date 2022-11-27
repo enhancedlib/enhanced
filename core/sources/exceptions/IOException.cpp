@@ -13,12 +13,12 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exceptions/IOException.h>
+#include <enhanced/exceptions/IOException.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
 
-namespace enhanced::core::exceptions {
+namespace enhanced::exceptions {
     IOException::IOException(const String& message) noexcept : Exception(message) {}
 
     IOException::IOException(const Exception* cause) noexcept : Exception(cause) {}

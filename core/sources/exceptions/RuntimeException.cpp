@@ -13,12 +13,12 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exceptions/RuntimeException.h>
+#include <enhanced/exceptions/RuntimeException.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
 
-namespace enhanced::core::exceptions {
+namespace enhanced::exceptions {
     RuntimeException::RuntimeException(const String& message) noexcept : Exception(message) {}
 
     RuntimeException::RuntimeException(const Exception* cause) noexcept : Exception(cause) {}

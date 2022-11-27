@@ -15,22 +15,22 @@
 
 #include <exception>
 
-#include <enhanced/core/exceptions/Exception.h>
+#include <enhanced/exceptions/Exception.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
-#include <enhanced/core/String.h>
-#include <enhanced/core/TypeInfo.h>
-#include <enhanced/core/io/iostream.h>
-#include <enhanced/core/util/traits.h>
-#include <enhanced/core/exceptions/NotImplementedError.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
+#include <enhanced/String.h>
+#include <enhanced/TypeInfo.h>
+#include <enhanced/io/IOStream.h>
+#include <enhanced/util/Traits.h>
+#include <enhanced/exceptions/NotImplementedError.h>
 
-using enhanced::core::util::move;
-using enhanced::core::util::removeConst;
-using enhanced::core::io::errstream;
+using enhanced::util::move;
+using enhanced::util::removeConst;
+using enhanced::io::errstream;
 
-namespace enhanced::core::exceptions {
+namespace enhanced::exceptions {
     using TerminateHandler = void(*)();
 
     static void terminateHandler() {

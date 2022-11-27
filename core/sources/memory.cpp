@@ -15,18 +15,18 @@
 
 #include <malloc.h>
 
-#include <enhanced/core/memory.h>
+#include <enhanced/Memory.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/exceptions/MemoryAllocationError.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/exceptions/MemoryAllocationError.h>
 
-using enhanced::core::memoryAlloc;
-using enhanced::core::memoryFree;
-using enhanced::core::exceptions::MemoryAllocationError;
+using enhanced::memoryAlloc;
+using enhanced::memoryFree;
+using enhanced::exceptions::MemoryAllocationError;
 
-namespace enhanced::core {
-    $(MustInspectResult RetNullable RetRequiresRelease)
+namespace enhanced {
+    $Allocator $MustInspectResult $RetNullable
     func memoryAlloc(sizetype size) -> void* {
         if (size == 0) return null;
 
@@ -61,7 +61,7 @@ namespace enhanced::core {
     }
 }
 
-$(RetRequiresRelease)
+$Allocator
 func operator new(sizetype size) -> void* {
     void* space = memoryAlloc(size);
     if (space == null) {
@@ -74,7 +74,7 @@ func operator delete(void* pointer) noexcept -> void {
     memoryFree(pointer);
 }
 
-$(RetRequiresRelease)
+$Allocator
 func operator new[](sizetype size) -> void* {
     return operator new(size);
 }

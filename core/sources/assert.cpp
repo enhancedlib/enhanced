@@ -13,18 +13,20 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/assert.h>
+#include <enhanced/Assert.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/process.h>
-#include <enhanced/core/String.h>
-#include <enhanced/core/io/iostream.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/Process.h>
+#include <enhanced/String.h>
+#include <enhanced/io/IOStream.h>
 
-using enhanced::core::io::errstream;
+using enhanced::String;
+using enhanced::processAbort;
+using enhanced::io::errstream;
 
-namespace enhanced::core {
-    $(NoReturn)
+namespace enhancedInternal {
+    $NoReturn
     func assertionFailedImpl(const String& message, const String& file, sizetype line) -> void {
         errstream->printf("Failed to assert: {}, at {}:{}", message.getChars(), message.getChars(), line);
         processAbort();

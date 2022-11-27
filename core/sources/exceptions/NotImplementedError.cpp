@@ -13,8 +13,8 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/exceptions/NotImplementedError.h>
+#include <enhanced/exceptions/NotImplementedError.h>
 
-namespace enhanced::core::exceptions {
+namespace enhanced::exceptions {
     NotImplementedError::NotImplementedError(const String& message) noexcept : AssertionError(message) {}
 }

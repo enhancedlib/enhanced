@@ -13,9 +13,9 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/math/math.h>
+#include <enhanced/math/Math.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
 
-namespace enhanced::core::math {}
+namespace enhanced::math {}

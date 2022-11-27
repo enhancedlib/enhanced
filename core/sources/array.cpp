@@ -13,18 +13,18 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/array.h>
+#include <enhanced/Array.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/memory.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/Memory.h>
 
-namespace enhanced::core {
-    func arrayFill($(InOut) void* array, qword value, sizetype count, sizetype sizeOfType) -> void {
+namespace enhanced {
+    func arrayFill($InOut void* array, qword value, sizetype count, sizetype sizeOfType) -> void {
         arrayFillPtr(array, &value, count, sizeOfType);
     }
 
-    func arrayFillPtr($(InOut) void* array, void* valuePtr, sizetype count, sizetype sizeOfType) -> void {
+    func arrayFillPtr($InOut void* array, void* valuePtr, sizetype count, sizetype sizeOfType) -> void {
         if (array == null || count == 0 || sizeOfType == 0) return;
 
         sizetype size = count * sizeOfType;
@@ -34,7 +34,7 @@ namespace enhanced::core {
         }
     }
 
-    func arrayCopy($(Out) void* destination, const void* source, sizetype count, sizetype sizeOfType) -> void {
+    func arrayCopy($Out void* destination, const void* source, sizetype count, sizetype sizeOfType) -> void {
         memoryCopy(destination, source, count * sizeOfType);
     }
 }

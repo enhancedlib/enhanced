@@ -13,22 +13,22 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/TypeInfo.h>
+#include <enhanced/TypeInfo.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/String.h>
-#include <enhanced/core/util/traits.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/String.h>
+#include <enhanced/util/Traits.h>
 
-using enhanced::core::util::removeConst;
+using enhanced::util::removeConst;
 
-namespace enhanced::core {
-    $(NoIgnoreReturn)
+namespace enhanced {
+    $NoIgnoreReturn
     func TypeInfo::getName() const -> String {
         return removeConst(info.name());
     }
 
-    $(NoIgnoreReturn)
+    $NoIgnoreReturn
     func TypeInfo::hashCode() const -> sizetype {
         return info.hash_code();
     }

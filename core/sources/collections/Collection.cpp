@@ -13,12 +13,12 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/collections/Collection.h>
+#include <enhanced/collections/Collection.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
 
-namespace enhanced::core::collections {
-    sizetype ARRAY_INIT_SIZE = 255;
+namespace enhanced::collections {
+    sizetype ARRAY_INIT_SIZE = 256;
 }

@@ -13,23 +13,23 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/MutString.h>
+#include <enhanced/MutString.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
-#include <enhanced/core/memory.h>
-#include <enhanced/core/array.h>
-#include <enhanced/core/character.h>
-#include <enhanced/core/util/traits.h>
-#include <enhanced/core/CharSequence.h>
-#include <enhanced/core/String.h>
-#include <enhanced/core/exceptions/NotImplementedError.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
+#include <enhanced/Memory.h>
+#include <enhanced/Array.h>
+#include <enhanced/Character.h>
+#include <enhanced/util/Traits.h>
+#include <enhanced/CharSequence.h>
+#include <enhanced/String.h>
+#include <enhanced/exceptions/NotImplementedError.h>
 
-using enhanced::core::util::removeConst;
-using enhanced::core::util::removePtrConst;
+using enhanced::util::removeConst;
+using enhanced::util::removePtrConst;
 
-namespace enhanced::core {
+namespace enhanced {
     template <typename CharType>
     TMutString<CharType>::TMutString(const CharType* value, sizetype length) noexcept :
         TString<CharType>(TString<CharType>::copy(value, length), length) {}
@@ -66,13 +66,19 @@ namespace enhanced::core {
     }
 
     template <typename CharType>
-    $(NoIgnoreReturn)
+    $NoIgnoreReturn
+    func TMutString<CharType>::getChars() const noexcept -> CharType* {
+        return this->value;
+    }
+
+    template <typename CharType>
+    $NoIgnoreReturn
     func TMutString<CharType>::at(sizetype index) const noexcept -> CharType& {
         return this->value[index];
     }
 
     template <typename CharType>
-    $(NoIgnoreReturn)
+    $NoIgnoreReturn
     func TMutString<CharType>::operator[](sizetype index) const noexcept -> CharType& {
         return this->value[index];
     }

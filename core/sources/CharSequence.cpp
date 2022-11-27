@@ -13,18 +13,18 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/core/CharSequence.h>
+#include <enhanced/CharSequence.h>
 
-#include <enhanced/core/defines.h>
-#include <enhanced/core/types.h>
-#include <enhanced/core/annotations.h>
-#include <enhanced/core/util/traits.h>
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
+#include <enhanced/util/Traits.h>
 
-using enhanced::core::util::removePtrConst;
+using enhanced::util::removePtrConst;
 
-namespace enhanced::core {
+namespace enhanced {
     template <typename CharType>
-    CharSequence<CharType>::CharSequence(const CharType* value, const sizetype length) : value(removePtrConst(value)), length(length) {}
+    CharSequence<CharType>::CharSequence(const CharType* value, sizetype length) : value(removePtrConst(value)), length(length) {}
 
     template <typename CharType>
     CharSequence<CharType>::CharSequence(const CharSequence& other) noexcept = default;
@@ -39,32 +39,32 @@ namespace enhanced::core {
     CharSequence<CharType>::~CharSequence() noexcept = default;
 
     template <typename CharType>
-    $(NoIgnoreReturn)
+    $NoIgnoreReturn
     func CharSequence<CharType>::isEmpty() const noexcept -> bool {
         return length == 0;
     }
 
     template <typename CharType>
-    $(NoIgnoreReturn)
+    $NoIgnoreReturn
     func CharSequence<CharType>::getLength() const noexcept -> sizetype {
         return length;
     }
 
     template <typename CharType>
-    $(NoIgnoreReturn)
-    func CharSequence<CharType>::getChars() const noexcept -> CharType* {
+    $NoIgnoreReturn
+    func CharSequence<CharType>::getChars() const noexcept -> const CharType* {
         return value;
     }
 
     template <typename CharType>
-    $(NoIgnoreReturn)
+    $NoIgnoreReturn
     func CharSequence<CharType>::at(sizetype index) const noexcept -> const CharType {
         return value[index];
     }
 
     template <typename CharType>
-    $(NoIgnoreReturn)
-    func CharSequence<CharType>::operator[](const sizetype index) const noexcept -> const CharType {
+    $NoIgnoreReturn
+    func CharSequence<CharType>::operator[](sizetype index) const noexcept -> const CharType {
         return value[index];
     }
 
@@ -89,6 +89,11 @@ namespace enhanced::core {
         other.length = INVALID_SIZE;
 
         return *this;
+    }
+
+    template <typename CharType>
+    CharSequence<CharType>::operator const CharType *() const noexcept {
+        return getChars();
     }
 
     template class CharSequence<char>;
