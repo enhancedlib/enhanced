@@ -47,7 +47,7 @@ namespace enhanced {
         func isEmpty() const noexcept -> bool;
 
         $NoIgnoreReturn
-        func getChars() const noexcept -> const CharType*;
+        func chars() const noexcept -> const CharType*;
 
         $NoIgnoreReturn
         func at(sizetype index) const noexcept -> const CharType;

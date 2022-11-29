@@ -17,23 +17,27 @@
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
 #include <enhanced/util/Traits.h>
 
 namespace enhanced::math {
     template <typename IntegralType>
     requires util::isIntegralType<IntegralType>
+    $NoIgnoreReturn
     inline func max(IntegralType x, IntegralType y) -> IntegralType {
         return (x > y) ? x : y;
     }
 
     template <typename IntegralType>
     requires util::isIntegralType<IntegralType>
+    $NoIgnoreReturn
     inline func min(IntegralType x, IntegralType y) -> IntegralType {
         return (x < y) ? x : y;
     }
 
     template <typename IntegralType>
     requires util::isSigned<IntegralType>
+    $NoIgnoreReturn
     inline func abs(IntegralType number) -> IntegralType {
         return (number >= 0) ? number : -number;
     }

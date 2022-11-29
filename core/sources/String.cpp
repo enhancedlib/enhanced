@@ -113,7 +113,7 @@ namespace enhanced {
 
     template <typename CharType>
     func TString<CharType>::join(InitializerList<TString> list) -> TMutString<CharType> {
-        return join(initListToArray(list), initListConut(list));
+        return join(initListToArray(list), initListSize(list));
     }
 
     template <typename CharType>

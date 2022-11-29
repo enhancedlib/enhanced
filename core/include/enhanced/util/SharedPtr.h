@@ -35,7 +35,7 @@ namespace enhancedInternal::util {
 
         void* end;
 
-        using OpDestroy = func (*)(void* ptr, void* end) -> void;
+        using OpDestroy = void (*)(void* ptr, void* end);
 
         SharedPtrImpl(void* ptr);
 

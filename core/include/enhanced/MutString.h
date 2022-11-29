@@ -47,7 +47,7 @@ namespace enhanced {
         ~TMutString() noexcept;
 
         $NoIgnoreReturn
-        func getChars() const noexcept -> CharType*;
+        func chars() const noexcept -> CharType*;
 
         $NoIgnoreReturn
         func at(sizetype index) const noexcept -> CharType&;

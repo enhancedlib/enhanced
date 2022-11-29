@@ -135,11 +135,15 @@ namespace enhancedInternal::collections {
     }
 
     func ArrayListImpl::shrink0() -> void {
-        setCapacity0(size);
+        shrink0(size, null);
     }
 
-    func ArrayListImpl::shrink0(sizetype shrSize) -> void {
-        setCapacity0(capacity - shrSize);
+    func ArrayListImpl::shrink0(sizetype shrSize, OpDestroy opDestroy) -> void {
+        sizetype newCapacity = capacity - shrSize;
+        while (newCapacity < size) {
+            removeLast0(opDestroy);
+        }
+        setCapacity0(newCapacity);
     }
 
     func ArrayListImpl::clear0(OpDestroy opDestroy) -> void {

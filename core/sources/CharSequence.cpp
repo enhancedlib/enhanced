@@ -52,7 +52,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func CharSequence<CharType>::getChars() const noexcept -> const CharType* {
+    func CharSequence<CharType>::chars() const noexcept -> const CharType* {
         return value;
     }
 
@@ -93,7 +93,7 @@ namespace enhanced {
 
     template <typename CharType>
     CharSequence<CharType>::operator const CharType *() const noexcept {
-        return getChars();
+        return chars();
     }
 
     template class CharSequence<char>;

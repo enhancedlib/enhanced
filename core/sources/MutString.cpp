@@ -67,7 +67,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TMutString<CharType>::getChars() const noexcept -> CharType* {
+    func TMutString<CharType>::chars() const noexcept -> CharType* {
         return this->value;
     }
 
@@ -157,7 +157,7 @@ namespace enhanced {
 
     template <typename CharType>
     func TMutString<CharType>::fill(CharType ch) -> TMutString& {
-        arrayFill(this->value, ch, this->length);
+        arrayFill(this->value, ch, this->length, sizeof(char));
 
         return *this;
     }

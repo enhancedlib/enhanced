@@ -21,21 +21,38 @@
 #include <enhanced/util/Functional.h>
 #include <enhanced/exceptions/NotImplementedError.h>
 
+namespace enhancedInternal::util {
+    template <typename Return, typename... Args>
+    class FunctionImpl {
+    public:
+        using ReturnType = Return;
+
+        inline func invoke(Args... args) -> ReturnType {
+            NOT_IMPLEMENTED();
+        }
+
+        inline func operator()(Args... args) -> ReturnType {
+            return invoke(args...);
+        }
+    };
+
+    template <typename>
+    struct GetFunctionImpl final {};
+
+    template <typename ReturnType, typename... Args>
+    struct GetFunctionImpl<ReturnType (Args...)> final {
+        using Type = FunctionImpl<ReturnType, Args...>;
+    };
+}
+
 namespace enhanced::util {
     template <typename FunctionType>
     requires isFunction<FunctionType>
-    class Function : public Functional {
+    class Function : public Functional, public enhancedInternal::util::GetFunctionImpl<FunctionType>::Type {
     private:
-    	template <typename Type>
-        struct GetReturnType final {};
-        template <typename Return, typename... Args>
-        struct GetReturnType<Return (Args...)> final {
-            using ReturnType = Return;
-        };
+    	using FunctionImpl = typename enhancedInternal::util::GetFunctionImpl<FunctionType>::Type;
 
     public:
-        using ReturnType = typename GetReturnType<FunctionType>::Type;
-
         Function() = default;
 
         template <typename Callable>
@@ -44,21 +61,8 @@ namespace enhanced::util {
         }
 
         template <typename... Args>
-        requires isSame<ReturnType (Args...), FunctionType>
-        Function(func (*function)(Args...) -> ReturnType) {
+        Function(typename FunctionImpl::ReturnType (*function)(Args...)) {
             NOT_IMPLEMENTED();
-        }
-
-        template <typename... Args>
-        requires isSame<ReturnType (Args...), FunctionType>
-        inline func invoke(Args... args) -> ReturnType {
-            NOT_IMPLEMENTED();
-        }
-
-        template <typename... Args>
-        requires isSame<ReturnType (Args...), FunctionType>
-        inline func operator()(Args... args) -> ReturnType {
-            return invoke(args...);
         }
     };
 }

@@ -21,8 +21,8 @@
 #include <enhanced/String.h>
 #include <enhanced/collections/ArrayList.h>
 #include <enhanced/util/Traits.h>
-#include <enhanced/math/LargeInt.h>
+#include <enhanced/math/LargeNumber.h>
 
 namespace enhanced::math {
-    class ENHANCED_CORE_API BinLargeInt : public LargeInt {};
+    class ENHANCED_CORE_API BinLargeNumber : public LargeNumber {};
 }

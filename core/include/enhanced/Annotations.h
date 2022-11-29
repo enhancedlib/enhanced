@@ -34,16 +34,8 @@
 #define $FallThrough [[fallthrough]]
 
 #ifdef CLANG_COMPILER
-#ifdef MSVC_ABI
-#define $ForceInline [[clang::always_inline]] __forceinline
-#define $NoInline [[clang::noinline]] __declspec(noinline)
-#elif defined(GCC_ABI)
-#define $ForceInline [[clang::always_inline]] [[gnu::always_inline]]
-#define $NoInline [[clang::noinline]] [[gnu::noinline]]
-#else
 #define $ForceInline [[clang::always_inline]]
 #define $NoInline [[clang::noinline]]
-#endif
 #elif defined(MSVC_COMPILER)
 #define $ForceInline __forceinline
 #define $NoInline __declspec(noinline)
@@ -52,18 +44,16 @@
 #define $NoInline [[gnu::noinline]]
 #endif
 
-#ifdef GCC_ABI
-#define $Allocator $RetRequiresRelease [[gnu::malloc]]
-#elif defined(MSVC_ABI)
+#ifdef MSVC_ABI
 #define $Allocator $RetRequiresRelease __declspec(restrict) __declspec(allocator)
-#else
-#define $Allocator $RetRequiresRelease
+#elif defined(GCC_ABI) || defined(CLANG_COMPILER)
+#define $Allocator $RetRequiresRelease [[gnu::malloc]]
 #endif
 
 #ifdef WINDOWS_OS
 #include <sal.h>
 
-#ifdef GCC_ABI
+#if defined(GCC_ABI) || defined(CLANG_COMPILER)
 #define $RetNotNull _Ret_notnull_ [[gnu::returns_nonnull]]
 #else
 #define $RetNotNull _Ret_notnull_
@@ -82,7 +72,7 @@
 
 #else
 
-#ifdef GCC_ABI
+#if defined(GCC_ABI) || defined(CLANG_COMPILER)
 #define $RetNotNull [[gnu::returns_nonnull]]
 #else
 #define $RetNotNull

@@ -34,7 +34,7 @@ namespace enhanced {
 
     template <typename Type>
     $NoIgnoreReturn
-    inline constexpr func initListConut(const InitializerList<Type>& list) -> sizetype {
+    inline constexpr func initListSize(const InitializerList<Type>& list) -> sizetype {
         return list.size();
     }
 }

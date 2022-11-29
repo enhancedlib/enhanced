@@ -36,10 +36,14 @@ namespace enhancedInternal::collections {
 
         sizetype capacity;
 
-        using OpCopy = func (*)(void*) -> void*;
-        using OpMove = func (*)(void*) -> void*;
-        using OpDestroy = func (*)(void*) -> void;
-        using OpEqual = func (*)(void*, void*) -> bool;
+        using OpCopy = void* (*)(void*);
+        using OpMove = void* (*)(void*);
+        using OpDestroy = void (*)(void*);
+        using OpEqual = bool (*)(void*, void*);
+
+        using ExpSizeFallbackFunc = sizetype (*)(sizetype);
+
+        ExpSizeFallbackFunc expSizeFallback;
 
         class ENHANCED_CORE_API ArrayListIteratorImpl {
         protected:
@@ -98,14 +102,9 @@ namespace enhancedInternal::collections {
 
         func shrink0() -> void;
 
-        func shrink0(sizetype shrSize) -> void;
+        func shrink0(sizetype shrSize, OpDestroy opDestroy) -> void;
 
         func clear0(OpDestroy opDestory) -> void;
-
-    public:
-        using ExpSizeFallbackFunc = func (*)(sizetype) -> sizetype;
-
-        ExpSizeFallbackFunc expSizeFallback;
     };
 }
 
@@ -168,9 +167,11 @@ namespace enhanced::collections {
         ArrayListIterator iter {this};
 
     public:
+        using ExpSizeFallbackFunc = ArrayListImpl::ExpSizeFallbackFunc;
+
         inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE) {}
 
-        inline ArrayList(InitializerList<Type> list) : ArrayListImpl(initListConut(list) * 2) {
+        inline ArrayList(InitializerList<Type> list) : ArrayListImpl(initListSize(list) * 2) {
             for (let item : list) {
                 addLast(util::move(item));
             }
@@ -310,6 +311,10 @@ namespace enhanced::collections {
             return removeLastIf();
         }
 
+        inline func setExpSizeFallback(ExpSizeFallbackFunc expSizeFallbackFunc) -> void {
+            this->expSizeFallback = expSizeFallbackFunc;
+        }
+
         inline func setCapacity(sizetype newCapacity) -> void {
             setCapacity0(newCapacity);
         }
@@ -327,7 +332,7 @@ namespace enhanced::collections {
         }
 
         inline func shrink(sizetype size) -> void {
-            shrink0(size);
+            shrink0(size, destroy);
         }
 
         inline func clear() -> void override {

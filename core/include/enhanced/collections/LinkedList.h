@@ -43,10 +43,10 @@ namespace enhancedInternal::collections {
 
         sizetype size;
 
-        using OpCopy = func (*)(void*) -> void*;
-        using OpMove = func (*)(void*) -> void*;
-        using OpDestroy = func (*)(void*) -> void;
-        using OpEqual = func (*)(void*, void*) -> bool;
+        using OpCopy = void* (*)(void*);
+        using OpMove = void* (*)(void*);
+        using OpDestroy = void (*)(void*);
+        using OpEqual = bool (*)(void*, void*);
 
         static func prevNode(Node*& node) -> Node*&;
 

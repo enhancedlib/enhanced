@@ -13,22 +13,12 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/Assert.h>
+#pragma once
 
 #include <enhanced/Defines.h>
+#include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
-#include <enhanced/Process.h>
-#include <enhanced/String.h>
-#include <enhanced/io/IOStream.h>
 
-using enhanced::String;
-using enhanced::processAbort;
-using enhanced::io::errstream;
-
-namespace enhancedInternal {
-    $NoReturn
-    func assertionFailedImpl(const String& message, const String& file, sizetype line) -> void {
-        errstream->printf("Failed to assert: {}, at {}:{}", message.chars(), message.chars(), line);
-        processAbort();
-    }
+namespace enhanced::io {
+    class ENHANCED_CORE_API FileReader {};
 }

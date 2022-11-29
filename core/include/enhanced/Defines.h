@@ -127,25 +127,11 @@
 #define DEBUG
 #endif
 
-#if (defined(MSVC_COMPILER) && defined(_CHAR_UNSIGNED)) || defined(__CHAR_UNSIGNED__)
-#define CHAR_IS_UNSIGNED
-#endif
-
-#if !defined(MSVC_COMPILER) || defined(_NATIVE_WCHAR_T_DEFINED)
-#define WCHAR_IS_BUILTIN_TYPE
-#endif
-
-#if defined(MSVC_COMPILER) || (__SIZEOF_WCHAR_T__ == 2)
-#define WCHAR_EQUALS_UINT16
-#else
-#define WCHAR_EQUALS_INT32
-#endif
+#define PRAGMA(...) _Pragma(#__VA_ARGS__)
 
 #define EXTERN_C extern "C"
 #define EXTERN_C_START EXTERN_C {
 #define EXTERN_C_END }
-
-#define PRAGMA(...) _Pragma(#__VA_ARGS__)
 
 #define CURRENT_FUNC __func__
 #define CURRENT_FILE __FILE__
@@ -189,9 +175,5 @@
 #define val const auto
 #define scopedenum enum class
 #define abstractclass class
-#ifdef MSVC_ABI
-#define interface struct __declspec(novtable)
-#else
 #define interface struct
-#endif
 #define abstract = 0

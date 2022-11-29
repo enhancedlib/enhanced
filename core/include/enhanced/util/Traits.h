@@ -113,20 +113,20 @@ namespace enhancedInternal::util::traits {
         using Type = RemovePointerType* const volatile;
     };
 
-    template <bool condition, typename RawType = void>
+    template <bool, typename = void>
     struct EnableIfImpl final {};
     template <typename RawType>
     struct EnableIfImpl<true, RawType> final {
         using Type = RawType;
     };
 
-    template <bool condition, typename Type1, typename Type2>
+    template <bool, typename, typename Result>
     struct ConditionalImpl final {
-        using Type = Type2;
+        using Type = Result;
     };
-    template <typename Type1, typename Type2>
-    struct ConditionalImpl<true, Type1, Type2> final {
-        using Type = Type1;
+    template <typename Result, typename AnotherType>
+    struct ConditionalImpl<true, Result, AnotherType> final {
+        using Type = Result;
     };
 }
 

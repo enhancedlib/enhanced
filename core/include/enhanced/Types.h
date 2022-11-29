@@ -17,6 +17,20 @@
 
 #include <enhanced/Defines.h>
 
+#if (defined(MSVC_COMPILER) && defined(_CHAR_UNSIGNED)) || defined(__CHAR_UNSIGNED__)
+#define CHAR_IS_UNSIGNED
+#endif
+
+#if !defined(MSVC_COMPILER) || defined(_NATIVE_WCHAR_T_DEFINED)
+#define WCHAR_IS_BUILTIN_TYPE
+#endif
+
+#if defined(MSVC_COMPILER) || (__SIZEOF_WCHAR_T__ == 2)
+#define WCHAR_EQUALS_UINT16
+#else
+#define WCHAR_EQUALS_INT32
+#endif
+
 using llong = long long;
 using ldouble = long double;
 
@@ -205,7 +219,7 @@ using nulltype = decltype(null);
 
 #define FLOAT_MIN FLOAT32_MIN
 #define DOUBLE_MIN FLOAT64_MIN
-#if defined(WINDOWS_OS) && !defined(GCC_ABI)
+#ifdef MSVC_ABI
 #define LDOUBLE_MIN FLOAT64_MIN
 #else
 #define LDOUBLE_MIN 3.36210314311209350626267781732175260e-4932l
@@ -273,7 +287,7 @@ using nulltype = decltype(null);
 
 #define FLOAT_MAX FLOAT32_MAX
 #define DOUBLE_MAX FLOAT64_MAX
-#if defined(WINDOWS_OS) && !defined(GCC_ABI)
+#ifdef MSVC_ABI
 #define LDOUBLE_MAX FLOAT64_MAX
 #else
 #define LDOUBLE_MAX 1.18973149535723176502126385303097021E+4932l
