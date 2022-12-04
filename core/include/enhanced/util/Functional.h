@@ -19,5 +19,5 @@
 #include <enhanced/Types.h>
 
 namespace enhanced::util {
-    interface Functional {};
+    struct Functional {};
 }

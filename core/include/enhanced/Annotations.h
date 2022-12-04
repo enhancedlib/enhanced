@@ -21,8 +21,8 @@
 #define $Unused [[maybe_unused]]
 
 #define $NoReturn [[noreturn]]
-#define $NoIgnoreReturn [[nodiscard]]
 
+#define $NoIgnoreReturn [[nodiscard]]
 #define $NoIgnoreReturnExt(...) [[nodiscard(__VA_ARGS__)]]
 
 #define $RetRequiresRelease $NoIgnoreReturnExt("The return value needs to be released")
@@ -49,6 +49,8 @@
 #elif defined(GCC_ABI) || defined(CLANG_COMPILER)
 #define $Allocator $RetRequiresRelease [[gnu::malloc]]
 #endif
+
+#define $MaybeRequireRelease(releaseFunction)
 
 #ifdef WINDOWS_OS
 #include <sal.h>

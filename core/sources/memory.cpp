@@ -27,26 +27,26 @@ using enhanced::exceptions::MemoryAllocationError;
 
 namespace enhanced {
     $Allocator $MustInspectResult $RetNullable
-    func memoryAlloc(sizetype size) -> void* {
-        if (size == 0) return null;
+    void* memoryAlloc(sizetype size) {
+        if (size == 0) return nullptr;
 
         return malloc(size);
     }
 
-    func memoryFree(void* pointer) -> void {
+    void memoryFree(void* pointer) {
         free(pointer);
     }
 
-    func memorySet(void* ptr, byte aByte, sizetype size) -> void {
-        if (ptr == null || size == 0) return;
+    void memorySet(void* ptr, byte aByte, sizetype size) {
+        if (ptr == nullptr || size == 0) return;
 
         for (sizetype index = 0; index < size; ++index) {
             ((byte*) ptr)[index] = aByte;
         }
     }
 
-    func memoryCopy(void* destination, const void* source, sizetype size) -> void {
-        if (destination == null || source == null || size == 0) return;
+    void memoryCopy(void* destination, const void* source, sizetype size) {
+        if (destination == nullptr || source == nullptr || size == 0) return;
 
         sizetype countBlock = size / sizeof(qword);
         sizetype countByte = size % sizeof(qword);
@@ -62,23 +62,23 @@ namespace enhanced {
 }
 
 $Allocator
-func operator new(sizetype size) -> void* {
+void* operator new(sizetype size) {
     void* space = memoryAlloc(size);
-    if (space == null) {
+    if (space == nullptr) {
         throw MemoryAllocationError("Cannot allocate memory");
     }
     return space;
 }
 
-func operator delete(void* pointer) noexcept -> void {
+void operator delete(void* pointer) noexcept {
     memoryFree(pointer);
 }
 
 $Allocator
-func operator new[](sizetype size) -> void* {
+void* operator new[](sizetype size) {
     return operator new(size);
 }
 
-func operator delete[](void* pointer) noexcept -> void {
+void operator delete[](void* pointer) noexcept {
     operator delete(pointer);
 }

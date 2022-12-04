@@ -21,17 +21,18 @@
 #include <enhanced/Memory.h>
 #include <enhanced/Process.h>
 #include <enhanced/String.h>
+#include <enhanced/MutString.h>
 
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API Exception {
     protected:
-        const String message;
+        String message;
 
         const Exception* cause;
 
     public:
         $NoIgnoreReturn
-        virtual func getName() const -> const String {
+        virtual const String getName() const {
             return "enhanced::exceptions::Exception";
         }
 
@@ -39,23 +40,33 @@ namespace enhanced::exceptions {
 
         explicit Exception(const Exception* cause) noexcept;
 
-        Exception(const String& message, const Exception* cause) noexcept;
+        explicit Exception(const String& message, const Exception* cause) noexcept;
 
         virtual ~Exception() noexcept;
 
-        $NoIgnoreReturn
-        virtual func getTraceback() const noexcept -> String;
+        void printTraceback() const;
 
         $NoIgnoreReturn
-        virtual func getCause() const noexcept -> const Exception*;
+        virtual String getTraceback() const noexcept;
 
         $NoIgnoreReturn
-        virtual func getMessage() const noexcept -> const String&;
+        virtual const Exception* getCause() const noexcept;
+
+        $NoIgnoreReturn
+        virtual const String& getMessage() const noexcept;
     };
+
+    using TerminateHandler = void (*)();
+
+    ENHANCED_CORE_API void defaultTerminateHandler() noexcept;
+
+    ENHANCED_CORE_API const TerminateHandler& setupTerminateHandler(const TerminateHandler& terminateHandler) noexcept;
+
+    ENHANCED_CORE_API extern TerminateHandler terminateHandlerFunc;
 }
 
 #define DEFINE_EXCEPTION_NAME(name) \
-        $NoIgnoreReturn \
-        func getName() const -> const String override { \
-            return #name; \
-        }
+    $NoIgnoreReturn \
+    const String getName() const override { \
+        return #name; \
+    }

@@ -21,66 +21,70 @@
 #include <enhanced/exceptions/InvalidArgumentException.h>
 #include <enhanced/exceptions/NotImplementedError.h>
 
-using enhanced::exceptions::InvalidArgumentException;
 using enhanced::util::move;
+using enhanced::exceptions::InvalidArgumentException;
 
 namespace enhanced::math {
     BcdLargeNumber::BcdLargeNumber(const String& number) : storage(number.getLength() + 1), isNegative(false), length(number.getLength()) {
-        sizetype index;
+        sizetype start;
         if (number[0] == '-') {
-            index = 1;
+            start = 1;
             isNegative = true;
-        } else if (number[0] == '+') index = 1;
-        else index = 0;
+        } else if (number[0] == '+') start = 1;
+        else start = 0;
 
-        for (; index < length; ++index) {
-            storage.add(number[index] - '0');
-            if (storage[index] >= 10) { // Out of the range.
-                throw InvalidArgumentException("Each character in the string must be a number except the first character can be + or -");
+        for (sizetype index = start; index < length; ++index) {
+            if (number[index] == '.' && index != start && index != length - 1 && point == 0) {
+                point = index;
+            } else if (storage[index] < 10) {
+                storage.add(number[index] - '0');
+            } else { // Out of the range.
+                throw InvalidArgumentException("Each character in the string must be a number except"
+                    "the first character can be + or - and a point (.) between two number bits");
             }
         }
     }
 
-    BcdLargeNumber::BcdLargeNumber(const BcdLargeNumber& number) = default;
+    BcdLargeNumber::BcdLargeNumber(const BcdLargeNumber& other) = default;
 
-    BcdLargeNumber::BcdLargeNumber(BcdLargeNumber&& number) noexcept :
-        storage(move(number.storage)), isNegative(number.isNegative), length(number.length) {}
+    BcdLargeNumber::BcdLargeNumber(BcdLargeNumber&& other) noexcept :
+        storage(move(other.storage)), isNegative(other.isNegative), length(other.length), point(other.point) {}
 
-    func BcdLargeNumber::compare(const Comparable& other) const -> ComparisonResult {
+    BcdLargeNumber::ComparisonResult BcdLargeNumber::compare(const BcdLargeNumber& other) const {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator+() const -> BcdLargeNumber {
+    BcdLargeNumber BcdLargeNumber::operator+() const {
         return *this;
     }
 
-    func BcdLargeNumber::operator-() const -> BcdLargeNumber {
-        let result = *this;
+    BcdLargeNumber BcdLargeNumber::operator-() const {
+        auto result = *this;
         result.isNegative ^= result.isNegative;
         return result;
     }
 
-    func BcdLargeNumber::operator+(const BcdLargeNumber& number) const -> BcdLargeNumber {
+    BcdLargeNumber BcdLargeNumber::operator+(const BcdLargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator-(const BcdLargeNumber& number) const -> BcdLargeNumber {
+    BcdLargeNumber BcdLargeNumber::operator-(const BcdLargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator*(const BcdLargeNumber& number) const -> BcdLargeNumber {
+    BcdLargeNumber BcdLargeNumber::operator*(const BcdLargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator/(const BcdLargeNumber& number) const -> BcdLargeNumber {
+    BcdLargeNumber BcdLargeNumber::operator/(const BcdLargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator%(const BcdLargeNumber& number) const -> BcdLargeNumber {
+    BcdLargeNumber BcdLargeNumber::operator%(const BcdLargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::add(const BcdLargeNumber& number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::add(const BcdLargeNumber& number) {
         NOT_IMPLEMENTED();
 
         if (isNegative == number.isNegative) {
@@ -102,39 +106,39 @@ namespace enhanced::math {
         }
     }
 
-    func BcdLargeNumber::sub(const BcdLargeNumber& number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::sub(const BcdLargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::mul(const BcdLargeNumber& number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::mul(const BcdLargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::div(const BcdLargeNumber& number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::div(const BcdLargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::mod(const BcdLargeNumber &number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::mod(const BcdLargeNumber &number) {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator+=(const BcdLargeNumber& number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::operator+=(const BcdLargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator-=(const BcdLargeNumber& number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::operator-=(const BcdLargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator*=(const BcdLargeNumber& number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::operator*=(const BcdLargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator/=(const BcdLargeNumber& number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::operator/=(const BcdLargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    func BcdLargeNumber::operator%=(const BcdLargeNumber& number) -> BcdLargeNumber& {
+    BcdLargeNumber& BcdLargeNumber::operator%=(const BcdLargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 }

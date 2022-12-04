@@ -18,13 +18,15 @@
 #include <enhanced/Defines.h>
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
 #include <enhanced/String.h>
-#include <enhanced/collections/ArrayList.h>
 #include <enhanced/util/Traits.h>
+#include <enhanced/util/Comparable.h>
+#include <enhanced/collections/ArrayList.h>
 #include <enhanced/math/LargeNumber.h>
 
 namespace enhanced::math {
-    class ENHANCED_CORE_API BcdLargeNumber : public LargeNumber {
+    class ENHANCED_CORE_API BcdLargeNumber : public LargeNumber, public util::Comparable<BcdLargeNumber> {
     private:
         MSVC_WARNING_PUSH MSVC_WARNING_DISABLE(4251)
 
@@ -35,6 +37,8 @@ namespace enhanced::math {
         bool isNegative;
 
         sizetype length = 0;
+
+        sizetype point = 0;
 
         template <typename NumberType>
         requires util::isIntegralType<NumberType>
@@ -49,51 +53,52 @@ namespace enhanced::math {
     public:
         template <typename NumberType>
         requires util::isIntegralType<NumberType>
-        static inline func from(NumberType number) -> BcdLargeNumber {
+        static inline BcdLargeNumber from(NumberType number) {
             return {number};
         }
 
         BcdLargeNumber(const String& number);
 
-        BcdLargeNumber(const BcdLargeNumber& number);
+        BcdLargeNumber(const BcdLargeNumber& other);
 
-        BcdLargeNumber(BcdLargeNumber&& number) noexcept;
+        BcdLargeNumber(BcdLargeNumber&& other) noexcept;
 
-        func compare(const Comparable& other) const -> ComparisonResult override;
+        $NoIgnoreReturn
+        ComparisonResult compare(const BcdLargeNumber& other) const override;
 
-        func operator+() const -> BcdLargeNumber;
+        BcdLargeNumber operator+() const;
 
-        func operator-() const -> BcdLargeNumber;
+        BcdLargeNumber operator-() const;
 
-        func operator+(const BcdLargeNumber& number) const -> BcdLargeNumber;
+        BcdLargeNumber operator+(const BcdLargeNumber& number) const;
 
-        func operator-(const BcdLargeNumber& number) const -> BcdLargeNumber;
+        BcdLargeNumber operator-(const BcdLargeNumber& number) const;
 
-        func operator*(const BcdLargeNumber& number) const -> BcdLargeNumber;
+        BcdLargeNumber operator*(const BcdLargeNumber& number) const;
 
-        func operator/(const BcdLargeNumber& number) const -> BcdLargeNumber;
+        BcdLargeNumber operator/(const BcdLargeNumber& number) const;
 
-        func operator%(const BcdLargeNumber& number) const -> BcdLargeNumber;
+        BcdLargeNumber operator%(const BcdLargeNumber& number) const;
 
-        func add(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& add(const BcdLargeNumber& number);
 
-        func sub(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& sub(const BcdLargeNumber& number);
 
-        func mul(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& mul(const BcdLargeNumber& number);
 
-        func div(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& div(const BcdLargeNumber& number);
 
-        func mod(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& mod(const BcdLargeNumber& number);
 
-        func operator+=(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& operator+=(const BcdLargeNumber& number);
 
-        func operator-=(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& operator-=(const BcdLargeNumber& number);
 
-        func operator*=(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& operator*=(const BcdLargeNumber& number);
 
-        func operator/=(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& operator/=(const BcdLargeNumber& number);
 
-        func operator%=(const BcdLargeNumber& number) -> BcdLargeNumber&;
+        BcdLargeNumber& operator%=(const BcdLargeNumber& number);
     };
 }
 

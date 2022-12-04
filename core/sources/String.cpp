@@ -36,24 +36,24 @@ using enhanced::exceptions::NullPointerException;
 namespace enhanced {
     template <typename CharType>
     $RetRequiresRelease
-    func TString<CharType>::make(sizetype length) -> CharType* {
-        let str = new CharType[length + 1];
-        str[length] = TCHAR(CharType, '\0');
+    CharType* TString<CharType>::make(sizetype length) {
+        auto str = new CharType[length + 1];
+        str[length] = ST_CHAR(CharType, '\0');
         return str;
     }
 
     template <typename CharType>
     $RetRequiresRelease
-    func TString<CharType>::copy(const CharType* source) -> CharType* {
+    CharType* TString<CharType>::copy(const CharType* source) {
         return copy(source, calcLength(source));
     }
 
     template <typename CharType>
     $RetRequiresRelease
-    func TString<CharType>::copy(const CharType* source, sizetype length) -> CharType* {
-        if (source == null) throw NullPointerException("The given argument 'source' is null");
+    CharType* TString<CharType>::copy(const CharType* source, sizetype length) {
+        if (source == nullptr) throw NullPointerException("The given argument 'source' is nullptr");
 
-        let copy = make(length);
+        auto copy = make(length);
         arrayCopy(copy, source, length, sizeof(CharType));
 
         return copy;
@@ -61,10 +61,10 @@ namespace enhanced {
 
     template <typename CharType>
     $RetRequiresRelease
-    func TString<CharType>::copy(const CharType* source, sizetype oldLength, sizetype newLength) -> CharType* {
-        if (source == null) throw NullPointerException("The given argument 'source' is null");
+    CharType* TString<CharType>::copy(const CharType* source, sizetype oldLength, sizetype newLength) {
+        if (source == nullptr) throw NullPointerException("The given argument 'source' is nullptr");
 
-        let copy = make(newLength);
+        auto copy = make(newLength);
         arrayCopy(copy, source, ((newLength > oldLength) ? oldLength : newLength), sizeof(CharType));
 
         return copy;
@@ -72,23 +72,23 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::calcLength(const CharType* string) noexcept -> sizetype {
-        if (string == null) return INVALID_SIZE;
+    sizetype TString<CharType>::calcLength(const CharType* string) noexcept {
+        if (string == nullptr) return INVALID_SIZE;
 
         sizetype length;
-        for (length = 0; string[length] != TCHAR(CharType, '\0'); ++length) {}
+        for (length = 0; string[length] != ST_CHAR(CharType, '\0'); ++length) {}
 
         return length;
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::isEqual(const CharType* string1, const CharType* string2) noexcept -> bool {
+    bool TString<CharType>::isEqual(const CharType* string1, const CharType* string2) noexcept {
         if (string1 == string2) return true;
-        else if (string1 == null || string2 == null) return false;
+        else if (string1 == nullptr || string2 == nullptr) return false;
 
         for (sizetype index = 0;; ++index) {
-            if ((string1[index] == TCHAR(CharType, '\0')) ^ (string2[index] == TCHAR(CharType, '\0'))) {
+            if ((string1[index] == ST_CHAR(CharType, '\0')) ^ (string2[index] == ST_CHAR(CharType, '\0'))) {
                 return false;
             }
 
@@ -99,10 +99,10 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept -> bool {
+    bool TString<CharType>::isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept {
         if (length1 != length2) return false;
         if (string1 == string2) return true;
-        else if (string1 == null || string2 == null) return false;
+        else if (string1 == nullptr || string2 == nullptr) return false;
 
 
         for (sizetype index = 0; index < length1; ++index) {
@@ -112,18 +112,20 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    func TString<CharType>::join(InitializerList<TString> list) -> TMutString<CharType> {
-        return join(initListToArray(list), initListSize(list));
+    $NoIgnoreReturn
+    TMutString<CharType> TString<CharType>::join(InitializerList<TString> list) {
+        return join(initListToArray(list), list.size());
     }
 
     template <typename CharType>
-    func TString<CharType>::join(const TString* strings, sizetype count) -> TMutString<CharType> {
+    $NoIgnoreReturn
+    TMutString<CharType> TString<CharType>::join(const TString* strings, sizetype count) {
         sizetype length = 0;
         for (sizetype index = 0; index < count; ++index) {
             length += strings[index].length;
         }
 
-        let newString = TMutString<CharType>(length);
+        auto newString = TMutString<CharType>(length);
 
         sizetype offset = 0;
         for (sizetype index = 0; index < count; ++index) {
@@ -135,7 +137,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    TString<CharType>::TString() noexcept : CharSequence<CharType>(TSTRING(CharType, ""), 0) {}
+    TString<CharType>::TString() noexcept : CharSequence<CharType>(ST_STRING(CharType, ""), 0) {}
 
     template <typename CharType>
     TString<CharType>::TString(const CharType* value, sizetype length) noexcept : CharSequence<CharType>(value, length) {}
@@ -157,7 +159,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::indexOf(const CharType ch) const noexcept -> sizetype {
+    sizetype TString<CharType>::indexOf(const CharType ch) const noexcept {
         for (sizetype index = 0; index < this->length; ++index) {
             if (this->value[index] == ch) return index;
         }
@@ -167,7 +169,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::indexOf(const TString& string) const noexcept -> sizetype {
+    sizetype TString<CharType>::indexOf(const TString& string) const noexcept {
         sizetype substringIndex = 0;
 
         for (sizetype index = 0; index < this->length; ++index) {
@@ -182,7 +184,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::indexOf(CharType ch, sizetype getN) const noexcept -> sizetype {
+    sizetype TString<CharType>::indexOf(CharType ch, sizetype getN) const noexcept {
         sizetype indexN = 0;
 
         for (sizetype index = 0; index < this->length; ++index) {
@@ -197,7 +199,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::indexOf(const TString& string, sizetype getN) const noexcept -> sizetype {
+    sizetype TString<CharType>::indexOf(const TString& string, sizetype getN) const noexcept {
         sizetype indexN = 0;
         sizetype substringIndex = 0;
 
@@ -216,7 +218,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::indexOfLast(CharType ch) const noexcept -> sizetype {
+    sizetype TString<CharType>::indexOfLast(CharType ch) const noexcept {
         for (sizetype index = this->length - 1;; --index) {
             if (this->value[index] == ch) return index;
             if (index == 0) break;
@@ -227,7 +229,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::indexOfLast(const TString& string) const noexcept -> sizetype {
+    sizetype TString<CharType>::indexOfLast(const TString& string) const noexcept {
         sizetype substringIndex = string.length - 1;
 
         for (sizetype index = this->length - 1;; --index) {
@@ -246,7 +248,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::indexOfLast(CharType ch, sizetype getN) const noexcept -> sizetype {
+    sizetype TString<CharType>::indexOfLast(CharType ch, sizetype getN) const noexcept {
         sizetype indexN = 0;
 
         for (sizetype index = this->length - 1;; --index) {
@@ -263,7 +265,7 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::indexOfLast(const TString& string, sizetype getN) const noexcept -> sizetype {
+    sizetype TString<CharType>::indexOfLast(const TString& string, sizetype getN) const noexcept {
         sizetype indexN = 0;
         sizetype substringIndex = string.length - 1;
 
@@ -284,7 +286,7 @@ namespace enhanced {
 
     template <typename CharType>
     $RetRequiresRelease
-    func TString<CharType>::indexOfAll(const CharType ch) const noexcept -> ArrayList<sizetype> {
+    ArrayList<sizetype> TString<CharType>::indexOfAll(const CharType ch) const noexcept {
         ArrayList<sizetype> allIndexes;
 
         for (sizetype index = 0; index < this->length; ++index) {
@@ -296,7 +298,7 @@ namespace enhanced {
 
     template <typename CharType>
     $RetRequiresRelease
-    func TString<CharType>::indexOfAll(const TString& string) const noexcept -> ArrayList<sizetype> {
+    ArrayList<sizetype> TString<CharType>::indexOfAll(const TString& string) const noexcept {
         ArrayList<sizetype> allIndexes;
         sizetype substringIndex = 0;
 
@@ -314,85 +316,91 @@ namespace enhanced {
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replace(sizetype start, sizetype end, CharType newChar) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::toMutable() const {
+        return {this->value, this->length};
+    }
+
+    template <typename CharType>
+    $NoIgnoreReturn
+    TMutString<CharType> TString<CharType>::replace(sizetype start, sizetype end, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceTo(start, end, newChar);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replace(sizetype start, sizetype end, const TString& newSubstring) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::replace(sizetype start, sizetype end, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceTo(start, end, newSubstring);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replace(CharType oldChar, CharType newChar) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::replace(CharType oldChar, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceTo(oldChar, newChar);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replace(const TString& oldSubstring, const TString& newSubstring) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::replace(const TString& oldSubstring, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceTo(oldSubstring, newSubstring);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replace(CharType oldChar, const TString& newSubstring) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::replace(CharType oldChar, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceTo(oldChar, newSubstring);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replace(const TString& oldSubstring, CharType newChar) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::replace(const TString& oldSubstring, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceTo(oldSubstring, newChar);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replaceAll(CharType oldChar, CharType newChar) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::replaceAll(CharType oldChar, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceAllTo(oldChar, newChar);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replaceAll(const TString& oldSubstring, const TString& newSubstring) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::replaceAll(const TString& oldSubstring, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceAllTo(oldSubstring, newSubstring);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replaceAll(CharType oldChar, const TString& newSubstring) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::replaceAll(CharType oldChar, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceAllTo(oldChar, newSubstring);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::replaceAll(const TString& oldSubstring, CharType newChar) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::replaceAll(const TString& oldSubstring, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceAllTo(oldSubstring, newChar);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::uppercase() const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::uppercase() const {
         return TMutString<CharType>(this->value).toUppercase();
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::lowercase() const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::lowercase() const {
         return TMutString<CharType>(this->value).toLowercase();
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::operator==(const TString& string) const noexcept -> bool {
+    bool TString<CharType>::operator==(const TString& string) const noexcept {
         return isEqual(this->value, string.value, this->length, string.length);
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func TString<CharType>::operator+(const TString& string) const -> TMutString<CharType> {
+    TMutString<CharType> TString<CharType>::operator+(const TString& string) const {
         sizetype newLength = this->length + string.length;
         TMutString<CharType> newString(newLength);
 
@@ -403,10 +411,22 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    func TString<CharType>::operator=(const TString& other) noexcept -> TString<CharType>& = default;
+    $NoIgnoreReturn
+    TMutString<CharType> TString<CharType>::operator+(CharType ch) const {
+        sizetype newLength = this->length + 1;
+        TMutString<CharType> newString(newLength);
+
+        arrayCopy(newString.value, this->value, this->length, sizeof(CharType));
+        newString[this->length] = ch;
+
+        return newString;
+    }
 
     template <typename CharType>
-    func TString<CharType>::operator=(TString&& other) noexcept -> TString<CharType>& = default;
+    TString<CharType>& TString<CharType>::operator=(const TString& other) noexcept = default;
+
+    template <typename CharType>
+    TString<CharType>& TString<CharType>::operator=(TString&& other) noexcept = default;
 
     template class TString<char>;
     template class TString<wchar>;

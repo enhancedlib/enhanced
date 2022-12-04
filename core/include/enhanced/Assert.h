@@ -19,20 +19,16 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/String.h>
+#include <enhanced/exceptions/AssertionError.h>
 
-namespace enhancedInternal {
-    $NoReturn
-    ENHANCED_CORE_API func assertionFailedImpl(const enhanced::String& message, const enhanced::String& file, sizetype line) -> void;
-}
-
-#define DYNAMIC_ASSERT(expression) ((expression) || (enhancedInternal::assertionFailedImpl(#expression, CURRENT_FILE, CURRENT_LINE), 0))
-
-#define dynamic_assert DYNAMIC_ASSERT
-
-#undef assert
+// TODO
+#define dynamic_assert(expression) ((expression) || (throw enhanced::exceptions::AssertionError(#expression, CURRENT_FILE, CURRENT_LINE), false))
 
 #ifdef DEBUG
-#define assert(expression) dynamic_assert(expression)
+#define E_ASSERT(expression) dynamic_assert(expression)
 #else
-#define assert(expression) (void) 0
+#define E_ASSERT(expression) (void) 0
 #endif
+
+#undef assert
+#define assert E_ASSERT

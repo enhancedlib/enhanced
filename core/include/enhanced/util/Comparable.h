@@ -19,52 +19,51 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/util/Pair.h>
-#include <enhanced/exceptions/UnsupportedOperationException.h>
 
 namespace enhanced::util {
-    interface ENHANCED_CORE_API Comparable {
-        scopedenum ComparisonResult : uint8 {
+    template <typename Type>
+    struct ENHANCED_CORE_API Comparable {
+        enum class ComparisonResult : uint8 {
             EQUAL, MORE, LESS
         };
 
         $NoIgnoreReturn
-        virtual func compare(const Comparable& other) const -> ComparisonResult abstract;
+        virtual ComparisonResult compare(const Type& other) const = 0;
 
         $NoIgnoreReturn
-        inline func equal(const Comparable& other) const -> bool {
+        inline bool equal(const Type& other) const {
             return compare(other) == ComparisonResult::EQUAL;
         }
 
         $NoIgnoreReturn
-        inline func operator==(const Comparable& other) const -> bool {
+        inline bool operator==(const Type& other) const {
             return equal(other);
         }
 
         $NoIgnoreReturn
-        inline func operator!=(const Comparable& other) const -> bool {
+        inline bool operator!=(const Type& other) const {
             return !equal(other);
         }
 
         $NoIgnoreReturn
-        inline func operator<(const Comparable& other) const -> bool {
+        inline bool operator<(const Type& other) const {
             return compare(other) == ComparisonResult::LESS;
         }
 
         $NoIgnoreReturn
-        inline func operator>(const Comparable& other) const -> bool {
+        inline bool operator>(const Type& other) const {
             return compare(other) == ComparisonResult::MORE;
         }
 
         $NoIgnoreReturn
-        inline func operator<=(const Comparable& other) const -> bool {
-            let result = compare(other);
+        inline bool operator<=(const Type& other) const {
+            auto result = compare(other);
             return result == ComparisonResult::LESS || result == ComparisonResult::EQUAL;
         }
 
         $NoIgnoreReturn
-        inline func operator>=(const Comparable& other) const -> bool {
-            let result = compare(other);
+        inline bool operator>=(const Type& other) const {
+            auto result = compare(other);
             return result == ComparisonResult::MORE || result == ComparisonResult::EQUAL;
         }
     };

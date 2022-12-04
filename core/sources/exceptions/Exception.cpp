@@ -14,6 +14,7 @@
  */
 
 #include <exception>
+#include <thread>
 
 #include <enhanced/exceptions/Exception.h>
 
@@ -22,35 +23,41 @@
 #include <enhanced/Annotations.h>
 #include <enhanced/String.h>
 #include <enhanced/TypeInfo.h>
+#include <enhanced/Process.h>
 #include <enhanced/io/IOStream.h>
 #include <enhanced/util/Traits.h>
 #include <enhanced/exceptions/NotImplementedError.h>
 
 using enhanced::util::move;
+using enhanced::util::forceCast;
 using enhanced::util::removeConst;
+using enhanced::util::removeRefConst;
 using enhanced::io::errstream;
 
 namespace enhanced::exceptions {
-    using TerminateHandler = void(*)();
-
-    static void terminateHandler() {
+    void defaultTerminateHandler() noexcept {
         try {
             std::rethrow_exception(std::current_exception());
         } catch (const Exception& exception) {
-            errstream->print(exception.getTraceback());
+            exception.printTraceback();
         } catch (const std::exception& exception) {
-            errstream->print(String(removeConst(exception.what())));
-        } catch (...) {}
+            errstream->print("Exception [based on std::exception]: ");
+            errstream->println(exception.what());
+        } catch (...) {
+            errstream->println("Exception [unknown]");
+        }
+        processAbort();
     }
 
-    static TerminateHandler setupTerminateHandler() noexcept {
+    const TerminateHandler& setupTerminateHandler(const TerminateHandler& terminateHandler) noexcept {
+        terminateHandlerFunc = terminateHandler;
         std::set_terminate(terminateHandler);
         return terminateHandler;
     }
 
-    const TerminateHandler terminateHandlerFunc = setupTerminateHandler();
+    TerminateHandler terminateHandlerFunc = setupTerminateHandler(defaultTerminateHandler);
 
-    Exception::Exception(const String& message) noexcept : message(move(message)), cause(null) {}
+    Exception::Exception(const String& message) noexcept : message(move(message)), cause(nullptr) {}
 
     Exception::Exception(const Exception* cause) noexcept : message(""), cause(cause) {}
 
@@ -58,8 +65,14 @@ namespace enhanced::exceptions {
 
     Exception::~Exception() noexcept = default;
 
+    // TODO
+
+    void Exception::printTraceback() const {
+        errstream->println(getTraceback());
+    }
+
     String Exception::getTraceback() const noexcept {
-        return String::join({getName(), ": ", message});
+        return String::join({"Exception [", getName(), "]: ", message});
     }
 
     const Exception* Exception::getCause() const noexcept {

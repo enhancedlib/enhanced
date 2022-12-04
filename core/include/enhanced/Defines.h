@@ -44,23 +44,23 @@
 #define X86_ARCH
 #elif defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64__) // x86_64 (amd64)
 #define X64_ARCH
-#elif defined(_M_ARM) || defined(__arm__) // ARM32
+#elif defined(_M_ARM) || defined(__arm__) // arm (arm32)
 #define ARM32_ARCH
-#elif defined(_M_ARM64) || defined(__aarch64__) // ARM64 (AArch64)
+#elif defined(_M_ARM64) || defined(__aarch64__) // arm64 (aarch64)
 #define ARM64_ARCH
 #else // Unsupported
 #error Unsupported architecture
 #endif
 
 // Detect the operating system
-#if defined(_WIN32) || defined(_WIN64) // Microsoft Windows
+#if defined(_WIN32) || defined(_WIN64) || defined(WIN32) // Microsoft Windows
 #define WINDOWS_OS
 
 #elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__))
 // Unix-style operating systems
 #define UNIX_STYLE_OS
 
-#if defined(__linux__) || defined(__linux) || defined(linux) || defined(__LINUX__) // Operating systems based on Linux kernel
+#if defined(__linux__) || defined(__linux) || defined(linux) || defined(__LINUX__) // Linux kernel OS
 #define LINUX_KERNEL_OS
 
 #if defined(__gnu_linux__) || defined(__gnu_linux) // GNU/Linux
@@ -70,7 +70,6 @@
 #endif
 
 #else
-
 #include <sys/param.h>
 #ifdef BSD // BSD operating systems
 #define BSD_OS
@@ -129,10 +128,6 @@
 
 #define PRAGMA(...) _Pragma(#__VA_ARGS__)
 
-#define EXTERN_C extern "C"
-#define EXTERN_C_START EXTERN_C {
-#define EXTERN_C_END }
-
 #define CURRENT_FUNC __func__
 #define CURRENT_FILE __FILE__
 #define CURRENT_LINE __LINE__
@@ -142,7 +137,7 @@
 
 #ifdef CLANG_COMPILER
 #define CLANG_WARNING_PUSH PRAGMA(clang diagnostic push)
-#define CLANG_WARNING_DISABLE(id) PRAGMA(clang diagnostic warning id)
+#define CLANG_WARNING_DISABLE(id) PRAGMA(clang diagnostic ignored id)
 #define CLANG_WARNING_POP PRAGMA(clang diagnostic pop)
 #else
 #define CLANG_WARNING_PUSH
@@ -161,19 +156,11 @@
 #endif
 
 #ifdef GCC_COMPILER
-#define GCC_WARNING_PUSH PRAGMA(gcc diagnostic push)
-#define GCC_WARNING_DISABLE(id) PRAGMA(gcc diagnostic warning id)
-#define GCC_WARNING_POP PRAGMA(gcc diagnostic pop)
+#define GCC_WARNING_PUSH PRAGMA(GCC diagnostic push)
+#define GCC_WARNING_DISABLE(id) PRAGMA(GCC diagnostic ignored id)
+#define GCC_WARNING_POP PRAGMA(GCC diagnostic pop)
 #else
 #define GCC_WARNING_PUSH
 #define GCC_WARNING_DISABLE(id)
 #define GCC_WARNING_POP
 #endif
-
-#define func auto
-#define let auto
-#define val const auto
-#define scopedenum enum class
-#define abstractclass class
-#define interface struct
-#define abstract = 0

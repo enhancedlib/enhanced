@@ -20,25 +20,25 @@
 
 namespace enhanced::io {
     // TODO
-    static ScanStream* _instream = null;
-    static PrintStream* _outstream = null;
-    static PrintStream* _errstream = null;
+    static ScanStream* _instream = nullptr;
+    static PrintStream* _outstream = nullptr;
+    static PrintStream* _errstream = nullptr;
 
     ScanStream* const& instream = _instream;
     PrintStream* const& outstream = _outstream;
     PrintStream* const& errstream = _errstream;
 
-    func setInStream(ScanStream* in) -> void {
+    void setInStream(ScanStream* in) {
         instream->flush();
         _instream = in;
     }
 
-    func setOutStream(PrintStream* out) -> void {
+    void setOutStream(PrintStream* out) {
         outstream->flush();
         _outstream = out;
     }
 
-    func setErrStream(PrintStream* err) -> void {
+    void setErrStream(PrintStream* err) {
         errstream->flush();
         _errstream = err;
     }

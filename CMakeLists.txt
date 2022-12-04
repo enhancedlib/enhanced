@@ -1,3 +1,4 @@
+##
 ## Copyright (C) 2022 Liu Baihao. All rights reserved.
 ##
 ## Licensed under the Enhanced Software License.
@@ -10,6 +11,7 @@
 ## THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
 ## WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 ## INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+##
 
 cmake_minimum_required(VERSION 3.0)
 
@@ -85,7 +87,7 @@ function (setup_module MODULE_NAME)
 
     target_compile_definitions(${MODULE_NAME}-shared PRIVATE ENHANCED_BUILDING)
     target_compile_definitions(${MODULE_NAME}-shared PRIVATE ENHANCED_${MODULE_NAME_UPPER}_BUILDING)
-    target_compile_definitions(${MODULE_NAME}-shared PUBLIC ENHANCED_${MODULE_NAME_UPPER}_SHARED_LIB)
+    target_compile_definitions(${MODULE_NAME}-shared PUBLIC ENHANCED_${MODULE_NAME_UPPER}_SHARED_LIBRARY)
 
     target_include_directories(${MODULE_NAME}-shared PRIVATE ${INCLUDE_DIRECTORIES})
 
@@ -105,11 +107,11 @@ function (setup_module MODULE_NAME)
     message("${PROMPT} Set the installation directory for the target \"${MODULE_NAME}-shared\"")
 endfunction ()
 
-function (setup_module_test)
-    set(PROMPT "[Module: test]")
+function (setup_test)
+    set(PROMPT "[test]")
 
-    message("${PROMPT} Configuring module: test")
-    message("${PROMPT} Module path: \"${CMAKE_SOURCE_DIR}/test\"")
+    message("${PROMPT} Configuring test")
+    message("${PROMPT} Test sources path: \"${CMAKE_SOURCE_DIR}/test\"")
 
     set(DEPENDENT_MODULES ${MODULES})
     message("${PROMPT} Dependent modules: ${DEPENDENT_MODULES}")
@@ -169,11 +171,11 @@ foreach (MODULE_NAME IN ITEMS ${MODULES})
     setup_module(${MODULE_NAME})
 endforeach ()
 
-if (EXISTS "${CMAKE_SOURCE_DIR}/test")
-    setup_module_test()
-endif ()
-
 message("${PROMPT} Configuring modules done")
+
+if (EXISTS "${CMAKE_SOURCE_DIR}/test")
+    setup_test()
+endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Release" OR ${CMAKE_BUILD_TYPE} STREQUAL "MinSizeRel")
     install(FILES "README.md" DESTINATION ".")

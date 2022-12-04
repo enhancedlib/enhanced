@@ -19,7 +19,7 @@
 
 namespace enhanced::util {
     template <typename FirstType, typename SecondType>
-    struct Pair final {
+    struct Pair {
         FirstType first;
         SecondType second;
     };

@@ -20,55 +20,48 @@
 #include <enhanced/Annotations.h>
 #include <enhanced/util/Traits.h>
 
-#define Property(type, name, value, getter, setter, ...) \
-    struct { \
-    private: \
-        using Self = type; \
-        Self self = value; \
-        __PROPERTY_GETTER_##getter \
-        __PROPERTY_SETTER_##setter \
-    public: \
-        __VA_ARGS__ \
-    } name
+#define propertiesClass(name) using CLASS = name
 
-#define PropertyFieldClass(clazz) using CLASS = clazz
-
-#define PropertyField(type, name, getter, setter, ...) \
-    struct PropertyField_##name { \
+#define property(type, name, getter, setter, ...) \
+    struct Property_##name { \
         friend CLASS; \
     private: \
         using Self = type; \
         Self self; \
-        inline PropertyField_##name(Self value) : self(enhanced::util::move(value)) {} \
-        __PROPERTY_GETTER_##getter \
-        __PROPERTY_SETTER_##setter \
+        inline Property_##name(Self value) : self(enhanced::util::move(value)) {} \
+        __property_getter_##getter \
+        __property_setter_##setter \
     public: \
         __VA_ARGS__ \
     } name
 
-#define __PROPERTY_GETTER_get(accessModifier) \
+#define __property_getter_get(accessModifier) \
 accessModifier: \
     $NoIgnoreReturn \
-    inline func operator->() const -> const Self* { \
+    inline const Self* operator->() const { \
         return &self; \
+    } \
+    $NoIgnoreReturn \
+    inline const Self& operator*() const { \
+        return operator()(); \
     } \
     $NoIgnoreReturn \
     inline operator const Self&() const { \
         return operator()(); \
     } \
     $NoIgnoreReturn \
-    inline func operator()() const -> const Self&
+    inline const Self& operator()() const
 
-#define __PROPERTY_SETTER_set(accessModifier) \
+#define __property_setter_set(accessModifier) \
 accessModifier: \
-    inline func operator=(const Self& value) -> Self&
+    inline Self& operator=(const Self& value)
 
-#define __PROPERTY_GETTER_getDefault(accessModifier) \
-    __PROPERTY_GETTER_get(accessModifier) { \
+#define __property_getter_getter(accessModifier) \
+    __property_getter_get(accessModifier) { \
         return self; \
     }
 
-#define __PROPERTY_SETTER_setDefault(accessModifier) \
-    __PROPERTY_SETTER_set(accessModifier) { \
+#define __property_setter_setter(accessModifier) \
+    __property_setter_set(accessModifier) { \
         return self = value; \
     }

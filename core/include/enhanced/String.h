@@ -32,34 +32,52 @@ namespace enhanced {
     class ENHANCED_CORE_API TString : public CharSequence<CharType> {
     public:
         $RetRequiresRelease
-        static func make(sizetype length) -> CharType*;
+        static CharType* make(sizetype length);
 
         $RetRequiresRelease
-        static func copy(const CharType* source) -> CharType*;
+        static CharType* copy(const CharType* source);
 
         $RetRequiresRelease
-        static func copy(const CharType* source, sizetype length) -> CharType*;
+        static CharType* copy(const CharType* source, sizetype length);
 
         $RetRequiresRelease
-        static func copy(const CharType* source, sizetype oldLength, sizetype newLength) -> CharType*;
+        static CharType* copy(const CharType* source, sizetype oldLength, sizetype newLength);
 
         $NoIgnoreReturn
-        static func calcLength(const CharType* string) noexcept -> sizetype;
+        static sizetype calcLength(const CharType* string) noexcept;
 
         $NoIgnoreReturn
-        static func isEqual(const CharType* string1, const CharType* string2) noexcept -> bool;
+        static bool isEqual(const CharType* string1, const CharType* string2) noexcept;
 
         $NoIgnoreReturn
-        static func isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept -> bool;
+        static bool isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept;
 
-        template <sizetype count>
-        static inline func join(TString strings[count]) -> TMutString<CharType> {
-            return join(count, strings);
+        template <typename IntType>
+        requires util::isIntegralType<IntType> && (!util::isCharType<IntType>)
+        $NoIgnoreReturn
+        static TMutString<CharType> from(IntType value) {
+            // TODO
+            TMutString<CharType> str;
+            int8 bit;
+            while (value != 0) {
+                bit = value % 10;
+                str.insertFirst(bit + '0');
+                value /= 10;
+            }
+            return str;
         }
 
-        static func join(InitializerList<TString> list) -> TMutString<CharType>;
+        template <sizetype count>
+        $NoIgnoreReturn
+        static inline TMutString<CharType> join(TString strings[count]) {
+            return join(strings, count);
+        }
 
-        static func join(const TString* strings, sizetype count) -> TMutString<CharType>;
+        $NoIgnoreReturn
+        static TMutString<CharType> join(InitializerList<TString> list);
+
+        $NoIgnoreReturn
+        static TMutString<CharType> join(const TString* strings, sizetype count);
 
         TString() noexcept;
 
@@ -79,80 +97,86 @@ namespace enhanced {
         TString(TString&& other) noexcept;
 
         $NoIgnoreReturn
-        func indexOf(CharType ch) const noexcept -> sizetype;
+        sizetype indexOf(CharType ch) const noexcept;
 
         $NoIgnoreReturn
-        func indexOf(CharType ch, sizetype getN) const noexcept -> sizetype;
+        sizetype indexOf(CharType ch, sizetype getN) const noexcept;
 
         $NoIgnoreReturn
-        func indexOf(const TString& string) const noexcept -> sizetype;
+        sizetype indexOf(const TString& string) const noexcept;
 
         $NoIgnoreReturn
-        func indexOf(const TString& string, sizetype getN) const noexcept -> sizetype;
+        sizetype indexOf(const TString& string, sizetype getN) const noexcept;
 
         $NoIgnoreReturn
-        func indexOfLast(const TString& string) const noexcept -> sizetype;
+        sizetype indexOfLast(const TString& string) const noexcept;
 
         $NoIgnoreReturn
-        func indexOfLast(const TString& string, sizetype getN) const noexcept -> sizetype;
+        sizetype indexOfLast(const TString& string, sizetype getN) const noexcept;
 
         $NoIgnoreReturn
-        func indexOfLast(CharType ch) const noexcept -> sizetype;
+        sizetype indexOfLast(CharType ch) const noexcept;
 
         $NoIgnoreReturn
-        func indexOfLast(CharType ch, sizetype getN) const noexcept -> sizetype;
+        sizetype indexOfLast(CharType ch, sizetype getN) const noexcept;
 
         $RetRequiresRelease
-        func indexOfAll(CharType ch) const noexcept -> collections::ArrayList<sizetype>;
+        collections::ArrayList<sizetype> indexOfAll(CharType ch) const noexcept;
 
         $RetRequiresRelease
-        func indexOfAll(const TString& string) const noexcept -> collections::ArrayList<sizetype>;
+        collections::ArrayList<sizetype> indexOfAll(const TString& string) const noexcept;
 
         $NoIgnoreReturn
-        func replace(sizetype start, sizetype end, CharType newChar) const -> TMutString<CharType>;
+        TMutString<CharType> toMutable() const;
 
         $NoIgnoreReturn
-        func replace(sizetype start, sizetype end, const TString& newSubstring) const -> TMutString<CharType>;
+        TMutString<CharType> replace(sizetype start, sizetype end, CharType newChar) const;
 
         $NoIgnoreReturn
-        func replace(CharType oldChar, CharType newChar) const -> TMutString<CharType>;
+        TMutString<CharType> replace(sizetype start, sizetype end, const TString& newSubstring) const;
 
         $NoIgnoreReturn
-        func replace(const TString& oldSubstring, const TString& newSubstring) const -> TMutString<CharType>;
+        TMutString<CharType> replace(CharType oldChar, CharType newChar) const;
 
         $NoIgnoreReturn
-        func replace(CharType oldChar, const TString& newSubstring) const -> TMutString<CharType>;
+        TMutString<CharType> replace(const TString& oldSubstring, const TString& newSubstring) const;
 
         $NoIgnoreReturn
-        func replace(const TString& oldSubstring, CharType newChar) const -> TMutString<CharType>;
+        TMutString<CharType> replace(CharType oldChar, const TString& newSubstring) const;
 
         $NoIgnoreReturn
-        func replaceAll(CharType oldChar, CharType newChar) const -> TMutString<CharType>;;
+        TMutString<CharType> replace(const TString& oldSubstring, CharType newChar) const;
 
         $NoIgnoreReturn
-        func replaceAll(const TString& oldSubstring, const TString& newSubstring) const -> TMutString<CharType>;;
+        TMutString<CharType> replaceAll(CharType oldChar, CharType newChar) const;
 
         $NoIgnoreReturn
-        func replaceAll(CharType oldChar, const TString& newSubstring) const -> TMutString<CharType>;;
+        TMutString<CharType> replaceAll(const TString& oldSubstring, const TString& newSubstring) const;
 
         $NoIgnoreReturn
-        func replaceAll(const TString& oldSubstring, CharType newChar) const -> TMutString<CharType>;;
+        TMutString<CharType> replaceAll(CharType oldChar, const TString& newSubstring) const;
 
         $NoIgnoreReturn
-        func uppercase() const -> TMutString<CharType>;;
+        TMutString<CharType> replaceAll(const TString& oldSubstring, CharType newChar) const;
 
         $NoIgnoreReturn
-        func lowercase() const -> TMutString<CharType>;;
+        TMutString<CharType> uppercase() const;
 
         $NoIgnoreReturn
-        func operator==(const TString& string) const noexcept -> bool;
+        TMutString<CharType> lowercase() const;
 
         $NoIgnoreReturn
-        func operator+(const TString& string) const -> TMutString<CharType>;
+        bool operator==(const TString& string) const noexcept;
 
-        func operator=(const TString& other) noexcept -> TString&;
+        $NoIgnoreReturn
+        TMutString<CharType> operator+(const TString& string) const;
 
-        func operator=(TString&& other) noexcept -> TString&;
+        $NoIgnoreReturn
+        TMutString<CharType> operator+(CharType ch) const;
+
+        TString& operator=(const TString& other) noexcept;
+
+        TString& operator=(TString&& other) noexcept;
     };
 
     using String = TString<char>;
@@ -164,32 +188,31 @@ namespace enhanced {
     using U32String = TString<u32char>;
 
     inline namespace literals {
-        inline func operator""_s(const char* string, sizetype size) -> String {
+        inline String operator""_s(const char* string, sizetype size) {
             return {string, size};
         }
 
     #ifdef WCHAR_IS_BUILTIN_TYPE
-        inline func operator""_s(const wchar* string, sizetype size) -> WideString {
+        inline WideString operator""_s(const wchar* string, sizetype size) {
             return {string, size};
         }
     #endif
 
-        inline func operator""_s(const u8char* string, sizetype size) -> U8String {
+        inline U8String operator""_s(const u8char* string, sizetype size) {
             return {string, size};
         }
 
-        inline func operator""_s(const u16char* string, sizetype size) -> U16String {
+        inline U16String operator""_s(const u16char* string, sizetype size) {
             return {string, size};
         }
 
-        inline func operator""_s(const u32char* string, sizetype size) -> U32String {
+        inline U32String operator""_s(const u32char* string, sizetype size) {
             return {string, size};
         }
     }
 }
 
-#define TSTRING(type, string) enhanced::util::switchType<const type(&)[sizeof(string) / sizeof(char)]> \
+#define ST_STRING(type, string) enhanced::util::switchType<const type(&)[sizeof(string) / sizeof(char)]> \
     (string, WIDE_TEXT(string), U8_TEXT(string), U16_TEXT(string), U32_TEXT(string))
 
-#undef STR
 #define STR(quote) quote##_s

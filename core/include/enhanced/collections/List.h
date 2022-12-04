@@ -22,13 +22,13 @@
 
 namespace enhanced::collections {
     template <typename Type>
-    interface List : Queue<Type> {
-        virtual func addFirst(const Type& element) -> void abstract;
+    struct List : Queue<Type> {
+        virtual void addFirst(const Type& element) = 0;
 
-        virtual func addFirst(Type&& element) -> void abstract;
+        virtual void addFirst(Type&& element) = 0;
 
-        virtual func removeLast() -> Type abstract;
+        virtual Type removeLast() = 0;
 
-        virtual func removeLastIf() -> bool abstract;
+        virtual bool removeLastIf() = 0;
     };
 }

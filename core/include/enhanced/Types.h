@@ -31,6 +31,20 @@
 #define WCHAR_EQUALS_INT32
 #endif
 
+#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
+#define LONG_EQUALS_INT
+#endif
+
+#ifdef MSVC_ABI
+#define LDOUBLE_EQUALS_DOUBLE
+#endif
+
+#if defined(X86_ARCH) || defined(ARM32_ARCH)
+#define SIZE_TYPE_IS_UINT32
+#else
+#define SIZE_TYPE_IS_UINT64
+#endif
+
 using llong = long long;
 using ldouble = long double;
 
@@ -45,7 +59,7 @@ using ullong = unsigned long long;
 using int8 = schar;
 using int16 = short;
 using int32 = int;
-#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
+#ifdef LONG_EQUALS_INT
 using int64 = llong;
 #else
 using int64 = long;
@@ -54,7 +68,7 @@ using int64 = long;
 using uint8 = uchar;
 using uint16 = ushort;
 using uint32 = uint;
-#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
+#ifdef LONG_EQUALS_INT
 using uint64 = ullong;
 #else
 using uint64 = ulong;
@@ -64,7 +78,7 @@ using float32 = float;
 using float64 = double;
 
 // The name "sizetype" is used instead of "size" because "size" is often used as a variable/function name.
-#if defined(X86_ARCH) || defined(ARM32_ARCH)
+#ifdef SIZE_TYPE_IS_UINT32
 using sizetype = uint32;
 #else
 using sizetype = uint64;
@@ -89,84 +103,38 @@ using wchar = int32;
 #endif
 #endif
 
-#undef null
-#define null nullptr
-using nulltype = decltype(null);
+using nulltype = decltype(nullptr);
 
 #undef INT8_MIN
 #undef INT16_MIN
 #undef INT32_MIN
 #undef INT64_MIN
-
-#undef UINT8_MIN
-#undef UINT16_MIN
-#undef UINT32_MIN
-#undef UINT64_MIN
-
-#undef FLOAT32_MIN
-#undef FLOAT64_MIN
-
 #undef CHAR_MIN
 #undef WCHAR_MIN
-#undef U8CHAR_MIN
-#undef U16CHAR_MIN
-#undef U32CHAR_MIN
-
 #undef SCHAR_MIN
-#undef SHORT_MIN
 #undef INT_MIN
 #undef LONG_MIN
 #undef LLONG_MIN
-
-#undef UCHAR_MIN
-#undef USHORT_MIN
-#undef UINT_MIN
-#undef ULONG_MIN
-#undef ULLONG_MIN
-
-#undef FLOAT_MIN
-#undef DOUBLE_MIN
-#undef LDOUBLE_MIN
-
 #undef INT8_MAX
 #undef INT16_MAX
 #undef INT32_MAX
 #undef INT64_MAX
-
 #undef UINT8_MAX
 #undef UINT16_MAX
 #undef UINT32_MAX
 #undef UINT64_MAX
-
-#undef FLOAT32_MAX
-#undef FLOAT64_MAX
-
 #undef CHAR_MAX
 #undef WCHAR_MAX
-#undef U8CHAR_MAX
-#undef U16CHAR_MAX
-#undef U32CHAR_MAX
-
 #undef SCHAR_MAX
 #undef INT_MAX
-#undef SHORT_MAX
 #undef LONG_MAX
 #undef LLONG_MAX
-
 #undef UCHAR_MAX
-#undef USHORT_MAX
 #undef UINT_MAX
 #undef ULONG_MAX
 #undef ULLONG_MAX
-
-#undef FLOAT_MAX
-#undef DOUBLE_MAX
-#undef LDOUBLE_MAX
-
 #undef INFINITY
 #undef NAN
-
-#undef INVALID_SIZE
 
 #define INT8_MIN ((int8) -0x80) // -128
 #define INT16_MIN ((int16) -0x8000) // -32768
@@ -200,17 +168,17 @@ using nulltype = decltype(null);
 #define SCHAR_MIN INT8_MIN
 #define SHORT_MIN INT16_MIN
 #define INT_MIN INT32_MIN
-#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
+#ifdef LONG_EQUALS_INT
 #define LONG_MIN INT32_MIN
 #else
 #define LONG_MIN INT64_MIN
 #endif
 #define LLONG_MIN INT64_MIN
 
-#define UCHAR_MIN UINT8_MIN;
-#define USHORT_MIN UINT16_MIN;
-#define UINT_MIN UINT32_MIN;
-#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
+#define UCHAR_MIN UINT8_MIN
+#define USHORT_MIN UINT16_MIN
+#define UINT_MIN UINT32_MIN
+#ifdef LONG_EQUALS_INT
 #define ULONG_MIN UINT32_MIN
 #else
 #define ULONG_MIN UINT64_MIN
@@ -219,16 +187,16 @@ using nulltype = decltype(null);
 
 #define FLOAT_MIN FLOAT32_MIN
 #define DOUBLE_MIN FLOAT64_MIN
-#ifdef MSVC_ABI
+#ifdef LDOUBLE_EQUALS_DOUBLE
 #define LDOUBLE_MIN FLOAT64_MIN
 #else
 #define LDOUBLE_MIN 3.36210314311209350626267781732175260e-4932l
 #endif
 
-#if defined(X86_ARCH) || defined(ARM32_ARCH)
-#define SIZE_TYPE_MIN UINT64_MIN
-#else
+#ifdef SIZE_TYPE_IS_UINT32
 #define SIZE_TYPE_MIN UINT32_MIN
+#else
+#define SIZE_TYPE_MIN UINT64_MIN
 #endif
 
 #define BYTE_MIN UINT8_MIN
@@ -268,7 +236,7 @@ using nulltype = decltype(null);
 #define SCHAR_MAX INT8_MAX
 #define SHORT_MAX INT16_MAX
 #define INT_MAX INT32_MAX
-#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
+#ifdef LONG_EQUALS_INT
 #define LONG_MAX INT32_MAX
 #else
 #define LONG_MAX INT64_MAX
@@ -278,7 +246,7 @@ using nulltype = decltype(null);
 #define UCHAR_MAX UINT8_MAX
 #define USHORT_MAX UINT16_MAX
 #define UINT_MAX UINT32_MAX
-#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
+#ifdef LONG_EQUALS_INT
 #define ULONG_MAX UINT32_MAX
 #else
 #define ULONG_MAX UINT64_MAX
@@ -287,13 +255,13 @@ using nulltype = decltype(null);
 
 #define FLOAT_MAX FLOAT32_MAX
 #define DOUBLE_MAX FLOAT64_MAX
-#ifdef MSVC_ABI
+#ifdef LDOUBLE_EQUALS_DOUBLE
 #define LDOUBLE_MAX FLOAT64_MAX
 #else
 #define LDOUBLE_MAX 1.18973149535723176502126385303097021E+4932l
 #endif
 
-#if defined(X86_ARCH) || defined(ARM32_ARCH)
+#ifdef SIZE_TYPE_IS_UINT32
 #define SIZE_TYPE_MAX UINT32_MAX
 #else
 #define SIZE_TYPE_MAX UINT64_MAX

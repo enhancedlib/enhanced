@@ -31,6 +31,8 @@ namespace enhanced {
 
         sizetype length;
 
+        bool isDynamic = false;
+
     public:
         CharSequence(const CharType* value, sizetype length);
 
@@ -38,26 +40,26 @@ namespace enhanced {
 
         CharSequence(CharSequence&& other) noexcept;
 
-        virtual ~CharSequence() noexcept;
+        ~CharSequence() noexcept;
 
         $NoIgnoreReturn
-        func getLength() const noexcept -> sizetype;
+        sizetype getLength() const noexcept;
 
         $NoIgnoreReturn
-        func isEmpty() const noexcept -> bool;
+        bool isEmpty() const noexcept;
 
         $NoIgnoreReturn
-        func chars() const noexcept -> const CharType*;
+        const CharType* chars() const noexcept;
 
         $NoIgnoreReturn
-        func at(sizetype index) const noexcept -> const CharType;
+        const CharType at(sizetype index) const noexcept;
 
         $NoIgnoreReturn
-        func operator[](sizetype index) const noexcept -> const CharType;
+        const CharType operator[](sizetype index) const noexcept;
 
-        func operator=(const CharSequence& other) noexcept -> CharSequence&;
+        CharSequence& operator=(const CharSequence& other) noexcept;
 
-        func operator=(CharSequence&& other) noexcept -> CharSequence&;
+        CharSequence& operator=(CharSequence&& other) noexcept;
 
         explicit operator const CharType*() const noexcept;
     };

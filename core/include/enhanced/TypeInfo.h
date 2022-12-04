@@ -40,19 +40,19 @@ namespace enhanced {
         TypeInfo& operator=(const TypeInfo& info) = delete;
 
         $NoIgnoreReturn
-        func getName() const -> String;
+        String getName() const;
 
         $NoIgnoreReturn
-        func hashCode() const -> sizetype;
+        sizetype hashCode() const;
     };
 
     template <typename Type>
-    inline constexpr func typeInfoOf() -> TypeInfo {
+    inline constexpr TypeInfo typeInfoOf() {
         return typeid(Type);
     }
 
     template <typename Type>
-    inline constexpr func typeInfoOf(Type&& value) -> TypeInfo {
+    inline constexpr TypeInfo typeInfoOf(Type&& value) {
         return typeid(value);
     }
 }

@@ -13,7 +13,7 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/io/PrintStream.h>
+#include <enhanced/io/ScanStream.h>
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
@@ -21,95 +21,11 @@
 #include <enhanced/exceptions/NotImplementedError.h>
 
 namespace enhanced::io {
-    func PrintStream::print(char ch) -> void {
+    void ScanStream::close() const {
         NOT_IMPLEMENTED();
     }
 
-    func PrintStream::print(wchar wch) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(u8char u8ch) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(u16char u16ch) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(u32char u32ch) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(bool boolean) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(int8 i8) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(uint8 u8) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(int16 i16) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(uint16 u16) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(int32 i32) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(uint32 u32) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(int64 i64) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(uint64 u64) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(float32 i32) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(float64 i64) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(const char* message) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(const String& message) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(void* address) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::print(nulltype) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::printf(const String& message, ...) -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::close() const -> void {
-        NOT_IMPLEMENTED();
-    }
-
-    func PrintStream::flush() const -> void {
+    void ScanStream::flush() const {
         NOT_IMPLEMENTED();
     }
 }

@@ -22,35 +22,32 @@
 #include <enhanced/exceptions/NotImplementedError.h>
 
 namespace enhancedInternal::util {
+    template <typename>
+    class FunctionImpl {};
+
     template <typename Return, typename... Args>
-    class FunctionImpl {
+    class FunctionImpl<Return (Args...)> {
+    private:
+
     public:
         using ReturnType = Return;
 
-        inline func invoke(Args... args) -> ReturnType {
+        inline ReturnType invoke(Args... args) {
             NOT_IMPLEMENTED();
         }
 
-        inline func operator()(Args... args) -> ReturnType {
+        inline ReturnType operator()(Args... args) {
             return invoke(args...);
         }
-    };
-
-    template <typename>
-    struct GetFunctionImpl final {};
-
-    template <typename ReturnType, typename... Args>
-    struct GetFunctionImpl<ReturnType (Args...)> final {
-        using Type = FunctionImpl<ReturnType, Args...>;
     };
 }
 
 namespace enhanced::util {
     template <typename FunctionType>
     requires isFunction<FunctionType>
-    class Function : public Functional, public enhancedInternal::util::GetFunctionImpl<FunctionType>::Type {
+    class Function : public Functional, public enhancedInternal::util::FunctionImpl<FunctionType> {
     private:
-    	using FunctionImpl = typename enhancedInternal::util::GetFunctionImpl<FunctionType>::Type;
+    	using FunctionImpl = enhancedInternal::util::FunctionImpl<FunctionType>;
 
     public:
         Function() = default;
@@ -61,6 +58,7 @@ namespace enhanced::util {
         }
 
         template <typename... Args>
+        requires util::isSame<FunctionType, typename FunctionImpl::ReturnType (Args...)>
         Function(typename FunctionImpl::ReturnType (*function)(Args...)) {
             NOT_IMPLEMENTED();
         }

@@ -23,8 +23,8 @@ namespace enhanced::io {
     class ENHANCED_CORE_API BufferInputStream : public InputStream {
     public:
         $NoIgnoreReturn
-        func get() const -> byte override;
+        byte get() const override;
 
-        func read(byte* buffer, sizetype size) const -> void override;
+        void read(byte* buffer, sizetype size) const override;
     };
 }

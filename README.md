@@ -44,7 +44,7 @@ To use this library, you should use at least the C++20 standard.
 Environments:
 
 - Compiler: [Clang](https://clang.llvm.org/), [Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/), [GNU Compiler Collections](https://gcc.gnu.org/)
-- Operating system: Microsoft Windows, Operating systems based on Linux kernel, Apple macOS
+- Operating system: Microsoft Windows, Linux kernel OS, Apple macOS
 - Processor architecture: amd64 (x86_64), x86, arm (arm32), arm64 (aarch64)
 - Build System: [CMake](https://cmake.org/)
 - C++ Standard: C++20 or later

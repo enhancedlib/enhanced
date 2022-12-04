@@ -27,5 +27,7 @@ namespace enhanced::exceptions {
         DEFINE_EXCEPTION_NAME(enhanced::exceptions::AssertionError)
 
         explicit AssertionError(const String& message = "") noexcept;
+
+        explicit AssertionError(const enhanced::String& expression, const enhanced::String& file, sizetype line) noexcept;
     };
 }

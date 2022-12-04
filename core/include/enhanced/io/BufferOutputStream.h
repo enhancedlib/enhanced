@@ -22,8 +22,8 @@
 namespace enhanced::io {
     class ENHANCED_CORE_API BufferOutputStream : public OutputStream {
     public:
-        func write(byte ch) const -> void override;
+        void write(byte ch) const override;
 
-        func write(byte* buffer, sizetype size) const -> void override;
+        void write(byte* buffer, sizetype size) const override;
     };
 }

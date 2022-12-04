@@ -18,9 +18,7 @@
 #include <enhanced/Defines.h>
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
-#include <enhanced/util/Comparable.h>
-#include <enhanced/exceptions/UnsupportedOperationException.h>
 
 namespace enhanced::math {
-    interface ENHANCED_CORE_API Number : util::Comparable {};
+    struct Number {};
 }

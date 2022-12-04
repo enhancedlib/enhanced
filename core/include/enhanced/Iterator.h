@@ -21,35 +21,49 @@
 
 namespace enhanced {
     template <typename Type>
-    interface Iterator {
+    struct Iterator {
         virtual ~Iterator() noexcept = default;
 
         /*!
          * Determines if there are still elements can iterate over.
          */
         $NoIgnoreReturn
-        virtual func hasNext() const -> bool abstract;
+        virtual bool hasNext() const = 0;
 
         /*!
          * Let the iterator pointer return to the next element.
          */
-        virtual func next() const -> const Iterator<Type>* abstract;
+        virtual const Iterator<Type>* next() const = 0;
 
         /*!
          * Gets the current element.
          */
         $NoIgnoreReturn
-        virtual func get() const -> Type& abstract;
+        virtual Type& get() const = 0;
 
         /*!
          * Let the iterator pointer return to the first element.
          */
-        virtual func reset() const -> void abstract;
+        virtual void reset() const = 0;
 
         /*!
          * Gets the number of elements.
          */
         $NoIgnoreReturn
-        virtual func count() const -> sizetype abstract;
+        virtual sizetype count() const = 0;
+
+        $NoIgnoreReturn
+        inline bool operator!=(byte) const {
+            return hasNext();
+        }
+
+        inline const Iterator<Type>* operator++() const {
+            return next();
+        }
+
+        $NoIgnoreReturn
+        inline Type& operator*() const {
+            return get();
+        }
     };
 }

@@ -43,34 +43,34 @@ namespace enhancedInternal::collections {
 
     ArrayListImpl::ArrayListImpl(ArrayListImpl&& other) noexcept : elements(other.elements), size(other.size),
         capacity(other.capacity), expSizeFallback([](sizetype capacity) {return capacity;}) {
-        other.elements = null;
+        other.elements = nullptr;
         other.size = INVALID_SIZE;
         other.capacity = INVALID_SIZE;
     }
 
     $NoIgnoreReturn
-    func ArrayListImpl::getFirst0() const -> void* {
+    void* ArrayListImpl::getFirst0() const {
         if (size == 0) throw UnsupportedOperationException("The list is empty");
 
         return elements[0];
     }
 
     $NoIgnoreReturn
-    func ArrayListImpl::getLast0() const -> void* {
+    void* ArrayListImpl::getLast0() const {
         if (size == 0) throw UnsupportedOperationException("The list is empty");
 
         return elements[size - 1];
     }
 
     $NoIgnoreReturn
-    func ArrayListImpl::get0(sizetype index) const -> void* {
+    void* ArrayListImpl::get0(sizetype index) const {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
         return elements[index];
     }
 
     $NoIgnoreReturn
-    func ArrayListImpl::indexOf0(void* value, OpEqual opEqual) const -> sizetype {
+    sizetype ArrayListImpl::indexOf0(void* value, OpEqual opEqual) const {
         for (sizetype index = 0; index < size; ++index) {
             if (opEqual(elements[index], value)) {
                 return index;
@@ -80,15 +80,15 @@ namespace enhancedInternal::collections {
         return INVALID_SIZE;
     }
 
-    func ArrayListImpl::addFirst0(void* element, OpCopy opCopy) -> void {
+    void ArrayListImpl::addFirst0(void* element, OpCopy opCopy) {
         NOT_IMPLEMENTED();
     }
 
-    func ArrayListImpl::addFirst1(void* element, OpMove opMove) -> void {
+    void ArrayListImpl::addFirst1(void* element, OpMove opMove) {
         NOT_IMPLEMENTED();
     }
 
-    func ArrayListImpl::addLast0(void* element, OpCopy opCopy) -> void {
+    void ArrayListImpl::addLast0(void* element, OpCopy opCopy) {
         if (size == capacity) {
             expand0();
         }
@@ -97,7 +97,7 @@ namespace enhancedInternal::collections {
         ++size;
     }
 
-    func ArrayListImpl::addLast1(void* element, OpMove opMove) -> void {
+    void ArrayListImpl::addLast1(void* element, OpMove opMove) {
         if (size == capacity) {
             expand0();
         }
@@ -106,17 +106,23 @@ namespace enhancedInternal::collections {
         ++size;
     }
 
-    func ArrayListImpl::removeFirst0(OpDestroy opDestroy) -> void {
+    void ArrayListImpl::removeFirst0(OpDestroy opDestroy) {
         NOT_IMPLEMENTED();
     }
 
-    func ArrayListImpl::removeLast0(OpDestroy opDestroy) -> void {
+    void ArrayListImpl::removeLast0(OpDestroy opDestroy) {
         assert(size > 0);
 
         opDestroy(elements[--size]);
     }
 
-    func ArrayListImpl::setCapacity0(sizetype newCapacity) -> void {
+    void ArrayListImpl::clear0(OpDestroy opDestroy) {
+        while (size > 0) {
+            opDestroy(elements[--size]);
+        }
+    }
+
+    void ArrayListImpl::setCapacity0(sizetype newCapacity) {
         void** array = new void*[newCapacity];
 
         arrayCopy(array, elements, size, sizeof(void*));
@@ -126,19 +132,19 @@ namespace enhancedInternal::collections {
         capacity = newCapacity;
     }
 
-    func ArrayListImpl::expand0() -> void {
+    void ArrayListImpl::expand0() {
         expand0(expSizeFallback(capacity));
     }
 
-    func ArrayListImpl::expand0(sizetype expSize) -> void {
+    void ArrayListImpl::expand0(sizetype expSize) {
         setCapacity0(capacity + expSize);
     }
 
-    func ArrayListImpl::shrink0() -> void {
-        shrink0(size, null);
+    void ArrayListImpl::shrink0() {
+        shrink0(size, nullptr);
     }
 
-    func ArrayListImpl::shrink0(sizetype shrSize, OpDestroy opDestroy) -> void {
+    void ArrayListImpl::shrink0(sizetype shrSize, OpDestroy opDestroy) {
         sizetype newCapacity = capacity - shrSize;
         while (newCapacity < size) {
             removeLast0(opDestroy);
@@ -146,34 +152,28 @@ namespace enhancedInternal::collections {
         setCapacity0(newCapacity);
     }
 
-    func ArrayListImpl::clear0(OpDestroy opDestroy) -> void {
-        while (size > 0) {
-            opDestroy(elements[--size]);
-        }
-    }
-
     ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList) :
         arrayList(arrayList), indexer(arrayList->elements) {}
 
     $NoIgnoreReturn
-    func ArrayListImpl::ArrayListIteratorImpl::hasNext0() const -> bool {
+    bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
         return indexer != (arrayList->elements + arrayList->size);
     }
 
-    func ArrayListImpl::ArrayListIteratorImpl::next0() const -> void {
+    void ArrayListImpl::ArrayListIteratorImpl::next0() const {
         if (!hasNext0()) throw UnsupportedOperationException("The iterator is at the end of the list");
 
         ++indexer;
     }
 
     $NoIgnoreReturn
-    func ArrayListImpl::ArrayListIteratorImpl::get0() const -> void* {
+    void* ArrayListImpl::ArrayListIteratorImpl::get0() const {
         if (arrayList->size == 0) throw UnsupportedOperationException("The list is empty");
 
         return *indexer;
     }
 
-    func ArrayListImpl::ArrayListIteratorImpl::reset0() const -> void {
+    void ArrayListImpl::ArrayListIteratorImpl::reset0() const {
         indexer = arrayList->elements;
     }
 }

@@ -17,13 +17,13 @@
 
 #include <enhanced/Defines.h>
 
-#if defined(WINDOWS_OS) && defined(ENHANCED_CORE_SHARED_LIB)
+#if defined(WINDOWS_OS) && defined(ENHANCED_CORE_SHARED_LIBRARY)
 #ifdef ENHANCED_CORE_BUILDING
 #define ENHANCED_CORE_API __declspec(dllexport)
 #else
 #define ENHANCED_CORE_API __declspec(dllimport)
 #endif
-#elif defined(GCC_COMPILER) && defined(ENHANCED_CORE_SHARED_LIB)
+#elif defined(GCC_COMPILER) && defined(ENHANCED_CORE_SHARED_LIBRARYRARY)
 #define ENHANCED_CORE_API [[gnu::visibility("default")]]
 #else
 #define ENHANCED_CORE_API

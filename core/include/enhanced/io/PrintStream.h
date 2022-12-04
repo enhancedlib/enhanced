@@ -24,52 +24,96 @@
 namespace enhanced::io {
     class ENHANCED_CORE_API PrintStream : public OutputStream {
     public:
-        func print(char ch) -> void;
+        void print(char ch);
 
     #ifdef WCHAR_IS_BUILTIN_TYPE
-        func print(wchar wch) -> void;
+        void print(wchar wch);
     #endif
 
-        func print(u8char u8ch) -> void;
+        void print(u8char u8ch);
 
-        func print(u16char u16ch) -> void;
+        void print(u16char u16ch);
 
-        func print(u32char u32ch) -> void;
+        void print(u32char u32ch);
 
-        func print(bool boolean) -> void;
+        void print(bool boolean);
 
-        func print(int8 i8) -> void;
+        void print(int8 i8);
 
-        func print(uint8 u8) -> void;
+        void print(uint8 u8);
 
-        func print(int16 i16) -> void;
+        void print(int16 i16);
 
-        func print(uint16 u16) -> void;
+        void print(uint16 u16);
 
-        func print(int32 i32) -> void;
+        void print(int32 i32);
 
-        func print(uint32 u32) -> void;
+        void print(uint32 u32);
 
-        func print(int64 i64) -> void;
+        void print(int64 i64);
 
-        func print(uint64 u64) -> void;
+        void print(uint64 u64);
 
-        func print(float32 i32) -> void;
+        void print(float32 i32);
 
-        func print(float64 i64) -> void;
+        void print(float64 i64);
 
-        func print(const char* message) -> void;
+        void print(const char* message);
 
-        func print(const String& message) -> void;
+        void print(const String& message);
 
-        func print(void* address) -> void;
+        void print(void* address);
 
-        func print(nulltype) -> void;
+        void print(nulltype);
 
-        func printf(const String& message, ...) -> void;
+        void println();
 
-        func close() const -> void override;
+        void println(char ch);
 
-        func flush() const -> void override;
+    #ifdef WCHAR_IS_BUILTIN_TYPE
+        void println(wchar wch);
+    #endif
+
+        void println(u8char u8ch);
+
+        void println(u16char u16ch);
+
+        void println(u32char u32ch);
+
+        void println(bool boolean);
+
+        void println(int8 i8);
+
+        void println(uint8 u8);
+
+        void println(int16 i16);
+
+        void println(uint16 u16);
+
+        void println(int32 i32);
+
+        void println(uint32 u32);
+
+        void println(int64 i64);
+
+        void println(uint64 u64);
+
+        void println(float32 i32);
+
+        void println(float64 i64);
+
+        void println(const char* message);
+
+        void println(const String& message);
+
+        void println(void* address);
+
+        void println(nulltype);
+
+        void printf(const String& message, ...);
+
+        void close() const override;
+
+        void flush() const override;
     };
 }

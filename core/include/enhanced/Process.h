@@ -22,8 +22,8 @@
 
 namespace enhanced {
     $NoReturn
-    ENHANCED_CORE_API func processExit(int status) -> void;
+    ENHANCED_CORE_API void processExit(int status);
 
     $NoReturn
-    ENHANCED_CORE_API func processAbort() -> void;
+    ENHANCED_CORE_API void processAbort();
 }

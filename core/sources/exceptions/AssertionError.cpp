@@ -15,8 +15,17 @@
 
 #include <enhanced/exceptions/AssertionError.h>
 
+
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/String.h>
+#include <enhanced/MutString.h>
 #include <enhanced/exceptions/Error.h>
 
 namespace enhanced::exceptions {
     AssertionError::AssertionError(const String& message) noexcept : Error(message) {}
+
+    // TODO
+    AssertionError::AssertionError(const enhanced::String& expression, const enhanced::String& file, sizetype line) noexcept :
+        Error(String::join({"Failed to assert [", expression, "] at ", file, ":", String::from(line)})) {}
 }

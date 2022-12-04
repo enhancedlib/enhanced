@@ -23,44 +23,44 @@
 
 namespace enhanced::collections {
     template <typename Type>
-    interface Queue : Collection<Type> {
+    struct Queue : Collection<Type> {
         $NoIgnoreReturn
-        virtual func indexOf(const Type& value) const -> sizetype abstract;
-
-        $NoIgnoreReturn
-        virtual func getFirst() const -> Type& abstract;
+        virtual sizetype indexOf(const Type& value) const = 0;
 
         $NoIgnoreReturn
-        virtual func getLast() const -> Type& abstract;
+        virtual Type& getFirst() const = 0;
 
         $NoIgnoreReturn
-        virtual func get(sizetype index) const -> Type& abstract;
+        virtual Type& getLast() const = 0;
 
         $NoIgnoreReturn
-        virtual func operator[](sizetype index) const -> Type& abstract;
+        virtual Type& get(sizetype index) const = 0;
 
-        virtual func addLast(const Type& element) -> void abstract;
+        $NoIgnoreReturn
+        virtual Type& operator[](sizetype index) const = 0;
 
-        virtual func addLast(Type&& element) -> void abstract;
+        virtual void addLast(const Type& element) = 0;
 
-        virtual inline func push(const Type& element) -> void abstract;
+        virtual void addLast(Type&& element) = 0;
 
-        virtual inline func push(Type&& element) -> void abstract;
+        virtual void push(const Type& element) = 0;
 
-        virtual inline func add(const Type& element) -> void abstract;
+        virtual void push(Type&& element) = 0;
 
-        virtual inline func add(Type&& element) -> void abstract;
+        virtual void add(const Type& element) = 0;
 
-        virtual func removeFirst() -> Type abstract;
+        virtual void add(Type&& element) = 0;
 
-        virtual func removeFirstIf() -> bool abstract;
+        virtual Type removeFirst() = 0;
 
-        virtual inline func popup() -> Type abstract;
+        virtual Type popup() = 0;
 
-        virtual inline func remove() -> Type abstract;
+        virtual Type remove() = 0;
 
-        virtual inline func popupIf() -> bool abstract;
+        virtual bool removeFirstIf() = 0;
 
-        virtual inline func removeIf() -> bool abstract;
+        virtual bool popupIf() = 0;
+
+        virtual bool removeIf() = 0;
     };
 }

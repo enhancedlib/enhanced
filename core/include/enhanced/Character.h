@@ -24,4 +24,4 @@
 #define U16_TEXT(quote) u##quote
 #define U32_TEXT(quote) U##quote
 
-#define TCHAR(type, ch) enhanced::util::switchType<type>(ch, WIDE_TEXT(ch), U8_TEXT(ch), U16_TEXT(ch), U32_TEXT(ch))
+#define ST_CHAR(type, ch) enhanced::util::switchType<type>(ch, WIDE_TEXT(ch), U8_TEXT(ch), U16_TEXT(ch), U32_TEXT(ch))

@@ -21,5 +21,5 @@
 #include <enhanced/math/Number.h>
 
 namespace enhanced::math {
-    interface ENHANCED_CORE_API LargeNumber : Number {};
+    struct LargeNumber : Number {};
 }

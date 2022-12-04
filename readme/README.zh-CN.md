@@ -44,7 +44,7 @@
 环境：
 
 - 编译器：[Clang](https://clang.llvm.org/)、[Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU Compiler Collections](https://gcc.gnu.org/)
-- 操作系统：Microsoft Windows、基于Linux内核的操作系统、Apple macOS
+- 操作系统：Microsoft Windows、Linux内核操作系统、Apple macOS
 - 处理器：amd64 (x86_64)、x86、arm (arm32)、arm64 (aarch64)
 - 构建系统: [CMake](https://cmake.org/)
 - C++标准: C++20或更高标准

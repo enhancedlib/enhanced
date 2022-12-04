@@ -31,45 +31,48 @@ namespace enhanced {
 
     template <typename CharType>
     CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept : value(other.value), length(other.length) {
-        other.value = null;
+        other.value = nullptr;
         other.length = INVALID_SIZE;
+        other.isDynamic = false;
     }
 
     template <typename CharType>
-    CharSequence<CharType>::~CharSequence() noexcept = default;
+    CharSequence<CharType>::~CharSequence() noexcept {
+        if (isDynamic) delete[] this->value;
+    }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func CharSequence<CharType>::isEmpty() const noexcept -> bool {
+    bool CharSequence<CharType>::isEmpty() const noexcept {
         return length == 0;
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func CharSequence<CharType>::getLength() const noexcept -> sizetype {
+    sizetype CharSequence<CharType>::getLength() const noexcept {
         return length;
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func CharSequence<CharType>::chars() const noexcept -> const CharType* {
+    const CharType* CharSequence<CharType>::chars() const noexcept {
         return value;
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func CharSequence<CharType>::at(sizetype index) const noexcept -> const CharType {
+    const CharType CharSequence<CharType>::at(sizetype index) const noexcept {
         return value[index];
     }
 
     template <typename CharType>
     $NoIgnoreReturn
-    func CharSequence<CharType>::operator[](sizetype index) const noexcept -> const CharType {
+    const CharType CharSequence<CharType>::operator[](sizetype index) const noexcept {
         return value[index];
     }
 
     template <typename CharType>
-    func CharSequence<CharType>::operator=(const CharSequence& other) noexcept -> CharSequence<CharType>& {
+    CharSequence<CharType>& CharSequence<CharType>::operator=(const CharSequence& other) noexcept {
         if (this == &other) return *this;
 
         this->value = other.value;
@@ -79,14 +82,15 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    func CharSequence<CharType>::operator=(CharSequence&& other) noexcept -> CharSequence<CharType>& {
+    CharSequence<CharType>& CharSequence<CharType>::operator=(CharSequence&& other) noexcept {
         if (this == &other) return *this;
 
         this->value = other.value;
         this->length = other.length;
 
-        other.value = null;
+        other.value = nullptr;
         other.length = INVALID_SIZE;
+        other.length = false;
 
         return *this;
     }

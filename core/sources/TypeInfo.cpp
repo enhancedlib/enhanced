@@ -24,12 +24,12 @@ using enhanced::util::removeConst;
 
 namespace enhanced {
     $NoIgnoreReturn
-    func TypeInfo::getName() const -> String {
+    String TypeInfo::getName() const {
         return removeConst(info.name());
     }
 
     $NoIgnoreReturn
-    func TypeInfo::hashCode() const -> sizetype {
+    sizetype TypeInfo::hashCode() const {
         return info.hash_code();
     }
 }

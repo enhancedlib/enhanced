@@ -20,6 +20,7 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/InitializerList.h>
+#include <enhanced/Iterator.h>
 #include <enhanced/util/Traits.h>
 
 namespace enhanced {
@@ -28,38 +29,54 @@ namespace enhanced {
     private:
         sizetype size;
 
+        $MaybeRequireRelease(release)
         Type* elements;
 
     public:
         template <sizetype size>
-        Array(const Type (&elements)[size]) noexcept : size(size), elements(elements) {}
+        inline Array(const Type (&elements)[size]) noexcept : size(size), elements(elements) {}
 
-        explicit Array(sizetype size, const Type*& elements) noexcept : size(size), elements(elements) {}
+        inline explicit Array(sizetype size, const Type* elements) noexcept : size(size), elements(elements) {}
 
-        Array(InitializerList<Type> list) noexcept : size(initListSize(list)), elements(util::removePtrConst(initListToArray(list))) {}
+        inline Array(InitializerList<Type> list) noexcept : size(list.size()), elements(util::removePtrConst(initListToArray(list))) {}
 
-        Array(const Array& other) noexcept : size(other.size), elements(other.elements) {}
+        inline Array(const Array& other) noexcept : size(other.size), elements(other.elements) {}
 
-        Array(Array&& other) noexcept : size(other.size), elements(other.elements) {
+        inline Array(Array&& other) noexcept : size(other.size), elements(other.elements) {
             other.size = INVALID_SIZE;
-            other.elements = null;
+            other.elements = nullptr;
         }
 
         $NoIgnoreReturn
-        func operator[](sizetype index) const noexcept -> Type& {
+        inline Type& operator[](sizetype index) const noexcept {
             return elements[index];
         }
 
         $NoIgnoreReturn
-        func getSize() const noexcept -> sizetype {
+        inline sizetype getSize() const noexcept {
             return size;
         }
 
-        func destroy() const noexcept -> void {
+        $NoIgnoreReturn
+        inline Type* raw() const noexcept {
+            return elements;
+        }
+
+        inline void release() const noexcept {
             delete[] elements;
         }
 
-        func operator=(const Array& other) noexcept -> Array& {
+        $NoIgnoreReturn
+        inline Type* begin() const noexcept {
+            return raw();
+        }
+
+        $NoIgnoreReturn
+        inline Type* end() const noexcept {
+            return elements + size;
+        }
+
+        inline Array& operator=(const Array& other) noexcept {
             if (this == &other) return *this;
 
             size = other.size;
@@ -68,14 +85,14 @@ namespace enhanced {
             return *this;
         }
 
-        func operator=(Array&& other) noexcept -> Array& {
+        inline Array& operator=(Array&& other) noexcept {
             if (this == &other) return *this;
 
             size = other.size;
             elements = other.elements;
 
             other.size = INVALID_SIZE;
-            other.elements = null;
+            other.elements = nullptr;
 
             return *this;
         }
@@ -83,7 +100,7 @@ namespace enhanced {
 
     /*!
      * Sets elements of an array to the same value. \n
-     * For float types, use the pointer edition. \n
+     * For float types, use the pointer edition (arrayFillPtr). \n
      * For struct/class types, use the template edition.
      *
      * @example arrayFill(str, 'a', 5, sizeof(char));
@@ -94,7 +111,7 @@ namespace enhanced {
      * @param count        The number of elements.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<array-type>)").
      */
-    ENHANCED_CORE_API func arrayFill($InOut void* array, qword value, sizetype count, sizetype sizeOfType) -> void;
+    ENHANCED_CORE_API void arrayFill($InOut void* array, qword value, sizetype count, sizetype sizeOfType);
 
     /*!
      * Sets elements of an array to the same value (template edition).
@@ -107,7 +124,7 @@ namespace enhanced {
      * @param count        The number of elements.
      */
     template <typename Type>
-    inline func arrayFill($InOut Type* array, const Type& value, sizetype count) -> void {
+    inline void arrayFill($InOut Type* array, const Type& value, sizetype count) {
         for (sizetype index = 0; index < count; ++index) {
             array[index] = value;
         }
@@ -126,7 +143,7 @@ namespace enhanced {
      * @param valuePtr     A pointer to the value.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<type>)").
      */
-    ENHANCED_CORE_API func arrayFillPtr($InOut void* array, void* valuePtr, sizetype count, sizetype sizeOfType) -> void;
+    ENHANCED_CORE_API void arrayFillPtr($InOut void* array, void* valuePtr, sizetype count, sizetype sizeOfType);
 
     /*!
      * Copies elements of an array to another array.
@@ -139,5 +156,5 @@ namespace enhanced {
      * @param count         The number of elements.
      * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
      */
-    ENHANCED_CORE_API func arrayCopy($Out void* destination, const void* source, sizetype count, sizetype sizeOfType) -> void;
+    ENHANCED_CORE_API void arrayCopy($Out void* destination, const void* source, sizetype count, sizetype sizeOfType);
 }

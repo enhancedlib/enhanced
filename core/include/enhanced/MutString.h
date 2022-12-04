@@ -44,50 +44,56 @@ namespace enhanced {
 
         TMutString(TMutString&& other) noexcept;
 
-        ~TMutString() noexcept;
+        $NoIgnoreReturn
+        CharType* chars() const noexcept;
 
         $NoIgnoreReturn
-        func chars() const noexcept -> CharType*;
+        CharType& at(sizetype index) const noexcept;
 
         $NoIgnoreReturn
-        func at(sizetype index) const noexcept -> CharType&;
+        CharType& operator[](sizetype index) const noexcept;
 
-        $NoIgnoreReturn
-        func operator[](sizetype index) const noexcept -> CharType&;
+        TMutString& append(const TString<CharType>& string);
 
-        func append(const TString<CharType>& other) -> TMutString&;
+        TMutString& append(CharType ch);
 
-        func replaceTo(sizetype start, sizetype end, CharType newChar) -> TMutString&;
+        TMutString& insertFirst(const TString<CharType>& string);
 
-        func replaceTo(sizetype start, sizetype end, const TString<CharType>& newSubstring) -> TMutString&;
+        TMutString& insertFirst(CharType ch);
 
-        func replaceTo(CharType oldChar, CharType newChar) -> TMutString&;
+        TMutString& replaceTo(sizetype start, sizetype end, CharType newChar);
 
-        func replaceTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring) -> TMutString&;
+        TMutString& replaceTo(sizetype start, sizetype end, const TString<CharType>& newSubstring);
 
-        func replaceTo(CharType oldChar, const TString<CharType>& newSubstring) -> TMutString&;
+        TMutString& replaceTo(CharType oldChar, CharType newChar);
 
-        func replaceTo(const TString<CharType>& oldSubstring, CharType newChar) -> TMutString&;
+        TMutString& replaceTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring);
 
-        func replaceAllTo(CharType oldChar, CharType newChar) -> TMutString&;
+        TMutString& replaceTo(CharType oldChar, const TString<CharType>& newSubstring);
 
-        func replaceAllTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring) -> TMutString&;
+        TMutString& replaceTo(const TString<CharType>& oldSubstring, CharType newChar);
 
-        func replaceAllTo(CharType oldChar, const TString<CharType>& newSubstring) -> TMutString&;
+        TMutString& replaceAllTo(CharType oldChar, CharType newChar);
 
-        func replaceAllTo(const TString<CharType>& oldSubstring, CharType newChar) -> TMutString&;
+        TMutString& replaceAllTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring);
 
-        func fill(CharType ch) -> TMutString&;
+        TMutString& replaceAllTo(CharType oldChar, const TString<CharType>& newSubstring);
 
-        func toUppercase() -> TMutString&;
+        TMutString& replaceAllTo(const TString<CharType>& oldSubstring, CharType newChar);
 
-        func toLowercase() -> TMutString&;
+        TMutString& fill(CharType ch);
 
-        func operator=(const TMutString& other) -> TMutString&;
+        TMutString& toUppercase();
 
-        func operator=(TMutString&& other) noexcept -> TMutString&;
+        TMutString& toLowercase();
 
-        func operator+=(const TString<CharType>& other) -> TMutString&;
+        TMutString& operator=(const TMutString& other);
+
+        TMutString& operator=(TMutString&& other) noexcept;
+
+        TMutString& operator+=(const TString<CharType>& string);
+
+        TMutString& operator+=(CharType ch);
     };
 
     using MutString = TMutString<char>;
@@ -99,29 +105,28 @@ namespace enhanced {
     using U32MutString = TMutString<u32char>;
 
     inline namespace literals {
-        inline func operator""_m(const char* string, sizetype size) -> MutString {
+        inline MutString operator""_m(const char* string, sizetype size) {
             return {string, size};
         }
 
     #ifdef WCHAR_IS_BUILTIN_TYPE
-        inline func operator""_m(const wchar* string, sizetype size) -> WideMutString {
+        inline WideMutString operator""_m(const wchar* string, sizetype size) {
             return {string, size};
         }
     #endif
 
-        inline func operator""_m(const u8char* string, sizetype size) -> U8MutString {
+        inline U8MutString operator""_m(const u8char* string, sizetype size) {
             return {string, size};
         }
 
-        inline func operator""_m(const u16char* string, sizetype size) -> U16MutString {
+        inline U16MutString operator""_m(const u16char* string, sizetype size) {
             return {string, size};
         }
 
-        inline func operator""_m(const u32char* string, sizetype size) -> U32MutString {
+        inline U32MutString operator""_m(const u32char* string, sizetype size) {
             return {string, size};
         }
     }
 }
 
-#undef MUT_STR
 #define MUT_STR(quote) quote##_m

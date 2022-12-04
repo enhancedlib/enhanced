@@ -22,15 +22,15 @@
 #include <enhanced/exceptions/NotImplementedError.h>
 
 namespace enhanced::io {
-    func InputStream::get() const -> byte {
+    byte InputStream::get() const {
         NOT_IMPLEMENTED();
     }
 
-    func InputStream::read(byte *buffer, sizetype size) const -> void {
+    void InputStream::read(byte *buffer, sizetype size) const {
         NOT_IMPLEMENTED();
     }
 
-    func InputStream::readLine() const -> MutString {
+    MutString InputStream::readLine() const {
         NOT_IMPLEMENTED();
     }
 }

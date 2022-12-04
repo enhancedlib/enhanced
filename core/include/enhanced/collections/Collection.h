@@ -19,23 +19,22 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/Iterable.h>
 
 namespace enhanced::collections {
     template <typename Type>
-    interface Collection : Iterable<Type> {
+    struct Collection {
         virtual ~Collection() noexcept = default;
 
         $NoIgnoreReturn
-        virtual func getSize() const -> sizetype abstract;
+        virtual sizetype getSize() const = 0;
 
         $NoIgnoreReturn
-        virtual func isEmpty() const -> bool abstract;
+        virtual bool isEmpty() const = 0;
 
         $NoIgnoreReturn
-        virtual func contain(const Type& value) const -> bool abstract;
+        virtual bool contain(const Type& value) const = 0;
 
-        virtual func clear() -> void abstract;
+        virtual void clear() = 0;
     };
 
     ENHANCED_CORE_API extern sizetype ARRAY_INIT_SIZE; // Default value: 256

@@ -24,8 +24,8 @@
 namespace enhanced::io {
     class ENHANCED_CORE_API FileOutputStream : public OutputStream {
     public:
-        func close() const -> void override;
+        void close() const override;
 
-        func flush() const -> void override;
+        void flush() const override;
     };
 }

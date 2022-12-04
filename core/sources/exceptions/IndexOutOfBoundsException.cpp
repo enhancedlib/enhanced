@@ -20,5 +20,6 @@
 namespace enhanced::exceptions {
     IndexOutOfBoundsException::IndexOutOfBoundsException(const String& message) noexcept : RuntimeException(message) {}
 
-    IndexOutOfBoundsException::IndexOutOfBoundsException(sizetype index, sizetype size) noexcept : RuntimeException("") {} // TODO
+    IndexOutOfBoundsException::IndexOutOfBoundsException(sizetype index, sizetype size) noexcept :
+        RuntimeException(String::join({"Index ", String::from(index), " out of bounds (size: ", String::from(size), ")"})) {}
 }

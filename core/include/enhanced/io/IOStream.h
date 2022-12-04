@@ -25,7 +25,7 @@ namespace enhanced::io {
     ENHANCED_CORE_API extern PrintStream* const& outstream;
     ENHANCED_CORE_API extern PrintStream* const& errstream;
 
-    ENHANCED_CORE_API func setInStream(ScanStream* in) -> void;
-    ENHANCED_CORE_API func setOutStream(PrintStream* out) -> void;
-    ENHANCED_CORE_API func setErrStream(PrintStream* err) -> void;
+    ENHANCED_CORE_API void setInStream(ScanStream* in);
+    ENHANCED_CORE_API void setOutStream(PrintStream* out);
+    ENHANCED_CORE_API void setErrStream(PrintStream* err);
 }

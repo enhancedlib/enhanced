@@ -24,14 +24,14 @@
 #include <enhanced/io/Flushable.h>
 
 namespace enhanced::io {
-    abstractclass ENHANCED_CORE_API InputStream : public Closeable, Flushable {
+    class ENHANCED_CORE_API InputStream : public Closeable, Flushable {
     public:
         $NoIgnoreReturn
-        virtual func get() const -> byte;
+        virtual byte get() const;
 
-        virtual func read(byte* buffer, sizetype size) const -> void;
+        virtual void read(byte* buffer, sizetype size) const;
 
         $NoIgnoreReturn
-        virtual func readLine() const -> MutString;
+        virtual MutString readLine() const;
     };
 }

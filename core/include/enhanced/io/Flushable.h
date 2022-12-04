@@ -20,7 +20,7 @@
 #include <enhanced/Annotations.h>
 
 namespace enhanced::io {
-    interface Flushable {
-        virtual func flush() const -> void abstract;
+    struct Flushable {
+        virtual void flush() const = 0;
     };
 }

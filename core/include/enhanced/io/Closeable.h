@@ -20,7 +20,7 @@
 #include <enhanced/Annotations.h>
 
 namespace enhanced::io {
-    interface Closeable {
-        virtual func close() const -> void abstract;
+    struct Closeable {
+        virtual void close() const = 0;
     };
 }

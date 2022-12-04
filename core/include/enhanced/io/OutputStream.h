@@ -24,12 +24,12 @@
 #include <enhanced/io/Flushable.h>
 
 namespace enhanced::io {
-    abstractclass ENHANCED_CORE_API OutputStream : public Closeable, Flushable {
+    class ENHANCED_CORE_API OutputStream : public Closeable, Flushable {
     public:
-        virtual func write(byte b) const -> void;
+        virtual void write(byte b) const;
 
-        virtual func write(byte* buffer, sizetype size) const -> void;
+        virtual void write(byte* buffer, sizetype size) const;
 
-        virtual func writeLine(const String& string) const -> void;
+        virtual void writeLine(const String& string) const;
     };
 }

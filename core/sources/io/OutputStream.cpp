@@ -20,15 +20,15 @@
 #include <enhanced/exceptions/NotImplementedError.h>
 
 namespace enhanced::io {
-    func OutputStream::write(byte b) const -> void {
+    void OutputStream::write(byte b) const {
         NOT_IMPLEMENTED();
     }
 
-    func OutputStream::write(byte* buffer, sizetype size) const -> void {
+    void OutputStream::write(byte* buffer, sizetype size) const {
         NOT_IMPLEMENTED();
     }
 
-    func OutputStream::writeLine(const String& string) const -> void {
+    void OutputStream::writeLine(const String& string) const {
         NOT_IMPLEMENTED();
     }
 }

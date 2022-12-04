@@ -24,21 +24,21 @@ namespace enhanced::math {
     template <typename IntegralType>
     requires util::isIntegralType<IntegralType>
     $NoIgnoreReturn
-    inline func max(IntegralType x, IntegralType y) -> IntegralType {
+    inline IntegralType max(IntegralType x, IntegralType y) {
         return (x > y) ? x : y;
     }
 
     template <typename IntegralType>
     requires util::isIntegralType<IntegralType>
     $NoIgnoreReturn
-    inline func min(IntegralType x, IntegralType y) -> IntegralType {
+    inline IntegralType min(IntegralType x, IntegralType y) {
         return (x < y) ? x : y;
     }
 
     template <typename IntegralType>
     requires util::isSigned<IntegralType>
     $NoIgnoreReturn
-    inline func abs(IntegralType number) -> IntegralType {
+    inline IntegralType abs(IntegralType number) {
         return (number >= 0) ? number : -number;
     }
 }

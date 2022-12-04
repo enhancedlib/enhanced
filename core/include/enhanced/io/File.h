@@ -35,43 +35,43 @@ namespace enhanced::io {
         File(File&& file) noexcept;
 
         $NoIgnoreReturn
-        func getFilename() const -> String;
+        String getFilename() const;
 
         $NoIgnoreReturn
-        func getExtension() const -> String;
+        String getExtension() const;
 
         $NoIgnoreReturn
-        func getPath() const -> const String&;
+        const String& getPath() const;
 
         $NoIgnoreReturn
-        func isExist() const -> bool;
+        bool isExist() const;
 
         $NoIgnoreReturn
-        func isReadOnly() const -> bool;
+        bool isReadOnly() const;
 
         $NoIgnoreReturn
-        func isFile() const -> bool;
+        bool isFile() const;
 
         $NoIgnoreReturn
-        func isDirectory() const -> bool;
+        bool isDirectory() const;
 
         $NoIgnoreReturn
-        func isSymlink() const -> bool;
+        bool isSymlink() const;
 
         $NoIgnoreReturn
-        func splitPath() const -> collections::ArrayList<String>;
+        collections::ArrayList<String> splitPath() const;
 
         $NoIgnoreReturn
-        func inStream() const -> FileInputStream;
+        FileInputStream inStream() const;
 
         $NoIgnoreReturn
-        func outStream() const -> FileOutputStream;
+        FileOutputStream outStream() const;
 
         $NoIgnoreReturn
-        func reader() const -> FileReader;
+        FileReader reader() const;
 
         $NoIgnoreReturn
-        func writer() const -> FileWriter;
+        FileWriter writer() const;
     };
 }
 

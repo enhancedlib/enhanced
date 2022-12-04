@@ -20,7 +20,6 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/Iterable.h>
 
 namespace enhanced {
     template <typename Type>
@@ -28,13 +27,7 @@ namespace enhanced {
 
     template <typename Type>
     $NoIgnoreReturn
-    inline constexpr func initListToArray(const InitializerList<Type>& list) -> const Type* {
+    inline constexpr const Type* initListToArray(const InitializerList<Type>& list) {
         return list.begin();
-    }
-
-    template <typename Type>
-    $NoIgnoreReturn
-    inline constexpr func initListSize(const InitializerList<Type>& list) -> sizetype {
-        return list.size();
     }
 }

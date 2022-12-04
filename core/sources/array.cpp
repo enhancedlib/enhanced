@@ -20,12 +20,12 @@
 #include <enhanced/Memory.h>
 
 namespace enhanced {
-    func arrayFill($InOut void* array, qword value, sizetype count, sizetype sizeOfType) -> void {
+    void arrayFill($InOut void* array, qword value, sizetype count, sizetype sizeOfType) {
         arrayFillPtr(array, &value, count, sizeOfType);
     }
 
-    func arrayFillPtr($InOut void* array, void* valuePtr, sizetype count, sizetype sizeOfType) -> void {
-        if (array == null || count == 0 || sizeOfType == 0) return;
+    void arrayFillPtr($InOut void* array, void* valuePtr, sizetype count, sizetype sizeOfType) {
+        if (array == nullptr || count == 0 || sizeOfType == 0) return;
 
         sizetype size = count * sizeOfType;
 
@@ -34,7 +34,7 @@ namespace enhanced {
         }
     }
 
-    func arrayCopy($Out void* destination, const void* source, sizetype count, sizetype sizeOfType) -> void {
+    void arrayCopy($Out void* destination, const void* source, sizetype count, sizetype sizeOfType) {
         memoryCopy(destination, source, count * sizeOfType);
     }
 }

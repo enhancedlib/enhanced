@@ -27,17 +27,17 @@ using enhanced::exceptions::IndexOutOfBoundsException;
 using enhanced::exceptions::UnsupportedOperationException;
 
 namespace enhancedInternal::collections {
-    func LinkedListImpl::prevNode(Node*& node) -> LinkedListImpl::Node*& {
+    LinkedListImpl::Node*& LinkedListImpl::prevNode(Node*& node) {
         return node = node->prev;
     }
 
-    func LinkedListImpl::nextNode(Node*& node) -> LinkedListImpl::Node*& {
+    LinkedListImpl::Node*& LinkedListImpl::nextNode(Node*& node) {
         return node = node->next;
     }
 
-    LinkedListImpl::LinkedListImpl() : first(null), last(null), size(0) {}
+    LinkedListImpl::LinkedListImpl() : first(nullptr), last(nullptr), size(0) {}
 
-    LinkedListImpl::LinkedListImpl(const LinkedListImpl& other, OpCopy opCopy) : first(null), last(null), size(0) {
+    LinkedListImpl::LinkedListImpl(const LinkedListImpl& other, OpCopy opCopy) : first(nullptr), last(nullptr), size(0) {
         Node* indexer = other.first;
         for (sizetype _ = 0; _ < other.size; ++_) {
             addLast0(indexer->value, opCopy);
@@ -46,13 +46,13 @@ namespace enhancedInternal::collections {
     }
 
     LinkedListImpl::LinkedListImpl(LinkedListImpl&& other) noexcept : first(other.first), last(other.last), size(other.size) {
-        other.first = null;
-        other.last = null;
+        other.first = nullptr;
+        other.last = nullptr;
         other.size = INVALID_SIZE;
     }
 
     $NoIgnoreReturn
-    func LinkedListImpl::indexOf0(void* value, OpEqual opEqual) const -> sizetype {
+    sizetype LinkedListImpl::indexOf0(void* value, OpEqual opEqual) const {
         Node* indexer = first;
         for (sizetype index = 0; index < size; ++index) {
             if (opEqual(indexer->value, value)) {
@@ -65,21 +65,21 @@ namespace enhancedInternal::collections {
     }
 
     $NoIgnoreReturn
-    func LinkedListImpl::getFirst0() const -> void* {
+    void* LinkedListImpl::getFirst0() const {
         if (size == 0) throw UnsupportedOperationException("The list is empty");
 
         return first->value;
     }
 
     $NoIgnoreReturn
-    func LinkedListImpl::getLast0() const -> void* {
+    void* LinkedListImpl::getLast0() const {
         if (size == 0) throw UnsupportedOperationException("The list is empty");
 
         return last->value;
     }
 
     $NoIgnoreReturn
-    func LinkedListImpl::get0(sizetype index) const -> void* {
+    void* LinkedListImpl::get0(sizetype index) const {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
         Node* indexer;
@@ -98,7 +98,7 @@ namespace enhancedInternal::collections {
         return indexer->value;
     }
 
-    func LinkedListImpl::addFirst0(void* element, OpCopy opCopy) -> void {
+    void LinkedListImpl::addFirst0(void* element, OpCopy opCopy) {
         if (size == 0) {
             first = new Node();
             first->value = opCopy(element);
@@ -113,7 +113,7 @@ namespace enhancedInternal::collections {
         ++size;
     }
 
-    func LinkedListImpl::addFirst1(void* element, OpMove opMove) -> void {
+    void LinkedListImpl::addFirst1(void* element, OpMove opMove) {
         if (size == 0) {
             first = new Node();
             first->value = opMove(element);
@@ -128,7 +128,7 @@ namespace enhancedInternal::collections {
         ++size;
     }
 
-    func LinkedListImpl::addLast0(void* element, OpCopy opCopy) -> void {
+    void LinkedListImpl::addLast0(void* element, OpCopy opCopy) {
         if (size == 0) {
             last = new Node();
             last->value = opCopy(element);
@@ -143,7 +143,7 @@ namespace enhancedInternal::collections {
         ++size;
     }
 
-    func LinkedListImpl::addLast1(void* element, OpMove opMove) -> void {
+    void LinkedListImpl::addLast1(void* element, OpMove opMove) {
         if (size == 0) {
             last = new Node();
             last->value = opMove(element);
@@ -158,7 +158,7 @@ namespace enhancedInternal::collections {
         ++size;
     }
 
-    func LinkedListImpl::removeFirst0(OpDestroy opDestroy) -> void {
+    void LinkedListImpl::removeFirst0(OpDestroy opDestroy) {
         assert(size > 0);
 
         if (size > 1) {
@@ -168,13 +168,13 @@ namespace enhancedInternal::collections {
         } else {
             opDestroy(first->value);
             delete first;
-            first = last = null;
+            first = last = nullptr;
         }
 
         --size;
     }
 
-    func LinkedListImpl::removeLast0(OpDestroy opDestroy) -> void {
+    void LinkedListImpl::removeLast0(OpDestroy opDestroy) {
         assert(size > 0);
 
         if (size > 1) {
@@ -184,23 +184,23 @@ namespace enhancedInternal::collections {
         } else {
             opDestroy(last->value);
             delete last;
-            last = first = null;
+            last = first = nullptr;
         }
 
         --size;
     }
 
-    func LinkedListImpl::clear0(OpDestroy opDestroy) -> void {
+    void LinkedListImpl::clear0(OpDestroy opDestroy) {
         while (size-- > 1) {
             prevNode(last);
             opDestroy(last->next->value);
             delete last->next;
         }
 
-        if (last != null) {
+        if (last != nullptr) {
             opDestroy(last->value);
             delete last;
-            last = first = null;
+            last = first = nullptr;
         }
     }
 
@@ -208,24 +208,24 @@ namespace enhancedInternal::collections {
         linkedList(linkedList), indexer(linkedList->first) {}
 
     $NoIgnoreReturn
-    func LinkedListImpl::LinkedListIteratorImpl::hasNext0() const -> bool {
-        return indexer != null;
+    bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
+        return indexer != nullptr;
     }
 
-    func LinkedListImpl::LinkedListIteratorImpl::next0() const -> void {
+    void LinkedListImpl::LinkedListIteratorImpl::next0() const {
         if (!hasNext0()) throw UnsupportedOperationException("The iterator is at the end of the list");
 
         nextNode(indexer);
     }
 
     $NoIgnoreReturn
-    func LinkedListImpl::LinkedListIteratorImpl::get0() const -> void* {
+    void* LinkedListImpl::LinkedListIteratorImpl::get0() const {
         if (linkedList->size == 0) throw UnsupportedOperationException("The list is empty");
 
         return indexer->value;
     }
 
-    func LinkedListImpl::LinkedListIteratorImpl::reset0() const -> void {
+    void LinkedListImpl::LinkedListIteratorImpl::reset0() const {
         indexer = linkedList->first;
     }
 }
