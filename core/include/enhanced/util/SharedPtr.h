@@ -80,12 +80,12 @@ namespace enhanced::util {
 
     public:
         template <typename... Args>
-        static SharedPtr make(Args&&... args) {
+        static inline SharedPtr make(Args&&... args) {
             return new Type(args...);
         }
 
         template <sizetype size, typename... Args>
-        static SharedPtr make(Args&&... args) {
+        static inline SharedPtr make(Args&&... args) {
             auto ptr = (Type*) operator new(size * sizeof(Type));
             auto end = ptr + size;
 

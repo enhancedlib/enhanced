@@ -75,8 +75,11 @@ namespace enhanced {
     CharSequence<CharType>& CharSequence<CharType>::operator=(const CharSequence& other) noexcept {
         if (this == &other) return *this;
 
-        this->value = other.value;
-        this->length = other.length;
+        if (isDynamic) delete[] value;
+
+        value = other.value;
+        length = other.length;
+        isDynamic = other.isDynamic;
 
         return *this;
     }
@@ -85,12 +88,15 @@ namespace enhanced {
     CharSequence<CharType>& CharSequence<CharType>::operator=(CharSequence&& other) noexcept {
         if (this == &other) return *this;
 
-        this->value = other.value;
-        this->length = other.length;
+        if (isDynamic) delete[] value;
+
+        value = other.value;
+        length = other.length;
+        isDynamic = other.isDynamic;
 
         other.value = nullptr;
         other.length = INVALID_SIZE;
-        other.length = false;
+        other.isDynamic = false;
 
         return *this;
     }

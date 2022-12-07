@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2022 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
@@ -44,10 +44,10 @@ namespace enhanced::exceptions {
 
         virtual ~Exception() noexcept;
 
-        void printTraceback() const;
+        void printInfo() const;
 
         $NoIgnoreReturn
-        virtual String getTraceback() const noexcept;
+        virtual MutString getInfo() const noexcept;
 
         $NoIgnoreReturn
         virtual const Exception* getCause() const noexcept;

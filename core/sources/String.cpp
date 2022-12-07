@@ -28,6 +28,7 @@
 #include <enhanced/collections/ArrayList.h>
 #include <enhanced/exceptions/NullPointerException.h>
 
+using enhanced::util::move;
 using enhanced::util::removeConst;
 using enhanced::util::removePtrConst;
 using enhanced::collections::ArrayList;
@@ -423,10 +424,16 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    TString<CharType>& TString<CharType>::operator=(const TString& other) noexcept = default;
+    TString<CharType>& TString<CharType>::operator=(const TString& other) noexcept {
+        CharSequence<CharType>::operator=(other);
+        return *this;
+    }
 
     template <typename CharType>
-    TString<CharType>& TString<CharType>::operator=(TString&& other) noexcept = default;
+    TString<CharType>& TString<CharType>::operator=(TString&& other) noexcept {
+        CharSequence<CharType>::operator=(move(other));
+        return *this;
+    }
 
     template class TString<char>;
     template class TString<wchar>;

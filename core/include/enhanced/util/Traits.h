@@ -260,6 +260,72 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isReference = isLvalueRef<Type> || isRvalueRef<Type>;
 
     template <typename Type>
+    inline constexpr bool isLvaRefConst = false;
+
+    template <typename Type>
+    inline constexpr bool isLvaRefConst<const Type&> = true;
+
+    template <typename Type>
+    inline constexpr bool isLvaRefVolatile = false;
+
+    template <typename Type>
+    inline constexpr bool isLvaRefVolatile<volatile Type&> = true;
+
+    template <typename Type>
+    inline constexpr bool isLvaRefCvAnd = isLvaRefConst<Type> && isLvaRefVolatile<Type>;
+
+    template <typename Type>
+    inline constexpr bool isLvaRefCvOr = isLvaRefConst<Type> || isLvaRefVolatile<Type>;
+
+    template <typename Type>
+    inline constexpr bool isRvaRefConst = false;
+
+    template <typename Type>
+    inline constexpr bool isRvaRefConst<const Type&&> = true;
+
+    template <typename Type>
+    inline constexpr bool isRvaRefVolatile = false;
+
+    template <typename Type>
+    inline constexpr bool isRvaRefVolatile<volatile Type&&> = true;
+
+    template <typename Type>
+    inline constexpr bool isRvaRefCvAnd = isRvaRefConst<Type> && isRvaRefVolatile<Type>;
+
+    template <typename Type>
+    inline constexpr bool isRvaRefCvOr = isRvaRefConst<Type> || isRvaRefVolatile<Type>;
+
+    template <typename Type>
+    inline constexpr bool isRefConst = isLvaRefConst<Type> || isRvaRefConst<Type>;
+
+    template <typename Type>
+    inline constexpr bool isRefVolatile = isLvaRefVolatile<Type> || isRvaRefVolatile<Type>;
+
+    template <typename Type>
+    inline constexpr bool isRefCvAnd = isRefConst<Type> && isRefVolatile<Type>;
+
+    template <typename Type>
+    inline constexpr bool isRefCvOr = isRefConst<Type> || isRefVolatile<Type>;
+
+    template <typename Type>
+    inline constexpr bool isPtrConst = false;
+
+    template <typename Type>
+    inline constexpr bool isPtrConst<const Type*> = true;
+
+    template <typename Type>
+    inline constexpr bool isPtrVolatile = false;
+
+    template <typename Type>
+    inline constexpr bool isPtrVolatile<volatile Type*> = true;
+
+    template <typename Type>
+    inline constexpr bool isPtrCvAnd = isPtrConst<Type> && isPtrVolatile<Type>;
+
+    template <typename Type>
+    inline constexpr bool isPtrCvOr = isPtrConst<Type> || isPtrVolatile<Type>;
+
+    template <typename Type>
     requires isReference<Type>
     using RemoveRefConst = typename enhancedInternal::util::traits::RemoveRefConstImpl<Type>::Type;
 
@@ -270,6 +336,9 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     requires isReference<Type>
     using RemoveRefCv = RemoveRefConst<RemoveRefVolatile<Type>>;
+
+    template <typename Type>
+    using RemoveRefAndCv = RemoveCv<RemoveRef<Type>>;
 
 #define _IMPL_TEMPLATE(...) \
     template <typename Type> \
@@ -292,9 +361,6 @@ namespace enhanced::util::inline traits {
 
     template <typename Type>
     using RemovePtrAndCv = RemoveCv<RemovePointer<Type>>;
-
-    template <typename Type>
-    using RemoveRefAndCv = RemoveCv<RemoveRef<Type>>;
 
     template <typename Type>
     inline constexpr bool isIntegralType =
@@ -478,7 +544,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isValid = true; // Used for template-requires determines type expression is valid.
 
     template <typename Type>
-    inline constexpr Type&& declvalue() noexcept; // Used for compile-time type inference, no implementation required.
+    inline constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
 
     template <typename Type>
     inline constexpr Type& weakCast(Type&& value) noexcept {

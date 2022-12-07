@@ -14,7 +14,6 @@
  */
 
 #include <exception>
-#include <thread>
 
 #include <enhanced/exceptions/Exception.h>
 
@@ -39,7 +38,7 @@ namespace enhanced::exceptions {
         try {
             std::rethrow_exception(std::current_exception());
         } catch (const Exception& exception) {
-            exception.printTraceback();
+            exception.printInfo();
         } catch (const std::exception& exception) {
             errstream->print("Exception [based on std::exception]: ");
             errstream->println(exception.what());
@@ -67,11 +66,11 @@ namespace enhanced::exceptions {
 
     // TODO
 
-    void Exception::printTraceback() const {
-        errstream->println(getTraceback());
+    void Exception::printInfo() const {
+        errstream->println(getInfo());
     }
 
-    String Exception::getTraceback() const noexcept {
+    MutString Exception::getInfo() const noexcept {
         return String::join({"Exception [", getName(), "]: ", message});
     }
 

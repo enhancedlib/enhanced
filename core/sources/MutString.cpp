@@ -248,29 +248,13 @@ namespace enhanced {
 
     template <typename CharType>
     TMutString<CharType>& TMutString<CharType>::operator=(const TMutString& other) {
-        if (this == &other) return *this;
-
-        delete[] this->value;
-
-        this->value = TString<CharType>::copy(other.value, other.length);
-        this->length = other.length;
-
+        TString<CharType>::operator=(other);
         return *this;
     }
 
     template <typename CharType>
     TMutString<CharType>& TMutString<CharType>::operator=(TMutString&& other) noexcept {
-        if (this == &other) return *this;
-
-        delete[] this->value;
-
-        this->value = other.value;
-        this->length = other.length;
-
-        other.value = nullptr;
-        other.length = INVALID_SIZE;
-        other.isDynamic = false;
-
+        TString<CharType>::operator=(move(other));
         return *this;
     }
 
