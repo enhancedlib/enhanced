@@ -57,7 +57,7 @@ namespace enhanced::util {
     class SharedPtr final : private enhancedInternal::util::SharedPtrImpl {
     private:
         static void destroy(void* ptr, void* end) {
-            if (ptr == (static_cast<Type*>(end) + 1)) {
+            if (ptr == (static_cast<Type*>(end) - 1)) {
                 delete static_cast<Type*>(ptr);
             } else {
                 if constexpr (isClass<Type>) {
@@ -74,9 +74,9 @@ namespace enhanced::util {
             if (pointer == nullptr) throw exceptions::NullPointerException("The pointer is nullptr");
         }
 
-        SharedPtr(Type* ptr) : SharedPtrImpl(static_cast<void*>(ptr)) {}
+        inline SharedPtr(Type* ptr) : SharedPtrImpl(static_cast<void*>(ptr)) {}
 
-        SharedPtr(Type* ptr, Type* end) : SharedPtrImpl(static_cast<void*>(ptr), static_cast<void*>(end)) {}
+        inline SharedPtr(Type* ptr, Type* end) : SharedPtrImpl(static_cast<void*>(ptr), static_cast<void*>(end)) {}
 
     public:
         template <typename... Args>
@@ -84,8 +84,8 @@ namespace enhanced::util {
             return new Type(args...);
         }
 
-        template <sizetype size, typename... Args>
-        static inline SharedPtr make(Args&&... args) {
+        template <typename... Args>
+        static SharedPtr makeMulti(sizetype size, Args&&... args) {
             auto ptr = (Type*) operator new(size * sizeof(Type));
             auto end = ptr + size;
 
@@ -94,6 +94,11 @@ namespace enhanced::util {
             }
 
             return {ptr, end};
+        }
+
+        template <sizetype size, typename... Args>
+        static inline SharedPtr make(Args&&... args) {
+            return makeMulti(size, args...);
         }
 
         inline SharedPtr() : SharedPtrImpl(nullptr) {}
@@ -112,12 +117,12 @@ namespace enhanced::util {
             return static_cast<Type*>(pointer);
         }
 
-        inline Type* endOf() const noexcept {
-            return static_cast<Type*>(end);
-        }
-
         inline const SharedPtr* addressOf() const noexcept {
             return &self();
+        }
+
+        inline Type* endOf() const noexcept {
+            return static_cast<Type*>(end);
         }
 
         inline void release() const noexcept {

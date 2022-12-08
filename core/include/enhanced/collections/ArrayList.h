@@ -318,7 +318,7 @@ namespace enhanced::collections {
             clear0(destroy);
         }
 
-        inline bool setExpSizeFallback(ExpSizeFallbackFunc expSizeFallbackFunc) noexcept {
+        inline void setExpSizeFallback(ExpSizeFallbackFunc expSizeFallbackFunc) noexcept {
             this->expSizeFallback = expSizeFallbackFunc;
         }
 

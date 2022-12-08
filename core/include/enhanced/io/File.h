@@ -35,10 +35,10 @@ namespace enhanced::io {
         File(File&& file) noexcept;
 
         $NoIgnoreReturn
-        String getFilename() const;
+        MutString getFilename() const;
 
         $NoIgnoreReturn
-        String getExtension() const;
+        MutString getExtension() const;
 
         $NoIgnoreReturn
         const String& getPath() const;
@@ -59,7 +59,18 @@ namespace enhanced::io {
         bool isSymlink() const;
 
         $NoIgnoreReturn
-        collections::ArrayList<String> splitPath() const;
+        bool isJunction() const;
+
+        void create() const;
+
+        bool createIf() const; // NOLINT(modernize-use-nodiscard)
+
+        void remove() const;
+
+        bool removeIf() const; // NOLINT(modernize-use-nodiscard)
+
+        $NoIgnoreReturn
+        collections::ArrayList<MutString> splitPath() const;
 
         $NoIgnoreReturn
         FileInputStream inStream() const;

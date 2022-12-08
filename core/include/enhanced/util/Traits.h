@@ -19,13 +19,37 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 
+MSVC_WARNING_PUSH MSVC_WARNING_DISABLE(4003)
+
 #define _IMPL_CV_OPT_TEMPLATE \
-    _IMPL_TEMPLATE(); \
-    _IMPL_TEMPLATE(const); \
-    _IMPL_TEMPLATE(volatile); \
-    _IMPL_TEMPLATE(const volatile);
+    _IMPL_TEMPLATE() \
+    _IMPL_TEMPLATE(const) \
+    _IMPL_TEMPLATE(volatile) \
+    _IMPL_TEMPLATE(const volatile)
 
 namespace enhancedInternal::util::traits {
+    template <bool, typename = void>
+    struct EnableIfImpl final {};
+
+    template <typename RawType>
+    struct EnableIfImpl<true, RawType> final {
+        using Type = RawType;
+    };
+
+    // ----------------------------------------------------------------------
+
+    template <bool, typename, typename Result>
+    struct ConditionalImpl final {
+        using Type = Result;
+    };
+
+    template <typename Result, typename AnotherType>
+    struct ConditionalImpl<true, Result, AnotherType> final {
+        using Type = Result;
+    };
+
+    // ----------------------------------------------------------------------
+
     template <typename RawType>
     struct RemoveConstImpl final {
         using Type = RawType;
@@ -72,14 +96,14 @@ namespace enhancedInternal::util::traits {
         using Type = RawType;
     };
 
-    template <typename RwaType>
-    struct RemoveRefConstImpl<const RwaType&> final {
-        using Type = RwaType&;
+    template <typename RawType>
+    struct RemoveRefConstImpl<const RawType&> final {
+        using Type = RawType&;
     };
 
-    template <typename RwaType>
-    struct RemoveRefConstImpl<const RwaType&&> final {
-        using Type = RwaType&&;
+    template <typename RawType>
+    struct RemoveRefConstImpl<const RawType&&> final {
+        using Type = RawType&&;
     };
 
     // ----------------------------------------------------------------------
@@ -89,14 +113,14 @@ namespace enhancedInternal::util::traits {
         using Type = RawType;
     };
 
-    template <typename RwaType>
-    struct RemoveRefVolatileImpl<volatile RwaType&> final {
-        using Type = RwaType&;
+    template <typename RawType>
+    struct RemoveRefVolatileImpl<volatile RawType&> final {
+        using Type = RawType&;
     };
 
-    template <typename RwaType>
-    struct RemoveRefVolatileImpl<volatile RwaType&&> final {
-        using Type = RwaType&&;
+    template <typename RawType>
+    struct RemoveRefVolatileImpl<volatile RawType&&> final {
+        using Type = RawType&&;
     };
 
     // ----------------------------------------------------------------------
@@ -106,9 +130,9 @@ namespace enhancedInternal::util::traits {
         using Type = RawType;
     };
 
-#define _IMPL_TEMPLATE(...) \
+#define _IMPL_TEMPLATE(qualifier) \
     template <typename RawType> \
-    struct RemovePointerImpl<RawType* __VA_ARGS__> final { \
+    struct RemovePointerImpl<RawType* qualifier> final { \
         using Type = RawType; \
     };
 
@@ -122,10 +146,10 @@ namespace enhancedInternal::util::traits {
         using Type = RawType;
     };
 
-#define _IMPL_TEMPLATE(...) \
-    template <typename RwaType> \
-    struct RemovePtrConstImpl<const RwaType* __VA_ARGS__> final { \
-        using Type = RwaType* __VA_ARGS__; \
+#define _IMPL_TEMPLATE(qualifier) \
+    template <typename RawType> \
+    struct RemovePtrConstImpl<const RawType* qualifier> final { \
+        using Type = RawType* qualifier; \
     };
 
     _IMPL_CV_OPT_TEMPLATE
@@ -138,36 +162,50 @@ namespace enhancedInternal::util::traits {
         using Type = RawType;
     };
 
-#define _IMPL_TEMPLATE(...) \
-    template <typename RwaType> \
-    struct RemovePtrVolatileImpl<volatile RwaType* __VA_ARGS__> final { \
-        using Type = RwaType* __VA_ARGS__; \
+#define _IMPL_TEMPLATE(qualifier) \
+    template <typename RawType> \
+    struct RemovePtrVolatileImpl<volatile RawType* qualifier> final { \
+        using Type = RawType* qualifier; \
     };
 
     _IMPL_CV_OPT_TEMPLATE
 #undef _IMPL_TEMPLATE
 
-    // ----------------------------------------------------------------------
-
-    template <bool, typename = void>
-    struct EnableIfImpl final {};
-
     template <typename RawType>
-    struct EnableIfImpl<true, RawType> final {
+    struct ToSignedImpl final {
         using Type = RawType;
     };
 
-    // ----------------------------------------------------------------------
-
-    template <bool, typename, typename Result>
-    struct ConditionalImpl final {
-        using Type = Result;
+#define _IMPL_TEMPLATE(intType) \
+    template <> \
+    struct ToSignedImpl<unsigned intType> final { \
+        using Type = signed intType; \
     };
 
-    template <typename Result, typename AnotherType>
-    struct ConditionalImpl<true, Result, AnotherType> final {
-        using Type = Result;
+    _IMPL_TEMPLATE(char)
+    _IMPL_TEMPLATE(short)
+    _IMPL_TEMPLATE(int)
+    _IMPL_TEMPLATE(long)
+    _IMPL_TEMPLATE(long long)
+#undef _IMPL_TEMPLATE
+
+    template <typename RawType>
+    struct ToUnsignedImpl final {
+        using Type = RawType;
     };
+
+#define _IMPL_TEMPLATE(intType) \
+    template <> \
+    struct ToUnsignedImpl<signed intType> final { \
+        using Type = unsigned intType; \
+    };
+
+    _IMPL_TEMPLATE(char)
+    _IMPL_TEMPLATE(short)
+    _IMPL_TEMPLATE(int)
+    _IMPL_TEMPLATE(long)
+    _IMPL_TEMPLATE(long long)
+#undef _IMPL_TEMPLATE
 }
 
 namespace enhanced::util::inline traits {
@@ -228,6 +266,15 @@ namespace enhanced::util::inline traits {
 
     template <typename Base, typename... Derived>
     inline constexpr bool isAnyBaseOf = anyOfTrue<isBaseOf<Base, Derived>...>;
+
+    template <typename Base, typename Derived>
+    inline constexpr bool isBaseOfNotSame = isBaseOf<Base, Derived> && !isSame<Base, Derived>;
+
+    template <typename Base, typename... Derived>
+    inline constexpr bool isAllBaseOfNotSame = allOfTrue<isBaseOfNotSame<Base, Derived>...>;
+
+    template <typename Base, typename... Derived>
+    inline constexpr bool isAnyBaseOfNotSame = anyOfTrue<isBaseOfNotSame<Base, Derived>...>;
 
     template <typename>
     inline constexpr bool isConst = false;
@@ -340,9 +387,9 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     using RemoveRefAndCv = RemoveCv<RemoveRef<Type>>;
 
-#define _IMPL_TEMPLATE(...) \
+#define _IMPL_TEMPLATE(qualifier) \
     template <typename Type> \
-    inline constexpr bool isPointer<Type* __VA_ARGS__> = true;
+    inline constexpr bool isPointer<Type* qualifier> = true;
 
     _IMPL_CV_OPT_TEMPLATE
 #undef _IMPL_TEMPLATE
@@ -388,6 +435,14 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     requires isIntegralType<Type>
     inline constexpr bool isUnsigned = static_cast<RemoveCv<Type>>(-1) >= static_cast<Type>(0);
+
+    template <typename Type>
+    requires isIntegralType<Type>
+    using ToSigned = typename enhancedInternal::util::traits::ToSignedImpl<Type>::Type;
+
+    template <typename Type>
+    requires isIntegralType<Type>
+    using ToUnsigned = typename enhancedInternal::util::traits::ToUnsignedImpl<Type>::Type;
 
     template <typename Type>
     inline constexpr bool isArithmeticType = isIntegralType<Type> || isFloatType<Type>;
@@ -475,9 +530,9 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isMemObjPtr = false;
 
-#define _IMPL_TEMPLATE(...) \
+#define _IMPL_TEMPLATE(qualifier) \
     template <typename Type, typename Class> \
-    inline constexpr bool isMemObjPtr<Type Class::* __VA_ARGS__> = enhanced::util::isObject<Type>;
+    inline constexpr bool isMemObjPtr<Type Class::* qualifier> = enhanced::util::isObject<Type>;
 
     _IMPL_CV_OPT_TEMPLATE
 #undef _IMPL_TEMPLATE
@@ -485,9 +540,9 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isMemFuncPtr = false;
 
-#define _IMPL_TEMPLATE(...) \
+#define _IMPL_TEMPLATE(qualifier) \
     template <typename Type, typename Class> \
-    inline constexpr bool isMemFuncPtr<Type Class::* __VA_ARGS__> = enhanced::util::isFunction<Type>;
+    inline constexpr bool isMemFuncPtr<Type Class::* qualifier> = enhanced::util::isFunction<Type>;
 
     _IMPL_CV_OPT_TEMPLATE
 #undef _IMPL_TEMPLATE
@@ -500,12 +555,12 @@ namespace enhanced::util::inline traits {
     requires isMemberPointer<Type>
     struct MemberPointerParser {};
 
-#define _IMPL_TEMPLATE(...) \
+#define _IMPL_TEMPLATE(qualifier) \
     template <typename Type, typename Class> \
-    struct MemberPointerParser<Type Class::* __VA_ARGS__> { \
+    struct MemberPointerParser<Type Class::* qualifier> { \
         using MemberType = Type; \
         using ClassType = Class; \
-    }
+    };
 
     _IMPL_CV_OPT_TEMPLATE
 #undef _IMPL_TEMPLATE
@@ -518,9 +573,9 @@ namespace enhanced::util::inline traits {
     requires isMemFuncPtr<Type>
     struct MemFuncPtrParser : MemberPointerParser<Type> {};
 
-#define _IMPL_TEMPLATE(...) \
+#define _IMPL_TEMPLATE(qualifier) \
     template <typename Return, typename Class, typename... Args> \
-    struct MemFuncPtrParser<Return (Class::* __VA_ARGS__)(Args...)> : MemberPointerParser<Return (Class::* __VA_ARGS__)(Args...)> { \
+    struct MemFuncPtrParser<Return (Class::* qualifier)(Args...)> : MemberPointerParser<Return (Class::* qualifier)(Args...)> { \
         using FunctinoType = typename MemberPointerParser<Return (Class::*)(Args...)>::MemberType; \
         using ReturnType = Return; \
     };
@@ -544,14 +599,17 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isValid = true; // Used for template-requires determines type expression is valid.
 
     template <typename Type>
+    $NoIgnoreReturn
     inline constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
 
     template <typename Type>
+    $NoIgnoreReturn
     inline constexpr Type& weakCast(Type&& value) noexcept {
         return value;
     }
 
     template <typename Type>
+    $NoIgnoreReturn
     inline constexpr Type& forceCast(auto&& value) noexcept {
         return *((Type*) &value);
     }
@@ -658,7 +716,7 @@ namespace enhanced::util::inline traits {
     template <typename Callable, typename... Args>
     requires (!isMemberPointer<RemoveRef<Callable>>)
     inline constexpr auto invoke(Callable&& callable, Args&&... args)
-        noexcept(noexcept(static_cast<Callable&&>(callable)(static_cast<Args&&>(args)...))){
+        noexcept(noexcept(static_cast<Callable&&>(callable)(static_cast<Args&&>(args)...))) {
         return static_cast<Callable&&>(callable)(static_cast<Args&&>(args)...);
     }
 
@@ -789,7 +847,7 @@ namespace enhanced::util::inline traits {
     }
 
     template <typename Derived, typename Base>
-    requires isPolymorphicClass<RemoveRef<Base>> && (!isSame<Derived, RemoveRef<Base>> && isBaseOf<RemoveRef<Base>, Derived>)
+    requires isPolymorphicClass<RemoveRef<Base>> && isBaseOfNotSame<RemoveRef<Base>, Derived>
     $NoIgnoreReturn
     inline constexpr bool isInstanceOf(Base&& value) noexcept {
         return dynamic_cast<Derived*>(&value) != nullptr;
@@ -797,3 +855,5 @@ namespace enhanced::util::inline traits {
 }
 
 #undef _IMPL_CV_OPT_TEMPLATE
+
+MSVC_WARNING_PUSH

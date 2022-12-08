@@ -122,7 +122,7 @@
 #error To build this software, please use the C++20 standard or later.
 #endif
 
-#if (defined(_DEBUG) || defined(DBG)) && !defined(NDEBUG) && !defined(DEBUG)
+#if ((defined(_DEBUG) || defined(DBG)) || !defined(NDEBUG)) && !defined(DEBUG)
 #define DEBUG
 #endif
 

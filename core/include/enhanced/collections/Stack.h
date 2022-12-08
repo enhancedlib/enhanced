@@ -19,11 +19,10 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/collections/ArrayList.h>
-#include <enhanced/collections/RandomAccess.h>
 
 namespace enhanced::collections {
     template <typename Type>
-    class Stack : public ArrayList<Type>, public RandomAccess {
+    class Stack : public ArrayList<Type> {
     public:
         // TODO
     };

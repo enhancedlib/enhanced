@@ -19,11 +19,10 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/collections/Queue.h>
-#include <enhanced/collections/RandomAccess.h>
 
 namespace enhanced::collections {
     template <typename Type>
-    class PriorityQueue : public Queue<Type>, public RandomAccess {
+    class PriorityQueue : public Queue<Type> {
     public:
         // TODO
     };

@@ -19,11 +19,10 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/collections/List.h>
-#include <enhanced/collections/RandomAccess.h>
 
 namespace enhanced::collections {
     template <typename Type>
-    class Deque : public List<Type>, public RandomAccess {
+    class Deque : public List<Type> {
     public:
         // TODO
     };
