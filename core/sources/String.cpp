@@ -55,7 +55,7 @@ namespace enhanced {
         if (source == nullptr) throw NullPointerException("The given argument 'source' is nullptr");
 
         auto copy = make(length);
-        arrayCopy(copy, source, length, sizeof(CharType));
+        arrayCopy(copy, source, length);
 
         return copy;
     }
@@ -66,7 +66,7 @@ namespace enhanced {
         if (source == nullptr) throw NullPointerException("The given argument 'source' is nullptr");
 
         auto copy = make(newLength);
-        arrayCopy(copy, source, ((newLength > oldLength) ? oldLength : newLength), sizeof(CharType));
+        arrayCopy(copy, source, ((newLength > oldLength) ? oldLength : newLength));
 
         return copy;
     }
@@ -95,7 +95,6 @@ namespace enhanced {
 
             if (string1[index] != string2[index]) return false;
         }
-        return true;
     }
 
     template <typename CharType>
@@ -130,12 +129,15 @@ namespace enhanced {
 
         sizetype offset = 0;
         for (sizetype index = 0; index < count; ++index) {
-            arrayCopy(newString.value + offset, strings[index].value, strings[index].length, sizeof(CharType));
+            arrayCopy(newString.value + offset, strings[index].value, strings[index].length);
             offset += strings[index].length;
         }
 
         return newString;
     }
+
+    template <typename CharType>
+    TString<CharType>::TString(const CharType* value, sizetype length, bool isMutable) noexcept : CharSequence<CharType>(value, length, isMutable) {}
 
     template <typename CharType>
     TString<CharType>::TString() noexcept : CharSequence<CharType>(ST_STRING(CharType, ""), 0) {}
@@ -405,8 +407,8 @@ namespace enhanced {
         sizetype newLength = this->length + string.length;
         TMutString<CharType> newString(newLength);
 
-        arrayCopy(newString.value, this->value, this->length, sizeof(CharType));
-        arrayCopy(newString.value + this->length, string.value, string.length, sizeof(CharType));
+        arrayCopy(newString.value, this->value, this->length);
+        arrayCopy(newString.value + this->length, string.value, string.length);
 
         return newString;
     }
@@ -417,19 +419,21 @@ namespace enhanced {
         sizetype newLength = this->length + 1;
         TMutString<CharType> newString(newLength);
 
-        arrayCopy(newString.value, this->value, this->length, sizeof(CharType));
+        arrayCopy(newString.value, this->value, this->length);
         newString[this->length] = ch;
 
         return newString;
     }
 
     template <typename CharType>
+    $RetSelf
     TString<CharType>& TString<CharType>::operator=(const TString& other) noexcept {
         CharSequence<CharType>::operator=(other);
         return *this;
     }
 
     template <typename CharType>
+    $RetSelf
     TString<CharType>& TString<CharType>::operator=(TString&& other) noexcept {
         CharSequence<CharType>::operator=(move(other));
         return *this;

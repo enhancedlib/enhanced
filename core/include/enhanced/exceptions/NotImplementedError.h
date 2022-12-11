@@ -18,6 +18,7 @@
 #include <enhanced/Defines.h>
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
+#include <enhanced/Warnings.h>
 #include <enhanced/exceptions/AssertionError.h>
 
 namespace enhanced::exceptions {
@@ -30,3 +31,9 @@ namespace enhanced::exceptions {
 }
 
 #define NOT_IMPLEMENTED throw enhanced::exceptions::NotImplementedError
+
+// Disable the 'unused parameter' warning for not implemented functions.
+
+CLANG_WARNING_DISABLE("-Wunused-parameter")
+MSVC_WARNING_DISABLE(4100)
+GCC_WARNING_DISABLE("-Wunused-parameter")

@@ -13,7 +13,7 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/math/BcdLargeNumber.h>
+#include <enhanced/math/LargeNumber.h>
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
@@ -25,7 +25,7 @@ using enhanced::util::move;
 using enhanced::exceptions::InvalidArgumentException;
 
 namespace enhanced::math {
-    BcdLargeNumber::BcdLargeNumber(const String& number) : storage(number.getLength() + 1), isNegative(false), length(number.getLength()) {
+    LargeNumber::LargeNumber(const String& number) : storage(number.getLength() + 1), isNegative(false), length(number.getLength()) {
         sizetype start;
         if (number[0] == '-') {
             start = 1;
@@ -45,100 +45,99 @@ namespace enhanced::math {
         }
     }
 
-    BcdLargeNumber::BcdLargeNumber(const BcdLargeNumber& other) = default;
+    LargeNumber::LargeNumber(const LargeNumber& other) = default;
 
-    BcdLargeNumber::BcdLargeNumber(BcdLargeNumber&& other) noexcept :
+    LargeNumber::LargeNumber(LargeNumber&& other) noexcept :
         storage(move(other.storage)), isNegative(other.isNegative), length(other.length), point(other.point) {}
 
-    BcdLargeNumber::ComparisonResult BcdLargeNumber::compare(const BcdLargeNumber& other) const {
+    LargeNumber::ComparisonResult LargeNumber::compare(const LargeNumber& other) const {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber BcdLargeNumber::operator+() const {
+    LargeNumber LargeNumber::operator+() const {
         return *this;
     }
 
-    BcdLargeNumber BcdLargeNumber::operator-() const {
+    LargeNumber LargeNumber::operator-() const {
         auto result = *this;
         result.isNegative ^= result.isNegative;
         return result;
     }
 
-    BcdLargeNumber BcdLargeNumber::operator+(const BcdLargeNumber& number) const {
+    LargeNumber LargeNumber::operator+(const LargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber BcdLargeNumber::operator-(const BcdLargeNumber& number) const {
+    LargeNumber LargeNumber::operator-(const LargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber BcdLargeNumber::operator*(const BcdLargeNumber& number) const {
+    LargeNumber LargeNumber::operator*(const LargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber BcdLargeNumber::operator/(const BcdLargeNumber& number) const {
+    LargeNumber LargeNumber::operator/(const LargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber BcdLargeNumber::operator%(const BcdLargeNumber& number) const {
+    LargeNumber LargeNumber::operator%(const LargeNumber& number) const {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber& BcdLargeNumber::add(const BcdLargeNumber& number) {
+    LargeNumber& LargeNumber::add(const LargeNumber& number) {
         NOT_IMPLEMENTED();
 
-        if (isNegative == number.isNegative) {
-            for (sizetype index = 0; index < length; ++index) {
-                storage[index] += number.storage[index];
-                if (storage[index] >= 10) {
-                    storage[index] -= 10;
-                    storage[index + 1] += 1;
-                }
-            }
-            storage[length - 1] += number.storage[length - 1];
-            if (storage[length - 1] >= 10) {
-                storage[length - 1] -= 10;
-                storage.add(1);
-                ++length;
-            }
-
-            return *this;
-        }
+        //if (isNegative == number.isNegative) {
+        //    for (sizetype index = 0; index < length; ++index) {
+        //        storage[index] += number.storage[index];
+        //        if (storage[index] >= 10) {
+        //            storage[index] -= 10;
+        //            storage[index + 1] += 1;
+        //        }
+        //    }
+        //    storage[length - 1] += number.storage[length - 1];
+        //    if (storage[length - 1] >= 10) {
+        //        storage[length - 1] -= 10;
+        //        storage.add(1);
+        //        ++length;
+        //    }
+        //    return *this;
+        //}
     }
 
-    BcdLargeNumber& BcdLargeNumber::sub(const BcdLargeNumber& number) {
-        NOT_IMPLEMENTED();
-    }
-
-    BcdLargeNumber& BcdLargeNumber::mul(const BcdLargeNumber& number) {
+    LargeNumber& LargeNumber::sub(const LargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber& BcdLargeNumber::div(const BcdLargeNumber& number) {
+    LargeNumber& LargeNumber::mul(const LargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber& BcdLargeNumber::mod(const BcdLargeNumber &number) {
+    LargeNumber& LargeNumber::div(const LargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber& BcdLargeNumber::operator+=(const BcdLargeNumber& number) {
+    LargeNumber& LargeNumber::mod(const LargeNumber &number) {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber& BcdLargeNumber::operator-=(const BcdLargeNumber& number) {
+    LargeNumber& LargeNumber::operator+=(const LargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber& BcdLargeNumber::operator*=(const BcdLargeNumber& number) {
+    LargeNumber& LargeNumber::operator-=(const LargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber& BcdLargeNumber::operator/=(const BcdLargeNumber& number) {
+    LargeNumber& LargeNumber::operator*=(const LargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 
-    BcdLargeNumber& BcdLargeNumber::operator%=(const BcdLargeNumber& number) {
+    LargeNumber& LargeNumber::operator/=(const LargeNumber& number) {
+        NOT_IMPLEMENTED();
+    }
+
+    LargeNumber& LargeNumber::operator%=(const LargeNumber& number) {
         NOT_IMPLEMENTED();
     }
 }

@@ -34,7 +34,7 @@ using enhanced::util::removeRefConst;
 using enhanced::io::errstream;
 
 namespace enhanced::exceptions {
-    void defaultTerminateHandler() noexcept {
+    void defaultExceptionHandler() noexcept {
         try {
             std::rethrow_exception(std::current_exception());
         } catch (const Exception& exception) {
@@ -45,16 +45,15 @@ namespace enhanced::exceptions {
         } catch (...) {
             errstream->println("Exception [unknown]");
         }
-        processAbort();
     }
 
-    const TerminateHandler& setupTerminateHandler(const TerminateHandler& terminateHandler) noexcept {
-        terminateHandlerFunc = terminateHandler;
-        std::set_terminate(terminateHandler);
-        return terminateHandler;
+    const ExceptionHandler& setupExceptionHandler(const ExceptionHandler& handler) noexcept {
+        exceptionHandler = handler;
+        std::set_terminate(handler);
+        return handler;
     }
 
-    TerminateHandler terminateHandlerFunc = setupTerminateHandler(defaultTerminateHandler);
+    ExceptionHandler exceptionHandler = setupExceptionHandler(defaultExceptionHandler);
 
     Exception::Exception(const String& message) noexcept : message(move(message)), cause(nullptr) {}
 
@@ -64,7 +63,7 @@ namespace enhanced::exceptions {
 
     Exception::~Exception() noexcept = default;
 
-    // TODO
+    // TODO: Implementes for tracing exceptions
 
     void Exception::printInfo() const {
         errstream->println(getInfo());

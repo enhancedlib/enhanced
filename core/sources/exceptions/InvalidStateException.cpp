@@ -13,19 +13,14 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#pragma once
+#include <enhanced/exceptions/InvalidStateException.h>
 
-#include <enhanced/Defines.h>
-#include <enhanced/Types.h>
-#include <enhanced/Annotations.h>
+#include <enhanced/exceptions/RuntimeException.h>
 
-namespace enhanced {
-    template <typename Type>
-    using InitializerList = std::initializer_list<Type>;
+namespace enhanced::exceptions {
+    InvalidStateException::InvalidStateException(const String& message) noexcept : RuntimeException(message) {}
 
-    template <typename Type>
-    $NoIgnoreReturn
-    inline constexpr const Type* initListToArray(const InitializerList<Type>& list) {
-        return list.begin();
-    }
+    InvalidStateException::InvalidStateException(const Exception* cause) noexcept : RuntimeException(cause) {}
+
+    InvalidStateException::InvalidStateException(const String& message, const Exception* cause) noexcept : RuntimeException(message, cause) {}
 }

@@ -24,21 +24,25 @@ using enhanced::util::removePtrConst;
 
 namespace enhanced {
     template <typename CharType>
+    CharSequence<CharType>::CharSequence(const CharType* value, sizetype length, bool isMutable) :
+        value(removePtrConst(value)), length(length), isMutable(isMutable) {}
+
+    template <typename CharType>
     CharSequence<CharType>::CharSequence(const CharType* value, sizetype length) : value(removePtrConst(value)), length(length) {}
 
     template <typename CharType>
     CharSequence<CharType>::CharSequence(const CharSequence& other) noexcept = default;
 
     template <typename CharType>
-    CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept : value(other.value), length(other.length) {
+    CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept : value(other.value), length(other.length), isMutable(other.isMutable) {
         other.value = nullptr;
         other.length = INVALID_SIZE;
-        other.isDynamic = false;
+        other.isMutable = false;
     }
 
     template <typename CharType>
     CharSequence<CharType>::~CharSequence() noexcept {
-        if (isDynamic) delete[] this->value;
+        if (isMutable) delete[] this->value;
     }
 
     template <typename CharType>
@@ -72,31 +76,33 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    $RetSelf
     CharSequence<CharType>& CharSequence<CharType>::operator=(const CharSequence& other) noexcept {
         if (this == &other) return *this;
 
-        if (isDynamic) delete[] value;
+        if (isMutable) delete[] value;
 
         value = other.value;
         length = other.length;
-        isDynamic = other.isDynamic;
+        isMutable = other.isMutable;
 
         return *this;
     }
 
     template <typename CharType>
+    $RetSelf
     CharSequence<CharType>& CharSequence<CharType>::operator=(CharSequence&& other) noexcept {
         if (this == &other) return *this;
 
-        if (isDynamic) delete[] value;
+        if (isMutable) delete[] value;
 
         value = other.value;
         length = other.length;
-        isDynamic = other.isDynamic;
+        isMutable = other.isMutable;
 
         other.value = nullptr;
         other.length = INVALID_SIZE;
-        other.isDynamic = false;
+        other.isMutable = false;
 
         return *this;
     }

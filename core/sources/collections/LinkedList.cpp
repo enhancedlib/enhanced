@@ -21,10 +21,10 @@
 #include <enhanced/Memory.h>
 #include <enhanced/Assert.h>
 #include <enhanced/exceptions/IndexOutOfBoundsException.h>
-#include <enhanced/exceptions/UnsupportedOperationException.h>
+#include <enhanced/exceptions/InvalidStateException.h>
 
 using enhanced::exceptions::IndexOutOfBoundsException;
-using enhanced::exceptions::UnsupportedOperationException;
+using enhanced::exceptions::InvalidStateException;
 
 namespace enhancedInternal::collections {
     LinkedListImpl::Node*& LinkedListImpl::prevNode(Node*& node) {
@@ -66,14 +66,14 @@ namespace enhancedInternal::collections {
 
     $NoIgnoreReturn
     void* LinkedListImpl::getFirst0() const {
-        if (size == 0) throw UnsupportedOperationException("The list is empty");
+        if (size == 0) throw InvalidStateException("The list is empty");
 
         return first->value;
     }
 
     $NoIgnoreReturn
     void* LinkedListImpl::getLast0() const {
-        if (size == 0) throw UnsupportedOperationException("The list is empty");
+        if (size == 0) throw InvalidStateException("The list is empty");
 
         return last->value;
     }
@@ -191,6 +191,8 @@ namespace enhancedInternal::collections {
     }
 
     void LinkedListImpl::clear0(OpDestroy opDestroy) {
+        if (size == INVALID_SIZE) return;
+
         while (size-- > 1) {
             prevNode(last);
             opDestroy(last->next->value);
@@ -205,27 +207,43 @@ namespace enhancedInternal::collections {
     }
 
     LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl* linkedList) :
-        linkedList(linkedList), indexer(linkedList->first) {}
+        linkedList(linkedList), indexer((Node*) INVALID_SIZE) {}
+
+    $NoIgnoreReturn
+    bool LinkedListImpl::LinkedListIteratorImpl::isBegin0() const {
+        return indexer == (Node*) INVALID_SIZE;
+    }
+
+    $NoIgnoreReturn
+    bool LinkedListImpl::LinkedListIteratorImpl::isEnd0() const {
+        return indexer == nullptr;
+    }
 
     $NoIgnoreReturn
     bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
-        return indexer != nullptr;
+        return indexer != nullptr && linkedList->size != 0;
     }
 
     void LinkedListImpl::LinkedListIteratorImpl::next0() const {
-        if (!hasNext0()) throw UnsupportedOperationException("The iterator is at the end of the list");
+        if (isEnd0()) throw InvalidStateException("The iterator is at the end of the list");
+        else if (isBegin0()) indexer = linkedList->first;
+        else nextNode(indexer);
+    }
 
-        nextNode(indexer);
+    void LinkedListImpl::LinkedListIteratorImpl::prev0() const {
+        if (isBegin0()) throw InvalidStateException("The iterator is at the begin of the list");
+        else if (isEnd0()) indexer = linkedList->last;
+        else nextNode(indexer);
     }
 
     $NoIgnoreReturn
     void* LinkedListImpl::LinkedListIteratorImpl::get0() const {
-        if (linkedList->size == 0) throw UnsupportedOperationException("The list is empty");
+        if (isBegin0() || isEnd0()) throw InvalidStateException("Current location of the iterator is not valid");
 
         return indexer->value;
     }
 
     void LinkedListImpl::LinkedListIteratorImpl::reset0() const {
-        indexer = linkedList->first;
+        indexer = (Node*) INVALID_SIZE;
     }
 }

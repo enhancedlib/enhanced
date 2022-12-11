@@ -21,6 +21,11 @@
 #include <enhanced/Annotations.h>
 
 namespace enhanced {
+    using Nothrow = std::nothrow_t;
+    using NothrowRef = const std::nothrow_t&;
+
+    extern const Nothrow nothrow;
+
     /*!
      * Allocates space in memory. \n
      *
@@ -29,7 +34,7 @@ namespace enhanced {
      * @param size     The size to be allocated (unit: byte).
      * @return void*   A pointer to the newly allocated space.
      */
-    $Allocator $MustInspectResult $RetNullable
+    $MustInspectResult $RetNullable $SuccessIf(return != nullptr) $Allocator $RetRestrict
     ENHANCED_CORE_API void* memoryAlloc(sizetype size);
 
     /*!
@@ -63,17 +68,3 @@ namespace enhanced {
      */
     ENHANCED_CORE_API void memoryCopy(void* destination, const void* source, sizetype size);
 }
-
-#ifndef ENHANCED_SUPPRESS_MEMORY_OPERATOR_OVERRIDE
-
-$Allocator
-void* operator new(sizetype size);
-
-void operator delete(void* pointer) noexcept;
-
-$Allocator
-void* operator new[](sizetype size);
-
-void operator delete[](void* pointer) noexcept;
-
-#endif

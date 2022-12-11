@@ -19,6 +19,7 @@
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
+#include <enhanced/Warnings.h>
 #include <enhanced/exceptions/MemoryAllocationError.h>
 
 using enhanced::memoryAlloc;
@@ -26,7 +27,9 @@ using enhanced::memoryFree;
 using enhanced::exceptions::MemoryAllocationError;
 
 namespace enhanced {
-    $Allocator $MustInspectResult $RetNullable
+    const Nothrow nothrow {};
+
+    $MustInspectResult $RetNullable $SuccessIf(return != nullptr) $Allocator $RetRestrict
     void* memoryAlloc(sizetype size) {
         if (size == 0) return nullptr;
 
@@ -61,7 +64,12 @@ namespace enhanced {
     }
 }
 
-$Allocator
+using enhanced::NothrowRef;
+using enhanced::nothrow;
+
+// TODO
+
+$RetNotNull $Allocator
 void* operator new(sizetype size) {
     void* space = memoryAlloc(size);
     if (space == nullptr) {
@@ -70,15 +78,37 @@ void* operator new(sizetype size) {
     return space;
 }
 
-void operator delete(void* pointer) noexcept {
-    memoryFree(pointer);
-}
-
-$Allocator
+$RetNotNull $Allocator
 void* operator new[](sizetype size) {
     return operator new(size);
 }
 
-void operator delete[](void* pointer) noexcept {
-    operator delete(pointer);
+$RetNullable $SuccessIf(return != nullptr) $Allocator $RetRestrict
+void* operator new(sizetype size, enhanced::NothrowRef) noexcept {
+    return memoryAlloc(size);
 }
+
+$RetNullable $SuccessIf(return != nullptr) $Allocator $RetRestrict
+void* operator new[](sizetype size, enhanced::NothrowRef) noexcept {
+    return operator new(size, nothrow);
+}
+
+GCC_WARNING_PUSH_AND_DISABLE("-Wsized-deallocation")
+
+void operator delete(void* block) noexcept {
+    memoryFree(block);
+}
+
+void operator delete[](void* block) noexcept {
+    operator delete(block);
+}
+
+void operator delete(void* block, enhanced::NothrowRef) noexcept {
+    operator delete(block);
+}
+
+void operator delete[](void* block, enhanced::NothrowRef) noexcept {
+    operator delete(block);
+}
+
+GCC_WARNING_POP

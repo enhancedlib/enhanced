@@ -21,24 +21,31 @@
 #include <enhanced/util/Traits.h>
 
 namespace enhanced::math {
-    template <typename IntegralType>
-    requires util::isIntegralType<IntegralType>
+    template <typename X, typename Y>
+    requires util::isIntegralType<X> && util::isIntegralType<Y>
     $NoIgnoreReturn
-    inline IntegralType max(IntegralType x, IntegralType y) {
+    inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> max(X x, Y y) {
         return (x > y) ? x : y;
     }
 
-    template <typename IntegralType>
-    requires util::isIntegralType<IntegralType>
+    template <typename X, typename Y>
+    requires util::isIntegralType<X> && util::isIntegralType<Y>
     $NoIgnoreReturn
-    inline IntegralType min(IntegralType x, IntegralType y) {
+    inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> min(X x, Y y) {
         return (x < y) ? x : y;
     }
 
     template <typename IntegralType>
     requires util::isSigned<IntegralType>
     $NoIgnoreReturn
-    inline IntegralType abs(IntegralType number) {
+    inline constexpr util::ToUnsigned<IntegralType> abs(IntegralType number) {
         return (number >= 0) ? number : -number;
+    }
+
+    template <typename X, typename Y>
+    requires util::isIntegralType<X> && util::isIntegralType<Y>
+    $NoIgnoreReturn
+    inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> difference(X x, Y y) {
+        return (x < y) ? y - x : x - y;
     }
 }

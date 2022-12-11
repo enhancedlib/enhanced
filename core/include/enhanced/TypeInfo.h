@@ -15,8 +15,6 @@
 
 #pragma once
 
-#include <typeinfo>
-
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/String.h>

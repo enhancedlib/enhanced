@@ -21,13 +21,13 @@
 #include <enhanced/String.h>
 #include <enhanced/exceptions/AssertionError.h>
 
-// TODO
+// TODO: In the future, don't need to provide the current file and the current line for arguments
 #define dynamic_assert(expression) ((expression) || (throw enhanced::exceptions::AssertionError(#expression, CURRENT_FILE, CURRENT_LINE), false))
 
 #ifdef DEBUG
-#define E_ASSERT(expression) dynamic_assert(expression)
+    #define E_ASSERT(expression) dynamic_assert(expression)
 #else
-#define E_ASSERT(expression) (void) 0
+    #define E_ASSERT(expression) (void) 0
 #endif
 
 #undef assert

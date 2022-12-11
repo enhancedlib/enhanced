@@ -19,7 +19,7 @@
 #include <enhanced/io/PrintStream.h>
 
 namespace enhanced::io {
-    // TODO
+    // TODO: Implementes I/O streams
     static ScanStream* _instream = nullptr;
     static PrintStream* _outstream = nullptr;
     static PrintStream* _errstream = nullptr;

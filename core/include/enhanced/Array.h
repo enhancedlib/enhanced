@@ -76,6 +76,7 @@ namespace enhanced {
             return elements + size;
         }
 
+        $RetSelf
         inline Array& operator=(const Array& other) noexcept {
             if (this == &other) return *this;
 
@@ -85,6 +86,7 @@ namespace enhanced {
             return *this;
         }
 
+        $RetSelf
         inline Array& operator=(Array&& other) noexcept {
             if (this == &other) return *this;
 
@@ -114,23 +116,6 @@ namespace enhanced {
     ENHANCED_CORE_API void arrayFill($InOut void* array, qword value, sizetype count, sizetype sizeOfType);
 
     /*!
-     * Sets elements of an array to the same value (template edition).
-     *
-     * @example arrayFill(str, 'a', 5);
-     * @example arrayFill(array, 0, 10);
-     *
-     * @param array        An array.
-     * @param value        A value.
-     * @param count        The number of elements.
-     */
-    template <typename Type>
-    inline void arrayFill($InOut Type* array, const Type& value, sizetype count) {
-        for (sizetype index = 0; index < count; ++index) {
-            array[index] = value;
-        }
-    }
-
-    /*!
      * Sets elements of an array to the same value (pointer edition).
      *
      * @example float f = 10.0f; \n
@@ -143,7 +128,32 @@ namespace enhanced {
      * @param valuePtr     A pointer to the value.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<type>)").
      */
-    ENHANCED_CORE_API void arrayFillPtr($InOut void* array, void* valuePtr, sizetype count, sizetype sizeOfType);
+    ENHANCED_CORE_API void arrayFillPtr($InOut void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
+
+    /*!
+     * Sets elements of an array to the same value (template edition).
+     *
+     * @example arrayFill(str, 'a', 5);
+     * @example arrayFill(array, 0, 10);
+     *
+     * @param array        An array.
+     * @param value        A value.
+     * @param count        The number of elements.
+     */
+    template <typename Type>
+    requires util::isClass<Type>
+    inline void arrayFill($InOut Type* array, const Type& value, sizetype count) {
+        if (array == nullptr) return;
+        for (sizetype index = 0; index < count; ++index) {
+            array[index] = value;
+        }
+    }
+
+    template <typename Type>
+    requires (!util::isClass<Type>)
+    inline void arrayFill($InOut Type* array, const Type& value, sizetype count) {
+        arrayFillPtr(array, &value, count, sizeof(Type));
+    }
 
     /*!
      * Copies elements of an array to another array.
@@ -156,5 +166,32 @@ namespace enhanced {
      * @param count         The number of elements.
      * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
      */
-    ENHANCED_CORE_API void arrayCopy($Out void* destination, const void* source, sizetype count, sizetype sizeOfType);
+    ENHANCED_CORE_API void arrayCopy($InOut void* destination, const void* source, sizetype count, sizetype sizeOfType);
+
+
+    /*!
+     * Copies elements of an array to another array (template edition).
+     *
+     * @example arrayCopy(string, srcString, 50, sizeof(char));
+     * @example arrayCopy(array, oldArray, 20, sizeof(int));
+     *
+     * @param destination   The destination array.
+     * @param source        The source array.
+     * @param count         The number of elements.
+     * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
+     */
+    template <typename Type>
+    requires util::isClass<Type>
+    void arrayCopy($InOut Type* destination, const Type* source, sizetype count) {
+        if (destination == nullptr || source == nullptr) return;
+        for (sizetype index = 0; index < count; ++index) {
+            destination[index] = source[index];
+        }
+    }
+
+    template <typename Type>
+    requires (!util::isClass<Type>)
+    void arrayCopy($InOut Type* destination, const Type* source, sizetype count) {
+        arrayCopy(destination, source, count, sizeof(Type));
+    }
 }

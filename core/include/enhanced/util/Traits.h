@@ -18,11 +18,10 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-
-MSVC_WARNING_PUSH MSVC_WARNING_DISABLE(4003)
+#include <enhanced/Warnings.h>
 
 #define _IMPL_CV_OPT_TEMPLATE \
-    _IMPL_TEMPLATE() \
+    _IMPL_TEMPLATE(EMPTY_MACRO_ARGUMENT) \
     _IMPL_TEMPLATE(const) \
     _IMPL_TEMPLATE(volatile) \
     _IMPL_TEMPLATE(const volatile)
@@ -176,6 +175,11 @@ namespace enhancedInternal::util::traits {
         using Type = RawType;
     };
 
+    template <>
+    struct ToSignedImpl<char> final {
+        using Type = schar;
+    };
+
 #define _IMPL_TEMPLATE(intType) \
     template <> \
     struct ToSignedImpl<unsigned intType> final { \
@@ -192,6 +196,11 @@ namespace enhancedInternal::util::traits {
     template <typename RawType>
     struct ToUnsignedImpl final {
         using Type = RawType;
+    };
+
+    template <>
+    struct ToUnsignedImpl<char> final {
+        using Type = uchar;
     };
 
 #define _IMPL_TEMPLATE(intType) \
@@ -226,8 +235,10 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     using RemoveCv = RemoveConst<RemoveVolatile<Type>>;
 
+    // Recommended to use C++20 concepts.
     template <bool condition, typename Type = void>
-    using EnableIf = typename enhancedInternal::util::traits::EnableIfImpl<condition, Type>::Type;
+    using EnableIf $DeprecatedExt("Recommended to use C++20 concepts") =
+        typename enhancedInternal::util::traits::EnableIfImpl<condition, Type>::Type;
 
     template <bool condition, typename Type1, typename Type2>
     using Conditional = typename enhancedInternal::util::traits::ConditionalImpl<condition, Type1, Type2>::Type;
@@ -268,13 +279,36 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isAnyBaseOf = anyOfTrue<isBaseOf<Base, Derived>...>;
 
     template <typename Base, typename Derived>
-    inline constexpr bool isBaseOfNotSame = isBaseOf<Base, Derived> && !isSame<Base, Derived>;
+    inline constexpr bool isBaseOfNs = isBaseOf<Base, Derived> && !isSame<Base, Derived>;
 
     template <typename Base, typename... Derived>
-    inline constexpr bool isAllBaseOfNotSame = allOfTrue<isBaseOfNotSame<Base, Derived>...>;
+    inline constexpr bool isAllBaseOfNs = allOfTrue<isBaseOfNs<Base, Derived>...>;
 
     template <typename Base, typename... Derived>
-    inline constexpr bool isAnyBaseOfNotSame = anyOfTrue<isBaseOfNotSame<Base, Derived>...>;
+    inline constexpr bool isAnyBaseOfNs = anyOfTrue<isBaseOfNs<Base, Derived>...>;
+
+    // Recommended to use C++20 concepts with 'enhanced::util::traits::isValid'.
+    template <typename>
+    using VoidTemplate $DeprecatedExt("Recommended to use C++20 concepts with 'enhanced::util::traits::isValid'") = void;
+
+    template <typename...>
+    inline constexpr bool isValid = true; // Used for C++20 concepts determines type expression is valid.
+
+    template <typename Type>
+    $NoIgnoreReturn
+    inline constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
+
+    template <typename Type>
+    $NoIgnoreReturn
+    inline constexpr Type& weakCast(Type&& value) noexcept {
+        return value;
+    }
+
+    template <typename Type>
+    $NoIgnoreReturn
+    inline constexpr Type& forceCast(auto&& value) noexcept {
+        return *((Type*) &value);
+    }
 
     template <typename>
     inline constexpr bool isConst = false;
@@ -482,7 +516,7 @@ namespace enhanced::util::inline traits {
 
     // Only function types and reference types cannot be const qualified.
 
-    MSVC_WARNING_PUSH MSVC_WARNING_DISABLE(4180)
+    MSVC_WARNING_PUSH_AND_DISABLE(4180)
 
     template <typename Type>
     inline constexpr bool isObject = !isVoidType<Type> && isConst<const Type>;
@@ -491,6 +525,8 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isFunction = !isReference<Type> && !isConst<const Type>;
 
     MSVC_WARNING_POP
+
+    // TODO: Support calling-convention
 
     template <typename Type>
     requires isFunction<Type>
@@ -595,25 +631,6 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isFinalClass = __is_final(Type);
 
-    template <typename...>
-    inline constexpr bool isValid = true; // Used for template-requires determines type expression is valid.
-
-    template <typename Type>
-    $NoIgnoreReturn
-    inline constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
-
-    template <typename Type>
-    $NoIgnoreReturn
-    inline constexpr Type& weakCast(Type&& value) noexcept {
-        return value;
-    }
-
-    template <typename Type>
-    $NoIgnoreReturn
-    inline constexpr Type& forceCast(auto&& value) noexcept {
-        return *((Type*) &value);
-    }
-
 #ifdef GCC_COMPILER
     template <typename From, typename To>
     inline constexpr bool isConvertible = false;
@@ -702,14 +719,14 @@ namespace enhanced::util::inline traits {
     template <typename Case, typename First, typename... Types>
     requires isSame<Case, First>
     $NoIgnoreReturn
-    inline constexpr Case& switchType(First&& first, Types&&... values) noexcept {
+    inline constexpr Case& switchType(First&& first, Types&&...) noexcept {
         return first;
     }
 
     template <typename Case, typename First, typename... Types>
     requires (!isSame<Case, First>)
     $NoIgnoreReturn
-    inline constexpr Case& switchType(First&& first, Types&&... values) noexcept {
+    inline constexpr Case& switchType(First&&, Types&&... values) noexcept {
         return switchType<Case, Types...>(static_cast<Types&&>(values)...);
     }
 
@@ -734,15 +751,15 @@ namespace enhanced::util::inline traits {
         return ((*static_cast<Class&&>(object)).*callable)(static_cast<Args&&>(args)...);
     }
 
-    template <typename Member, typename Class, typename... Args>
+    template <typename Member, typename Class>
     requires (isMemObjPtr<RemoveRef<Member>> && isBaseOf<typename MemObjPtrParser<RemoveRef<Member>>::ClassType, RemoveRef<Class>>)
-    inline constexpr auto invoke(Member&& member, Class&& object, Args&&... args) noexcept {
+    inline constexpr auto invoke(Member&& member, Class&& object) noexcept {
         return static_cast<Class&&>(object).*member;
     }
 
-    template <typename Member, typename Class, typename... Args>
+    template <typename Member, typename Class>
     requires (isMemObjPtr<RemoveRef<Member>> && !isBaseOf<typename MemObjPtrParser<RemoveRef<Member>>::ClassType, RemoveRef<Class>>)
-    inline constexpr auto invoke(Member&& member, Class&& object, Args&&... args) noexcept(noexcept((*static_cast<Class&&>(object)).*member)) {
+    inline constexpr auto invoke(Member&& member, Class&& object) noexcept(noexcept((*static_cast<Class&&>(object)).*member)) {
         return (*static_cast<Class&&>(object)).*member;
     }
 
@@ -842,12 +859,12 @@ namespace enhanced::util::inline traits {
     template <typename Derived, typename Base>
     requires isPolymorphicClass<RemoveRef<Base>> && isSame<Derived, RemoveRef<Base>>
     $NoIgnoreReturn
-    inline constexpr bool isInstanceOf(Base&& value) noexcept {
+    inline constexpr bool isInstanceOf(Base&&) noexcept {
         return true;
     }
 
     template <typename Derived, typename Base>
-    requires isPolymorphicClass<RemoveRef<Base>> && isBaseOfNotSame<RemoveRef<Base>, Derived>
+    requires isPolymorphicClass<RemoveRef<Base>> && isBaseOfNs<RemoveRef<Base>, Derived>
     $NoIgnoreReturn
     inline constexpr bool isInstanceOf(Base&& value) noexcept {
         return dynamic_cast<Derived*>(&value) != nullptr;
@@ -855,5 +872,3 @@ namespace enhanced::util::inline traits {
 }
 
 #undef _IMPL_CV_OPT_TEMPLATE
-
-MSVC_WARNING_PUSH

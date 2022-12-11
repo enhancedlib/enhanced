@@ -27,7 +27,7 @@ namespace enhanced {
     public:
         TMutString();
 
-        TMutString(const CharType* value, sizetype length) noexcept;
+        TMutString(const CharType* value, sizetype length);
 
         template <sizetype size>
         TMutString(const CharType (&value)[size]) : TMutString<CharType>(value, size - 1) {}
@@ -87,8 +87,10 @@ namespace enhanced {
 
         TMutString& toLowercase();
 
+        $RetSelf
         TMutString& operator=(const TMutString& other);
 
+        $RetSelf
         TMutString& operator=(TMutString&& other) noexcept;
 
         TMutString& operator+=(const TString<CharType>& string);
@@ -97,9 +99,9 @@ namespace enhanced {
     };
 
     using MutString = TMutString<char>;
-    #ifdef WCHAR_IS_BUILTIN_TYPE
+#ifdef WCHAR_IS_BUILTIN_TYPE
     using WideMutString = TMutString<wchar>;
-    #endif
+#endif
     using U8MutString = TMutString<u8char>;
     using U16MutString = TMutString<u16char>;
     using U32MutString = TMutString<u32char>;

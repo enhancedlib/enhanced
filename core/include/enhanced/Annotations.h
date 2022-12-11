@@ -34,61 +34,64 @@
 #define $FallThrough [[fallthrough]]
 
 #ifdef CLANG_COMPILER
-#define $ForceInline [[clang::always_inline]]
-#define $NoInline [[clang::noinline]]
+    #define $ForceInline [[clang::always_inline]]
+    #define $NoInline [[clang::noinline]]
 #elif defined(MSVC_COMPILER)
-#define $ForceInline __forceinline
-#define $NoInline __declspec(noinline)
+    #define $ForceInline __forceinline
+    #define $NoInline __declspec(noinline)
 #elif defined(GCC_COMPILER)
-#define $ForceInline [[gnu::always_inline]]
-#define $NoInline [[gnu::noinline]]
+    #define $ForceInline [[gnu::always_inline]]
+    #define $NoInline [[gnu::noinline]]
 #endif
 
 #ifdef MSVC_ABI
-#define $Allocator $RetRequiresRelease __declspec(restrict) __declspec(allocator)
+    #define $Allocator $RetRequiresRelease __declspec(allocator)
+#else
+    #define $Allocator $RetRequiresRelease
+#endif
+
+#ifdef MSVC_ABI
+    #define $RetRestrict __declspec(restrict)
 #elif defined(GCC_ABI) || defined(CLANG_COMPILER)
-#define $Allocator $RetRequiresRelease [[gnu::malloc]]
+    #define $RetRestrict [[gnu::malloc]]
 #endif
 
 #define $MaybeRequireRelease(releaseFunction)
 
+#define $RetSelf
+
 #ifdef WINDOWS_OS
-#include <sal.h>
+    #if defined(GCC_ABI) || defined(CLANG_COMPILER)
+        #define $RetNotNull [[gnu::returns_nonnull]] _Ret_notnull_
+    #else
+        #define $RetNotNull _Ret_notnull_
+    #endif
+    #define $RetNullable _Ret_maybenull_
+    #define $MustInspectResult _Must_inspect_result_
+    #define $SuccessIf(condition) _Success_(condition)
 
-#if defined(GCC_ABI) || defined(CLANG_COMPILER)
-#define $RetNotNull _Ret_notnull_ [[gnu::returns_nonnull]]
+    #define $Optional _In_opt_
+    #define $Out _Out_
+    #define $InOut _Inout_
+    #define $OutOptional _Out_opt_
+    #define $InOutOptional _Inout_opt_
+
+    #define $When(condition, annotations) _When_(condition, annotations)
 #else
-#define $RetNotNull _Ret_notnull_
-#endif
-#define $RetNullable _Ret_maybenull_
-#define $MustInspectResult _Must_inspect_result_
-#define $SuccessIf(condition) _Success_(condition)
+    #if defined(GCC_ABI) || defined(CLANG_COMPILER)
+        #define $RetNotNull [[gnu::returns_nonnull]]
+    #else
+        #define $RetNotNull
+    #endif
+    #define $RetNullable
+    #define $MustInspectResult
+    #define $SuccessIf(condition)
 
-#define $Optional _In_opt_
-#define $Out _Out_
-#define $InOut _Inout_
-#define $OutOptional _Out_opt_
-#define $InOutOptional _Inout_opt_
+    #define $Optional
+    #define $Out
+    #define $InOut
+    #define $OutOptional
+    #define $InOutOptional
 
-#define $When(condition, annotations) _When_(condition, annotations)
-
-#else
-
-#if defined(GCC_ABI) || defined(CLANG_COMPILER)
-#define $RetNotNull [[gnu::returns_nonnull]]
-#else
-#define $RetNotNull
-#endif
-#define $RetNullable
-#define $MustInspectResult
-#define $SuccessIf(condition)
-
-#define $Optional
-#define $Out
-#define $InOut
-#define $OutOptional
-#define $InOutOptional
-
-#define $When(condition, annotations)
-
+    #define $When(condition, annotations)
 #endif

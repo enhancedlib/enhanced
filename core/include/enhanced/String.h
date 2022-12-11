@@ -30,6 +30,9 @@ namespace enhanced {
 
     template <typename CharType>
     class ENHANCED_CORE_API TString : public CharSequence<CharType> {
+    protected:
+        TString(const CharType* value, sizetype length, bool isMutable) noexcept;
+
     public:
         $RetRequiresRelease
         static CharType* make(sizetype length);
@@ -56,7 +59,7 @@ namespace enhanced {
         requires util::isIntegralType<IntType> && (!util::isCharType<IntType>)
         $NoIgnoreReturn
         static TMutString<CharType> from(IntType value) {
-            // TODO
+            // TODO: Faster implementation
             TMutString<CharType> str;
             int8 bit;
             while (value != 0) {
@@ -174,15 +177,17 @@ namespace enhanced {
         $NoIgnoreReturn
         TMutString<CharType> operator+(CharType ch) const;
 
+        $RetSelf
         TString& operator=(const TString& other) noexcept;
 
+        $RetSelf
         TString& operator=(TString&& other) noexcept;
     };
 
     using String = TString<char>;
-    #ifdef WCHAR_IS_BUILTIN_TYPE
+#ifdef WCHAR_IS_BUILTIN_TYPE
     using WideString = TString<wchar>;
-    #endif
+#endif
     using U8String = TString<u8char>;
     using U16String = TString<u16char>;
     using U32String = TString<u32char>;

@@ -101,7 +101,7 @@ namespace enhanced::util {
             return makeMulti(size, args...);
         }
 
-        inline SharedPtr() : SharedPtrImpl(nullptr) {}
+        inline SharedPtr() noexcept : SharedPtrImpl(nullptr) {}
 
         inline SharedPtr(nulltype ptr) : SharedPtrImpl(static_cast<void*>(ptr)) {}
 
@@ -113,14 +113,23 @@ namespace enhanced::util {
             release();
         }
 
+        $NoIgnoreReturn $RetNotNull
+        inline Type* get() const noexcept {
+            nullPointerCheck();
+            return static_cast<Type*>(pointer);
+        }
+
+        $NoIgnoreReturn $RetNullable
         inline Type* self() const noexcept {
             return static_cast<Type*>(pointer);
         }
 
+        $NoIgnoreReturn
         inline const SharedPtr* addressOf() const noexcept {
             return &self();
         }
 
+        $NoIgnoreReturn
         inline Type* endOf() const noexcept {
             return static_cast<Type*>(end);
         }
@@ -141,32 +150,31 @@ namespace enhanced::util {
 
         $NoIgnoreReturn
         inline Type* operator->() const {
-            nullPointerCheck();
-            return self();
+            return get();
         }
 
         $NoIgnoreReturn
         inline Type& operator*() const {
-            nullPointerCheck();
-            return *self();
+            return *get();
         }
 
         $NoIgnoreReturn
         inline Type& operator[](sizetype offset) const {
-            nullPointerCheck();
-            return self()[offset];
+            return get()[offset];
         }
 
-        $NoIgnoreReturn
+        $NoIgnoreReturn $RetNullable
         inline operator Type*() const noexcept {
             return self();
         }
 
+        $RetSelf
         inline SharedPtr<Type>& operator=(const SharedPtr<Type>& other) noexcept {
             assign0(other, destroy);
             return *this;
         }
 
+        $RetSelf
         inline SharedPtr<Type>& operator=(SharedPtr<Type>&& other) noexcept {
             assign0(other, destroy);
             return *this;

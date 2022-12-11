@@ -13,19 +13,23 @@
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include <enhanced/exceptions/AssertionError.h>
-
+#pragma once
 
 #include <enhanced/Defines.h>
+#include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
-#include <enhanced/String.h>
-#include <enhanced/MutString.h>
-#include <enhanced/exceptions/Error.h>
+#include <enhanced/exceptions/Exception.h>
+#include <enhanced/exceptions/RuntimeException.h>
 
 namespace enhanced::exceptions {
-    AssertionError::AssertionError(const String& message) noexcept : Error(message) {}
+    class ENHANCED_CORE_API InvalidStateException : public RuntimeException {
+    public:
+        DEFINE_EXCEPTION_NAME(enhanced::exceptions::InvalidStateException)
 
-    // TODO: Remove two parameters (file, line)
-    AssertionError::AssertionError(const enhanced::String& expression, const enhanced::String& file, sizetype line) noexcept :
-        Error(String::join({"Failed to assert [", expression, "] at ", file, ":", String::from(line)})) {}
+        explicit InvalidStateException(const String& message = "") noexcept;
+
+        explicit InvalidStateException(const Exception* cause) noexcept;
+
+        InvalidStateException(const String& message, const Exception* cause) noexcept;
+    };
 }

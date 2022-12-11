@@ -31,7 +31,9 @@ namespace enhanced {
 
         sizetype length;
 
-        bool isDynamic = false;
+        bool isMutable = false;
+
+        CharSequence(const CharType* value, sizetype length, bool isMutable);
 
     public:
         CharSequence(const CharType* value, sizetype length);
@@ -57,8 +59,10 @@ namespace enhanced {
         $NoIgnoreReturn
         const CharType operator[](sizetype index) const noexcept;
 
+        $RetSelf
         CharSequence& operator=(const CharSequence& other) noexcept;
 
+        $RetSelf
         CharSequence& operator=(CharSequence&& other) noexcept;
 
         explicit operator const CharType*() const noexcept;

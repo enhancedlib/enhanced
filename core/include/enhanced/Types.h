@@ -17,32 +17,28 @@
 
 #include <enhanced/Defines.h>
 
-#if (defined(MSVC_COMPILER) && defined(_CHAR_UNSIGNED)) || defined(__CHAR_UNSIGNED__)
-#define CHAR_IS_UNSIGNED
+#if defined(_CHAR_UNSIGNED) || defined(__CHAR_UNSIGNED__)
+    #define CHAR_IS_UNSIGNED
 #endif
 
 #if !defined(MSVC_COMPILER) || defined(_NATIVE_WCHAR_T_DEFINED)
-#define WCHAR_IS_BUILTIN_TYPE
+    #define WCHAR_IS_BUILTIN_TYPE
 #endif
 
 #if defined(MSVC_COMPILER) || (__SIZEOF_WCHAR_T__ == 2)
-#define WCHAR_EQUALS_UINT16
-#else
-#define WCHAR_EQUALS_INT32
-#endif
-
-#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
-#define LONG_EQUALS_INT
-#endif
-
-#ifdef MSVC_ABI
-#define LDOUBLE_EQUALS_DOUBLE
+    #define WCHAR_16BIT
 #endif
 
 #if defined(X86_ARCH) || defined(ARM32_ARCH)
-#define SIZE_TYPE_IS_UINT32
-#else
-#define SIZE_TYPE_IS_UINT64
+    #define SIZE_TYPE_32BIT
+#endif
+
+#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
+    #define LONG_EQUALS_INT
+#endif
+
+#ifdef MSVC_ABI
+    #define LDOUBLE_EQUALS_DOUBLE
 #endif
 
 using llong = long long;
@@ -77,33 +73,63 @@ using uint64 = ulong;
 using float32 = float;
 using float64 = double;
 
-// The name "sizetype" is used instead of "size" because "size" is often used as a variable/function name.
-#ifdef SIZE_TYPE_IS_UINT32
-using sizetype = uint32;
-#else
-using sizetype = uint64;
-#endif
-
-using byte = uint8;
-using word = uint16;
-using dword = uint32;
-using qword = uint64;
-
-using u8char = char8_t;
-using u16char = char16_t;
-using u32char = char32_t;
-
 #ifdef WCHAR_IS_BUILTIN_TYPE
 using wchar = wchar_t;
 #else
-#ifdef WCHAR_EQUALS_UINT16
+#ifdef WCHAR_16BIT
 using wchar = uint16;
 #else
 using wchar = int32;
 #endif
 #endif
 
+using u8char = char8_t;
+using u16char = char16_t;
+using u32char = char32_t;
+
+using byte = uint8;
+using word = uint16;
+using dword = uint32;
+using qword = uint64;
+
+// The name "sizetype" is used instead of "size" because "size" is often used as a variable/function name.
+#ifdef SIZE_TYPE_32BIT
+using sizetype = uint32;
+#else
+using sizetype = uint64;
+#endif
+
 using nulltype = decltype(nullptr);
+
+namespace enhanced {
+    using ::llong;
+    using ::ldouble;
+    using ::schar;
+    using ::uchar;
+    using ::ushort;
+    using ::uint;
+    using ::ulong;
+    using ::ullong;
+    using ::int8;
+    using ::int16;
+    using ::int32;
+    using ::int64;
+    using ::uint8;
+    using ::uint16;
+    using ::uint32;
+    using ::uint64;
+    using ::float32;
+    using ::float64;
+    using ::wchar;
+    using ::u8char;
+    using ::u16char;
+    using ::u32char;
+    using ::byte;
+    using ::word;
+    using ::dword;
+    using ::qword;
+    using ::sizetype;
+}
 
 #undef INT8_MIN
 #undef INT16_MIN
@@ -150,15 +176,15 @@ using nulltype = decltype(nullptr);
 #define FLOAT64_MIN 2.22507385850720138309023271733240406e-308
 
 #ifdef CHAR_IS_UNSIGNED
-#define CHAR_MIN UINT8_MIN
+    #define CHAR_MIN UINT8_MIN
 #else
-#define CHAR_MIN INT8_MIN
+    #define CHAR_MIN INT8_MIN
 #endif
 
-#ifdef WCHAR_EQUALS_UINT16
-#define WCHAR_MIN UINT16_MIN
+#ifdef WCHAR_16BIT
+    #define WCHAR_MIN UINT16_MIN
 #else
-#define WCHAR_MIN INT32_MIN
+    #define WCHAR_MIN INT32_MIN
 #endif
 
 #define U8CHAR_MIN UINT8_MIN
@@ -169,9 +195,9 @@ using nulltype = decltype(nullptr);
 #define SHORT_MIN INT16_MIN
 #define INT_MIN INT32_MIN
 #ifdef LONG_EQUALS_INT
-#define LONG_MIN INT32_MIN
+    #define LONG_MIN INT32_MIN
 #else
-#define LONG_MIN INT64_MIN
+    #define LONG_MIN INT64_MIN
 #endif
 #define LLONG_MIN INT64_MIN
 
@@ -179,30 +205,30 @@ using nulltype = decltype(nullptr);
 #define USHORT_MIN UINT16_MIN
 #define UINT_MIN UINT32_MIN
 #ifdef LONG_EQUALS_INT
-#define ULONG_MIN UINT32_MIN
+    #define ULONG_MIN UINT32_MIN
 #else
-#define ULONG_MIN UINT64_MIN
+    #define ULONG_MIN UINT64_MIN
 #endif
 #define ULLONG_MIN UINT64_MIN
 
 #define FLOAT_MIN FLOAT32_MIN
 #define DOUBLE_MIN FLOAT64_MIN
 #ifdef LDOUBLE_EQUALS_DOUBLE
-#define LDOUBLE_MIN FLOAT64_MIN
+    #define LDOUBLE_MIN FLOAT64_MIN
 #else
-#define LDOUBLE_MIN 3.36210314311209350626267781732175260e-4932l
-#endif
-
-#ifdef SIZE_TYPE_IS_UINT32
-#define SIZE_TYPE_MIN UINT32_MIN
-#else
-#define SIZE_TYPE_MIN UINT64_MIN
+    #define LDOUBLE_MIN 3.36210314311209350626267781732175260e-4932l
 #endif
 
 #define BYTE_MIN UINT8_MIN
 #define WORD_MIN UINT16_MIN
 #define DWORD_MIN UINT32_MIN
 #define QWORD_MIN UINT64_MIN
+
+#ifdef SIZE_TYPE_32BIT
+    #define SIZE_TYPE_MIN UINT32_MIN
+#else
+    #define SIZE_TYPE_MIN UINT64_MIN
+#endif
 
 #define INT8_MAX ((int8) 0x7F) // 127
 #define INT16_MAX ((int16) 0x7FFF) // 32767
@@ -218,15 +244,15 @@ using nulltype = decltype(nullptr);
 #define FLOAT64_MAX 1.79769313486231570814527423731704357e+308
 
 #ifdef CHAR_IS_UNSIGNED
-#define CHAR_MAX UINT8_MAX
+    #define CHAR_MAX UINT8_MAX
 #else
-#define CHAR_MAX INT8_MAX
+    #define CHAR_MAX INT8_MAX
 #endif
 
-#ifdef WCHAR_EQUALS_UINT16
-#define WCHAR_MAX UINT16_MAX
+#ifdef WCHAR_16BIT
+    #define WCHAR_MAX UINT16_MAX
 #else
-#define WCHAR_MAX INT32_MAX
+    #define WCHAR_MAX INT32_MAX
 #endif
 
 #define U8CHAR_MAX UINT8_MAX
@@ -237,9 +263,9 @@ using nulltype = decltype(nullptr);
 #define SHORT_MAX INT16_MAX
 #define INT_MAX INT32_MAX
 #ifdef LONG_EQUALS_INT
-#define LONG_MAX INT32_MAX
+    #define LONG_MAX INT32_MAX
 #else
-#define LONG_MAX INT64_MAX
+    #define LONG_MAX INT64_MAX
 #endif
 #define LLONG_MAX INT64_MAX
 
@@ -247,24 +273,18 @@ using nulltype = decltype(nullptr);
 #define USHORT_MAX UINT16_MAX
 #define UINT_MAX UINT32_MAX
 #ifdef LONG_EQUALS_INT
-#define ULONG_MAX UINT32_MAX
+    #define ULONG_MAX UINT32_MAX
 #else
-#define ULONG_MAX UINT64_MAX
+    #define ULONG_MAX UINT64_MAX
 #endif
 #define ULLONG_MAX UINT64_MAX
 
 #define FLOAT_MAX FLOAT32_MAX
 #define DOUBLE_MAX FLOAT64_MAX
 #ifdef LDOUBLE_EQUALS_DOUBLE
-#define LDOUBLE_MAX FLOAT64_MAX
+    #define LDOUBLE_MAX FLOAT64_MAX
 #else
-#define LDOUBLE_MAX 1.18973149535723176502126385303097021E+4932l
-#endif
-
-#ifdef SIZE_TYPE_IS_UINT32
-#define SIZE_TYPE_MAX UINT32_MAX
-#else
-#define SIZE_TYPE_MAX UINT64_MAX
+    #define LDOUBLE_MAX 1.18973149535723176502126385303097021E+4932l
 #endif
 
 #define BYTE_MAX UINT8_MAX
@@ -272,16 +292,22 @@ using nulltype = decltype(nullptr);
 #define DWORD_MAX UINT32_MAX
 #define QWORD_MAX UINT64_MAX
 
-#ifdef MSVC_COMPILER
-#define POSITIVE_INFINITY ((double) (1e+300 * 1e+300))
-#define NEGATIVE_INFINITY (-POSITIVE_INFINITY)
-#define INFINITY POSITIVE_INFINITY
-#define NAN ((double) (INFINITY * 0.0))
+#ifdef SIZE_TYPE_32BIT
+    #define SIZE_TYPE_MAX UINT32_MAX
 #else
-#define POSITIVE_INFINITY (1.0 / 0.0)
-#define NEGATIVE_INFINITY (-1.0 / 0.0)
-#define INFINITY POSITIVE_INFINITY
-#define NAN (0.0 / 0.0)
+    #define SIZE_TYPE_MAX UINT64_MAX
+#endif
+
+#ifdef MSVC_COMPILER
+    #define POSITIVE_INFINITY ((double) (1e+300 * 1e+300))
+    #define NEGATIVE_INFINITY (-POSITIVE_INFINITY)
+    #define INFINITY POSITIVE_INFINITY
+    #define NAN ((double) (INFINITY * 0.0))
+#else
+    #define POSITIVE_INFINITY (1.0 / 0.0)
+    #define NEGATIVE_INFINITY (-1.0 / 0.0)
+    #define INFINITY POSITIVE_INFINITY
+    #define NAN (0.0 / 0.0)
 #endif
 
 #define INVALID_SIZE SIZE_TYPE_MAX

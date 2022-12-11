@@ -32,11 +32,11 @@ namespace enhancedInternal::util {
     public:
         using ReturnType = Return;
 
-        inline ReturnType invoke(Args... args) {
+        inline ReturnType invoke(Args... args) const {
             NOT_IMPLEMENTED();
         }
 
-        inline ReturnType operator()(Args... args) {
+        inline ReturnType operator()(Args... args) const {
             return invoke(args...);
         }
     };

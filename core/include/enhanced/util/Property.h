@@ -20,11 +20,16 @@
 #include <enhanced/Annotations.h>
 #include <enhanced/util/Traits.h>
 
-#define propertiesClass(name) using CLASS = name
+#define propertiesClass(name) using __PROPERTIES_CLASS_SELF = name
+
+#define propertiesStruct(name) \
+    private: \
+        propertiesClass(name); \
+    public:
 
 #define property(type, name, getter, setter, ...) \
-    struct Property_##name { \
-        friend CLASS; \
+    struct Property_##name final { \
+        friend __PROPERTIES_CLASS_SELF; \
     private: \
         using Self = type; \
         Self self; \
@@ -54,6 +59,7 @@ accessModifier: \
 
 #define __property_setter_set(accessModifier) \
 accessModifier: \
+    $RetSelf \
     inline Self& operator=(const Self& value)
 
 #define __property_getter_getter(accessModifier) \

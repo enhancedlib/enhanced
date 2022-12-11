@@ -56,13 +56,13 @@ namespace enhanced::exceptions {
         virtual const String& getMessage() const noexcept;
     };
 
-    using TerminateHandler = void (*)();
+    using ExceptionHandler = void (*)();
 
-    ENHANCED_CORE_API void defaultTerminateHandler() noexcept;
+    ENHANCED_CORE_API void defaultExceptionHandler() noexcept;
 
-    ENHANCED_CORE_API const TerminateHandler& setupTerminateHandler(const TerminateHandler& terminateHandler) noexcept;
+    ENHANCED_CORE_API const ExceptionHandler& setupExceptionHandler(const ExceptionHandler& handler) noexcept;
 
-    ENHANCED_CORE_API extern TerminateHandler terminateHandlerFunc;
+    ENHANCED_CORE_API extern ExceptionHandler exceptionHandler;
 }
 
 #define DEFINE_EXCEPTION_NAME(name) \

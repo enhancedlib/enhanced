@@ -52,9 +52,17 @@ namespace enhancedInternal::collections {
             ArrayListIteratorImpl(const ArrayListImpl* arrayList);
 
             $NoIgnoreReturn
+            bool isBegin0() const;
+
+            $NoIgnoreReturn
+            bool isEnd0() const;
+
+            $NoIgnoreReturn
             bool hasNext0() const;
 
             void next0() const;
+
+            void prev0() const;
 
             $NoIgnoreReturn
             void* get0() const;
@@ -137,13 +145,30 @@ namespace enhanced::collections {
             inline explicit ArrayListIterator(const ArrayList<Type>* arrayList) : ArrayListIteratorImpl(arrayList) {}
 
             $NoIgnoreReturn
+            inline bool isBegin() const override {
+                return isBegin0();
+            }
+
+            $NoIgnoreReturn
+            inline bool isEnd() const override {
+                return isEnd0();
+            }
+
+            $NoIgnoreReturn
             inline bool hasNext() const override {
                 return hasNext0();
             }
 
-            inline const Iterator<Type>* next() const override {
+            $RetSelf
+            inline const Iterator<Type>& next() const override {
                 next0();
-                return this;
+                return *this;
+            }
+
+            $RetSelf
+            inline const Iterator<Type>& prev() const override {
+                prev0();
+                return *this;
             }
 
             $NoIgnoreReturn
@@ -189,7 +214,7 @@ namespace enhanced::collections {
 
         $NoIgnoreReturn
         inline bool isEmpty() const noexcept override {
-            return size != 0;
+            return size == 0;
         }
 
         $NoIgnoreReturn
@@ -199,7 +224,9 @@ namespace enhanced::collections {
 
         $NoIgnoreReturn
         inline ArrayListIterator begin() const noexcept {
-            return iterator();
+            auto it = iterator();
+            it.next();
+            return it;
         }
 
         $NoIgnoreReturn

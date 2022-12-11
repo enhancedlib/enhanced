@@ -25,3 +25,21 @@
 #define U32_TEXT(quote) U##quote
 
 #define ST_CHAR(type, ch) enhanced::util::switchType<type>(ch, WIDE_TEXT(ch), U8_TEXT(ch), U16_TEXT(ch), U32_TEXT(ch))
+
+namespace enhanced {
+    template <typename CharType>
+    inline constexpr CharType uppercase(CharType ch) {
+        if (ch >= ST_CHAR(CharType, 'A') && ch <= ST_CHAR(CharType, 'Z')) {
+            (ch -= ST_CHAR(CharType, 'A')) += ST_CHAR(CharType, 'a');
+        }
+        return ch;
+    }
+
+    template <typename CharType>
+    inline constexpr CharType lowercase(CharType ch) {
+        if (ch >= ST_CHAR(CharType, 'A') && ch <= ST_CHAR(CharType, 'Z')) {
+            (ch -= ST_CHAR(CharType, 'A')) += ST_CHAR(CharType, 'a');
+        }
+        return ch;
+    }
+}

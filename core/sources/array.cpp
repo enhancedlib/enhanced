@@ -24,8 +24,8 @@ namespace enhanced {
         arrayFillPtr(array, &value, count, sizeOfType);
     }
 
-    void arrayFillPtr($InOut void* array, void* valuePtr, sizetype count, sizetype sizeOfType) {
-        if (array == nullptr || count == 0 || sizeOfType == 0) return;
+    void arrayFillPtr($InOut void* array, const void* valuePtr, sizetype count, sizetype sizeOfType) {
+        if (array == nullptr || valuePtr == nullptr || count == 0 || sizeOfType == 0) return;
 
         sizetype size = count * sizeOfType;
 
@@ -34,7 +34,7 @@ namespace enhanced {
         }
     }
 
-    void arrayCopy($Out void* destination, const void* source, sizetype count, sizetype sizeOfType) {
+    void arrayCopy($InOut void* destination, const void* source, sizetype count, sizetype sizeOfType) {
         memoryCopy(destination, source, count * sizeOfType);
     }
 }
