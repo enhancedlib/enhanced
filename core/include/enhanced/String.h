@@ -56,7 +56,7 @@ namespace enhanced {
         static bool isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept;
 
         template <typename IntType>
-        requires util::isIntegralType<IntType> && (!util::isCharType<IntType>)
+        requires util::isIntegralTypeNc<IntType>
         $NoIgnoreReturn
         static TMutString<CharType> from(IntType value) {
             // TODO: Faster implementation

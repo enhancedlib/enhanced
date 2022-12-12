@@ -221,7 +221,7 @@ namespace enhancedInternal::collections {
 
     $NoIgnoreReturn
     bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
-        return indexer != nullptr && linkedList->size != 0;
+        return (isBegin0() && linkedList->size != 0) || (!isEnd0() && indexer->next != nullptr);
     }
 
     void LinkedListImpl::LinkedListIteratorImpl::next0() const {

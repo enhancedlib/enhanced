@@ -40,7 +40,7 @@
 #endif
 
 #if defined(MSVC_ABI) && defined(_M_CEE)
-#define CLR_ABI
+#define MS_CLR_ABI
 #endif
 
 // Detect the architecture for the current platform
@@ -128,7 +128,7 @@
 
 #define PRAGMA(...) _Pragma(#__VA_ARGS__)
 
-#define EMPTY_MACRO_ARGUMENT
+#define EMPTY_MACRO_ARG
 
 #define CURRENT_FUNC __func__
 #define CURRENT_FILE __FILE__
@@ -145,8 +145,8 @@
 #define THISCALL __thiscall
 
 #ifdef MSVC_ABI
-    #define VECTOR_CALL __vectorcall
-    #ifdef CLR_ABI
+    #define VECTORCALL __vectorcall
+    #ifdef MS_CLR_ABI
         #define CLRCALL __clrcall
     #endif
 #endif

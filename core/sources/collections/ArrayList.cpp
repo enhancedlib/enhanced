@@ -81,11 +81,29 @@ namespace enhancedInternal::collections {
     }
 
     void ArrayListImpl::addFirst0(void* element, OpCopy opCopy) {
-        NOT_IMPLEMENTED();
+        if (size == capacity) {
+            capacity = expSizeFallback(capacity);
+        }
+
+        void** array = new void*[capacity];
+        arrayCopy(array + 1, elements, size);
+        elements = array;
+
+        elements[0] = opCopy(element);
+        ++size;
     }
 
     void ArrayListImpl::addFirst1(void* element, OpMove opMove) {
-        NOT_IMPLEMENTED();
+        if (size == capacity) {
+            capacity = expSizeFallback(capacity);
+        }
+
+        void** array = new void*[capacity];
+        arrayCopy(array + 1, elements, size);
+        elements = array;
+
+        elements[0] = opMove(element);
+        ++size;
     }
 
     void ArrayListImpl::addLast0(void* element, OpCopy opCopy) {
@@ -107,7 +125,14 @@ namespace enhancedInternal::collections {
     }
 
     void ArrayListImpl::removeFirst0(OpDestroy opDestroy) {
-        NOT_IMPLEMENTED();
+        opDestroy(elements[0]);
+
+        void** array = new void*[capacity];
+        arrayCopy(array, elements + 1, size - 1);
+        delete[] elements;
+
+        elements = array;
+        --size;
     }
 
     void ArrayListImpl::removeLast0(OpDestroy opDestroy) {
@@ -126,7 +151,6 @@ namespace enhancedInternal::collections {
 
     void ArrayListImpl::setCapacity0(sizetype newCapacity) {
         void** array = new void*[newCapacity];
-
         arrayCopy(array, elements, size);
         delete[] elements;
 
