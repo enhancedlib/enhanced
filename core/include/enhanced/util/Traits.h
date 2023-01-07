@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -90,28 +89,30 @@
 #define _FUNC_TEMPLATE_CDECL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Cdecl, CDECL)
 
 #if defined(X86_ARCH) && !defined(MS_CLR_ABI)
-#define _FUNC_TEMPLATE_FASTCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Fastcall, FASTCALL)
+    #define _FUNC_TEMPLATE_FASTCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Fastcall, FASTCALL)
 #else
-#define _FUNC_TEMPLATE_FASTCALL(SUFFIX)
+    #define _FUNC_TEMPLATE_FASTCALL(SUFFIX)
 #endif
 
 #ifdef X86_ARCH
-#define _FUNC_TEMPLATE_STDCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Stdcall, STDCALL)
-#define _FUNC_TEMPLATE_THISCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Thiscall, THISCALL)
+    #define _FUNC_TEMPLATE_STDCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Stdcall, STDCALL)
+    #define _FUNC_TEMPLATE_THISCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Thiscall, THISCALL)
 #else
-#define _FUNC_TEMPLATE_STDCALL(SUFFIX)
-#define _FUNC_TEMPLATE_THISCALL(SUFFIX)
+    #define _FUNC_TEMPLATE_STDCALL(SUFFIX)
+    #define _FUNC_TEMPLATE_THISCALL(SUFFIX)
 #endif
 
-#ifdef MS_CLR_ABI
-#define _FUNC_TEMPLATE_VECTORCALL(SUFFIX)
-#define _FUNC_TEMPLATE_CLRCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Clrcall, CLRCALL)
-#elif (defined(X86_ARCH) && _M_IX86_FP >= 2) || defined(X64_ARCH)
-#define _FUNC_TEMPLATE_VECTORCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Vectorcall, VECTORCALL)
-#define _FUNC_TEMPLATE_CLRCALL(SUFFIX)
+#ifdef MSVC_ABI
+    #ifdef MS_CLR_ABI
+        #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX)
+        #define _FUNC_TEMPLATE_CLRCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Clrcall, CLRCALL)
+    #elif (defined(X86_ARCH) && _M_IX86_FP >= 2) || defined(X64_ARCH)
+        #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Vectorcall, VECTORCALL)
+        #define _FUNC_TEMPLATE_CLRCALL(SUFFIX)
+    #endif
 #else
-#define _FUNC_TEMPLATE_VECTORCALL(SUFFIX)
-#define _FUNC_TEMPLATE_CLRCALL(SUFFIX)
+    #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX)
+    #define _FUNC_TEMPLATE_CLRCALL(SUFFIX)
 #endif
 
 // ======================================================================
@@ -279,6 +280,20 @@ namespace enhancedInternal::util::traits {
 
     // ======================================================================
 
+    template <bool, typename RawType>
+    struct AddReferenceImpl final {
+        using LvalueRef = RawType;
+        using RvalueRef = RawType;
+    };
+
+    template <typename RawType>
+    struct AddReferenceImpl<true, RawType> final {
+        using LvalueRef = RawType&;
+        using RvalueRef = RawType&&;
+    };
+
+    // ======================================================================
+
     template <typename RawType>
     struct RemovePtrConstImpl final {
         using Type = RawType;
@@ -349,7 +364,15 @@ namespace enhancedInternal::util::traits {
 }
 
 namespace enhanced::util::inline traits {
-    // Functions whose names begin with "__" are compiler internal macro functions.
+    template <typename>
+    using VoidTemplate $DeprecatedExt("Recommended to use C++20 concepts") = void;
+
+    template <bool condition, typename Type = void>
+    using EnableIf $DeprecatedExt("Recommended to use C++20 concepts") =
+        typename enhancedInternal::util::traits::EnableIfImpl<condition, Type>::Type;
+
+    template <bool condition, typename Type1, typename Type2>
+    using Conditional = typename enhancedInternal::util::traits::ConditionalImpl<condition, Type1, Type2>::Type;
 
     template <typename Type>
     using RemoveRef = typename enhancedInternal::util::traits::RemoveRefImpl<Type>::Type;
@@ -366,14 +389,6 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     using RemoveCv = RemoveConst<RemoveVolatile<Type>>;
 
-    // Recommended to use C++20 concepts.
-    template <bool condition, typename Type = void>
-    using EnableIf $DeprecatedExt("Recommended to use C++20 concepts") =
-        typename enhancedInternal::util::traits::EnableIfImpl<condition, Type>::Type;
-
-    template <bool condition, typename Type1, typename Type2>
-    using Conditional = typename enhancedInternal::util::traits::ConditionalImpl<condition, Type1, Type2>::Type;
-
     template <bool first, bool... conditions>
     inline constexpr bool allOfTrue = first;
 
@@ -386,7 +401,16 @@ namespace enhanced::util::inline traits {
     template <bool next, bool... conditions>
     inline constexpr bool anyOfTrue<false, next, conditions...> = anyOfTrue<next, conditions...>;
 
-#ifdef MSVC_COMPILER
+    template <typename...>
+    inline constexpr sizetype typeCounter = 0;
+
+    template <typename First>
+    inline constexpr sizetype typeCounter<First> = 1;
+
+    template <typename First, typename... Others>
+    inline constexpr sizetype typeCounter<First, Others...> = typeCounter<Others...> + 1;
+
+#if defined(MSVC_COMPILER)
     template <typename, typename>
     inline constexpr bool isSame = false;
 
@@ -418,28 +442,8 @@ namespace enhanced::util::inline traits {
     template <typename Base, typename... Derived>
     inline constexpr bool isAnyBaseOfNs = anyOfTrue<isBaseOfNs<Base, Derived>...>;
 
-    // Recommended to use C++20 concepts with 'enhanced::util::traits::isValid'.
-    template <typename>
-    using VoidTemplate $DeprecatedExt("Recommended to use C++20 concepts with 'enhanced::util::traits::isValid'") = void;
-
     template <typename...>
     inline constexpr bool isValid = true; // Used for C++20 concepts determines type expression is valid.
-
-    template <typename Type>
-    $NoIgnoreReturn
-    inline constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
-
-    template <typename Type>
-    $NoIgnoreReturn
-    inline constexpr Type& weakCast(Type&& value) noexcept {
-        return value;
-    }
-
-    template <typename Type>
-    $NoIgnoreReturn
-    inline constexpr Type& forceCast(auto&& value) noexcept {
-        return *((Type*) &value);
-    }
 
     template <typename>
     inline constexpr bool isConst = false;
@@ -516,6 +520,13 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isRefCvOr = isRefConst<Type> || isRefVolatile<Type>;
 
+    template <typename Type>
+    inline constexpr bool isReferenceable = false;
+
+    template <typename Type>
+    requires isValid<Type&>
+    inline constexpr bool isReferenceable<Type> = true;
+
     template <typename>
     inline constexpr bool isPointer = false;
 
@@ -543,6 +554,12 @@ namespace enhanced::util::inline traits {
 
     template <typename Type>
     inline constexpr bool isPtrCvOr = isPtrConst<Type> || isPtrVolatile<Type>;
+
+    template <typename Type>
+    using AddLvalueRef = typename enhancedInternal::util::traits::AddReferenceImpl<isReferenceable<Type>, Type>::LvalueRef;
+
+    template <typename Type>
+    using AddRvalueRef = typename enhancedInternal::util::traits::AddReferenceImpl<isReferenceable<Type>, Type>::RvalueRef;
 
     template <typename Type>
     requires isReference<Type>
@@ -575,6 +592,37 @@ namespace enhanced::util::inline traits {
     using RemovePtrAndCv = RemoveCv<RemovePointer<Type>>;
 
     template <typename Type>
+    $NoIgnoreReturn
+    constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
+
+    template <typename Type>
+    $NoIgnoreReturn
+    inline constexpr Type& weakCast(Type&& value) noexcept {
+        return value;
+    }
+
+#define _TEMPLATE(CV_OPT) \
+    template <typename Type> \
+    $NoIgnoreReturn \
+    inline constexpr Type& weakCast(CV_OPT Type& value) noexcept { \
+        return const_cast<Type&>(value); \
+    }
+
+    _CV_OPT_TEMPLATE
+#undef _TEMPLATE
+
+    template <typename Type>
+    $NoIgnoreReturn
+    inline constexpr Type& forceCast(auto&& value) noexcept {
+        return *((Type*) &value);
+    }
+
+    template <typename... Types>
+    inline constexpr sizetype valueCounter(Types&&...) noexcept {
+        return typeCounter<Types...>;
+    }
+
+    template <typename Type>
     inline constexpr bool isIntegralType =
         isAnyOf<RemoveCv<Type>, char,
     #ifdef WCHAR_IS_BUILTIN_TYPE
@@ -594,7 +642,10 @@ namespace enhanced::util::inline traits {
         u8char, u16char, u32char>;
 
     template <typename Type>
-    inline constexpr bool isIntegralTypeNc = util::isIntegralType<Type> && !util::isCharType<Type>;
+    inline constexpr bool isIntegralTypeNc = isIntegralType<Type> && !isCharType<Type>;
+
+    template <typename Type>
+    inline constexpr bool isIntegralTypeNs = isIntegralTypeNc<Type> && !isSame<Type, bool>;
 
     template <typename Type>
     requires isIntegralType<Type>
@@ -890,15 +941,47 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isReintConvertible<From, To> = true;
 
     template <typename From, typename To>
-    inline constexpr bool isQualiConvertible = false;
+    inline constexpr bool isCvConvertible = false;
 
     template <typename From, typename To>
     requires isVoidType<From> && isVoidType<To>
-    inline constexpr bool isQualiConvertible<From, To> = true;
+    inline constexpr bool isCvConvertible<From, To> = true;
 
     template <typename From, typename To>
     requires (!isVoidType<From> && !isVoidType<To>) && isValid<decltype(const_cast<To>(declvalue<From>()))>
-    inline constexpr bool isQualiConvertible<From, To> = true;
+    inline constexpr bool isCvConvertible<From, To> = true;
+
+    template <typename Type, typename... Args>
+    inline constexpr bool isConstructible = __is_constructible(Type, Args...);
+
+    template <typename Type>
+    inline constexpr bool isDefaultConstructible = isConstructible<Type>;
+
+    MSVC_WARNING_PUSH_AND_DISABLE(4180)
+
+    template <typename Type>
+    inline constexpr bool isCopyConstructible = isConstructible<Type, AddLvalueRef<const Type>>;
+
+    template <typename Type>
+    inline constexpr bool isMoveConstructible = isConstructible<Type, AddRvalueRef<Type>>;
+
+    MSVC_WARNING_POP
+
+#ifdef GCC_ABI
+    template <typename Type>
+    inline constexpr bool isDestructible = false;
+
+    template <typename Type>
+    requires isObject<Type> && (!isClass<Type>)
+    inline constexpr bool isDestructible<Type> = true;
+
+    template <typename Type>
+    requires isClass<Type> && (isValidValue(declvalue<Type>().~Type()))
+    inline constexpr bool isDestructible<Type> = true;
+#else
+    template <typename Type>
+    inline constexpr bool isDestructible = __is_destructible(Type);
+#endif
 
     template <typename Type>
     $NoIgnoreReturn
@@ -991,21 +1074,21 @@ namespace enhanced::util::inline traits {
     }
 
     template <typename Type>
-    requires isPointer<Type>
+    requires isPointer<RemoveRef<Type>>
     $NoIgnoreReturn
     inline constexpr const RemovePointer<RemoveRef<Type>>*& addPtrConst(Type&& value) noexcept {
         return const_cast<const RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
-    requires isPointer<Type>
+    requires isPointer<RemoveRef<Type>>
     $NoIgnoreReturn
     inline constexpr volatile RemovePointer<RemoveRef<Type>>*& addPtrVolatile(Type&& value) noexcept {
         return const_cast<volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
-    requires isPointer<Type>
+    requires isPointer<RemoveRef<Type>>
     $NoIgnoreReturn
     inline constexpr const volatile RemovePointer<RemoveRef<Type>>*& addPtrCv(Type&& value) noexcept {
         return const_cast<const volatile RemovePointer<RemoveRef<Type>>*&>(value);

@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -18,6 +17,7 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Warnings.h>
 #include <enhanced/String.h>
 #include <enhanced/collections/ArrayList.h>
 #include <enhanced/io/FileInputStream.h>
@@ -63,11 +63,11 @@ namespace enhanced::io {
 
         void create() const;
 
-        bool createIf() const; // NOLINT(modernize-use-nodiscard)
+        bool createIf() const; CTIDY_NOLINT(modernize-use-nodiscard)
 
         void remove() const;
 
-        bool removeIf() const; // NOLINT(modernize-use-nodiscard)
+        bool removeIf() const; CTIDY_NOLINT(modernize-use-nodiscard)
 
         $NoIgnoreReturn
         collections::ArrayList<MutString> splitPath() const;
@@ -86,5 +86,6 @@ namespace enhanced::io {
     };
 }
 
-#undef EOF
+#ifndef EOF
 #define EOF (-1)
+#endif

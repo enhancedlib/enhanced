@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -21,7 +20,7 @@
 
 // Detect current using which compiler to compile
 #ifdef __clang__ // Clang
-#define CLANG_COMPILER __clang__
+    #define CLANG_COMPILER __clang__
     #ifdef _MSC_VER
         #define MSVC_ABI
     #elif defined(__GNUC__)
@@ -139,10 +138,17 @@
 
 #define RESTRICT __restrict
 
-#define CDECL __cdecl
-#define FASTCALL __fastcall
-#define STDCALL __stdcall
-#define THISCALL __thiscall
+#ifdef GCC_COMPILER
+    #define CDECL
+    #define FASTCALL __attribute__((fastcall))
+    #define STDCALL __attribute__((stdcall))
+    #define THISCALL __attribute__((thiscall))
+#else
+    #define CDECL __cdecl
+    #define FASTCALL __fastcall
+    #define STDCALL __stdcall
+    #define THISCALL __thiscall
+#endif
 
 #ifdef MSVC_ABI
     #define VECTORCALL __vectorcall
@@ -154,7 +160,3 @@
 #include <new>
 #include <typeinfo>
 #include <initializer_list>
-
-#ifdef WINDOWS_OS
-    #include <sal.h>
-#endif

@@ -1,55 +1,66 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
 
 #include <enhanced/Defines.h>
 
+// Clang
 #ifdef CLANG_COMPILER
     #define CLANG_WARNING_PUSH PRAGMA(clang diagnostic push)
-    #define CLANG_WARNING_DISABLE(id) PRAGMA(clang diagnostic ignored id)
+    #define CLANG_WARNING_DISABLE(ID) PRAGMA(clang diagnostic ignored ID)
     #define CLANG_WARNING_POP PRAGMA(clang diagnostic pop)
 #else
     #define CLANG_WARNING_PUSH
-    #define CLANG_WARNING_DISABLE(id)
+    #define CLANG_WARNING_DISABLE(ID)
     #define CLANG_WARNING_POP
 #endif
 
+// MSVC
 #ifdef MSVC_COMPILER
     #define MSVC_WARNING_PUSH PRAGMA(warning(push))
-    #define MSVC_WARNING_DISABLE(id) PRAGMA(warning(disable: id))
+    #define MSVC_WARNING_DISABLE(ID) PRAGMA(warning(disable: ID))
     #define MSVC_WARNING_POP PRAGMA(warning(pop))
 #else
     #define MSVC_WARNING_PUSH
-    #define MSVC_WARNING_DISABLE(id)
+    #define MSVC_WARNING_DISABLE(ID)
     #define MSVC_WARNING_POP
 #endif
 
+// GCC
 #ifdef GCC_COMPILER
     #define GCC_WARNING_PUSH PRAGMA(GCC diagnostic push)
-    #define GCC_WARNING_DISABLE(id) PRAGMA(GCC diagnostic ignored id)
+    #define GCC_WARNING_DISABLE(ID) PRAGMA(GCC diagnostic ignored ID)
     #define GCC_WARNING_POP PRAGMA(GCC diagnostic pop)
 #else
     #define GCC_WARNING_PUSH
-    #define GCC_WARNING_DISABLE(id)
+    #define GCC_WARNING_DISABLE(ID)
     #define GCC_WARNING_POP
 #endif
 
-#define CLANG_WARNING_PUSH_AND_DISABLE(id) CLANG_WARNING_PUSH CLANG_WARNING_DISABLE(id)
-#define MSVC_WARNING_PUSH_AND_DISABLE(id) MSVC_WARNING_PUSH MSVC_WARNING_DISABLE(id)
-#define GCC_WARNING_PUSH_AND_DISABLE(id) GCC_WARNING_PUSH GCC_WARNING_DISABLE(id)
+// clang-tidy
+#define CTIDY_NOLINT_ALL
+#define CTIDY_NOLINT(...)
+#define CTIDY_NOLINTNEXTLINE_ALL
+#define CTIDY_NOLINTNEXTLINE(...)
+#define CTIDY_NOLINTBEGIN_ALL
+#define CTIDY_NOLINTBEGIN(...)
+#define CTIDY_NOLINTEND
+
+#define CLANG_WARNING_PUSH_AND_DISABLE(ID) CLANG_WARNING_PUSH CLANG_WARNING_DISABLE(ID)
+#define MSVC_WARNING_PUSH_AND_DISABLE(ID) MSVC_WARNING_PUSH MSVC_WARNING_DISABLE(ID)
+#define GCC_WARNING_PUSH_AND_DISABLE(ID) GCC_WARNING_PUSH GCC_WARNING_DISABLE(ID)
 
 #define ALLOW_DEPRECATED_BEGIN \
     CLANG_WARNING_PUSH_AND_DISABLE("-Wdeprecated") MSVC_WARNING_PUSH_AND_DISABLE(4996) GCC_WARNING_PUSH_AND_DISABLE("-Wdeprecated-declarations")

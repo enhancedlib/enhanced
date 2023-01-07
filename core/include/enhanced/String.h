@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -26,53 +25,42 @@
 
 namespace enhanced {
     template <typename CharType>
+    requires util::isCharType<CharType>
     class ENHANCED_CORE_API TMutString;
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     class ENHANCED_CORE_API TString : public CharSequence<CharType> {
     protected:
         TString(const CharType* value, sizetype length, bool isMutable) noexcept;
 
+        $NoIgnoreReturn
+        static TMutString<CharType> from(qword value, bool isNegative);
+
     public:
-        $RetRequiresRelease
-        static CharType* make(sizetype length);
-
-        $RetRequiresRelease
-        static CharType* copy(const CharType* source);
-
-        $RetRequiresRelease
-        static CharType* copy(const CharType* source, sizetype length);
-
-        $RetRequiresRelease
-        static CharType* copy(const CharType* source, sizetype oldLength, sizetype newLength);
+        $NoIgnoreReturn
+        static TString<CharType> from(bool value);
 
         $NoIgnoreReturn
-        static sizetype calcLength(const CharType* string) noexcept;
+        static TMutString<CharType> from(CharType value);
 
+        template <typename IntTypeNs>
+        requires util::isIntegralTypeNs<IntTypeNs>
         $NoIgnoreReturn
-        static bool isEqual(const CharType* string1, const CharType* string2) noexcept;
+        static TMutString<CharType> from(IntTypeNs value) {
+            return from(value, value < 0);
+        }
 
+        template <typename... Args>
+        requires (util::typeCounter<Args...> >= 2)
         $NoIgnoreReturn
-        static bool isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept;
-
-        template <typename IntType>
-        requires util::isIntegralTypeNc<IntType>
-        $NoIgnoreReturn
-        static TMutString<CharType> from(IntType value) {
-            // TODO: Faster implementation
-            TMutString<CharType> str;
-            int8 bit;
-            while (value != 0) {
-                bit = value % 10;
-                str.insertFirst(bit + '0');
-                value /= 10;
-            }
-            return str;
+        static TMutString<CharType> join(Args&&... values) {
+            return join({values...});
         }
 
         template <sizetype count>
         $NoIgnoreReturn
-        static inline TMutString<CharType> join(TString strings[count]) {
+        static inline TMutString<CharType> join(TString (&strings)[count]) {
             return join(strings, count);
         }
 
@@ -95,7 +83,7 @@ namespace enhanced {
 
         TString(CharType* const& value);
 
-        TString(const TString& other) noexcept;
+        TString(const TString& other);
 
         TString(TString&& other) noexcept;
 
@@ -172,16 +160,48 @@ namespace enhanced {
         bool operator==(const TString& string) const noexcept;
 
         $NoIgnoreReturn
+        bool operator!=(const TString& string) const noexcept;
+
+        $NoIgnoreReturn
         TMutString<CharType> operator+(const TString& string) const;
 
         $NoIgnoreReturn
         TMutString<CharType> operator+(CharType ch) const;
 
-        $RetSelf
+        $ReturnSelf
         TString& operator=(const TString& other) noexcept;
 
-        $RetSelf
+        $ReturnSelf
         TString& operator=(TString&& other) noexcept;
+    };
+
+    template <typename CharType>
+    requires util::isCharType<CharType>
+    struct TStringUtil {
+        TStringUtil() = delete;
+
+        ~TStringUtil() = delete;
+
+        $RetRequiresRelease
+        static CharType* make(sizetype length);
+
+        $RetRequiresRelease
+        static CharType* copy(const CharType* source);
+
+        $RetRequiresRelease
+        static CharType* copy(const CharType* source, sizetype length);
+
+        $RetRequiresRelease
+        static CharType* copy(const CharType* source, sizetype oldLength, sizetype newLength);
+
+        $NoIgnoreReturn
+        static sizetype calcLength(const CharType* string) noexcept;
+
+        $NoIgnoreReturn
+        static bool isEqual(const CharType* string1, const CharType* string2) noexcept;
+
+        $NoIgnoreReturn
+        static bool isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept;
     };
 
     using String = TString<char>;
@@ -192,32 +212,42 @@ namespace enhanced {
     using U16String = TString<u16char>;
     using U32String = TString<u32char>;
 
+    using StringUtil = TStringUtil<char>;
+#ifdef WCHAR_IS_BUILTIN_TYPE
+    using WideStringUtil = TStringUtil<wchar>;
+#endif
+    using U8StringUtil = TStringUtil<u8char>;
+    using U16StringUtil = TStringUtil<u16char>;
+    using U32StringUtil = TStringUtil<u32char>;
+
     inline namespace literals {
-        inline String operator""_s(const char* string, sizetype size) {
+        inline String operator""_ES(const char* string, sizetype size) {
             return {string, size};
         }
 
     #ifdef WCHAR_IS_BUILTIN_TYPE
-        inline WideString operator""_s(const wchar* string, sizetype size) {
+        inline WideString operator""_ES(const wchar* string, sizetype size) {
             return {string, size};
         }
     #endif
 
-        inline U8String operator""_s(const u8char* string, sizetype size) {
+        inline U8String operator""_ES(const u8char* string, sizetype size) {
             return {string, size};
         }
 
-        inline U16String operator""_s(const u16char* string, sizetype size) {
+        inline U16String operator""_ES(const u16char* string, sizetype size) {
             return {string, size};
         }
 
-        inline U32String operator""_s(const u32char* string, sizetype size) {
+        inline U32String operator""_ES(const u32char* string, sizetype size) {
             return {string, size};
         }
     }
 }
 
-#define ST_STRING(type, string) enhanced::util::switchType<const type(&)[sizeof(string) / sizeof(char)]> \
-    (string, WIDE_TEXT(string), U8_TEXT(string), U16_TEXT(string), U32_TEXT(string))
+#define E_SWITCH_STR(TYPE, STRING) enhanced::util::switchType<const TYPE(&)[sizeof(STRING) / sizeof(char)]> \
+    (STRING, L##STRING, u8##STRING, u##STRING, U##STRING)
 
-#define STR(quote) quote##_s
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define SWITCH_STR E_SWITCH_STR
+#endif

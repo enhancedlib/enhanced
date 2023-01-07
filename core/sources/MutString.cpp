@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #include <enhanced/MutString.h>
@@ -34,55 +33,67 @@ using enhanced::math::difference;
 
 namespace enhanced {
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>::TMutString(const CharType* value, sizetype length) :
-        TString<CharType>(TString<CharType>::copy(value, length), length, true) {}
+        TString<CharType>(TStringUtil<CharType>::copy(value, length), length, true) {}
 
     template <typename CharType>
-    TMutString<CharType>::TMutString() : TString<CharType>(TString<CharType>::make(0), 0, true) {}
+    requires util::isCharType<CharType>
+    TMutString<CharType>::TMutString() : TString<CharType>(TStringUtil<CharType>::make(0), 0, true) {}
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>::TMutString(const CharType*& value) : TMutString<CharType>(removePtrConst(value)) {}
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>::TMutString(CharType* const& value) : TMutString<CharType>(removeConst(value)) {}
 
     template <typename CharType>
-    TMutString<CharType>::TMutString(CharType*& value) : TMutString<CharType>(value, TString<CharType>::calcLength(value)) {}
+    requires util::isCharType<CharType>
+    TMutString<CharType>::TMutString(CharType*& value) : TMutString<CharType>(value, TStringUtil<CharType>::calcLength(value)) {}
 
     template <typename CharType>
-    TMutString<CharType>::TMutString(sizetype length) : TString<CharType>(TString<CharType>::make(length), length, true) {}
+    requires util::isCharType<CharType>
+    TMutString<CharType>::TMutString(sizetype length) : TString<CharType>(TStringUtil<CharType>::make(length), length, true) {}
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>::TMutString(const TMutString& other) :
-        TString<CharType>(TString<CharType>::copy(other.value, other.length), other.length, true) {}
+        TString<CharType>(TStringUtil<CharType>::copy(other.value, other.length), other.length, true) {}
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>::TMutString(TMutString&& other) noexcept : TString<CharType>(move(other)) {}
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     CharType* TMutString<CharType>::chars() const noexcept {
         return this->value;
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     CharType& TMutString<CharType>::at(sizetype index) const noexcept {
         return this->value[index];
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     CharType& TMutString<CharType>::operator[](sizetype index) const noexcept {
         return this->value[index];
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::append(const TString<CharType>& string) {
         if (string.length == 0) return *this;
 
         sizetype newLength = this->length + string.length;
-        auto newString = TString<CharType>::make(newLength);
+        auto newString = TStringUtil<CharType>::make(newLength);
 
         arrayCopy(newString, this->value, this->length);
         arrayCopy(newString + this->length, string.value, string.length);
@@ -96,9 +107,10 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::append(CharType ch) {
         sizetype newLength = this->length + 1;
-        auto newString = TString<CharType>::make(newLength);
+        auto newString = TStringUtil<CharType>::make(newLength);
 
         arrayCopy(newString, this->value, this->length);
         newString[this->length] = ch;
@@ -112,11 +124,12 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::insertFirst(const TString<CharType>& string) {
         if (string.length == 0) return *this;
 
         sizetype newLength = this->length + string.length;
-        auto newString = TString<CharType>::make(newLength);
+        auto newString = TStringUtil<CharType>::make(newLength);
 
         arrayCopy(newString, string.value, string.length);
         arrayCopy(newString + string.length, this->value, this->length);
@@ -130,9 +143,10 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::insertFirst(CharType ch) {
         sizetype newLength = this->length + 1;
-        auto newString = TString<CharType>::make(newLength);
+        auto newString = TStringUtil<CharType>::make(newLength);
 
         newString[0] = ch;
         arrayCopy(newString + 1, this->value, this->length);
@@ -146,9 +160,10 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceTo(sizetype start, sizetype end, CharType newChar) {
         sizetype newLength = this->length - (end - start) + 1;
-        auto newString = TString<CharType>::make(newLength);
+        auto newString = TStringUtil<CharType>::make(newLength);
 
         arrayCopy(newString, this->value, start);
         newString[start] = newChar;
@@ -163,9 +178,10 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceTo(sizetype start, sizetype end, const TString<CharType>& newSubstring) {
         sizetype newLength = this->length - (end - start) + newSubstring.length;
-        auto newString = TString<CharType>::make(newLength);
+        auto newString = TStringUtil<CharType>::make(newLength);
 
         arrayCopy(newString, this->value, start);
         arrayCopy(newString + start, newSubstring.value, newSubstring.length);
@@ -180,6 +196,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceTo(const CharType oldChar, const CharType newChar) {
         sizetype index = this->indexOf(oldChar);
         if (index == INVALID_SIZE) return *this;
@@ -188,6 +205,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring) {
         sizetype index = this->indexOf(oldSubstring);
         if (index == INVALID_SIZE) return *this;
@@ -195,6 +213,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceTo(CharType oldChar, const TString<CharType>& newSubstring) {
         sizetype index = this->indexOf(oldChar);
         if (index == INVALID_SIZE) return *this;
@@ -202,6 +221,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceTo(const TString<CharType>& oldSubstring, CharType newChar) {
         sizetype index = this->indexOf(oldSubstring);
         if (index == INVALID_SIZE) return *this;
@@ -209,6 +229,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceAllTo(CharType oldChar, CharType newChar) {
         auto result = this->indexOfAll(oldChar);
         for (auto index : result) {
@@ -218,6 +239,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceAllTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring) {
         auto result = this->indexOfAll(oldSubstring);
         if (result.isEmpty()) return *this;
@@ -225,7 +247,7 @@ namespace enhanced {
         sizetype diff = difference(newSubstring.length, oldSubstring.length) * result.getSize();
         sizetype newLength = (newSubstring.length > oldSubstring.length) ? this->length + diff : this->length - diff;
 
-        auto newString = TString<CharType>::make(newLength);
+        auto newString = TStringUtil<CharType>::make(newLength);
 
         arrayCopy(newString, this->value, result[0]);
 
@@ -255,14 +277,15 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceAllTo(CharType oldChar, const TString<CharType>& newSubstring) {
         auto result = this->indexOfAll(oldChar);
         if (result.isEmpty()) return *this;
 
-        sizetype diff = difference(newSubstring.length, 1) * result.getSize();
+        sizetype diff = difference(newSubstring.length, 1u) * result.getSize();
         sizetype newLength = (newSubstring.length > 1) ? this->length + diff : this->length - diff;
 
-        auto newString = TString<CharType>::make(newLength);
+        auto newString = TStringUtil<CharType>::make(newLength);
 
         arrayCopy(newString, this->value, result[0]);
 
@@ -292,14 +315,15 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::replaceAllTo(const TString<CharType>& oldSubstring, CharType newChar) {
         auto result = this->indexOfAll(oldSubstring);
         if (result.isEmpty()) return *this;
 
-        sizetype diff = difference(1, oldSubstring.length) * result.getSize();
+        sizetype diff = difference(1u, oldSubstring.length) * result.getSize();
         sizetype newLength = (1 > oldSubstring.length) ? this->length + diff : this->length - diff;
 
-        auto newString = TString<CharType>::make(newLength);
+        auto newString = TStringUtil<CharType>::make(newLength);
 
         arrayCopy(newString, this->value, result[0]);
 
@@ -329,6 +353,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::fill(CharType ch) {
         arrayFill(this->value, ch, this->length);
 
@@ -336,6 +361,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::toUppercase() {
         for (sizetype index = 0; index < this->length; ++index) {
             this->value[index] = uppercase(this->value[index]);
@@ -344,6 +370,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::toLowercase() {
         for (sizetype index = 0; index < this->length; ++index) {
             this->value[index] = lowercase(this->value[index]);
@@ -352,25 +379,29 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    $RetSelf
+    requires util::isCharType<CharType>
+    $ReturnSelf
     TMutString<CharType>& TMutString<CharType>::operator=(const TMutString& other) {
         TString<CharType>::operator=(other);
         return *this;
     }
 
     template <typename CharType>
-    $RetSelf
+    requires util::isCharType<CharType>
+    $ReturnSelf
     TMutString<CharType>& TMutString<CharType>::operator=(TMutString&& other) noexcept {
         TString<CharType>::operator=(move(other));
         return *this;
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::operator+=(const TString<CharType>& string) {
         return append(string);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TMutString<CharType>& TMutString<CharType>::operator+=(CharType ch) {
         return append(ch);
     }

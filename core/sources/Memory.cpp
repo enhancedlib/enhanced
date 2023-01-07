@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #include <malloc.h>
@@ -49,6 +48,9 @@ namespace enhanced {
     }
 
     void memoryCopy(void* destination, const void* source, sizetype size) {
+    #ifndef MSVC_COMPILER
+        __builtin_memcpy(destination, source, size);
+    #else
         if (destination == nullptr || source == nullptr || size == 0) return;
 
         sizetype countBlock = size / sizeof(qword);
@@ -61,6 +63,7 @@ namespace enhanced {
         for (sizetype index = size - countByte; index < size; ++index) {
             ((byte*) destination)[index] = ((byte*) source)[index];
         }
+    #endif
     }
 }
 

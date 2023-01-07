@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -19,10 +18,12 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/util/Traits.h>
 #include <enhanced/String.h>
 
 namespace enhanced {
     template <typename CharType>
+    requires util::isCharType<CharType>
     class ENHANCED_CORE_API TMutString final : public TString<CharType> {
     public:
         TMutString();
@@ -87,10 +88,10 @@ namespace enhanced {
 
         TMutString& toLowercase();
 
-        $RetSelf
+        $ReturnSelf
         TMutString& operator=(const TMutString& other);
 
-        $RetSelf
+        $ReturnSelf
         TMutString& operator=(TMutString&& other) noexcept;
 
         TMutString& operator+=(const TString<CharType>& string);
@@ -107,28 +108,26 @@ namespace enhanced {
     using U32MutString = TMutString<u32char>;
 
     inline namespace literals {
-        inline MutString operator""_m(const char* string, sizetype size) {
+        inline MutString operator""_EM(const char* string, sizetype size) {
             return {string, size};
         }
 
     #ifdef WCHAR_IS_BUILTIN_TYPE
-        inline WideMutString operator""_m(const wchar* string, sizetype size) {
+        inline WideMutString operator""_EM(const wchar* string, sizetype size) {
             return {string, size};
         }
     #endif
 
-        inline U8MutString operator""_m(const u8char* string, sizetype size) {
+        inline U8MutString operator""_EM(const u8char* string, sizetype size) {
             return {string, size};
         }
 
-        inline U16MutString operator""_m(const u16char* string, sizetype size) {
+        inline U16MutString operator""_EM(const u16char* string, sizetype size) {
             return {string, size};
         }
 
-        inline U32MutString operator""_m(const u32char* string, sizetype size) {
+        inline U32MutString operator""_EM(const u32char* string, sizetype size) {
             return {string, size};
         }
     }
 }
-
-#define MUT_STR(quote) quote##_m

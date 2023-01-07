@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -19,6 +18,7 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Warnings.h>
 #include <enhanced/InitializerList.h>
 #include <enhanced/Iterator.h>
 #include <enhanced/util/Traits.h>
@@ -38,7 +38,9 @@ namespace enhanced {
 
         inline explicit Array(sizetype size, const Type* elements) noexcept : size(size), elements(elements) {}
 
-        inline Array(InitializerList<Type> list) noexcept : size(list.size()), elements(util::removePtrConst(initListToArray(list))) {}
+        inline Array(InitializerList<Type> list) noexcept : size(list.getArray()), elements(util::removePtrConst(list.getArray())) {}
+
+        inline E_INIT_LIST_CONSTRUCTOR(Array, noexcept) CTIDY_NOLINT(cppcoreguidelines-pro-type-member-init)
 
         inline Array(const Array& other) noexcept : size(other.size), elements(other.elements) {}
 
@@ -76,7 +78,7 @@ namespace enhanced {
             return elements + size;
         }
 
-        $RetSelf
+        $ReturnSelf
         inline Array& operator=(const Array& other) noexcept {
             if (this == &other) return *this;
 
@@ -86,7 +88,7 @@ namespace enhanced {
             return *this;
         }
 
-        $RetSelf
+        $ReturnSelf
         inline Array& operator=(Array&& other) noexcept {
             if (this == &other) return *this;
 

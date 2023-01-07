@@ -12,22 +12,18 @@
  * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
-#include <enhanced/io/OutputStream.h>
+#include <stdlib.h>
 
-#include <enhanced/Defines.h>
-#include <enhanced/String.h>
-#include <enhanced/exceptions/NotImplementedError.h>
+#include <enhanced/Process.h>
 
-namespace enhanced::io {
-    void OutputStream::write(byte b) const {
-        E_NOT_IMPLEMENTED();
+namespace enhanced {
+    $NoReturn
+    void processExit(int status) {
+        exit(status);
     }
 
-    void OutputStream::write(const byte* buffer, sizetype size) const {
-        E_NOT_IMPLEMENTED();
-    }
-
-    void OutputStream::writeLine(const String& string) const {
-        E_NOT_IMPLEMENTED();
+    $NoReturn
+    void processAbort() {
+        abort();
     }
 }

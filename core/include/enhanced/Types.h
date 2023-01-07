@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -130,6 +129,39 @@ namespace enhanced {
     using ::qword;
     using ::sizetype;
 }
+
+#if defined(ENHANCED_SUPPRESS_OVERWRITE) || defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_LIMITS)
+    #pragma push_macro("INT8_MIN")
+    #pragma push_macro("INT16_MIN")
+    #pragma push_macro("INT32_MIN")
+    #pragma push_macro("INT64_MIN")
+    #pragma push_macro("CHAR_MIN")
+    #pragma push_macro("WCHAR_MIN")
+    #pragma push_macro("SCHAR_MIN")
+    #pragma push_macro("INT_MIN")
+    #pragma push_macro("LONG_MIN")
+    #pragma push_macro("LLONG_MIN")
+    #pragma push_macro("INT8_MAX")
+    #pragma push_macro("INT16_MAX")
+    #pragma push_macro("INT32_MAX")
+    #pragma push_macro("INT64_MAX")
+    #pragma push_macro("UINT8_MAX")
+    #pragma push_macro("UINT16_MAX")
+    #pragma push_macro("UINT32_MAX")
+    #pragma push_macro("UINT64_MAX")
+    #pragma push_macro("CHAR_MAX")
+    #pragma push_macro("WCHAR_MAX")
+    #pragma push_macro("SCHAR_MAX")
+    #pragma push_macro("INT_MAX")
+    #pragma push_macro("LONG_MAX")
+    #pragma push_macro("LLONG_MAX")
+    #pragma push_macro("UCHAR_MAX")
+    #pragma push_macro("UINT_MAX")
+    #pragma push_macro("ULONG_MAX")
+    #pragma push_macro("ULLONG_MAX")
+    #pragma push_macro("INFINITY")
+    #pragma push_macro("NAN")
+#endif
 
 #undef INT8_MIN
 #undef INT16_MIN
@@ -311,3 +343,36 @@ namespace enhanced {
 #endif
 
 #define INVALID_SIZE SIZE_TYPE_MAX
+
+#if defined(ENHANCED_SUPPRESS_OVERWRITE) || defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_LIMITS)
+    #pragma pop_macro("INT8_MIN")
+    #pragma pop_macro("INT16_MIN")
+    #pragma pop_macro("INT32_MIN")
+    #pragma pop_macro("INT64_MIN")
+    #pragma pop_macro("CHAR_MIN")
+    #pragma pop_macro("WCHAR_MIN")
+    #pragma pop_macro("SCHAR_MIN")
+    #pragma pop_macro("INT_MIN")
+    #pragma pop_macro("LONG_MIN")
+    #pragma pop_macro("LLONG_MIN")
+    #pragma pop_macro("INT8_MAX")
+    #pragma pop_macro("INT16_MAX")
+    #pragma pop_macro("INT32_MAX")
+    #pragma pop_macro("INT64_MAX")
+    #pragma pop_macro("UINT8_MAX")
+    #pragma pop_macro("UINT16_MAX")
+    #pragma pop_macro("UINT32_MAX")
+    #pragma pop_macro("UINT64_MAX")
+    #pragma pop_macro("CHAR_MAX")
+    #pragma pop_macro("WCHAR_MAX")
+    #pragma pop_macro("SCHAR_MAX")
+    #pragma pop_macro("INT_MAX")
+    #pragma pop_macro("LONG_MAX")
+    #pragma pop_macro("LLONG_MAX")
+    #pragma pop_macro("UCHAR_MAX")
+    #pragma pop_macro("UINT_MAX")
+    #pragma pop_macro("ULONG_MAX")
+    #pragma pop_macro("ULLONG_MAX")
+    #pragma pop_macro("INFINITY")
+    #pragma pop_macro("NAN")
+#endif

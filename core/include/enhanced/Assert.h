@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -22,13 +21,16 @@
 #include <enhanced/exceptions/AssertionError.h>
 
 // TODO: In the future, don't need to provide the current file and the current line for arguments
-#define dynamic_assert(expression) ((expression) || (throw enhanced::exceptions::AssertionError(#expression, CURRENT_FILE, CURRENT_LINE), false))
+#define E_DYNAMIC_ASSERT(EXPRESSION, ...) \
+    ((EXPRESSION) || (throw enhanced::exceptions::AssertionError(#EXPRESSION, CURRENT_FILE, CURRENT_LINE, ##__VA_ARGS__), false))
 
-#ifdef DEBUG
-    #define E_ASSERT(expression) dynamic_assert(expression)
+#if (defined(DEBUG) && !defined(ENHANCED_ASSERT_DISABLE)) || defined(ENHANCED_ASSERT_ENABLE)
+    #define E_ASSERT(EXPRESSION, ...) E_DYNAMIC_ASSERT(EXPRESSION, ##__VA_ARGS__)
 #else
-    #define E_ASSERT(expression) (void) 0
+    #define E_ASSERT(EXPRESSION, ...) (void) 0
 #endif
 
-#undef assert
-#define assert E_ASSERT
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define DYNAMIC_ASSERT E_DYNAMIC_ASSERT
+    #define ASSERT E_ASSERT
+#endif

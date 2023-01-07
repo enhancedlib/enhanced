@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -21,11 +20,37 @@
 
 namespace enhanced {
     template <typename Type>
-    using InitializerList = std::initializer_list<Type>;
+    class InitializerList {
+    private:
+        std::initializer_list<Type> initList;
 
-    template <typename Type>
+    public:
+        inline constexpr InitializerList(std::initializer_list<Type> initList) : initList(initList) {}
+
     $NoIgnoreReturn
-    inline constexpr const Type* initListToArray(const InitializerList<Type>& list) {
-        return list.begin();
+        inline constexpr const Type* begin() const noexcept {
+            return initList.begin();
     }
+
+        $NoIgnoreReturn
+        inline constexpr const Type* end() const noexcept {
+            return initList.end();
+        }
+
+        $NoIgnoreReturn
+        inline constexpr const Type* getArray() const noexcept {
+            return initList.begin();
+        }
+
+        $NoIgnoreReturn
+        inline constexpr sizetype getSize() const noexcept {
+            return initList.size();
 }
+    };
+}
+
+#define E_INIT_LIST_CONSTRUCTOR(NAME, ...) NAME(std::initializer_list<Type> list) __VA_ARGS__ : NAME(enhanced::InitializerList(list)) {}
+
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define INIT_LIST_CONSTRUCTOR E_INIT_LIST_CONSTRUCTOR
+#endif

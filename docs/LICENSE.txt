@@ -1,8 +1,7 @@
-Enhanced Software License
+                  Enhanced Software License
 
-> Copyright © 2022 Liu Baihao. All rights reserved.
-> Last updated: 2022/11/3
-> https://sharedwonder.github.io/enhanced/LICENSE.txt
+        Copyright © 2023 Liu Baihao. All rights reserved.
+       https://sharedwonder.github.io/enhanced/LICENSE.txt
 
 1. Definition
 - "License" shall mean all sections of this documentation.
@@ -32,10 +31,9 @@ Enhanced Software License
   that accompany the distribution of the Software.
 
 4. Disclaimer
-- UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
-  THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
-  WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+- UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
+  THE SOFTWARE IS ALWAYS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
 
 - FOR ANY LOSS OR DAMAGE CAUSED BY THE SOFTWARE OR YOUR ACCESS TO OR
   USE OF THIRD-PARTY CONTENT, PRODUCTS, ETC, THE LICENSOR MAY PROVIDE POSSIBLE SOLUTIONS,

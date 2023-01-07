@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #include <enhanced/String.h>
@@ -36,88 +35,46 @@ using enhanced::exceptions::NullPointerException;
 
 namespace enhanced {
     template <typename CharType>
-    $RetRequiresRelease
-    CharType* TString<CharType>::make(sizetype length) {
-        auto str = new CharType[length + 1];
-        str[length] = ST_CHAR(CharType, '\0');
-        return str;
-    }
-
-    template <typename CharType>
-    $RetRequiresRelease
-    CharType* TString<CharType>::copy(const CharType* source) {
-        return copy(source, calcLength(source));
-    }
-
-    template <typename CharType>
-    $RetRequiresRelease
-    CharType* TString<CharType>::copy(const CharType* source, sizetype length) {
-        if (source == nullptr) throw NullPointerException("The given argument 'source' is nullptr");
-
-        auto copy = make(length);
-        arrayCopy(copy, source, length);
-
-        return copy;
-    }
-
-    template <typename CharType>
-    $RetRequiresRelease
-    CharType* TString<CharType>::copy(const CharType* source, sizetype oldLength, sizetype newLength) {
-        if (source == nullptr) throw NullPointerException("The given argument 'source' is nullptr");
-
-        auto copy = make(newLength);
-        arrayCopy(copy, source, ((newLength > oldLength) ? oldLength : newLength));
-
-        return copy;
-    }
-
-    template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
-    sizetype TString<CharType>::calcLength(const CharType* string) noexcept {
-        if (string == nullptr) return INVALID_SIZE;
-
-        sizetype length;
-        for (length = 0; string[length] != ST_CHAR(CharType, '\0'); ++length) {}
-
-        return length;
+    TString<CharType> TString<CharType>::from(bool value) {
+        return value ? TString(E_SWITCH_STR(CharType, "true")) : E_SWITCH_STR(CharType, "false");
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
-    bool TString<CharType>::isEqual(const CharType* string1, const CharType* string2) noexcept {
-        if (string1 == string2) return true;
-        else if (string1 == nullptr || string2 == nullptr) return false;
+    TMutString<CharType> TString<CharType>::from(CharType value) {
+        TMutString<CharType> string {1};
+        string[0] = value;
+        return string;
+    }
 
-        for (sizetype index = 0;; ++index) {
-            if ((string1[index] == ST_CHAR(CharType, '\0')) ^ (string2[index] == ST_CHAR(CharType, '\0'))) {
-                return false;
-            }
-
-            if (string1[index] != string2[index]) return false;
+    template <typename CharType>
+    requires util::isCharType<CharType>
+    $NoIgnoreReturn
+    TMutString<CharType> TString<CharType>::from(qword value, bool isNegative) {
+        // TODO: Faster implementation
+        if (isNegative) value = -((int64) value);
+        CharType bits[21];
+        sizetype index = 20;
+        for (; value != 0; --index) {
+            bits[index] = value % 10 + '0';
+            value /= 10;
         }
+        if (isNegative) bits[index--] = '-';
+        return {bits + index + 1, 20 - index};
     }
 
     template <typename CharType>
-    $NoIgnoreReturn
-    bool TString<CharType>::isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept {
-        if (length1 != length2) return false;
-        if (string1 == string2) return true;
-        else if (string1 == nullptr || string2 == nullptr) return false;
-
-
-        for (sizetype index = 0; index < length1; ++index) {
-            if (string1[index] != string2[index]) return false;
-        }
-        return true;
-    }
-
-    template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::join(InitializerList<TString> list) {
-        return join(initListToArray(list), list.size());
+        return join(list.getArray(), list.getSize());
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::join(const TString* strings, sizetype count) {
         sizetype length = 0;
@@ -137,30 +94,39 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TString<CharType>::TString(const CharType* value, sizetype length, bool isMutable) noexcept : CharSequence<CharType>(value, length, isMutable) {}
 
     template <typename CharType>
-    TString<CharType>::TString() noexcept : CharSequence<CharType>(ST_STRING(CharType, ""), 0) {}
+    requires util::isCharType<CharType>
+    TString<CharType>::TString() noexcept : CharSequence<CharType>(E_SWITCH_STR(CharType, ""), 0) {}
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TString<CharType>::TString(const CharType* value, sizetype length) noexcept : CharSequence<CharType>(value, length) {}
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TString<CharType>::TString(const CharType*& value) : TString(removePtrConst(value)) {}
 
     template <typename CharType>
-    TString<CharType>::TString(CharType*& value) : TString<CharType>(value, calcLength(value)) {}
+    requires util::isCharType<CharType>
+    TString<CharType>::TString(CharType*& value) : TString<CharType>(value, TStringUtil<CharType>::calcLength(value)) {}
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TString<CharType>::TString(CharType* const& value) : TString(removeConst(value)) {}
 
     template <typename CharType>
-    TString<CharType>::TString(const TString& other) noexcept = default;
+    requires util::isCharType<CharType>
+    TString<CharType>::TString(const TString& other) = default;
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     TString<CharType>::TString(TString&& other) noexcept = default;
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     sizetype TString<CharType>::indexOf(const CharType ch) const noexcept {
         for (sizetype index = 0; index < this->length; ++index) {
@@ -171,6 +137,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     sizetype TString<CharType>::indexOf(const TString& string) const noexcept {
         sizetype substringIndex = 0;
@@ -186,6 +153,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     sizetype TString<CharType>::indexOf(CharType ch, sizetype getN) const noexcept {
         sizetype indexN = 0;
@@ -201,6 +169,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     sizetype TString<CharType>::indexOf(const TString& string, sizetype getN) const noexcept {
         sizetype indexN = 0;
@@ -220,6 +189,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     sizetype TString<CharType>::indexOfLast(CharType ch) const noexcept {
         for (sizetype index = this->length - 1;; --index) {
@@ -231,6 +201,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     sizetype TString<CharType>::indexOfLast(const TString& string) const noexcept {
         sizetype substringIndex = string.length - 1;
@@ -250,6 +221,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     sizetype TString<CharType>::indexOfLast(CharType ch, sizetype getN) const noexcept {
         sizetype indexN = 0;
@@ -267,6 +239,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     sizetype TString<CharType>::indexOfLast(const TString& string, sizetype getN) const noexcept {
         sizetype indexN = 0;
@@ -288,6 +261,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $RetRequiresRelease
     ArrayList<sizetype> TString<CharType>::indexOfAll(const CharType ch) const noexcept {
         ArrayList<sizetype> allIndexes;
@@ -300,6 +274,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $RetRequiresRelease
     ArrayList<sizetype> TString<CharType>::indexOfAll(const TString& string) const noexcept {
         ArrayList<sizetype> allIndexes;
@@ -311,6 +286,7 @@ namespace enhanced {
 
             if (substringIndex == string.length) {
                 allIndexes.add(index - string.length + 1);
+                substringIndex = 0;
             }
         }
 
@@ -318,90 +294,112 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::toMutable() const {
         return {this->value, this->length};
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replace(sizetype start, sizetype end, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceTo(start, end, newChar);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replace(sizetype start, sizetype end, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceTo(start, end, newSubstring);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replace(CharType oldChar, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceTo(oldChar, newChar);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replace(const TString& oldSubstring, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceTo(oldSubstring, newSubstring);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replace(CharType oldChar, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceTo(oldChar, newSubstring);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replace(const TString& oldSubstring, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceTo(oldSubstring, newChar);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replaceAll(CharType oldChar, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceAllTo(oldChar, newChar);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replaceAll(const TString& oldSubstring, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceAllTo(oldSubstring, newSubstring);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replaceAll(CharType oldChar, const TString& newSubstring) const {
         return TMutString<CharType>(this->value).replaceAllTo(oldChar, newSubstring);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::replaceAll(const TString& oldSubstring, CharType newChar) const {
         return TMutString<CharType>(this->value).replaceAllTo(oldSubstring, newChar);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::uppercase() const {
         return TMutString<CharType>(this->value).toUppercase();
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::lowercase() const {
         return TMutString<CharType>(this->value).toLowercase();
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     bool TString<CharType>::operator==(const TString& string) const noexcept {
-        return isEqual(this->value, string.value, this->length, string.length);
+        return TStringUtil<CharType>::isEqual(this->value, string.value, this->length, string.length);
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
+    $NoIgnoreReturn
+    bool TString<CharType>::operator!=(const TString& string) const noexcept {
+        return !operator==(string);
+    }
+
+    template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::operator+(const TString& string) const {
         sizetype newLength = this->length + string.length;
@@ -414,6 +412,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     $NoIgnoreReturn
     TMutString<CharType> TString<CharType>::operator+(CharType ch) const {
         sizetype newLength = this->length + 1;
@@ -426,17 +425,102 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    $RetSelf
+    requires util::isCharType<CharType>
+    $ReturnSelf
     TString<CharType>& TString<CharType>::operator=(const TString& other) noexcept {
         CharSequence<CharType>::operator=(other);
         return *this;
     }
 
     template <typename CharType>
-    $RetSelf
+    requires util::isCharType<CharType>
+    $ReturnSelf
     TString<CharType>& TString<CharType>::operator=(TString&& other) noexcept {
         CharSequence<CharType>::operator=(move(other));
         return *this;
+    }
+
+    template <typename CharType>
+    requires util::isCharType<CharType>
+    $RetRequiresRelease
+    CharType* TStringUtil<CharType>::make(sizetype length) {
+        auto str = new CharType[length + 1];
+        str[length] = E_SWITCH_CHAR(CharType, '\0');
+        return str;
+    }
+
+    template <typename CharType>
+    requires util::isCharType<CharType>
+    $RetRequiresRelease
+    CharType* TStringUtil<CharType>::copy(const CharType* source) {
+        return copy(source, calcLength(source));
+    }
+
+    template <typename CharType>
+    requires util::isCharType<CharType>
+    $RetRequiresRelease
+    CharType* TStringUtil<CharType>::copy(const CharType* source, sizetype length) {
+        if (source == nullptr) throw NullPointerException("The given argument 'source' is nullptr");
+
+        auto copy = make(length);
+        arrayCopy(copy, source, length);
+
+        return copy;
+    }
+
+    template <typename CharType>
+    requires util::isCharType<CharType>
+    $RetRequiresRelease
+    CharType* TStringUtil<CharType>::copy(const CharType* source, sizetype oldLength, sizetype newLength) {
+        if (source == nullptr) throw NullPointerException("The given argument 'source' is nullptr");
+
+        auto copy = make(newLength);
+        arrayCopy(copy, source, ((newLength > oldLength) ? oldLength : newLength));
+
+        return copy;
+    }
+
+    template <typename CharType>
+    requires util::isCharType<CharType>
+    $NoIgnoreReturn
+    sizetype TStringUtil<CharType>::calcLength(const CharType* string) noexcept {
+        if (string == nullptr) return INVALID_SIZE;
+
+        sizetype length;
+        for (length = 0; string[length] != E_SWITCH_CHAR(CharType, '\0'); ++length) {}
+
+        return length;
+    }
+
+    template <typename CharType>
+    requires util::isCharType<CharType>
+    $NoIgnoreReturn
+    bool TStringUtil<CharType>::isEqual(const CharType* string1, const CharType* string2) noexcept {
+        if (string1 == string2) return true;
+        else if (string1 == nullptr || string2 == nullptr) return false;
+
+        for (sizetype index = 0;; ++index) {
+            if ((string1[index] == E_SWITCH_CHAR(CharType, '\0')) ^ (string2[index] == E_SWITCH_CHAR(CharType, '\0'))) {
+                return false;
+            }
+
+            if (string1[index] != string2[index]) return false;
+        }
+    }
+
+    template <typename CharType>
+    requires util::isCharType<CharType>
+    $NoIgnoreReturn
+    bool TStringUtil<CharType>::isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept {
+        if (length1 != length2) return false;
+        if (string1 == string2) return true;
+        else if (string1 == nullptr || string2 == nullptr) return false;
+
+
+        for (sizetype index = 0; index < length1; ++index) {
+            if (string1[index] != string2[index]) return false;
+        }
+        return true;
     }
 
     template class TString<char>;
@@ -444,4 +528,10 @@ namespace enhanced {
     template class TString<u8char>;
     template class TString<u16char>;
     template class TString<u32char>;
+
+    template struct TStringUtil<char>;
+    template struct TStringUtil<wchar>;
+    template struct TStringUtil<u8char>;
+    template struct TStringUtil<u16char>;
+    template struct TStringUtil<u32char>;
 }

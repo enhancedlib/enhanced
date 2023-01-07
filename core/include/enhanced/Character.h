@@ -1,16 +1,15 @@
 /*
- * Copyright (C) 2022 Liu Baihao. All rights reserved.
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
  * Licensed under the Enhanced Software License.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *     https://sharedwonder.github.io/enhanced/LICENSE.txt
- *
- * UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
- * THE SOFTWARE IS ALWAYS PROVIDED "AS IS",
- * WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * This file is part of the Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ *
+ * You may not use this file except in compliance with the License.
+ * You should obtain a copy of the License in the distribution,
+ * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
 #pragma once
@@ -19,26 +18,23 @@
 #include <enhanced/Types.h>
 #include <enhanced/util/Traits.h>
 
-#define WIDE_TEXT(quote) L##quote
-#define U8_TEXT(quote) u8##quote
-#define U16_TEXT(quote) u##quote
-#define U32_TEXT(quote) U##quote
-
-#define ST_CHAR(type, ch) enhanced::util::switchType<type>(ch, WIDE_TEXT(ch), U8_TEXT(ch), U16_TEXT(ch), U32_TEXT(ch))
+#define E_SWITCH_CHAR(TYPE, CH) enhanced::util::switchType<TYPE>(CH, L##CH, u8##CH, u##CH, U##CH)
 
 namespace enhanced {
     template <typename CharType>
+    requires util::isCharType<CharType>
     inline constexpr CharType uppercase(CharType ch) {
-        if (ch >= ST_CHAR(CharType, 'A') && ch <= ST_CHAR(CharType, 'Z')) {
-            (ch -= ST_CHAR(CharType, 'A')) += ST_CHAR(CharType, 'a');
+        if (ch >= E_SWITCH_CHAR(CharType, 'A') && ch <= E_SWITCH_CHAR(CharType, 'Z')) {
+            (ch -= E_SWITCH_CHAR(CharType, 'A')) += E_SWITCH_CHAR(CharType, 'a');
         }
         return ch;
     }
 
     template <typename CharType>
+    requires util::isCharType<CharType>
     inline constexpr CharType lowercase(CharType ch) {
-        if (ch >= ST_CHAR(CharType, 'A') && ch <= ST_CHAR(CharType, 'Z')) {
-            (ch -= ST_CHAR(CharType, 'A')) += ST_CHAR(CharType, 'a');
+        if (ch >= E_SWITCH_CHAR(CharType, 'A') && ch <= E_SWITCH_CHAR(CharType, 'Z')) {
+            (ch -= E_SWITCH_CHAR(CharType, 'A')) += E_SWITCH_CHAR(CharType, 'a');
         }
         return ch;
     }
