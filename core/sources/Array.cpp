@@ -19,11 +19,11 @@
 #include <enhanced/Memory.h>
 
 namespace enhanced {
-    void arrayFill($InOut void* array, qword value, sizetype count, sizetype sizeOfType) {
+    void arrayFill([[InOut]] void* array, qword value, sizetype count, sizetype sizeOfType) {
         arrayFillPtr(array, &value, count, sizeOfType);
     }
 
-    void arrayFillPtr($InOut void* array, const void* valuePtr, sizetype count, sizetype sizeOfType) {
+    void arrayFillPtr([[InOut]] void* array, const void* valuePtr, sizetype count, sizetype sizeOfType) {
         if (array == nullptr || valuePtr == nullptr || count == 0 || sizeOfType == 0) return;
 
         sizetype size = count * sizeOfType;
@@ -33,7 +33,7 @@ namespace enhanced {
         }
     }
 
-    void arrayCopy($InOut void* destination, const void* source, sizetype count, sizetype sizeOfType) {
+    void arrayCopy([[InOut]] void* destination, const void* source, sizetype count, sizetype sizeOfType) {
         memoryCopy(destination, source, count * sizeOfType);
     }
 }

@@ -12,18 +12,18 @@
  * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <enhanced/Process.h>
 
 namespace enhanced {
-    $NoReturn
+    [[NoReturn]]
     void processExit(int status) {
-        exit(status);
+        std::exit(status);
     }
 
-    $NoReturn
+    [[NoReturn]]
     void processAbort() {
-        abort();
+        std::abort();
     }
 }

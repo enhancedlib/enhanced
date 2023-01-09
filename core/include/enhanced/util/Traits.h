@@ -88,13 +88,13 @@
 
 #define _FUNC_TEMPLATE_CDECL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Cdecl, CDECL)
 
-#if defined(X86_ARCH) && !defined(MS_CLR_ABI)
+#if defined(ARCH_X86) && !defined(MS_CLR)
     #define _FUNC_TEMPLATE_FASTCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Fastcall, FASTCALL)
 #else
     #define _FUNC_TEMPLATE_FASTCALL(SUFFIX)
 #endif
 
-#ifdef X86_ARCH
+#ifdef ARCH_X86
     #define _FUNC_TEMPLATE_STDCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Stdcall, STDCALL)
     #define _FUNC_TEMPLATE_THISCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Thiscall, THISCALL)
 #else
@@ -102,11 +102,11 @@
     #define _FUNC_TEMPLATE_THISCALL(SUFFIX)
 #endif
 
-#ifdef MSVC_ABI
-    #ifdef MS_CLR_ABI
+#ifdef ABI_MSVC
+    #ifdef MS_CLR
         #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX)
         #define _FUNC_TEMPLATE_CLRCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Clrcall, CLRCALL)
-    #elif (defined(X86_ARCH) && _M_IX86_FP >= 2) || defined(X64_ARCH)
+    #elif (defined(ARCH_X86) && _M_IX86_FP >= 2) || defined(ARCH_X64)
         #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Vectorcall, VECTORCALL)
         #define _FUNC_TEMPLATE_CLRCALL(SUFFIX)
     #endif
@@ -363,12 +363,14 @@ namespace enhancedInternal::util::traits {
 #undef _TEMPLATE
 }
 
+CLANG_WARNING_PAD("-Wdeprecated-volatile") MSVC_WARNING_PAD(4180) GCC_WARNING_PAD("-Wattributes")
+
 namespace enhanced::util::inline traits {
     template <typename>
-    using VoidTemplate $DeprecatedExt("Recommended to use C++20 concepts") = void;
+    using VoidTemplate [[Deprecated("Recommended to use C++20 concepts")]] = void;
 
     template <bool condition, typename Type = void>
-    using EnableIf $DeprecatedExt("Recommended to use C++20 concepts") =
+    using EnableIf [[Deprecated("Recommended to use C++20 concepts")]] =
         typename enhancedInternal::util::traits::EnableIfImpl<condition, Type>::Type;
 
     template <bool condition, typename Type1, typename Type2>
@@ -410,7 +412,7 @@ namespace enhanced::util::inline traits {
     template <typename First, typename... Others>
     inline constexpr sizetype typeCounter<First, Others...> = typeCounter<Others...> + 1;
 
-#if defined(MSVC_COMPILER)
+#if defined(COMPILER_MSVC)
     template <typename, typename>
     inline constexpr bool isSame = false;
 
@@ -443,7 +445,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isAnyBaseOfNs = anyOfTrue<isBaseOfNs<Base, Derived>...>;
 
     template <typename...>
-    inline constexpr bool isValid = true; // Used for C++20 concepts determines type expression is valid.
+    inline constexpr bool testValid = true; // Used for C++20 concepts determines type expression is valid.
 
     template <typename>
     inline constexpr bool isConst = false;
@@ -524,7 +526,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isReferenceable = false;
 
     template <typename Type>
-    requires isValid<Type&>
+    requires testValid<Type&>
     inline constexpr bool isReferenceable<Type> = true;
 
     template <typename>
@@ -592,18 +594,18 @@ namespace enhanced::util::inline traits {
     using RemovePtrAndCv = RemoveCv<RemovePointer<Type>>;
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr Type& weakCast(Type&& value) noexcept {
         return value;
     }
 
 #define _TEMPLATE(CV_OPT) \
     template <typename Type> \
-    $NoIgnoreReturn \
+    [[NoIgnoreReturn]] \
     inline constexpr Type& weakCast(CV_OPT Type& value) noexcept { \
         return const_cast<Type&>(value); \
     }
@@ -612,7 +614,7 @@ namespace enhanced::util::inline traits {
 #undef _TEMPLATE
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr Type& forceCast(auto&& value) noexcept {
         return *((Type*) &value);
     }
@@ -701,21 +703,17 @@ namespace enhanced::util::inline traits {
 
     // Only function types and reference types cannot be const qualified.
 
-    MSVC_WARNING_PUSH_AND_DISABLE(4180)
-
     template <typename Type>
     inline constexpr bool isObject = !isVoidType<Type> && isConst<const Type>;
 
     template <typename Type>
     inline constexpr bool isFunction = !isReference<Type> && !isConst<const Type>;
 
-    MSVC_WARNING_POP
-
     enum class CallingConvention {
         Cdecl, Fastcall, Stdcall, Thiscall,
-    #ifdef MSVC_ABI
+    #ifdef ABI_MSVC
         Vectorcall,
-        #ifdef MS_CLR_ABI
+        #ifdef MS_CLR
         Clrcall
         #endif
     #endif
@@ -792,7 +790,7 @@ namespace enhanced::util::inline traits {
     _FUNC_WITH_VARARGS_PTR_TEMPLATE
 #undef _TEMPLATE
 
-#ifdef CLANG_COMPILER
+#ifdef COMPILER_CLANG
     template <typename Type>
     inline constexpr bool isMemObjPtr = __is_member_object_pointer(Type);
 
@@ -891,7 +889,7 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isFinalClass = __is_final(Type);
 
-#ifdef GCC_COMPILER
+#ifdef COMPILER_GCC
     template <typename From, typename To>
     inline constexpr bool isConvertible = false;
 
@@ -900,7 +898,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && isValid<decltype(weakCast<To>(declvalue<From>()))>
+    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype(weakCast<To>(declvalue<From>()))>
     inline constexpr bool isConvertible<From, To> = true;
 #else
     template <typename From, typename To>
@@ -915,7 +913,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isGeneralConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && isValid<decltype((To) declvalue<From>())>
+    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype((To) declvalue<From>())>
     inline constexpr bool isGeneralConvertible<From, To> = true;
 
     template <typename From, typename To>
@@ -926,7 +924,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isStaticConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && isValid<decltype(static_cast<To>(declvalue<From>()))>
+    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype(static_cast<To>(declvalue<From>()))>
     inline constexpr bool isStaticConvertible<From, To> = true;
 
     template <typename From, typename To>
@@ -937,7 +935,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isReintConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && isValid<decltype(reinterpret_cast<To>(declvalue<From>()))>
+    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype(reinterpret_cast<To>(declvalue<From>()))>
     inline constexpr bool isReintConvertible<From, To> = true;
 
     template <typename From, typename To>
@@ -948,16 +946,11 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isCvConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && isValid<decltype(const_cast<To>(declvalue<From>()))>
+    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype(const_cast<To>(declvalue<From>()))>
     inline constexpr bool isCvConvertible<From, To> = true;
 
     template <typename Type, typename... Args>
     inline constexpr bool isConstructible = __is_constructible(Type, Args...);
-
-    template <typename Type>
-    inline constexpr bool isDefaultConstructible = isConstructible<Type>;
-
-    MSVC_WARNING_PUSH_AND_DISABLE(4180)
 
     template <typename Type>
     inline constexpr bool isCopyConstructible = isConstructible<Type, AddLvalueRef<const Type>>;
@@ -965,9 +958,7 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isMoveConstructible = isConstructible<Type, AddRvalueRef<Type>>;
 
-    MSVC_WARNING_POP
-
-#ifdef GCC_ABI
+#ifdef ABI_GCC
     template <typename Type>
     inline constexpr bool isDestructible = false;
 
@@ -976,7 +967,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isDestructible<Type> = true;
 
     template <typename Type>
-    requires isClass<Type> && (isValidValue(declvalue<Type>().~Type()))
+    requires isClass<Type> && testValid<decltype(declvalue<Type>().~Type())>
     inline constexpr bool isDestructible<Type> = true;
 #else
     template <typename Type>
@@ -984,40 +975,40 @@ namespace enhanced::util::inline traits {
 #endif
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemoveCv<RemoveRef<Type>>&& move(Type&& value) noexcept {
         return const_cast<RemoveCv<RemoveRef<Type>>&&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemoveRef<Type>&& moveIf(Type&& value) noexcept {
         return static_cast<RemoveRef<Type>&&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr Type&& forward(RemoveRef<Type>& value) noexcept {
         return static_cast<Type&&>(value);
     }
 
     template <typename Type>
     requires (!isLvalueRef<Type>)
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr Type&& forward(RemoveRef<Type>&& value) noexcept {
         return static_cast<Type&&>(value);
     }
 
     template <typename Case, typename First, typename... Types>
     requires isSame<Case, First>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr Case& switchType(First&& first, Types&&...) noexcept {
         return first;
     }
 
     template <typename Case, typename First, typename... Types>
     requires (!isSame<Case, First>)
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr Case& switchType(First&&, Types&&... values) noexcept {
         return switchType<Case, Types...>(static_cast<Types&&>(values)...);
     }
@@ -1056,130 +1047,137 @@ namespace enhanced::util::inline traits {
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr const RemoveRef<Type>& addConst(Type&& value) noexcept {
         return const_cast<const RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr volatile RemoveRef<Type>& addVolatile(Type&& value) noexcept {
         return const_cast<volatile RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr const volatile RemoveRef<Type>& addCv(Type&& value) noexcept {
         return const_cast<const volatile RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
     requires isPointer<RemoveRef<Type>>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr const RemovePointer<RemoveRef<Type>>*& addPtrConst(Type&& value) noexcept {
         return const_cast<const RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
     requires isPointer<RemoveRef<Type>>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr volatile RemovePointer<RemoveRef<Type>>*& addPtrVolatile(Type&& value) noexcept {
         return const_cast<volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
     requires isPointer<RemoveRef<Type>>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr const volatile RemovePointer<RemoveRef<Type>>*& addPtrCv(Type&& value) noexcept {
         return const_cast<const volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemoveConst<RemoveRef<Type>>& removeConst(Type&& value) noexcept {
         return const_cast<RemoveConst<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemoveVolatile<RemoveRef<Type>>& removeVolatile(Type&& value) noexcept {
         return const_cast<RemoveVolatile<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemoveCv<RemoveRef<Type>>& removeCv(Type&& value) noexcept {
         return const_cast<RemoveCv<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemoveRefConst<Type> removeRefConst(Type&& value) noexcept {
         return const_cast<RemoveRefConst<Type>>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemoveRefVolatile<Type> removeRefVolatile(Type&& value) noexcept {
         return const_cast<RemoveRefVolatile<Type>>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemoveRefCv<Type> removeRefCv(Type&& value) noexcept {
         return const_cast<RemoveRefCv<Type>>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemovePtrConst<RemoveRef<Type>> removePtrConst(Type&& value) noexcept {
         return const_cast<RemovePtrConst<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemovePtrVolatile<RemoveRef<Type>> removePtrVolatile(Type&& value) noexcept {
         return const_cast<RemovePtrVolatile<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr RemovePtrCv<RemoveRef<Type>>& removePtrCv(Type&& value) noexcept {
         return const_cast<RemovePtrCv<RemoveRef<Type>&>>(value);
     }
 
     template <typename Derived, typename Base>
     requires isPolymorphicClass<RemoveRef<Base>> && isSame<Derived, RemoveRef<Base>>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr bool isInstanceOf(Base&&) noexcept {
         return true;
     }
 
     template <typename Derived, typename Base>
     requires isPolymorphicClass<RemoveRef<Base>> && isBaseOfNs<RemoveRef<Base>, Derived>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr bool isInstanceOf(Base&& value) noexcept {
         return dynamic_cast<Derived*>(&value) != nullptr;
     }
 }
 
+CLANG_WARNING_POP MSVC_WARNING_POP GCC_WARNING_POP
+
 #undef _CV_OPT_TEMPLATE
 #undef _BASE_INT_TYPE_TEMPLATE
+
 #undef _FUNC_TEMPLATE_CV
 #undef _FUNC_TEMPLATE_CV_REF
 #undef _FUNC_TEMPLATE_CV_REF_NOEXCEPT
+
 #undef _FUNC_TEMPLATE_PTR
 #undef _FUNC_TEMPLATE_PTR_NOEXCEPT
+
 #undef _FUNC_TEMPLATE_MEMBER_PTR
 #undef _FUNC_TEMPLATE_MEMBER_PTR_CV
 #undef _FUNC_TEMPLATE_MEMBER_PTR_CV_REF
 #undef _FUNC_TEMPLATE_MEMBER_PTR_CV_REF_NOEXCEPT
+
 #undef _FUNC_TEMPLATE_CDECL
 #undef _FUNC_TEMPLATE_FASTCALL
 #undef _FUNC_TEMPLATE_STDCALL
 #undef _FUNC_TEMPLATE_THISCALL
 #undef _FUNC_TEMPLATE_VECTORCALL
 #undef _FUNC_TEMPLATE_CLRCALL
+
 #undef _FUNC_TEMPLATE
 #undef _FUNC_WITH_VARARGS_TEMPLATE
 #undef _FUNC_PTR_TEMPLATE

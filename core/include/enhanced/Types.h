@@ -20,23 +20,23 @@
     #define CHAR_IS_UNSIGNED
 #endif
 
-#if !defined(MSVC_COMPILER) || defined(_NATIVE_WCHAR_T_DEFINED)
+#if !defined(COMPILER_MSVC) || defined(_NATIVE_WCHAR_T_DEFINED)
     #define WCHAR_IS_BUILTIN_TYPE
 #endif
 
-#if defined(MSVC_COMPILER) || (__SIZEOF_WCHAR_T__ == 2)
+#if defined(COMPILER_MSVC) || (__SIZEOF_WCHAR_T__ == 2)
     #define WCHAR_16BIT
 #endif
 
-#if defined(X86_ARCH) || defined(ARM32_ARCH)
+#if defined(ARCH_X86) || defined(ARCH_ARM32)
     #define SIZE_TYPE_32BIT
 #endif
 
-#if defined(WINDOWS_OS) || defined(X86_ARCH) || defined(ARM32_ARCH)
+#if defined(OS_WINDOWS) || defined(ARCH_X86) || defined(ARCH_ARM32)
     #define LONG_EQUALS_INT
 #endif
 
-#ifdef MSVC_ABI
+#ifdef ABI_MSVC
     #define LDOUBLE_EQUALS_DOUBLE
 #endif
 
@@ -330,7 +330,7 @@ namespace enhanced {
     #define SIZE_TYPE_MAX UINT64_MAX
 #endif
 
-#ifdef MSVC_COMPILER
+#ifdef COMPILER_MSVC
     #define POSITIVE_INFINITY ((double) (1e+300 * 1e+300))
     #define NEGATIVE_INFINITY (-POSITIVE_INFINITY)
     #define INFINITY POSITIVE_INFINITY

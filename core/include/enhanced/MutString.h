@@ -45,13 +45,13 @@ namespace enhanced {
 
         TMutString(TMutString&& other) noexcept;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         CharType* chars() const noexcept;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         CharType& at(sizetype index) const noexcept;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         CharType& operator[](sizetype index) const noexcept;
 
         TMutString& append(const TString<CharType>& string);
@@ -88,10 +88,10 @@ namespace enhanced {
 
         TMutString& toLowercase();
 
-        $ReturnSelf
+        [[ReturnSelf]]
         TMutString& operator=(const TMutString& other);
 
-        $ReturnSelf
+        [[ReturnSelf]]
         TMutString& operator=(TMutString&& other) noexcept;
 
         TMutString& operator+=(const TString<CharType>& string);

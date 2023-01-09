@@ -24,13 +24,13 @@ namespace enhanced::collections {
     struct Collection {
         virtual ~Collection() noexcept = default;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         virtual sizetype getSize() const = 0;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         virtual bool isEmpty() const = 0;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         virtual bool contain(const Type& value) const = 0;
 
         virtual void clear() = 0;

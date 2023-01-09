@@ -29,27 +29,27 @@ namespace enhanced::math {
 #undef min
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr const Type& max(Type x, Type y) {
         return (x > y) ? x : y;
     }
 
     template <typename X, typename Y>
     requires util::isIntegralType<X> && util::isIntegralType<Y>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> max(X x, Y y) {
         return (x > y) ? x : y;
     }
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr const Type& min(Type x, Type y) {
         return (x < y) ? x : y;
     }
 
     template <typename X, typename Y>
     requires util::isIntegralType<X> && util::isIntegralType<Y>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> min(X x, Y y) {
         return (x < y) ? x : y;
     }
@@ -61,16 +61,16 @@ namespace enhanced::math {
 
     template <typename IntegralType>
     requires util::isIntegralType<IntegralType>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr util::ToUnsigned<IntegralType> abs(IntegralType number) {
         return (number >= 0) ? number : -number;
     }
 
     template <typename X, typename Y>
     requires util::isIntegralType<X> && util::isIntegralType<Y>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr util::ToUnsigned<util::Conditional<(sizeof(X) > sizeof(Y)), X, Y>> difference(X x, Y y) {
-        CLANG_WARNING_PUSH_AND_DISABLE("-Wsign-compare") GCC_WARNING_PUSH_AND_DISABLE("-Wsign-compare")
+        CLANG_WARNING_PAD("-Wsign-compare") GCC_WARNING_PAD("-Wsign-compare")
 
         return (x < y) ? y - x : x - y;
 

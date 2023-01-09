@@ -23,34 +23,34 @@ namespace enhanced {
     struct Iterator {
         virtual ~Iterator() noexcept = default;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         virtual bool isBegin() const = 0;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         virtual bool isEnd() const = 0;
 
         /*!
          * Determines if there are still elements can iterate over.
          */
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         virtual bool hasNext() const = 0;
 
         /*!
          * Let the iterator pointer return to the next element.
          */
-        $ReturnSelf
+        [[ReturnSelf]]
         virtual const Iterator<Type>& next() const = 0;
 
         /*!
          * Let the iterator pointer return to the next element.
          */
-        $ReturnSelf
+        [[ReturnSelf]]
         virtual const Iterator<Type>& prev() const = 0;
 
         /*!
          * Gets the current element.
          */
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         virtual Type& get() const = 0;
 
         /*!
@@ -61,20 +61,20 @@ namespace enhanced {
         /*!
          * Gets the number of elements.
          */
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         virtual sizetype count() const = 0;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool operator!=(byte) const {
             return !isEnd();
         }
 
-        $ReturnSelf
+        [[ReturnSelf]]
         inline const Iterator<Type>& operator++() const {
             return next();
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type& operator*() const {
             return get();
         }

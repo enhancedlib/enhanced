@@ -28,7 +28,7 @@
 namespace enhanced::math {
     class ENHANCED_CORE_API LargeNumber : public Number, public util::Comparable<LargeNumber> {
     private:
-        MSVC_WARNING_PUSH_AND_DISABLE(4251)
+        MSVC_WARNING_PAD(4251)
 
         collections::ArrayList<byte> storage;
 
@@ -63,7 +63,7 @@ namespace enhanced::math {
 
         LargeNumber(LargeNumber&& other) noexcept;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         ComparisonResult compare(const LargeNumber& other) const override;
 
         LargeNumber operator+() const;

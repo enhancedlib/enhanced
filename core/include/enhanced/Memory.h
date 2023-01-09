@@ -27,14 +27,14 @@ namespace enhanced {
     extern const Nothrow nothrow;
 
     template <typename Type>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     inline constexpr Type* addressOf(Type& value) noexcept {
         return __builtin_addressof(value);
     }
 
     template <typename Type>
     constexpr const Type* addressOf(const Type&&) {
-        static_assert(!util::isValid<Type>, "Cannot get address of a temporary expression");
+        static_assert(!util::testValid<Type>, "Cannot get address of a temporary expression");
     }
 
     /*!
@@ -45,8 +45,8 @@ namespace enhanced {
      * @param size     The size to be allocated (unit: byte).
      * @return void*   A pointer to the newly allocated space.
      */
-    $MustInspectResult $RetNullable $SuccessIf(return != nullptr) $Allocator $RetRestrict
-    ENHANCED_CORE_API void* memoryAlloc(sizetype size);
+    [[MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease]]
+    ENHANCED_CORE_API ALLOCATOR RET_RESTRICT void* memoryAlloc(sizetype size);
 
     /*!
      * Frees a memory space to which the pointer points. \n

@@ -12,6 +12,7 @@
  * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
+#include "enhanced/Annotations.h"
 #include <malloc.h>
 
 #include <enhanced/Memory.h>
@@ -28,8 +29,8 @@ using enhanced::exceptions::MemoryAllocationError;
 namespace enhanced {
     const Nothrow nothrow {};
 
-    $MustInspectResult $RetNullable $SuccessIf(return != nullptr) $Allocator $RetRestrict
-    void* memoryAlloc(sizetype size) {
+    [[MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease]]
+    ALLOCATOR RET_RESTRICT void* memoryAlloc(sizetype size) {
         if (size == 0) return nullptr;
 
         return malloc(size);
@@ -48,7 +49,7 @@ namespace enhanced {
     }
 
     void memoryCopy(void* destination, const void* source, sizetype size) {
-    #ifndef MSVC_COMPILER
+    #ifndef COMPILER_MSVC
         __builtin_memcpy(destination, source, size);
     #else
         if (destination == nullptr || source == nullptr || size == 0) return;
@@ -72,8 +73,8 @@ using enhanced::nothrow;
 
 // TODO
 
-$RetNotNull $Allocator
-void* operator new(sizetype size) {
+[[RetNotNull]]
+ALLOCATOR void* operator new(sizetype size) {
     void* space = memoryAlloc(size);
     if (space == nullptr) {
         throw MemoryAllocationError("Cannot allocate memory");
@@ -81,22 +82,22 @@ void* operator new(sizetype size) {
     return space;
 }
 
-$RetNotNull $Allocator
-void* operator new[](sizetype size) {
+[[RetNotNull]]
+ALLOCATOR void* operator new[](sizetype size) {
     return operator new(size);
 }
 
-$RetNullable $SuccessIf(return != nullptr) $Allocator $RetRestrict
-void* operator new(sizetype size, enhanced::NothrowRef) noexcept {
+[[MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease]]
+ALLOCATOR RET_RESTRICT void* operator new(sizetype size, enhanced::NothrowRef) noexcept {
     return memoryAlloc(size);
 }
 
-$RetNullable $SuccessIf(return != nullptr) $Allocator $RetRestrict
-void* operator new[](sizetype size, enhanced::NothrowRef) noexcept {
+[[MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease]]
+ALLOCATOR RET_RESTRICT void* operator new[](sizetype size, enhanced::NothrowRef) noexcept {
     return operator new(size, nothrow);
 }
 
-GCC_WARNING_PUSH_AND_DISABLE("-Wsized-deallocation")
+GCC_WARNING_PAD("-Wsized-deallocation")
 
 void operator delete(void* block) noexcept {
     memoryFree(block);

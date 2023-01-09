@@ -112,23 +112,23 @@ namespace enhanced::util {
             release();
         }
 
-        $NoIgnoreReturn $RetNotNull
+        [[NoIgnoreReturn, RetNotNull]]
         inline Type* get() const noexcept {
             nullPointerCheck();
             return static_cast<Type*>(pointer);
         }
 
-        $NoIgnoreReturn $RetNullable
+        [[NoIgnoreReturn, RetNullable]]
         inline Type* self() const noexcept {
             return static_cast<Type*>(pointer);
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline const SharedPtr* addressOf() const noexcept {
             return &self();
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type* endOf() const noexcept {
             return static_cast<Type*>(end);
         }
@@ -137,43 +137,43 @@ namespace enhanced::util {
             release0(destroy);
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type* operator+(sizetype offset) const noexcept {
             return self() + offset;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type* operator-(sizetype offset) const noexcept {
             return self() - offset;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type* operator->() const {
             return get();
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type& operator*() const {
             return *get();
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type& operator[](sizetype offset) const {
             return get()[offset];
         }
 
-        $NoIgnoreReturn $RetNullable
+        [[NoIgnoreReturn, ReturnSelf]]
         inline operator Type*() const noexcept {
             return self();
         }
 
-        $ReturnSelf
+        [[ReturnSelf]]
         inline SharedPtr<Type>& operator=(const SharedPtr<Type>& other) noexcept {
             assign0(other, destroy);
             return *this;
         }
 
-        $ReturnSelf
+        [[ReturnSelf]]
         inline SharedPtr<Type>& operator=(SharedPtr<Type>&& other) noexcept {
             assign0(other, destroy);
             return *this;

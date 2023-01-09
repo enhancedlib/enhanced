@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "enhanced/ExportCore.h"
 #include <enhanced/Defines.h>
+#include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/String.h>
@@ -23,50 +23,38 @@
 #include <enhanced/util/Traits.h>
 #include <enhanced/io/OutputStream.h>
 
+#define E_DECLARE_TYPE_IMPL_DISPLAY(TYPE, ...) \
+    template <> \
+    struct __VA_ARGS__ Display<TYPE> { \
+        static void display(const OutputStream& out, TYPE const& value); \
+    }
+
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define DECLARE_TYPE_IMPL_DISPLAY E_DECLARE_TYPE_IMPL_DISPLAY
+#endif
+
 namespace enhanced::io {
     template <typename Type>
-    struct ENHANCED_CORE_API Display {};
+    struct Display {};
 
-#define _TEMPLATE(TYPE) \
-    template <> \
-    struct ENHANCED_CORE_API Display<TYPE> { \
-        static void display(const OutputStream& out, const TYPE& value); \
-    };
-
-    _TEMPLATE(char)
-    _TEMPLATE(wchar)
-    _TEMPLATE(u8char)
-    _TEMPLATE(u16char)
-    _TEMPLATE(u32char)
-
-#undef _TEMPLATE
-
-#define _TEMPLATE(TYPE) \
-    template <> \
-    struct ENHANCED_CORE_API Display<TYPE> { \
-        static void display(const OutputStream& out, const TYPE& value); \
-    };
-
-    _TEMPLATE(int8)
-    _TEMPLATE(uint8)
-    _TEMPLATE(uint16)
-    _TEMPLATE(int16)
-    _TEMPLATE(int32)
-    _TEMPLATE(uint32)
-    _TEMPLATE(int64)
-    _TEMPLATE(uint64)
-
-#undef _TEMPLATE
-
-    template <>
-    struct ENHANCED_CORE_API Display<const char*> {
-        static void display(const OutputStream& out, const char* const& value);
-    };
-
-    template <>
-    struct ENHANCED_CORE_API Display<String> {
-        static void display(const OutputStream& out, const String& value);
-    };
+    E_DECLARE_TYPE_IMPL_DISPLAY(char, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(wchar, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(u8char, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(u16char, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(u32char, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(int8, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(uint8, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(uint16, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(int16, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(int32, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(uint32, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(int64, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(uint64, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(bool, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(const char*, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(String, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(MutString, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(nulltype, ENHANCED_CORE_API);
 
     template <sizetype size>
     struct Display<char[size]> {
@@ -75,20 +63,11 @@ namespace enhanced::io {
         }
     };
 
-    template <>
-    struct ENHANCED_CORE_API Display<MutString> {
-        static void display(const OutputStream& out, const MutString& value);
-    };
-
-    template <>
-    struct ENHANCED_CORE_API Display<nulltype> {
-        static void display(const OutputStream& out, const nulltype&);
-    };
-
     template <typename Type>
     inline constexpr bool isDisplayable = false;
 
     template <typename Type>
-    requires util::isValid<decltype(Display<Type>::display(util::declvalue<const OutputStream&>(), util::declvalue<Type&>()))>
+    requires util::testValid<decltype(Display<util::RemoveRefAndCv<Type>>::
+        display(util::declvalue<const OutputStream&>(), util::declvalue<const Type&>()))>
     inline constexpr bool isDisplayable<Type> = true;
 }

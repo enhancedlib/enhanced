@@ -45,21 +45,21 @@ namespace enhanced::collections {
             explicit ListStreamIterator(Iterator<Element>& agent) : agent(agent) {}
 
         public:
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             bool isBegin() const override {
                 return agent.isBegin();
             }
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             bool isEnd() const override {
                 if (index == agent.count() + 1) {
                     generator();
-                    return agent.isValid();
+                    return agent.testValid();
                 }
                 return false;
             }
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             bool hasNext() const override {
                 if (index == agent.count()) {
                     generator();
@@ -68,21 +68,21 @@ namespace enhanced::collections {
                 return true;
             }
 
-            $ReturnSelf
+            [[ReturnSelf]]
             const Iterator<Element>& next() const override {
                 if (isEnd()) throw exceptions::InvalidStateException("The iterator is at the end of the list");
                 ++index;
                 return agent.next();
             }
 
-            $ReturnSelf
+            [[ReturnSelf]]
             const Iterator<Element>& prev() const override {
                 if (isBegin()) throw exceptions::InvalidStateException("The iterator is at the begin of the list");
                 --index;
                 return agent.prev();
             }
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             Element& get() const override {
                 return agent.get();
             }
@@ -92,12 +92,12 @@ namespace enhanced::collections {
                 index = INVALID_SIZE;
             }
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             sizetype count() const override {
                 return agent.count();
             }
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             sizetype getIndex() const {
                 return index;
             }
@@ -105,19 +105,19 @@ namespace enhanced::collections {
 
         ListStream() = default;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline ListStreamIterator iterator() const {
             return ListStreamIterator {list.iterator()};
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline ListStreamIterator begin() const {
             auto it = iterator();
             it.next();
             return it;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline byte end() const {
             return 0;
         }

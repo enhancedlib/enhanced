@@ -68,21 +68,21 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     CharType* TMutString<CharType>::chars() const noexcept {
         return this->value;
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     CharType& TMutString<CharType>::at(sizetype index) const noexcept {
         return this->value[index];
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     CharType& TMutString<CharType>::operator[](sizetype index) const noexcept {
         return this->value[index];
     }
@@ -380,7 +380,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    $ReturnSelf
+    [[ReturnSelf]]
     TMutString<CharType>& TMutString<CharType>::operator=(const TMutString& other) {
         TString<CharType>::operator=(other);
         return *this;
@@ -388,7 +388,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    $ReturnSelf
+    [[ReturnSelf]]
     TMutString<CharType>& TMutString<CharType>::operator=(TMutString&& other) noexcept {
         TString<CharType>::operator=(move(other));
         return *this;

@@ -20,9 +20,9 @@
 #include <enhanced/Annotations.h>
 
 namespace enhanced {
-    $NoReturn
+    [[NoReturn]]
     ENHANCED_CORE_API void processExit(int status);
 
-    $NoReturn
+    [[NoReturn]]
     ENHANCED_CORE_API void processAbort();
 }

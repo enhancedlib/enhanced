@@ -26,41 +26,41 @@ namespace enhanced::util {
             EQUAL, MORE, LESS
         };
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         virtual ComparisonResult compare(const Type& other) const = 0;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool equal(const Type& other) const {
             return compare(other) == ComparisonResult::EQUAL;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool operator==(const Type& other) const {
             return equal(other);
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool operator!=(const Type& other) const {
             return !equal(other);
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool operator<(const Type& other) const {
             return compare(other) == ComparisonResult::LESS;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool operator>(const Type& other) const {
             return compare(other) == ComparisonResult::MORE;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool operator<=(const Type& other) const {
             auto result = compare(other);
             return result == ComparisonResult::LESS || result == ComparisonResult::EQUAL;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool operator>=(const Type& other) const {
             auto result = compare(other);
             return result == ComparisonResult::MORE || result == ComparisonResult::EQUAL;

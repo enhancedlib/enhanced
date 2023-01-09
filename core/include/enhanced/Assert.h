@@ -34,3 +34,9 @@
     #define DYNAMIC_ASSERT E_DYNAMIC_ASSERT
     #define ASSERT E_ASSERT
 #endif
+
+#if defined(COMPILER_GNU) || defined(COMPILER_CLANG)
+    #define E_UNREACHABLE_CODE() __builtin_unreachable();
+#elif defined(COMPILER_MSVC)
+    #define E_UNREACHABLE_CODE() __assume(false);
+#endif

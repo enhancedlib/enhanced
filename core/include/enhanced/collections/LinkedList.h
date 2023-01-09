@@ -54,20 +54,20 @@ namespace enhancedInternal::collections {
 
             LinkedListIteratorImpl(const LinkedListImpl* linkedList);
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             bool isBegin0() const;
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             bool isEnd0() const;
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             bool hasNext0() const;
 
             void next0() const;
 
             void prev0() const;
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             void* get0() const;
 
             void reset0() const;
@@ -83,16 +83,16 @@ namespace enhancedInternal::collections {
 
         LinkedListImpl(LinkedListImpl&& other) noexcept;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         void* getLast0() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         void* getFirst0() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         void* get0(sizetype index) const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         sizetype indexOf0(void* value, OpEqual opEqual) const;
 
         void addFirst0(void* element, OpCopy opCopy);
@@ -117,12 +117,12 @@ namespace enhanced::collections {
     private:
         using LinkedListImpl = enhancedInternal::collections::LinkedListImpl;
 
-        $RetRequiresRelease
+        [[RetRequiresRelease]]
         static void* copy(void* element) {
             return new Type(*reinterpret_cast<Type*>(element));
         }
 
-        $RetRequiresRelease
+        [[RetRequiresRelease]]
         static void* move(void* element) {
             return new Type(util::move(*reinterpret_cast<Type*>(element)));
         }
@@ -131,7 +131,7 @@ namespace enhanced::collections {
             delete reinterpret_cast<Type*>(element);
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         static bool equal(void* element, void* value) {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
@@ -141,34 +141,34 @@ namespace enhanced::collections {
         public:
             inline explicit LinkedListIterator(const LinkedList<Type>* linkedList) : LinkedListIteratorImpl(linkedList) {}
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             inline bool isBegin() const override {
                 return isBegin0();
             }
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             inline bool isEnd() const override {
                 return isEnd0();
             }
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             inline bool hasNext() const override {
                 return hasNext0();
             }
 
-            $ReturnSelf
+            [[ReturnSelf]]
             inline const Iterator<Type>& next() const override {
                 next0();
                 return *this;
             }
 
-            $ReturnSelf
+            [[ReturnSelf]]
             inline const Iterator<Type>& prev() const override {
                 prev0();
                 return *this;
             }
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             inline Type& get() const override {
                 return *reinterpret_cast<Type*>(get0());
             }
@@ -177,7 +177,7 @@ namespace enhanced::collections {
                 reset0();
             }
 
-            $NoIgnoreReturn
+            [[NoIgnoreReturn]]
             inline sizetype count() const override {
                 return static_cast<const LinkedList<Type>*>(linkedList)->size;
             }
@@ -201,59 +201,59 @@ namespace enhanced::collections {
             clear();
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline sizetype getSize() const override {
             return size;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool isEmpty() const override {
             return size == 0;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline bool contain(const Type& value) const override {
             return indexOf(value) != INVALID_SIZE;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline LinkedListIterator begin() const {
             auto it = iterator();
             it.next();
             return it;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline constexpr byte end() const {
             return 0;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline LinkedListIterator iterator() const {
             return LinkedListIterator {this};
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline sizetype indexOf(const Type& value) const override {
             return indexOf0(util::removePtrConst(&value), equal);
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type& getLast() const override {
             return *reinterpret_cast<Type*>(getLast0());
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type& getFirst() const override {
             return *reinterpret_cast<Type*>(getFirst0());
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type& get(sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type& operator[](sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }

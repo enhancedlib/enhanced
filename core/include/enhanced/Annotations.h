@@ -17,59 +17,25 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 
-#define $Unused [[maybe_unused]]
+#define Unused maybe_unused
+#define NoReturn noreturn
+#define NoIgnoreReturn nodiscard
+#define Deprecated deprecated
+#define FallThrough fallthrough
 
-#define $NoReturn [[noreturn]]
-
-#define $NoIgnoreReturn [[nodiscard]]
-#define $NoIgnoreReturnExt(...) [[nodiscard(__VA_ARGS__)]]
-
-#define $RetRequiresRelease $NoIgnoreReturnExt("The return value needs to be released")
-#define $RetRequiresReleaseExt(...) $NoIgnoreReturnExt(__VA_ARGS__)
-
-#define $Deprecated [[deprecated]]
-#define $DeprecatedExt(...) [[deprecated(__VA_ARGS__)]]
-
-#define $FallThrough [[fallthrough]]
-
-#ifdef CLANG_COMPILER
-    #define $ForceInline [[clang::always_inline]]
-    #define $NoInline [[clang::noinline]]
-#elif defined(MSVC_COMPILER)
-    #define $ForceInline __forceinline
-    #define $NoInline __declspec(noinline)
-#elif defined(GCC_COMPILER)
-    #define $ForceInline [[gnu::always_inline]]
-    #define $NoInline [[gnu::noinline]]
-#endif
-
-#ifdef MSVC_ABI
-    #define $Allocator $RetRequiresRelease __declspec(allocator)
+#define RetRequiresRelease NoIgnoreReturn("The return value needs to be released")
+#define ReturnSelf
+#if defined(COMPILER_GCC) || defined(COMPILER_CLANG)
+    #define RetNotNull gnu::returns_nonnull
 #else
-    #define $Allocator $RetRequiresRelease
+    #define RetNotNull
 #endif
-
-#ifdef MSVC_ABI
-    #define $RetRestrict __declspec(restrict)
-#elif defined(GCC_ABI) || defined(CLANG_COMPILER)
-    #define $RetRestrict [[gnu::malloc]]
-#endif
-
-#define $MaybeRequireRelease(FUNCTION)
-
-#define $ReturnSelf
-
-#if defined(GCC_ABI) || defined(CLANG_COMPILER)
-    #define $RetNotNull [[gnu::returns_nonnull]]
-#else
-    #define $RetNotNull
-#endif
-#define $RetNullable
-#define $MustInspectResult
-#define $SuccessIf(CONDITION)
-
-#define $Optional
-#define $Out
-#define $InOut
-#define $OutOptional
-#define $InOutOptional
+#define RetNullable
+#define MustInspectResult
+#define SuccessIf(CONDITION)
+#define Optional
+#define Out
+#define InOut
+#define OutOpt
+#define InOutOpt
+#define MayRequireRelease(FUNCTION)

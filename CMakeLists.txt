@@ -12,7 +12,7 @@
 ## if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
 ##
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.13)
 
 project("Enhanced")
 
@@ -57,6 +57,10 @@ function (setup_module MODULE_NAME)
         target_compile_options(${MODULE_NAME}-static PRIVATE -Wall -Wextra)
     endif ()
 
+    if (NOT WIN32 AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        target_compile_options(${MODULE_NAME}-static PRIVATE -stdlib=libc++)
+    endif ()
+
     foreach (DEPENDENT_MODULE IN ITEMS ${DEPENDENT_MODULES})
         target_link_libraries(${MODULE_NAME}-static PRIVATE ${DEPENDENT_MODULE}-static)
     endforeach ()
@@ -86,6 +90,11 @@ function (setup_module MODULE_NAME)
         endif()
     else ()
         target_compile_options(${MODULE_NAME}-shared PRIVATE -Wall -Wextra)
+    endif ()
+
+    if (NOT WIN32 AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        target_compile_options(${MODULE_NAME}-shared PRIVATE -stdlib=libc++)
+        target_link_options(${MODULE_NAME}-shared PRIVATE -stdlib=libc++)
     endif ()
 
     foreach (DEPENDENT_MODULE IN ITEMS ${DEPENDENT_MODULES})
@@ -146,6 +155,21 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/test")
     foreach (DEPENDENT_MODULE IN ITEMS ${MODULES})
         target_link_libraries(test PRIVATE ${DEPENDENT_MODULE}-shared)
     endforeach ()
+
+    if (MSVC)
+        if(${CMAKE_CXX_FLAGS} MATCHES "/W[0-4]")
+            string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        else()
+            target_compile_options(test PRIVATE /W4)
+        endif()
+    else ()
+        target_compile_options(test PRIVATE -Wall -Wextra)
+    endif ()
+
+    if (NOT WIN32 AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        target_compile_options(test PRIVATE -stdlib=libc++)
+        target_link_options(test PRIVATE -stdlib=libc++)
+    endif ()
 endif ()
 
 install(FILES "README.md" DESTINATION ".")

@@ -22,12 +22,12 @@
 using enhanced::util::removeConst;
 
 namespace enhanced {
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     String TypeInfo::getName() const {
         return removeConst(info.name());
     }
 
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     sizetype TypeInfo::hashCode() const {
         return info.hash_code();
     }

@@ -34,31 +34,31 @@ namespace enhanced::io {
 
         File(File&& file) noexcept;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         MutString getFilename() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         MutString getExtension() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         const String& getPath() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         bool isExist() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         bool isReadOnly() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         bool isFile() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         bool isDirectory() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         bool isSymlink() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         bool isJunction() const;
 
         void create() const;
@@ -69,23 +69,23 @@ namespace enhanced::io {
 
         bool removeIf() const; CTIDY_NOLINT(modernize-use-nodiscard)
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         collections::ArrayList<MutString> splitPath() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         FileInputStream inStream() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         FileOutputStream outStream() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         FileReader reader() const;
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         FileWriter writer() const;
     };
 }
 
 #ifndef EOF
-#define EOF (-1)
+    #define EOF (-1)
 #endif

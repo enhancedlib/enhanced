@@ -51,6 +51,7 @@ namespace enhanced::io {
     _TEMPLATE(uint32)
     _TEMPLATE(int64)
     _TEMPLATE(uint64)
+    _TEMPLATE(bool)
 
 #undef _TEMPLATE
 

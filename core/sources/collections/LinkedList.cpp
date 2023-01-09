@@ -50,7 +50,7 @@ namespace enhancedInternal::collections {
         other.size = INVALID_SIZE;
     }
 
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     sizetype LinkedListImpl::indexOf0(void* value, OpEqual opEqual) const {
         Node* indexer = first;
         for (sizetype index = 0; index < size; ++index) {
@@ -63,21 +63,21 @@ namespace enhancedInternal::collections {
         return INVALID_SIZE;
     }
 
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     void* LinkedListImpl::getFirst0() const {
         if (size == 0) throw InvalidStateException("The list is empty");
 
         return first->value;
     }
 
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     void* LinkedListImpl::getLast0() const {
         if (size == 0) throw InvalidStateException("The list is empty");
 
         return last->value;
     }
 
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     void* LinkedListImpl::get0(sizetype index) const {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
@@ -208,17 +208,17 @@ namespace enhancedInternal::collections {
     LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl* linkedList) :
         linkedList(linkedList), indexer((Node*) INVALID_SIZE) {}
 
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     bool LinkedListImpl::LinkedListIteratorImpl::isBegin0() const {
         return indexer == (Node*) INVALID_SIZE;
     }
 
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     bool LinkedListImpl::LinkedListIteratorImpl::isEnd0() const {
         return indexer == nullptr;
     }
 
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
         return (isBegin0() && linkedList->size != 0) || (!isEnd0() && indexer->next != nullptr);
     }
@@ -235,7 +235,7 @@ namespace enhancedInternal::collections {
         else nextNode(indexer);
     }
 
-    $NoIgnoreReturn
+    [[NoIgnoreReturn]]
     void* LinkedListImpl::LinkedListIteratorImpl::get0() const {
         if (isBegin0() || isEnd0()) throw InvalidStateException("Current location of the iterator is not valid");
 

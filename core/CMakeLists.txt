@@ -12,6 +12,6 @@
 ## if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
 ##
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.13)
 
 setup_module("core")

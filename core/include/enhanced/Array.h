@@ -29,7 +29,7 @@ namespace enhanced {
     private:
         sizetype size;
 
-        $MaybeRequireRelease(release)
+        [[MayRequireRelease(release)]]
         Type* elements;
 
     public:
@@ -49,17 +49,17 @@ namespace enhanced {
             other.elements = nullptr;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type& operator[](sizetype index) const noexcept {
             return elements[index];
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline sizetype getSize() const noexcept {
             return size;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type* raw() const noexcept {
             return elements;
         }
@@ -68,17 +68,17 @@ namespace enhanced {
             delete[] elements;
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type* begin() const noexcept {
             return raw();
         }
 
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         inline Type* end() const noexcept {
             return elements + size;
         }
 
-        $ReturnSelf
+        [[ReturnSelf]]
         inline Array& operator=(const Array& other) noexcept {
             if (this == &other) return *this;
 
@@ -88,7 +88,7 @@ namespace enhanced {
             return *this;
         }
 
-        $ReturnSelf
+        [[ReturnSelf]]
         inline Array& operator=(Array&& other) noexcept {
             if (this == &other) return *this;
 
@@ -115,7 +115,7 @@ namespace enhanced {
      * @param count        The number of elements.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<array-type>)").
      */
-    ENHANCED_CORE_API void arrayFill($InOut void* array, qword value, sizetype count, sizetype sizeOfType);
+    ENHANCED_CORE_API void arrayFill([[InOut]] void* array, qword value, sizetype count, sizetype sizeOfType);
 
     /*!
      * Sets elements of an array to the same value (pointer edition).
@@ -130,7 +130,7 @@ namespace enhanced {
      * @param valuePtr     A pointer to the value.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<type>)").
      */
-    ENHANCED_CORE_API void arrayFillPtr($InOut void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
+    ENHANCED_CORE_API void arrayFillPtr([[InOut]] void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
 
     /*!
      * Sets elements of an array to the same value (template edition).
@@ -144,7 +144,7 @@ namespace enhanced {
      */
     template <typename Type>
     requires util::isClass<Type>
-    inline void arrayFill($InOut Type* array, const Type& value, sizetype count) {
+    inline void arrayFill([[InOut]] Type* array, const Type& value, sizetype count) {
         if (array == nullptr) return;
         for (sizetype index = 0; index < count; ++index) {
             array[index] = value;
@@ -153,7 +153,7 @@ namespace enhanced {
 
     template <typename Type>
     requires (!util::isClass<Type>)
-    inline void arrayFill($InOut Type* array, const Type& value, sizetype count) {
+    inline void arrayFill([[InOut]] Type* array, const Type& value, sizetype count) {
         arrayFillPtr(array, &value, count, sizeof(Type));
     }
 
@@ -168,7 +168,7 @@ namespace enhanced {
      * @param count         The number of elements.
      * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
      */
-    ENHANCED_CORE_API void arrayCopy($InOut void* destination, const void* source, sizetype count, sizetype sizeOfType);
+    ENHANCED_CORE_API void arrayCopy([[InOut]] void* destination, const void* source, sizetype count, sizetype sizeOfType);
 
 
     /*!
@@ -184,7 +184,7 @@ namespace enhanced {
      */
     template <typename Type>
     requires util::isClass<Type>
-    void arrayCopy($InOut Type* destination, const Type* source, sizetype count) {
+    void arrayCopy([[InOut]] Type* destination, const Type* source, sizetype count) {
         if (destination == nullptr || source == nullptr) return;
         for (sizetype index = 0; index < count; ++index) {
             destination[index] = source[index];
@@ -193,7 +193,7 @@ namespace enhanced {
 
     template <typename Type>
     requires (!util::isClass<Type>)
-    void arrayCopy($InOut Type* destination, const Type* source, sizetype count) {
+    void arrayCopy([[InOut]] Type* destination, const Type* source, sizetype count) {
         arrayCopy(destination, source, count, sizeof(Type));
     }
 }

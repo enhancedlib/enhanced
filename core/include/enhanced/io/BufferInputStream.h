@@ -21,7 +21,7 @@
 namespace enhanced::io {
     class ENHANCED_CORE_API BufferInputStream : public InputStream {
     public:
-        $NoIgnoreReturn
+        [[NoIgnoreReturn]]
         byte get() const override;
 
         void read(byte* buffer, sizetype size) const override;

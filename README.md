@@ -8,7 +8,7 @@ This software is licensed under [Enhanced Software License](LICENSE).
 
 Please report bugs at [GitHub Issues](https://github.com/sharedwonder/enhanced/issues).
 
-[Other Languages](readme/LANGUAGES) | [Copyright Notice](COPYRIGHT) | [Website](https://sharedwonder.github.io/enhanced/) | [GitHub Repository](https://github.com/sharedwonder/enhanced/)
+[Other Languages](readme/LANGUAGES.md) | [Copyright Notice](COPYRIGHT) | [Website](https://sharedwonder.github.io/enhanced/) | [GitHub Repository](https://github.com/sharedwonder/enhanced/)
 
 ---
 
