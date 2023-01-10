@@ -45,13 +45,13 @@ namespace enhanced {
 
         TMutString(TMutString&& other) noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         CharType* chars() const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         CharType& at(sizetype index) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         CharType& operator[](sizetype index) const noexcept;
 
         TMutString& append(const TString<CharType>& string);

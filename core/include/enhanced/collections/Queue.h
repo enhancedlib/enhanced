@@ -23,19 +23,19 @@
 namespace enhanced::collections {
     template <typename Type>
     struct Queue : Collection<Type> {
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual sizetype indexOf(const Type& value) const = 0;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual Type& getFirst() const = 0;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual Type& getLast() const = 0;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual Type& get(sizetype index) const = 0;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual Type& operator[](sizetype index) const = 0;
 
         virtual void addLast(const Type& element) = 0;

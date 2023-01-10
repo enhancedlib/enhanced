@@ -30,7 +30,7 @@ namespace enhanced::exceptions {
         const Exception* cause;
 
     public:
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual const String getName() const {
             return "enhanced::exceptions::Exception";
         }
@@ -45,13 +45,13 @@ namespace enhanced::exceptions {
 
         void printInfo() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual MutString getInfo() const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual const Exception* getCause() const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual const String& getMessage() const noexcept;
     };
 
@@ -65,7 +65,7 @@ namespace enhanced::exceptions {
 }
 
 #define DEFINE_EXCEPTION_NAME(NAME) \
-    [[NoIgnoreReturn]] \
+    [[RetNotIgnored]] \
     const String getName() const override { \
         return #NAME; \
     }

@@ -46,22 +46,22 @@ namespace enhanced {
 
         ~CharSequence() noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype getLength() const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         bool isEmpty() const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         const CharType* chars() const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         const byte* toBytes() const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         const CharType at(sizetype index) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         const CharType operator[](sizetype index) const noexcept;
 
         [[ReturnSelf]]

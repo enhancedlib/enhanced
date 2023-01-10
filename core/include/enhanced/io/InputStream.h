@@ -25,12 +25,12 @@
 namespace enhanced::io {
     class ENHANCED_CORE_API InputStream : public Closeable, Flushable {
     public:
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual byte get() const;
 
         virtual void read(byte* buffer, sizetype size) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual MutString readLine() const;
     };
 }

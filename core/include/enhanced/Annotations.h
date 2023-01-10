@@ -19,11 +19,11 @@
 
 #define Unused maybe_unused
 #define NoReturn noreturn
-#define NoIgnoreReturn nodiscard
+#define RetNotIgnored nodiscard
 #define Deprecated deprecated
 #define FallThrough fallthrough
 
-#define RetRequiresRelease NoIgnoreReturn("The return value needs to be released")
+#define RetRequiresRelease RetNotIgnored("The return value needs to be released")
 #define ReturnSelf
 #if defined(COMPILER_GCC) || defined(COMPILER_CLANG)
     #define RetNotNull gnu::returns_nonnull

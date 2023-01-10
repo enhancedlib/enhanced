@@ -27,22 +27,22 @@ namespace enhanced {
     public:
         inline constexpr InitializerList(std::initializer_list<Type> initList) : initList(initList) {}
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline constexpr const Type* begin() const noexcept {
             return initList.begin();
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline constexpr const Type* end() const noexcept {
             return initList.end();
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline constexpr const Type* getArray() const noexcept {
             return initList.begin();
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline constexpr sizetype getSize() const noexcept {
             return initList.size();
 }

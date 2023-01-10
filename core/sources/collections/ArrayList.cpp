@@ -47,28 +47,28 @@ namespace enhancedInternal::collections {
         other.capacity = INVALID_SIZE;
     }
 
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     void* ArrayListImpl::getFirst0() const {
         if (size == 0) throw InvalidStateException("The list is empty");
 
         return elements[0];
     }
 
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     void* ArrayListImpl::getLast0() const {
         if (size == 0) throw InvalidStateException("The list is empty");
 
         return elements[size - 1];
     }
 
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     void* ArrayListImpl::get0(sizetype index) const {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
         return elements[index];
     }
 
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     sizetype ArrayListImpl::indexOf0(void* value, OpEqual opEqual) const {
         for (sizetype index = 0; index < size; ++index) {
             if (opEqual(elements[index], value)) {
@@ -180,17 +180,17 @@ namespace enhancedInternal::collections {
     ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList) :
         arrayList(arrayList), indexer(arrayList->elements - 1) {}
 
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     bool ArrayListImpl::ArrayListIteratorImpl::isBegin0() const {
         return indexer == arrayList->elements - 1;
     }
 
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     bool ArrayListImpl::ArrayListIteratorImpl::isEnd0() const {
         return indexer == arrayList->elements + arrayList->size;
     }
 
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
         return indexer != arrayList->elements + arrayList->size - 1;
     }
@@ -205,7 +205,7 @@ namespace enhancedInternal::collections {
         --indexer;
     }
 
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     void* ArrayListImpl::ArrayListIteratorImpl::get0() const {
         if (isBegin0() || isEnd0()) throw InvalidStateException("Current location of the iterator is not valid");
         return *indexer;

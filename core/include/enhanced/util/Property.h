@@ -41,19 +41,19 @@
 
 #define __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) \
 ACCESS_MODIFIER: \
-    [[NoIgnoreReturn]] \
+    [[RetNotIgnored]] \
     inline const Self* operator->() const { \
         return &self; \
     } \
-    [[NoIgnoreReturn]] \
+    [[RetNotIgnored]] \
     inline const Self& operator*() const { \
         return operator()(); \
     } \
-    [[NoIgnoreReturn]] \
+    [[RetNotIgnored]] \
     inline operator const Self&() const { \
         return operator()(); \
     } \
-    [[NoIgnoreReturn]] \
+    [[RetNotIgnored]] \
     inline const Self& operator()() const
 
 #define __E_PROPERTY_SETTER_set(ACCESS_MODIFIER) \

@@ -34,40 +34,40 @@ namespace enhanced {
     protected:
         TString(const CharType* value, sizetype length, bool isMutable) noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static TMutString<CharType> from(qword value, bool isNegative);
 
     public:
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static TString<CharType> from(bool value);
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static TMutString<CharType> from(CharType value);
 
         template <typename IntTypeNs>
         requires util::isIntegralTypeNs<IntTypeNs>
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static TMutString<CharType> from(IntTypeNs value) {
             return from(value, value < 0);
         }
 
         template <typename... Args>
         requires (util::typeCounter<Args...> >= 2)
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static TMutString<CharType> join(Args&&... values) {
             return join({values...});
         }
 
         template <sizetype count>
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static inline TMutString<CharType> join(TString (&strings)[count]) {
             return join(strings, count);
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static TMutString<CharType> join(InitializerList<TString> list);
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static TMutString<CharType> join(const TString* strings, sizetype count);
 
         TString() noexcept;
@@ -87,28 +87,28 @@ namespace enhanced {
 
         TString(TString&& other) noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype indexOf(CharType ch) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype indexOf(CharType ch, sizetype getN) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype indexOf(const TString& string) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype indexOf(const TString& string, sizetype getN) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype indexOfLast(const TString& string) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype indexOfLast(const TString& string, sizetype getN) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype indexOfLast(CharType ch) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype indexOfLast(CharType ch, sizetype getN) const noexcept;
 
         [[RetRequiresRelease]]
@@ -117,55 +117,55 @@ namespace enhanced {
         [[RetRequiresRelease]]
         collections::ArrayList<sizetype> indexOfAll(const TString& string) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> toMutable() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replace(sizetype start, sizetype end, CharType newChar) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replace(sizetype start, sizetype end, const TString& newSubstring) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replace(CharType oldChar, CharType newChar) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replace(const TString& oldSubstring, const TString& newSubstring) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replace(CharType oldChar, const TString& newSubstring) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replace(const TString& oldSubstring, CharType newChar) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replaceAll(CharType oldChar, CharType newChar) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replaceAll(const TString& oldSubstring, const TString& newSubstring) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replaceAll(CharType oldChar, const TString& newSubstring) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> replaceAll(const TString& oldSubstring, CharType newChar) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> uppercase() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> lowercase() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         bool operator==(const TString& string) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         bool operator!=(const TString& string) const noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> operator+(const TString& string) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         TMutString<CharType> operator+(CharType ch) const;
 
         [[ReturnSelf]]
@@ -194,13 +194,13 @@ namespace enhanced {
         [[RetRequiresRelease]]
         static CharType* copy(const CharType* source, sizetype oldLength, sizetype newLength);
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static sizetype calcLength(const CharType* string) noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static bool isEqual(const CharType* string1, const CharType* string2) noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static bool isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept;
     };
 

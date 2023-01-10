@@ -34,31 +34,31 @@ namespace enhanced::io {
 
         File(File&& file) noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         MutString getFilename() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         MutString getExtension() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         const String& getPath() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         bool isExist() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         bool isReadOnly() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         bool isFile() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         bool isDirectory() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         bool isSymlink() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         bool isJunction() const;
 
         void create() const;
@@ -69,19 +69,19 @@ namespace enhanced::io {
 
         bool removeIf() const; CTIDY_NOLINT(modernize-use-nodiscard)
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         collections::ArrayList<MutString> splitPath() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         FileInputStream inStream() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         FileOutputStream outStream() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         FileReader reader() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         FileWriter writer() const;
     };
 }

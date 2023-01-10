@@ -23,16 +23,16 @@ namespace enhanced {
     struct Iterator {
         virtual ~Iterator() noexcept = default;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual bool isBegin() const = 0;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual bool isEnd() const = 0;
 
         /*!
          * Determines if there are still elements can iterate over.
          */
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual bool hasNext() const = 0;
 
         /*!
@@ -50,7 +50,7 @@ namespace enhanced {
         /*!
          * Gets the current element.
          */
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual Type& get() const = 0;
 
         /*!
@@ -61,10 +61,10 @@ namespace enhanced {
         /*!
          * Gets the number of elements.
          */
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         virtual sizetype count() const = 0;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline bool operator!=(byte) const {
             return !isEnd();
         }
@@ -74,7 +74,7 @@ namespace enhanced {
             return next();
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type& operator*() const {
             return get();
         }

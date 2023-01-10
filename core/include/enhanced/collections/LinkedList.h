@@ -54,20 +54,20 @@ namespace enhancedInternal::collections {
 
             LinkedListIteratorImpl(const LinkedListImpl* linkedList);
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             bool isBegin0() const;
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             bool isEnd0() const;
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             bool hasNext0() const;
 
             void next0() const;
 
             void prev0() const;
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             void* get0() const;
 
             void reset0() const;
@@ -83,16 +83,16 @@ namespace enhancedInternal::collections {
 
         LinkedListImpl(LinkedListImpl&& other) noexcept;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         void* getLast0() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         void* getFirst0() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         void* get0(sizetype index) const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype indexOf0(void* value, OpEqual opEqual) const;
 
         void addFirst0(void* element, OpCopy opCopy);
@@ -131,7 +131,7 @@ namespace enhanced::collections {
             delete reinterpret_cast<Type*>(element);
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         static bool equal(void* element, void* value) {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
@@ -141,17 +141,17 @@ namespace enhanced::collections {
         public:
             inline explicit LinkedListIterator(const LinkedList<Type>* linkedList) : LinkedListIteratorImpl(linkedList) {}
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             inline bool isBegin() const override {
                 return isBegin0();
             }
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             inline bool isEnd() const override {
                 return isEnd0();
             }
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             inline bool hasNext() const override {
                 return hasNext0();
             }
@@ -168,7 +168,7 @@ namespace enhanced::collections {
                 return *this;
             }
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             inline Type& get() const override {
                 return *reinterpret_cast<Type*>(get0());
             }
@@ -177,7 +177,7 @@ namespace enhanced::collections {
                 reset0();
             }
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             inline sizetype count() const override {
                 return static_cast<const LinkedList<Type>*>(linkedList)->size;
             }
@@ -201,59 +201,59 @@ namespace enhanced::collections {
             clear();
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline sizetype getSize() const override {
             return size;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline bool isEmpty() const override {
             return size == 0;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline bool contain(const Type& value) const override {
             return indexOf(value) != INVALID_SIZE;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline LinkedListIterator begin() const {
             auto it = iterator();
             it.next();
             return it;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline constexpr byte end() const {
             return 0;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline LinkedListIterator iterator() const {
             return LinkedListIterator {this};
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline sizetype indexOf(const Type& value) const override {
             return indexOf0(util::removePtrConst(&value), equal);
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type& getLast() const override {
             return *reinterpret_cast<Type*>(getLast0());
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type& getFirst() const override {
             return *reinterpret_cast<Type*>(getFirst0());
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type& get(sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type& operator[](sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }

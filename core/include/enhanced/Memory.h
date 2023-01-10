@@ -27,7 +27,7 @@ namespace enhanced {
     extern const Nothrow nothrow;
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr Type* addressOf(Type& value) noexcept {
         return __builtin_addressof(value);
     }

@@ -68,21 +68,21 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     CharType* TMutString<CharType>::chars() const noexcept {
         return this->value;
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     CharType& TMutString<CharType>::at(sizetype index) const noexcept {
         return this->value[index];
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     CharType& TMutString<CharType>::operator[](sizetype index) const noexcept {
         return this->value[index];
     }

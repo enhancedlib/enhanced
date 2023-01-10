@@ -53,42 +53,42 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     bool CharSequence<CharType>::isEmpty() const noexcept {
         return length == 0;
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     sizetype CharSequence<CharType>::getLength() const noexcept {
         return length;
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     const CharType* CharSequence<CharType>::chars() const noexcept {
         return value;
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     const byte* CharSequence<CharType>::toBytes() const noexcept {
         return reinterpret_cast<const byte*>(value);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     const CharType CharSequence<CharType>::at(sizetype index) const noexcept {
         return value[index];
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     const CharType CharSequence<CharType>::operator[](sizetype index) const noexcept {
         return value[index];
     }

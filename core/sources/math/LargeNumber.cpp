@@ -83,7 +83,7 @@ namespace enhanced::math {
         E_NOT_IMPLEMENTED();
     }
 
-    LargeNumber& LargeNumber::add(const LargeNumber& number) {
+    LargeNumber& LargeNumber::operator+=(const LargeNumber& number) {
         E_NOT_IMPLEMENTED();
 
         //if (isNegative == number.isNegative) {
@@ -102,26 +102,6 @@ namespace enhanced::math {
         //    }
         //    return *this;
         //}
-    }
-
-    LargeNumber& LargeNumber::sub(const LargeNumber& number) {
-        E_NOT_IMPLEMENTED();
-    }
-
-    LargeNumber& LargeNumber::mul(const LargeNumber& number) {
-        E_NOT_IMPLEMENTED();
-    }
-
-    LargeNumber& LargeNumber::div(const LargeNumber& number) {
-        E_NOT_IMPLEMENTED();
-    }
-
-    LargeNumber& LargeNumber::mod(const LargeNumber &number) {
-        E_NOT_IMPLEMENTED();
-    }
-
-    LargeNumber& LargeNumber::operator+=(const LargeNumber& number) {
-        E_NOT_IMPLEMENTED();
     }
 
     LargeNumber& LargeNumber::operator-=(const LargeNumber& number) {

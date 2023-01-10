@@ -22,10 +22,9 @@
 #include <enhanced/util/Traits.h>
 #include <enhanced/util/Comparable.h>
 #include <enhanced/collections/ArrayList.h>
-#include <enhanced/math/Number.h>
 
 namespace enhanced::math {
-    class ENHANCED_CORE_API BitNumber : public Number, public util::Comparable<BitNumber> {
+    class ENHANCED_CORE_API BitNumber : public util::Comparable<BitNumber> {
     private:
         collections::ArrayList<byte> bits;
 
@@ -42,8 +41,8 @@ namespace enhanced::math {
 
         BitNumber(BitNumber&& number) noexcept;
 
-        [[NoIgnoreReturn]]
-        ComparisonResult compare(const BitNumber& other) const override;
+        [[RetNotIgnored]]
+        ComparisonResult compare(const BitNumber& other) const;
     };
 }
 

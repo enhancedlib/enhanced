@@ -49,17 +49,17 @@ namespace enhanced {
             other.elements = nullptr;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type& operator[](sizetype index) const noexcept {
             return elements[index];
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline sizetype getSize() const noexcept {
             return size;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type* raw() const noexcept {
             return elements;
         }
@@ -68,12 +68,12 @@ namespace enhanced {
             delete[] elements;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type* begin() const noexcept {
             return raw();
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type* end() const noexcept {
             return elements + size;
         }

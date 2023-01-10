@@ -22,48 +22,50 @@
 namespace enhanced::util {
     template <typename Type>
     struct ENHANCED_CORE_API Comparable {
-        enum class ComparisonResult : uint8 {
-            EQUAL, MORE, LESS
+        enum class ComparisonResult : int8 {
+            EQUAL = 0, LESS = -1, GREATER = 1
         };
 
-        [[NoIgnoreReturn]]
-        virtual ComparisonResult compare(const Type& other) const = 0;
-
-        [[NoIgnoreReturn]]
-        inline bool equal(const Type& other) const {
-            return compare(other) == ComparisonResult::EQUAL;
+        [[RetNotIgnored]]
+        inline constexpr bool equal(const Type& other) const {
+            return Type::compare(other) == ComparisonResult::EQUAL;
         }
 
-        [[NoIgnoreReturn]]
-        inline bool operator==(const Type& other) const {
+        [[RetNotIgnored]]
+        inline constexpr bool operator==(const Type& other) const {
             return equal(other);
         }
 
-        [[NoIgnoreReturn]]
-        inline bool operator!=(const Type& other) const {
+        [[RetNotIgnored]]
+        inline constexpr bool operator!=(const Type& other) const {
             return !equal(other);
         }
 
-        [[NoIgnoreReturn]]
-        inline bool operator<(const Type& other) const {
-            return compare(other) == ComparisonResult::LESS;
+        [[RetNotIgnored]]
+        inline constexpr bool operator<(const Type& other) const {
+            return Type::compare(other) == ComparisonResult::LESS;
         }
 
-        [[NoIgnoreReturn]]
-        inline bool operator>(const Type& other) const {
-            return compare(other) == ComparisonResult::MORE;
+        [[RetNotIgnored]]
+        inline constexpr bool operator>(const Type& other) const {
+            return Type::compare(other) == ComparisonResult::GREATER;
         }
 
-        [[NoIgnoreReturn]]
-        inline bool operator<=(const Type& other) const {
-            auto result = compare(other);
+        [[RetNotIgnored]]
+        inline constexpr bool operator<=(const Type& other) const {
+            auto result = Type::compare(other);
             return result == ComparisonResult::LESS || result == ComparisonResult::EQUAL;
         }
 
-        [[NoIgnoreReturn]]
-        inline bool operator>=(const Type& other) const {
-            auto result = compare(other);
-            return result == ComparisonResult::MORE || result == ComparisonResult::EQUAL;
+        [[RetNotIgnored]]
+        inline constexpr bool operator>=(const Type& other) const {
+            auto result = Type::compare(other);
+            return result == ComparisonResult::GREATER || result == ComparisonResult::EQUAL;
+        }
+
+        [[RetNotIgnored]]
+        inline constexpr ComparisonResult operator<=>(const Type& other) const {
+            return Type::compare(other);
         }
     };
 }

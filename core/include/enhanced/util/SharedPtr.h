@@ -112,23 +112,23 @@ namespace enhanced::util {
             release();
         }
 
-        [[NoIgnoreReturn, RetNotNull]]
+        [[RetNotIgnored, RetNotNull]]
         inline Type* get() const noexcept {
             nullPointerCheck();
             return static_cast<Type*>(pointer);
         }
 
-        [[NoIgnoreReturn, RetNullable]]
+        [[RetNotIgnored, RetNullable]]
         inline Type* self() const noexcept {
             return static_cast<Type*>(pointer);
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline const SharedPtr* addressOf() const noexcept {
             return &self();
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type* endOf() const noexcept {
             return static_cast<Type*>(end);
         }
@@ -137,32 +137,32 @@ namespace enhanced::util {
             release0(destroy);
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type* operator+(sizetype offset) const noexcept {
             return self() + offset;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type* operator-(sizetype offset) const noexcept {
             return self() - offset;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type* operator->() const {
             return get();
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type& operator*() const {
             return *get();
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline Type& operator[](sizetype offset) const {
             return get()[offset];
         }
 
-        [[NoIgnoreReturn, ReturnSelf]]
+        [[RetNotIgnored, ReturnSelf]]
         inline operator Type*() const noexcept {
             return self();
         }

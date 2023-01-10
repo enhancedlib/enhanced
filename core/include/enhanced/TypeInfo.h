@@ -36,10 +36,10 @@ namespace enhanced {
 
         TypeInfo& operator=(const TypeInfo& info) = delete;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         String getName() const;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         sizetype hashCode() const;
     };
 

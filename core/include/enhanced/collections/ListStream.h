@@ -45,12 +45,12 @@ namespace enhanced::collections {
             explicit ListStreamIterator(Iterator<Element>& agent) : agent(agent) {}
 
         public:
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             bool isBegin() const override {
                 return agent.isBegin();
             }
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             bool isEnd() const override {
                 if (index == agent.count() + 1) {
                     generator();
@@ -59,7 +59,7 @@ namespace enhanced::collections {
                 return false;
             }
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             bool hasNext() const override {
                 if (index == agent.count()) {
                     generator();
@@ -82,7 +82,7 @@ namespace enhanced::collections {
                 return agent.prev();
             }
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             Element& get() const override {
                 return agent.get();
             }
@@ -92,12 +92,12 @@ namespace enhanced::collections {
                 index = INVALID_SIZE;
             }
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             sizetype count() const override {
                 return agent.count();
             }
 
-            [[NoIgnoreReturn]]
+            [[RetNotIgnored]]
             sizetype getIndex() const {
                 return index;
             }
@@ -105,19 +105,19 @@ namespace enhanced::collections {
 
         ListStream() = default;
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline ListStreamIterator iterator() const {
             return ListStreamIterator {list.iterator()};
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline ListStreamIterator begin() const {
             auto it = iterator();
             it.next();
             return it;
         }
 
-        [[NoIgnoreReturn]]
+        [[RetNotIgnored]]
         inline byte end() const {
             return 0;
         }

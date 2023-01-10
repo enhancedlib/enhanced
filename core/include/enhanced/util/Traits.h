@@ -594,18 +594,18 @@ namespace enhanced::util::inline traits {
     using RemovePtrAndCv = RemoveCv<RemovePointer<Type>>;
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr Type& weakCast(Type&& value) noexcept {
         return value;
     }
 
 #define _TEMPLATE(CV_OPT) \
     template <typename Type> \
-    [[NoIgnoreReturn]] \
+    [[RetNotIgnored]] \
     inline constexpr Type& weakCast(CV_OPT Type& value) noexcept { \
         return const_cast<Type&>(value); \
     }
@@ -614,7 +614,7 @@ namespace enhanced::util::inline traits {
 #undef _TEMPLATE
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr Type& forceCast(auto&& value) noexcept {
         return *((Type*) &value);
     }
@@ -975,40 +975,40 @@ namespace enhanced::util::inline traits {
 #endif
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemoveCv<RemoveRef<Type>>&& move(Type&& value) noexcept {
         return const_cast<RemoveCv<RemoveRef<Type>>&&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemoveRef<Type>&& moveIf(Type&& value) noexcept {
         return static_cast<RemoveRef<Type>&&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr Type&& forward(RemoveRef<Type>& value) noexcept {
         return static_cast<Type&&>(value);
     }
 
     template <typename Type>
     requires (!isLvalueRef<Type>)
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr Type&& forward(RemoveRef<Type>&& value) noexcept {
         return static_cast<Type&&>(value);
     }
 
     template <typename Case, typename First, typename... Types>
     requires isSame<Case, First>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr Case& switchType(First&& first, Types&&...) noexcept {
         return first;
     }
 
     template <typename Case, typename First, typename... Types>
     requires (!isSame<Case, First>)
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr Case& switchType(First&&, Types&&... values) noexcept {
         return switchType<Case, Types...>(static_cast<Types&&>(values)...);
     }
@@ -1047,108 +1047,108 @@ namespace enhanced::util::inline traits {
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr const RemoveRef<Type>& addConst(Type&& value) noexcept {
         return const_cast<const RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr volatile RemoveRef<Type>& addVolatile(Type&& value) noexcept {
         return const_cast<volatile RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr const volatile RemoveRef<Type>& addCv(Type&& value) noexcept {
         return const_cast<const volatile RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
     requires isPointer<RemoveRef<Type>>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr const RemovePointer<RemoveRef<Type>>*& addPtrConst(Type&& value) noexcept {
         return const_cast<const RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
     requires isPointer<RemoveRef<Type>>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr volatile RemovePointer<RemoveRef<Type>>*& addPtrVolatile(Type&& value) noexcept {
         return const_cast<volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
     requires isPointer<RemoveRef<Type>>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr const volatile RemovePointer<RemoveRef<Type>>*& addPtrCv(Type&& value) noexcept {
         return const_cast<const volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemoveConst<RemoveRef<Type>>& removeConst(Type&& value) noexcept {
         return const_cast<RemoveConst<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemoveVolatile<RemoveRef<Type>>& removeVolatile(Type&& value) noexcept {
         return const_cast<RemoveVolatile<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemoveCv<RemoveRef<Type>>& removeCv(Type&& value) noexcept {
         return const_cast<RemoveCv<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemoveRefConst<Type> removeRefConst(Type&& value) noexcept {
         return const_cast<RemoveRefConst<Type>>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemoveRefVolatile<Type> removeRefVolatile(Type&& value) noexcept {
         return const_cast<RemoveRefVolatile<Type>>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemoveRefCv<Type> removeRefCv(Type&& value) noexcept {
         return const_cast<RemoveRefCv<Type>>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemovePtrConst<RemoveRef<Type>> removePtrConst(Type&& value) noexcept {
         return const_cast<RemovePtrConst<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemovePtrVolatile<RemoveRef<Type>> removePtrVolatile(Type&& value) noexcept {
         return const_cast<RemovePtrVolatile<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr RemovePtrCv<RemoveRef<Type>>& removePtrCv(Type&& value) noexcept {
         return const_cast<RemovePtrCv<RemoveRef<Type>&>>(value);
     }
 
     template <typename Derived, typename Base>
     requires isPolymorphicClass<RemoveRef<Base>> && isSame<Derived, RemoveRef<Base>>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr bool isInstanceOf(Base&&) noexcept {
         return true;
     }
 
     template <typename Derived, typename Base>
     requires isPolymorphicClass<RemoveRef<Base>> && isBaseOfNs<RemoveRef<Base>, Derived>
-    [[NoIgnoreReturn]]
+    [[RetNotIgnored]]
     inline constexpr bool isInstanceOf(Base&& value) noexcept {
         return dynamic_cast<Derived*>(&value) != nullptr;
     }
