@@ -20,11 +20,9 @@
 #include <enhanced/Memory.h>
 
 namespace enhancedInternal::util {
-    SharedPtrImpl::SharedPtrImpl(void* ptr) :
-        referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(ptr) {}
+    SharedPtrImpl::SharedPtrImpl(void* ptr) : referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(ptr) {}
 
-    SharedPtrImpl::SharedPtrImpl(void* ptr, void* end) :
-        referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(end) {}
+    SharedPtrImpl::SharedPtrImpl(void* ptr, void* end) : referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(end) {}
 
     SharedPtrImpl::SharedPtrImpl(const SharedPtrImpl& other) noexcept :
         referenceCount(other.referenceCount), pointer(other.pointer), end(other.end) {

@@ -33,7 +33,7 @@ BreakBeforeBraces: Attach
 BreakBeforeConceptDeclarations: Always
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializers: AfterColon
-BreakInheritanceList: AfterComma
+BreakInheritanceList: AfterColon
 BreakStringLiterals: false
 ColumnLimit: 150
 CompactNamespaces: true
@@ -54,7 +54,7 @@ IndentPPDirectives: None
 IndentRequiresClause: false
 IndentWidth: 4
 IndentWrappedFunctionNames: true
-InsertBraces: true
+InsertBraces: false
 InsertTrailingCommas: None
 KeepEmptyLinesAtTheStartOfBlocks: false
 LambdaBodyIndentation: OuterScope
@@ -66,7 +66,7 @@ PointerAlignment: Left
 QualifierAlignment: Left
 ReferenceAlignment: Left
 ReflowComments: false
-RequiresClausePosition: SingleLine
+RequiresClausePosition: OwnLine
 SeparateDefinitionBlocks: Always
 SortIncludes: Never
 SortUsingDeclarations: false

@@ -88,7 +88,7 @@
 
 #define _FUNC_TEMPLATE_CDECL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Cdecl, CDECL)
 
-#if defined(ARCH_X86) && !defined(MS_CLR)
+#if defined(ARCH_X86) && !defined(ABI_MS_CLR)
     #define _FUNC_TEMPLATE_FASTCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Fastcall, FASTCALL)
 #else
     #define _FUNC_TEMPLATE_FASTCALL(SUFFIX)
@@ -103,7 +103,7 @@
 #endif
 
 #ifdef ABI_MSVC
-    #ifdef MS_CLR
+    #ifdef ABI_MS_CLR
         #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX)
         #define _FUNC_TEMPLATE_CLRCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Clrcall, CLRCALL)
     #elif (defined(ARCH_X86) && _M_IX86_FP >= 2) || defined(ARCH_X64)
@@ -147,6 +147,10 @@
 
 #define _MEMBER_FUNC_WITH_VARARGS_PTR_TEMPLATE \
     _FUNC_TEMPLATE_CDECL(MEMBER_PTR_CV_REF_NOEXCEPT)
+
+// ======================================================================
+
+CTIDY_NOLINTBEGIN(bugprone-macro-parentheses)
 
 namespace enhancedInternal::util::traits {
     template <bool, typename = void>
@@ -257,25 +261,7 @@ namespace enhancedInternal::util::traits {
         using Type = RawType; \
     };
 
-    template <typename RawType>
-    struct RemovePointerImpl<RawType*> final {
-        using Type = RawType;
-    };
-
-    template <typename RawType>
-    struct RemovePointerImpl<RawType* const> final {
-        using Type = RawType;
-    };
-
-    template <typename RawType>
-    struct RemovePointerImpl<RawType* volatile> final {
-        using Type = RawType;
-    };
-
-    template <typename RawType>
-    struct RemovePointerImpl<RawType* const volatile> final {
-        using Type = RawType;
-    };
+    _CV_OPT_TEMPLATE
 #undef _TEMPLATE
 
     // ======================================================================
@@ -412,6 +398,9 @@ namespace enhanced::util::inline traits {
     template <typename First, typename... Others>
     inline constexpr sizetype typeCounter<First, Others...> = typeCounter<Others...> + 1;
 
+    template <typename...>
+    inline constexpr bool assume = true;
+
 #if defined(COMPILER_MSVC)
     template <typename, typename>
     inline constexpr bool isSame = false;
@@ -443,9 +432,6 @@ namespace enhanced::util::inline traits {
 
     template <typename Base, typename... Derived>
     inline constexpr bool isAnyBaseOfNs = anyOfTrue<isBaseOfNs<Base, Derived>...>;
-
-    template <typename...>
-    inline constexpr bool testValid = true; // Used for C++20 concepts determines type expression is valid.
 
     template <typename>
     inline constexpr bool isConst = false;
@@ -526,7 +512,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isReferenceable = false;
 
     template <typename Type>
-    requires testValid<Type&>
+    requires assume<Type&>
     inline constexpr bool isReferenceable<Type> = true;
 
     template <typename>
@@ -619,11 +605,6 @@ namespace enhanced::util::inline traits {
         return *((Type*) &value);
     }
 
-    template <typename... Types>
-    inline constexpr sizetype valueCounter(Types&&...) noexcept {
-        return typeCounter<Types...>;
-    }
-
     template <typename Type>
     inline constexpr bool isIntegralType =
         isAnyOf<RemoveCv<Type>, char,
@@ -656,6 +637,15 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     requires isIntegralType<Type>
     inline constexpr bool isUnsigned = static_cast<RemoveCv<Type>>(-1) >= static_cast<Type>(0);
+
+    template <typename Type>
+    inline constexpr bool isComparable = false;
+
+    template <typename Type>
+    requires assume<decltype(declvalue<Type>() == declvalue<Type>()), decltype(declvalue<Type>() != declvalue<Type>()),
+                       decltype(declvalue<Type>() < declvalue<Type>()), decltype(declvalue<Type>() > declvalue<Type>()),
+                       decltype(declvalue<Type>() <= declvalue<Type>()), decltype(declvalue<Type>() >= declvalue<Type>())>
+    inline constexpr bool isComparable<Type> = true;
 
     template <typename Type>
     requires isIntegralType<Type>
@@ -713,7 +703,7 @@ namespace enhanced::util::inline traits {
         Cdecl, Fastcall, Stdcall, Thiscall,
     #ifdef ABI_MSVC
         Vectorcall,
-        #ifdef MS_CLR
+        #ifdef ABI_MS_CLR
         Clrcall
         #endif
     #endif
@@ -898,7 +888,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype(weakCast<To>(declvalue<From>()))>
+    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(weakCast<To>(declvalue<From>()))>
     inline constexpr bool isConvertible<From, To> = true;
 #else
     template <typename From, typename To>
@@ -913,7 +903,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isGeneralConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype((To) declvalue<From>())>
+    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype((To) declvalue<From>())>
     inline constexpr bool isGeneralConvertible<From, To> = true;
 
     template <typename From, typename To>
@@ -924,7 +914,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isStaticConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype(static_cast<To>(declvalue<From>()))>
+    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(static_cast<To>(declvalue<From>()))>
     inline constexpr bool isStaticConvertible<From, To> = true;
 
     template <typename From, typename To>
@@ -935,7 +925,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isReintConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype(reinterpret_cast<To>(declvalue<From>()))>
+    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(reinterpret_cast<To>(declvalue<From>()))>
     inline constexpr bool isReintConvertible<From, To> = true;
 
     template <typename From, typename To>
@@ -946,7 +936,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isCvConvertible<From, To> = true;
 
     template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && testValid<decltype(const_cast<To>(declvalue<From>()))>
+    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(const_cast<To>(declvalue<From>()))>
     inline constexpr bool isCvConvertible<From, To> = true;
 
     template <typename Type, typename... Args>
@@ -967,7 +957,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isDestructible<Type> = true;
 
     template <typename Type>
-    requires isClass<Type> && testValid<decltype(declvalue<Type>().~Type())>
+    requires isClass<Type> && assume<decltype(declvalue<Type>().~Type())>
     inline constexpr bool isDestructible<Type> = true;
 #else
     template <typename Type>
@@ -1155,6 +1145,8 @@ namespace enhanced::util::inline traits {
 }
 
 CLANG_WARNING_POP MSVC_WARNING_POP GCC_WARNING_POP
+
+CTIDY_NOLINTEND(bugprone-macro-parentheses)
 
 #undef _CV_OPT_TEMPLATE
 #undef _BASE_INT_TYPE_TEMPLATE

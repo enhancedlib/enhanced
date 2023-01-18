@@ -22,10 +22,12 @@
 
 // TODO: In the future, don't need to provide the current file and the current line for arguments
 #define E_DYNAMIC_ASSERT(EXPRESSION, ...) \
-    ((EXPRESSION) || (throw enhanced::exceptions::AssertionError(#EXPRESSION, CURRENT_FILE, CURRENT_LINE, ##__VA_ARGS__), false))
+    if (EXPRESSION) { \
+        throw enhanced::exceptions::AssertionError(#EXPRESSION, CURRENT_FILE, CURRENT_LINE __VA_OPT__(,) __VA_ARGS__); \
+    }
 
 #if (defined(DEBUG) && !defined(ENHANCED_ASSERT_DISABLE)) || defined(ENHANCED_ASSERT_ENABLE)
-    #define E_ASSERT(EXPRESSION, ...) E_DYNAMIC_ASSERT(EXPRESSION, ##__VA_ARGS__)
+    #define E_ASSERT(EXPRESSION, ...) E_DYNAMIC_ASSERT(EXPRESSION __VA_OPT__(,) __VA_ARGS__)
 #else
     #define E_ASSERT(EXPRESSION, ...) (void) 0
 #endif

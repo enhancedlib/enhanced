@@ -38,7 +38,7 @@
 #endif
 
 #if defined(ABI_MSVC) && defined(_M_CEE)
-    #define MS_CLR
+    #define ABI_MS_CLR
 #endif
 
 // Detect the architecture for the current platform
@@ -98,7 +98,7 @@
     #error Unsupported operating system
 #endif
 
-// Detect the current language and its standard
+// Detect the C++ standard
 #ifndef COMPILER_MSVC
     #define CXX_STANDARD __cplusplus
 #else
@@ -113,18 +113,19 @@
         #define CXX_20
     #endif
 #else // Unknown
-    #error Unsupported C++ standard, please use least C++20 standard.
-#endif
-
-#if defined(ENHANCED_BUILDING) && !defined(CXX_20_OR_LATER)
-    #error To build this software, please use the C++20 standard or later.
+    #error Unsupported C++ standard, please use the C++20 standard or later
 #endif
 
 #if ((defined(_DEBUG) || defined(DBG)) || !defined(NDEBUG)) && !defined(DEBUG)
     #define DEBUG
 #endif
 
+// Pre-processor
+
 #define PRAGMA(...) _Pragma(#__VA_ARGS__)
+
+#define HAS_INCLUDE __has_include
+#define HAS_CPP_ATTRIBUTE __has_cpp_attribute
 
 #define EMPTY_MACRO_ARG
 
@@ -134,6 +135,8 @@
 
 #define COMPILING_DATE __DATE__
 #define COMPILING_TIME __TIME__
+
+// Compiler extensions
 
 #define RESTRICT __restrict
 
@@ -171,11 +174,14 @@
 
 #ifdef ABI_MSVC
     #define VECTORCALL __vectorcall
-    #ifdef MS_CLR
+    #ifdef ABI_MS_CLR
         #define CLRCALL __clrcall
     #endif
 #endif
 
-#include <new>
-#include <typeinfo>
-#include <initializer_list>
+// Some identifiers in the stantard library has special meaning and cannot
+// be implemented in other header files, so we must include the header files of them
+
+#include <new> // std::nothrow_t, std::align_val_t
+#include <typeinfo> // std::type_info, typeid (keyword)
+#include <initializer_list> // std::initializer_list

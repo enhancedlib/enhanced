@@ -22,6 +22,13 @@
 #define RetNotIgnored nodiscard
 #define Deprecated deprecated
 #define FallThrough fallthrough
+#define Likely likely
+#define Unlikely unlikely
+#if HAS_CPP_ATTRIBUTE(assume)
+    #define Assume assume
+#else
+    #define Assume(EXPRESSION)
+#endif
 
 #define RetRequiresRelease RetNotIgnored("The return value needs to be released")
 #define ReturnSelf

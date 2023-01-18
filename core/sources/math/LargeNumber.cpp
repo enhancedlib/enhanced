@@ -49,7 +49,8 @@ namespace enhanced::math {
     LargeNumber::LargeNumber(LargeNumber&& other) noexcept :
         storage(move(other.storage)), isNegative(other.isNegative), length(other.length), point(other.point) {}
 
-    LargeNumber::ComparisonResult LargeNumber::compare(const LargeNumber& other) const {
+    [[RetNotIgnored]]
+    util::ComparisonResult LargeNumber::compare(const LargeNumber& other) const {
         E_NOT_IMPLEMENTED();
     }
 
@@ -85,23 +86,6 @@ namespace enhanced::math {
 
     LargeNumber& LargeNumber::operator+=(const LargeNumber& number) {
         E_NOT_IMPLEMENTED();
-
-        //if (isNegative == number.isNegative) {
-        //    for (sizetype index = 0; index < length; ++index) {
-        //        storage[index] += number.storage[index];
-        //        if (storage[index] >= 10) {
-        //            storage[index] -= 10;
-        //            storage[index + 1] += 1;
-        //        }
-        //    }
-        //    storage[length - 1] += number.storage[length - 1];
-        //    if (storage[length - 1] >= 10) {
-        //        storage[length - 1] -= 10;
-        //        storage.add(1);
-        //        ++length;
-        //    }
-        //    return *this;
-        //}
     }
 
     LargeNumber& LargeNumber::operator-=(const LargeNumber& number) {

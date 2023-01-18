@@ -20,12 +20,12 @@
 #include <enhanced/Annotations.h>
 
 namespace enhanced::util {
+    enum class ComparisonResult : int8 {
+        EQUAL = 0, LESS = -1, GREATER = 1
+    };
+
     template <typename Type>
     struct ENHANCED_CORE_API Comparable {
-        enum class ComparisonResult : int8 {
-            EQUAL = 0, LESS = -1, GREATER = 1
-        };
-
         [[RetNotIgnored]]
         inline constexpr bool equal(const Type& other) const {
             return Type::compare(other) == ComparisonResult::EQUAL;

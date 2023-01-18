@@ -33,7 +33,7 @@ namespace enhanced::collections {
     private:
         const ListType<Element> list {};
 
-        util::Function<void()> generator;
+        util::Function<void ()> generator;
 
     public:
         class ListStreamIterator : public Iterator<Element> {
@@ -54,7 +54,7 @@ namespace enhanced::collections {
             bool isEnd() const override {
                 if (index == agent.count() + 1) {
                     generator();
-                    return agent.testValid();
+                    return agent.assume();
                 }
                 return false;
             }

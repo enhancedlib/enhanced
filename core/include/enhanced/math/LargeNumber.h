@@ -63,7 +63,7 @@ namespace enhanced::math {
         LargeNumber(LargeNumber&& other) noexcept;
 
         [[RetNotIgnored]]
-        ComparisonResult compare(const LargeNumber& other) const;
+        util::ComparisonResult compare(const LargeNumber& other) const;
 
         LargeNumber operator+() const;
 

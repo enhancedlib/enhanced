@@ -77,10 +77,10 @@ namespace enhanced::util {
 
         inline SharedPtr(Type* ptr, Type* end) : SharedPtrImpl(static_cast<void*>(ptr), static_cast<void*>(end)) {}
 
-    public:
+      public:
         template <typename... Args>
         static inline SharedPtr make(Args&&... args) {
-            return new Type(args...);
+            return new Type {args...};
         }
 
         template <typename... Args>

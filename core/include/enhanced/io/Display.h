@@ -67,7 +67,7 @@ namespace enhanced::io {
     inline constexpr bool isDisplayable = false;
 
     template <typename Type>
-    requires util::testValid<decltype(Display<util::RemoveRefAndCv<Type>>::
+    requires util::assume<decltype(Display<util::RemoveRefAndCv<Type>>::
         display(util::declvalue<const OutputStream&>(), util::declvalue<const Type&>()))>
     inline constexpr bool isDisplayable<Type> = true;
 }

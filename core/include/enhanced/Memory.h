@@ -34,7 +34,7 @@ namespace enhanced {
 
     template <typename Type>
     constexpr const Type* addressOf(const Type&&) {
-        static_assert(!util::testValid<Type>, "Cannot get address of a temporary expression");
+        static_assert(!util::assume<Type>, "Cannot get address of a temporary expression");
     }
 
     /*!

@@ -22,7 +22,7 @@
 
 namespace enhanced::util {
     template <typename FunctionType>
-    requires isFunction<FunctionType>
+    requires isFunction<FunctionType> && (!FunctionParser<FunctionType>::hasVarargs)
     class Function : public Functional {
     public:
         using ReturnType = typename FunctionParser<FunctionType>::ReturnType;

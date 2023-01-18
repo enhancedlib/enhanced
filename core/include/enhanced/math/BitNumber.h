@@ -42,7 +42,7 @@ namespace enhanced::math {
         BitNumber(BitNumber&& number) noexcept;
 
         [[RetNotIgnored]]
-        ComparisonResult compare(const BitNumber& other) const;
+        util::ComparisonResult compare(const BitNumber& other) const;
     };
 }
 
