@@ -19,6 +19,8 @@
 #include <enhanced/Types.h>
 #include <enhanced/exceptions/Exception.h>
 
+#define UNSUPPORTED_OPERATION() throw enhanced::exceptions::UnsupportedOperationException()
+
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API UnsupportedOperationException : public Exception {
     public:
@@ -31,5 +33,3 @@ namespace enhanced::exceptions {
         UnsupportedOperationException(const String& message, const Exception* cause) noexcept;
     };
 }
-
-#define UNSUPPORTED_OPERATION() throw enhanced::exceptions::UnsupportedOperationException()

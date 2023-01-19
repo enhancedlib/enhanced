@@ -22,6 +22,12 @@
 #include <enhanced/String.h>
 #include <enhanced/MutString.h>
 
+#define DEFINE_EXCEPTION_NAME(NAME) \
+    [[RetNotIgnored]] \
+    const String getName() const override { \
+        return #NAME; \
+    }
+
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API Exception {
     protected:
@@ -63,9 +69,3 @@ namespace enhanced::exceptions {
 
     ENHANCED_CORE_API extern ExceptionHandler exceptionHandler;
 }
-
-#define DEFINE_EXCEPTION_NAME(NAME) \
-    [[RetNotIgnored]] \
-    const String getName() const override { \
-        return #NAME; \
-    }

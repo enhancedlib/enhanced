@@ -20,6 +20,12 @@
 #include <enhanced/Warnings.h>
 #include <enhanced/exceptions/AssertionError.h>
 
+#define E_NOT_IMPLEMENTED throw enhanced::exceptions::NotImplementedError
+
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define NOT_IMPLEMENTED throw enhanced::exceptions::NotImplementedError
+#endif
+
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API NotImplementedError : public AssertionError {
     public:
@@ -29,14 +35,7 @@ namespace enhanced::exceptions {
     };
 }
 
-#define E_NOT_IMPLEMENTED throw enhanced::exceptions::NotImplementedError
-
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
-    #define NOT_IMPLEMENTED throw enhanced::exceptions::NotImplementedError
-#endif
-
 // Disable the 'unused parameter' warning for not implemented functions.
-
 CLANG_WARNING_DISABLE("-Wunused-parameter")
 MSVC_WARNING_DISABLE(4100)
 GCC_WARNING_DISABLE("-Wunused-parameter")

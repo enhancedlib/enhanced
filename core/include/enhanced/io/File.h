@@ -25,6 +25,10 @@
 #include <enhanced/io/FileReader.h>
 #include <enhanced/io/FileWriter.h>
 
+#ifndef EOF
+    #define EOF (-1)
+#endif
+
 namespace enhanced::io {
     class File {
     public:
@@ -85,7 +89,3 @@ namespace enhanced::io {
         FileWriter writer() const;
     };
 }
-
-#ifndef EOF
-    #define EOF (-1)
-#endif

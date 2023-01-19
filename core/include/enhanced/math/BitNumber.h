@@ -23,6 +23,12 @@
 #include <enhanced/util/Comparable.h>
 #include <enhanced/collections/ArrayList.h>
 
+#define E_BIT_NUM(NUMBER) enhanced::math::BitNumber(#NUMBER)
+
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define BIT_NUM E_BIT_NUM
+#endif
+
 namespace enhanced::math {
     class ENHANCED_CORE_API BitNumber : public util::Comparable<BitNumber> {
     private:
@@ -45,9 +51,3 @@ namespace enhanced::math {
         util::ComparisonResult compare(const BitNumber& other) const;
     };
 }
-
-#define E_BIT_NUM(NUMBER) enhanced::math::BitNumber(#NUMBER)
-
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
-    #define BIT_NUM E_BIT_NUM
-#endif

@@ -347,6 +347,38 @@ namespace enhancedInternal::util::traits {
 
     _BASE_INT_TYPE_TEMPLATE
 #undef _TEMPLATE
+
+    struct FunctionParserImpl {
+        template <sizetype size>
+        static consteval bool isNothrowImpl(const char (&arg)[size]) {
+            return arg[0] == 'n'; // "noexcept"
+        }
+
+        template <sizetype size>
+        static consteval bool isLimitedConstImpl(const char (&arg)[size]) {
+            return arg[0] == 'c'; // "const" or "const volatile"
+        }
+
+        template <sizetype size>
+        static consteval bool isLimitedVolatileImpl(const char (&arg)[size]) {
+            return arg[0] == 'v' || (arg[0] != '\0' && arg[5] != '\0' && arg[6] == 'v'); // "volatile" or "const volatile"
+        }
+
+        template <sizetype size>
+        static consteval bool isLimitedReferenceImpl(const char (&arg)[size]) {
+            return isLimitedLvalueRefImpl(arg) || isLimitedRvalueRefImpl(arg);
+        }
+
+        template <sizetype size>
+        static consteval bool isLimitedLvalueRefImpl(const char (&arg)[size]) {
+            return arg[0] == '&' && arg[1] == '\0'; // "&"
+        }
+
+        template <sizetype size>
+        static consteval bool isLimitedRvalueRefImpl(const char (&arg)[size]) {
+            return arg[0] == '&' && arg[1] == '&'; // "&&"
+        }
+    };
 }
 
 CLANG_WARNING_PAD("-Wdeprecated-volatile") MSVC_WARNING_PAD(4180) GCC_WARNING_PAD("-Wattributes")
@@ -699,7 +731,7 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isFunction = !isReference<Type> && !isConst<const Type>;
 
-    enum class CallingConvention {
+    enum class CallingConvention : uint8 {
         Cdecl, Fastcall, Stdcall, Thiscall,
     #ifdef ABI_MSVC
         Vectorcall,
@@ -719,8 +751,14 @@ namespace enhanced::util::inline traits {
         using Type = Return CALL_OPT (Args...) CV_OPT REF_OPT NOEXCEPT_OPT; \
         using ReturnType = Return; \
         using NeatFunctionType = Return (Args...); \
-        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool hasVarargs = false; \
+        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
+        static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static constexpr bool isLimitedConst = enhancedInternal::util::traits::FunctionParserImpl::isLimitedConstImpl(#CV_OPT); \
+        static constexpr bool isLimitedVolatile = enhancedInternal::util::traits::FunctionParserImpl::isLimitedVolatileImpl(#CV_OPT); \
+        static constexpr bool isLimitedReference = enhancedInternal::util::traits::FunctionParserImpl::isLimitedReferenceImpl(#REF_OPT); \
+        static constexpr bool isLimitedLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedLvalueRefImpl(#REF_OPT); \
+        static constexpr bool isLimitedRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedRvalueRefImpl(#REF_OPT); \
     };
 
     _FUNC_TEMPLATE
@@ -732,8 +770,14 @@ namespace enhanced::util::inline traits {
         using Type = Return CALL_OPT (Args..., ...) CV_OPT REF_OPT NOEXCEPT_OPT; \
         using ReturnType = Return; \
         using NeatFunctionType = Return (Args..., ...); \
-        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool hasVarargs = true; \
+        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
+        static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static constexpr bool isLimitedConst = enhancedInternal::util::traits::FunctionParserImpl::isLimitedConstImpl(#CV_OPT); \
+        static constexpr bool isLimitedVolatile = enhancedInternal::util::traits::FunctionParserImpl::isLimitedVolatileImpl(#CV_OPT); \
+        static constexpr bool isLimitedReference = enhancedInternal::util::traits::FunctionParserImpl::isLimitedReferenceImpl(#REF_OPT); \
+        static constexpr bool isLimitedLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedLvalueRefImpl(#REF_OPT); \
+        static constexpr bool isLimitedRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedRvalueRefImpl(#REF_OPT); \
     };
 
     _FUNC_WITH_VARARGS_TEMPLATE
@@ -760,8 +804,9 @@ namespace enhanced::util::inline traits {
         using Type = Return (CALL_OPT* PTR_CV_OPT)(Args...) NOEXCEPT_OPT; \
         using ReturnType = Return; \
         using NeatFunctionType = Return (Args...); \
-        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool hasVarargs = false; \
+        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
+        static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
     };
 
     _FUNC_PTR_TEMPLATE
@@ -773,8 +818,9 @@ namespace enhanced::util::inline traits {
         using Type = Return (CALL_OPT* PTR_CV_OPT)(Args..., ...) NOEXCEPT_OPT; \
         using ReturnType = Return; \
         using NeatFunctionType = Return (Args..., ...); \
-        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool hasVarargs = true; \
+        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
+        static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
     };
 
     _FUNC_WITH_VARARGS_PTR_TEMPLATE
@@ -845,8 +891,14 @@ namespace enhanced::util::inline traits {
         using FunctinoType = typename MemberPointerParser<Type>::MemberType; \
         using ReturnType = Return; \
         using NeatFunctionType = Return (Args...); \
-        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool hasVarargs = false; \
+        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
+        static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static constexpr bool isLimitedConst = enhancedInternal::util::traits::FunctionParserImpl::isLimitedConstImpl(#CV_OPT); \
+        static constexpr bool isLimitedVolatile = enhancedInternal::util::traits::FunctionParserImpl::isLimitedVolatileImpl(#CV_OPT); \
+        static constexpr bool isLimitedReference = enhancedInternal::util::traits::FunctionParserImpl::isLimitedReferenceImpl(#REF_OPT); \
+        static constexpr bool isLimitedLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedLvalueRefImpl(#REF_OPT); \
+        static constexpr bool isLimitedRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedRvalueRefImpl(#REF_OPT); \
     };
 
     _MEMBER_FUNC_PTR_TEMPLATE
@@ -860,8 +912,14 @@ namespace enhanced::util::inline traits {
         using FunctinoType = typename MemberPointerParser<Type>::MemberType; \
         using ReturnType = Return; \
         using NeatFunctionType = Return (Args..., ...); \
-        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool hasVarargs = true; \
+        static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
+        static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static constexpr bool isLimitedConst = enhancedInternal::util::traits::FunctionParserImpl::isLimitedConstImpl(#CV_OPT); \
+        static constexpr bool isLimitedVolatile = enhancedInternal::util::traits::FunctionParserImpl::isLimitedVolatileImpl(#CV_OPT); \
+        static constexpr bool isLimitedReference = enhancedInternal::util::traits::FunctionParserImpl::isLimitedReferenceImpl(#REF_OPT); \
+        static constexpr bool isLimitedLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedLvalueRefImpl(#REF_OPT); \
+        static constexpr bool isLimitedRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedRvalueRefImpl(#REF_OPT); \
     };
 
     _MEMBER_FUNC_WITH_VARARGS_PTR_TEMPLATE

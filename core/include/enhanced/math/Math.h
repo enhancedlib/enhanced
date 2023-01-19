@@ -22,7 +22,7 @@
 #include <enhanced/util/Comparable.h>
 
 namespace enhanced::math {
-    enum class TIntMode {
+    enum class TIntMode : bool {
         POSITIVE, NEGATIVE
     };
 

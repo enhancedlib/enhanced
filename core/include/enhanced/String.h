@@ -18,10 +18,18 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Character.h>
 #include <enhanced/CharSequence.h>
 #include <enhanced/InitializerList.h>
 #include <enhanced/util/Traits.h>
 #include <enhanced/collections/ArrayList.h>
+
+#define E_SWITCH_STR(TYPE, STRING) enhanced::util::switchType<const TYPE(&)[sizeof(STRING) / sizeof(char)]> \
+    (STRING, L##STRING, u8##STRING, u##STRING, U##STRING)
+
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define SWITCH_STR E_SWITCH_STR
+#endif
 
 namespace enhanced {
     template <typename CharType>
@@ -202,6 +210,20 @@ namespace enhanced {
 
         [[RetNotIgnored]]
         static bool isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept;
+
+        template <sizetype size1, sizetype size2>
+        [[RetNotIgnored]]
+        static constexpr bool isEqual(const CharType (&string1)[size1], const CharType (&string2)[size2]) noexcept {
+            if (size1 != size2) return false;
+
+            for (sizetype index = 0;; ++index) {
+                if ((string1[index] == E_SWITCH_CHAR(CharType, '\0')) ^ (string2[index] == E_SWITCH_CHAR(CharType, '\0'))) {
+                    return false;
+                }
+
+                if (string1[index] != string2[index]) return false;
+            }
+        }
     };
 
     using String = TString<char>;
@@ -244,10 +266,3 @@ namespace enhanced {
         }
     }
 }
-
-#define E_SWITCH_STR(TYPE, STRING) enhanced::util::switchType<const TYPE(&)[sizeof(STRING) / sizeof(char)]> \
-    (STRING, L##STRING, u8##STRING, u##STRING, U##STRING)
-
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
-    #define SWITCH_STR E_SWITCH_STR
-#endif
