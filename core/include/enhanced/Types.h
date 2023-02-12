@@ -130,7 +130,7 @@ namespace enhanced {
     using ::sizetype;
 }
 
-#if defined(ENHANCED_SUPPRESS_OVERWRITE) || defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_LIMITS)
+#if defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_LIMITS)
     #pragma push_macro("INT8_MIN")
     #pragma push_macro("INT16_MIN")
     #pragma push_macro("INT32_MIN")
@@ -344,7 +344,7 @@ namespace enhanced {
 
 #define INVALID_SIZE SIZE_TYPE_MAX
 
-#if defined(ENHANCED_SUPPRESS_OVERWRITE) || defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_LIMITS)
+#if defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_LIMITS)
     #pragma pop_macro("INT8_MIN")
     #pragma pop_macro("INT16_MIN")
     #pragma pop_macro("INT32_MIN")

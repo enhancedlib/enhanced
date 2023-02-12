@@ -22,7 +22,7 @@
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API IOException : public Exception {
     public:
-        DEFINE_EXCEPTION_NAME(enhanced::exceptions::IOException)
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::IOException)
 
         explicit IOException(const String& message = "") noexcept;
 

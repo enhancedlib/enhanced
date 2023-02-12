@@ -5,7 +5,7 @@
  *
  * This file is part of the Enhanced Software, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ * INCLUDING BUT NOT Object TO THE WARRANTIES OF MERCHANTABILITY.
  *
  * You may not use this file except in compliance with the License.
  * You should obtain a copy of the License in the distribution,
@@ -153,16 +153,6 @@
 CTIDY_NOLINTBEGIN(bugprone-macro-parentheses)
 
 namespace enhancedInternal::util::traits {
-    template <bool, typename = void>
-    struct EnableIfImpl final {};
-
-    template <typename RawType>
-    struct EnableIfImpl<true, RawType> final {
-        using Type = RawType;
-    };
-
-    // ======================================================================
-
     template <bool, typename, typename Result>
     struct ConditionalImpl final {
         using Type = Result;
@@ -175,90 +165,102 @@ namespace enhancedInternal::util::traits {
 
     // ======================================================================
 
-    template <typename RawType>
+    template <sizetype index, typename, typename... OtherTypes>
+    struct AtTypePackImpl final {
+        using Type = typename AtTypePackImpl<index - 1, OtherTypes...>::Type;
+    };
+
+    template <typename Result, typename... OtherTypes>
+    struct AtTypePackImpl<0, Result, OtherTypes...> final {
+        using Type = Result;
+    };
+
+    // ======================================================================
+
+    template <typename Result>
     struct RemoveConstImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
-    template <typename RawType>
-    struct RemoveConstImpl<const RawType> final {
-        using Type = RawType;
+    template <typename Result>
+    struct RemoveConstImpl<const Result> final {
+        using Type = Result;
     };
 
     // ======================================================================
 
-    template <typename RawType>
+    template <typename Result>
     struct RemoveVolatileImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
-    template <typename RawType>
-    struct RemoveVolatileImpl<volatile RawType> final {
-        using Type = RawType;
+    template <typename Result>
+    struct RemoveVolatileImpl<volatile Result> final {
+        using Type = Result;
     };
 
     // ======================================================================
 
-    template <typename RawType>
+    template <typename Result>
     struct RemoveRefImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
-    template <typename RawType>
-    struct RemoveRefImpl<RawType&> final {
-        using Type = RawType;
+    template <typename Result>
+    struct RemoveRefImpl<Result&> final {
+        using Type = Result;
     };
 
-    template <typename RawType>
-    struct RemoveRefImpl<RawType&&> final {
-        using Type = RawType;
+    template <typename Result>
+    struct RemoveRefImpl<Result&&> final {
+        using Type = Result;
     };
 
     // ======================================================================
 
-    template <typename RawType>
+    template <typename Result>
     struct RemoveRefConstImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
-    template <typename RawType>
-    struct RemoveRefConstImpl<const RawType&> final {
-        using Type = RawType&;
+    template <typename InterType>
+    struct RemoveRefConstImpl<const InterType&> final {
+        using Type = InterType&;
     };
 
-    template <typename RawType>
-    struct RemoveRefConstImpl<const RawType&&> final {
-        using Type = RawType&&;
+    template <typename InterType>
+    struct RemoveRefConstImpl<const InterType&&> final {
+        using Type = InterType&&;
     };
 
     // ======================================================================
 
-    template <typename RawType>
+    template <typename Result>
     struct RemoveRefVolatileImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
-    template <typename RawType>
-    struct RemoveRefVolatileImpl<volatile RawType&> final {
-        using Type = RawType&;
+    template <typename InterType>
+    struct RemoveRefVolatileImpl<volatile InterType&> final {
+        using Type = InterType&;
     };
 
-    template <typename RawType>
-    struct RemoveRefVolatileImpl<volatile RawType&&> final {
-        using Type = RawType&&;
+    template <typename InterType>
+    struct RemoveRefVolatileImpl<volatile InterType&&> final {
+        using Type = InterType&&;
     };
 
     // ======================================================================
 
-    template <typename RawType>
+    template <typename Result>
     struct RemovePointerImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
 #define _TEMPLATE(CV_OPT) \
-    template <typename RawType> \
-    struct RemovePointerImpl<RawType* CV_OPT> final { \
-        using Type = RawType; \
+    template <typename Result> \
+    struct RemovePointerImpl<Result* CV_OPT> final { \
+        using Type = Result; \
     };
 
     _CV_OPT_TEMPLATE
@@ -266,29 +268,29 @@ namespace enhancedInternal::util::traits {
 
     // ======================================================================
 
-    template <bool, typename RawType>
+    template <bool, typename Type>
     struct AddReferenceImpl final {
-        using LvalueRef = RawType;
-        using RvalueRef = RawType;
+        using LvalueRef = Type;
+        using RvalueRef = Type;
     };
 
-    template <typename RawType>
-    struct AddReferenceImpl<true, RawType> final {
-        using LvalueRef = RawType&;
-        using RvalueRef = RawType&&;
+    template <typename Type>
+    struct AddReferenceImpl<true, Type> final {
+        using LvalueRef = Type&;
+        using RvalueRef = Type&&;
     };
 
     // ======================================================================
 
-    template <typename RawType>
+    template <typename Result>
     struct RemovePtrConstImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
 #define _TEMPLATE(CV_OPT) \
-    template <typename RawType> \
-    struct RemovePtrConstImpl<const RawType* CV_OPT> final { \
-        using Type = RawType* CV_OPT; \
+    template <typename InterType> \
+    struct RemovePtrConstImpl<const InterType* CV_OPT> final { \
+        using Type = InterType* CV_OPT; \
     };
 
     _CV_OPT_TEMPLATE
@@ -296,23 +298,67 @@ namespace enhancedInternal::util::traits {
 
     // ======================================================================
 
-    template <typename RawType>
+    template <typename Result>
     struct RemovePtrVolatileImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
 #define _TEMPLATE(CV_OPT) \
-    template <typename RawType> \
-    struct RemovePtrVolatileImpl<volatile RawType* CV_OPT> final { \
-        using Type = RawType* CV_OPT; \
+    template <typename InterType> \
+    struct RemovePtrVolatileImpl<volatile InterType* CV_OPT> final { \
+        using Type = InterType* CV_OPT; \
     };
 
     _CV_OPT_TEMPLATE
 #undef _TEMPLATE
 
-    template <typename RawType>
+    // ======================================================================
+
+    template <typename, sizetype>
+    struct RemoveExtentImpl final {};
+
+    template <typename Result>
+    struct RemoveExtentImpl<Result[], 0> final {
+        using Type = Result;
+    };
+
+    template <typename InterType, sizetype extent>
+    struct RemoveExtentImpl<InterType[], extent> final {
+        using Type = typename RemoveExtentImpl<InterType, extent - 1>::Type[];
+    };
+
+    template <typename Result, sizetype size>
+    struct RemoveExtentImpl<Result[size], 0> final {
+        using Type = Result;
+    };
+
+    template <typename InterType, sizetype extent, sizetype size>
+    struct RemoveExtentImpl<InterType[size], extent> final {
+        using Type = typename RemoveExtentImpl<InterType, extent - 1>::Type[size];
+    };
+
+    // ======================================================================
+
+    template <typename Result>
+    struct RemoveAllExtentsImpl final {
+        using Type = Result;
+    };
+
+    template <typename InterType>
+    struct RemoveAllExtentsImpl<InterType[]> final {
+        using Type = typename RemoveAllExtentsImpl<InterType>::Type;
+    };
+
+    template <typename InterType, sizetype size>
+    struct RemoveAllExtentsImpl<InterType[size]> final {
+        using Type = typename RemoveAllExtentsImpl<InterType>::Type;
+    };
+
+    // ======================================================================
+
+    template <typename Result>
     struct ToSignedImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
     template <>
@@ -329,9 +375,11 @@ namespace enhancedInternal::util::traits {
     _BASE_INT_TYPE_TEMPLATE
 #undef _TEMPLATE
 
-    template <typename RawType>
+    // ======================================================================
+
+    template <typename Result>
     struct ToUnsignedImpl final {
-        using Type = RawType;
+        using Type = Result;
     };
 
     template <>
@@ -355,27 +403,27 @@ namespace enhancedInternal::util::traits {
         }
 
         template <sizetype size>
-        static consteval bool isLimitedConstImpl(const char (&arg)[size]) {
+        static consteval bool isObjectConstImpl(const char (&arg)[size]) {
             return arg[0] == 'c'; // "const" or "const volatile"
         }
 
         template <sizetype size>
-        static consteval bool isLimitedVolatileImpl(const char (&arg)[size]) {
+        static consteval bool isObjectVolatileImpl(const char (&arg)[size]) {
             return arg[0] == 'v' || (arg[0] != '\0' && arg[5] != '\0' && arg[6] == 'v'); // "volatile" or "const volatile"
         }
 
         template <sizetype size>
-        static consteval bool isLimitedReferenceImpl(const char (&arg)[size]) {
-            return isLimitedLvalueRefImpl(arg) || isLimitedRvalueRefImpl(arg);
+        static consteval bool isObjectReferenceImpl(const char (&arg)[size]) {
+            return isObjectLvalueRefImpl(arg) || isObjectRvalueRefImpl(arg);
         }
 
         template <sizetype size>
-        static consteval bool isLimitedLvalueRefImpl(const char (&arg)[size]) {
+        static consteval bool isObjectLvalueRefImpl(const char (&arg)[size]) {
             return arg[0] == '&' && arg[1] == '\0'; // "&"
         }
 
         template <sizetype size>
-        static consteval bool isLimitedRvalueRefImpl(const char (&arg)[size]) {
+        static consteval bool isObjectRvalueRefImpl(const char (&arg)[size]) {
             return arg[0] == '&' && arg[1] == '&'; // "&&"
         }
     };
@@ -384,30 +432,11 @@ namespace enhancedInternal::util::traits {
 CLANG_WARNING_PAD("-Wdeprecated-volatile") MSVC_WARNING_PAD(4180) GCC_WARNING_PAD("-Wattributes")
 
 namespace enhanced::util::inline traits {
-    template <typename>
-    using VoidTemplate [[Deprecated("Recommended to use C++20 concepts")]] = void;
-
-    template <bool condition, typename Type = void>
-    using EnableIf [[Deprecated("Recommended to use C++20 concepts")]] =
-        typename enhancedInternal::util::traits::EnableIfImpl<condition, Type>::Type;
-
     template <bool condition, typename Type1, typename Type2>
     using Conditional = typename enhancedInternal::util::traits::ConditionalImpl<condition, Type1, Type2>::Type;
 
-    template <typename Type>
-    using RemoveRef = typename enhancedInternal::util::traits::RemoveRefImpl<Type>::Type;
-
-    template <typename Type>
-    using RemovePointer = typename enhancedInternal::util::traits::RemovePointerImpl<Type>::Type;
-
-    template <typename Type>
-    using RemoveConst = typename enhancedInternal::util::traits::RemoveConstImpl<Type>::Type;
-
-    template <typename Type>
-    using RemoveVolatile = typename enhancedInternal::util::traits::RemoveVolatileImpl<Type>::Type;
-
-    template <typename Type>
-    using RemoveCv = RemoveConst<RemoveVolatile<Type>>;
+    template <sizetype index, typename... Types>
+    using AtTypePack = typename enhancedInternal::util::traits::AtTypePackImpl<index, Types...>::Type;
 
     template <bool first, bool... conditions>
     inline constexpr bool allOfTrue = first;
@@ -422,18 +451,57 @@ namespace enhanced::util::inline traits {
     inline constexpr bool anyOfTrue<false, next, conditions...> = anyOfTrue<next, conditions...>;
 
     template <typename...>
-    inline constexpr sizetype typeCounter = 0;
+    inline constexpr sizetype typeVecCount = 0;
 
     template <typename First>
-    inline constexpr sizetype typeCounter<First> = 1;
+    inline constexpr sizetype typeVecCount<First> = 1;
 
     template <typename First, typename... Others>
-    inline constexpr sizetype typeCounter<First, Others...> = typeCounter<Others...> + 1;
+    inline constexpr sizetype typeVecCount<First, Others...> = typeVecCount<Others...> + 1;
 
     template <typename...>
     inline constexpr bool assume = true;
 
-#if defined(COMPILER_MSVC)
+    template <typename Type>
+    [[RetNotIgnored]]
+    constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
+
+    template <typename Type>
+    [[RetNotIgnored]]
+    inline constexpr Type& weakCast(Type&& value) noexcept {
+        return value;
+    }
+
+#define _TEMPLATE(CV_OPT) \
+    template <typename Type> \
+    [[RetNotIgnored]] \
+    inline constexpr Type& weakCast(CV_OPT Type& value) noexcept { \
+        return const_cast<Type&>(value); \
+    }
+
+    _CV_OPT_TEMPLATE
+#undef _TEMPLATE
+
+    template <typename Type>
+    [[RetNotIgnored]]
+    inline constexpr Type& forceCast(auto&& value) noexcept {
+        return *((Type*) &value);
+    }
+
+    template <sizetype index>
+    [[RetNotIgnored]]
+    inline constexpr auto& atValuePack(auto&& result, auto&&...) noexcept {
+        return result;
+    }
+
+    template <sizetype index>
+    requires (index > 0)
+    [[RetNotIgnored]]
+    inline constexpr auto& atValuePack(auto&&, auto&&... values) noexcept {
+        return atValuePack<index - 1>(values...);
+    }
+
+#ifdef COMPILER_MSVC
     template <typename, typename>
     inline constexpr bool isSame = false;
 
@@ -576,10 +644,43 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isPtrCvOr = isPtrConst<Type> || isPtrVolatile<Type>;
 
     template <typename Type>
+    inline constexpr bool isArray = false;
+
+    template <typename Type>
+    inline constexpr bool isArray<Type[]> = true;
+
+    template <typename Type, sizetype size>
+    inline constexpr bool isArray<Type[size]> = true;
+
+    template <typename Type>
+    inline constexpr bool isBoundedArray = false;
+
+    template <typename Type, sizetype size>
+    inline constexpr bool isBoundedArray<Type[size]> = false;
+
+    template <typename Type>
+    inline constexpr bool isUnboundedArray = false;
+
+    template <typename Type>
+    inline constexpr bool isUnboundedArray<Type[]> = false;
+
+    template <typename Type>
     using AddLvalueRef = typename enhancedInternal::util::traits::AddReferenceImpl<isReferenceable<Type>, Type>::LvalueRef;
 
     template <typename Type>
     using AddRvalueRef = typename enhancedInternal::util::traits::AddReferenceImpl<isReferenceable<Type>, Type>::RvalueRef;
+
+    template <typename Type>
+    using RemoveConst = typename enhancedInternal::util::traits::RemoveConstImpl<Type>::Type;
+
+    template <typename Type>
+    using RemoveVolatile = typename enhancedInternal::util::traits::RemoveVolatileImpl<Type>::Type;
+
+    template <typename Type>
+    using RemoveCv = RemoveConst<RemoveVolatile<Type>>;
+
+    template <typename Type>
+    using RemoveRef = typename enhancedInternal::util::traits::RemoveRefImpl<Type>::Type;
 
     template <typename Type>
     requires isReference<Type>
@@ -597,6 +698,9 @@ namespace enhanced::util::inline traits {
     using RemoveRefAndCv = RemoveCv<RemoveRef<Type>>;
 
     template <typename Type>
+    using RemovePointer = typename enhancedInternal::util::traits::RemovePointerImpl<Type>::Type;
+
+    template <typename Type>
     requires isPointer<Type>
     using RemovePtrConst = typename enhancedInternal::util::traits::RemovePtrConstImpl<Type>::Type;
 
@@ -611,42 +715,24 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     using RemovePtrAndCv = RemoveCv<RemovePointer<Type>>;
 
-    template <typename Type>
-    [[RetNotIgnored]]
-    constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
+    template <typename Type, sizetype extent = 0>
+    using RemoveExtent = typename enhancedInternal::util::traits::RemoveExtentImpl<Type, extent>::Type;
 
     template <typename Type>
-    [[RetNotIgnored]]
-    inline constexpr Type& weakCast(Type&& value) noexcept {
-        return value;
-    }
+    using RemoveAllExtents = typename enhancedInternal::util::traits::RemoveAllExtentsImpl<Type>::Type;
 
-#define _TEMPLATE(CV_OPT) \
-    template <typename Type> \
-    [[RetNotIgnored]] \
-    inline constexpr Type& weakCast(CV_OPT Type& value) noexcept { \
-        return const_cast<Type&>(value); \
-    }
+    template <typename Type, sizetype extent = 0>
+    inline constexpr sizetype arrayExtent = arrayExtent<RemoveExtent<Type>, extent - 1>;
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    template <typename Type, sizetype size>
+    inline constexpr sizetype arrayExtent<Type[size], 0> = size;
 
     template <typename Type>
-    [[RetNotIgnored]]
-    inline constexpr Type& forceCast(auto&& value) noexcept {
-        return *((Type*) &value);
-    }
+    inline constexpr sizetype arrayRank = 0;
 
     template <typename Type>
-    inline constexpr bool isIntegralType =
-        isAnyOf<RemoveCv<Type>, char,
-    #ifdef WCHAR_IS_BUILTIN_TYPE
-        wchar,
-    #endif
-        u8char, u16char, u32char, bool, schar, uchar, short, ushort, int, uint, long, ulong, llong, ullong>;
-
-    template <typename Type>
-    inline constexpr bool isFloatType = isAnyOf<RemoveCv<Type>, float, double, ldouble>;
+    requires isArray<Type>
+    inline constexpr sizetype arrayRank<Type> = arrayRank<RemoveExtent<Type>> + 1;
 
     template <typename Type>
     inline constexpr bool isCharType =
@@ -657,10 +743,21 @@ namespace enhanced::util::inline traits {
         u8char, u16char, u32char>;
 
     template <typename Type>
+    inline constexpr bool isIntegralType =
+        isAnyOf<RemoveCv<Type>, char,
+    #ifdef WCHAR_IS_BUILTIN_TYPE
+        wchar,
+    #endif
+        u8char, u16char, u32char, bool, schar, uchar, short, ushort, int, uint, long, ulong, llong, ullong>;
+
+    template <typename Type>
     inline constexpr bool isIntegralTypeNc = isIntegralType<Type> && !isCharType<Type>;
 
     template <typename Type>
     inline constexpr bool isIntegralTypeNs = isIntegralTypeNc<Type> && !isSame<Type, bool>;
+
+    template <typename Type>
+    inline constexpr bool isFloatType = isAnyOf<RemoveCv<Type>, float, double, ldouble>;
 
     template <typename Type>
     requires isIntegralType<Type>
@@ -671,24 +768,12 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isUnsigned = static_cast<RemoveCv<Type>>(-1) >= static_cast<Type>(0);
 
     template <typename Type>
-    inline constexpr bool isComparable = false;
-
-    template <typename Type>
-    requires assume<decltype(declvalue<Type>() == declvalue<Type>()), decltype(declvalue<Type>() != declvalue<Type>()),
-                       decltype(declvalue<Type>() < declvalue<Type>()), decltype(declvalue<Type>() > declvalue<Type>()),
-                       decltype(declvalue<Type>() <= declvalue<Type>()), decltype(declvalue<Type>() >= declvalue<Type>())>
-    inline constexpr bool isComparable<Type> = true;
-
-    template <typename Type>
     requires isIntegralType<Type>
     using ToSigned = typename enhancedInternal::util::traits::ToSignedImpl<Type>::Type;
 
     template <typename Type>
     requires isIntegralType<Type>
     using ToUnsigned = typename enhancedInternal::util::traits::ToUnsignedImpl<Type>::Type;
-
-    template <typename Type>
-    inline constexpr bool isArithmeticType = isIntegralType<Type> || isFloatType<Type>;
 
     template <typename Type>
     inline constexpr bool isEmptyType = __is_empty(Type);
@@ -700,28 +785,105 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isNullType = isSame<RemoveCv<Type>, nulltype>;
 
     template <typename Type>
-    inline constexpr bool isBasicType = isArithmeticType<Type> || isVoidType<Type> || isNullType<Type>;
-
-    template <typename Type>
-    inline constexpr bool isCompoundType = !isBasicType<Type>;
-
-    template <typename Type>
     inline constexpr bool isEnum = __is_enum(Type);
 
     template <typename Type>
     inline constexpr bool isClass = __is_class(Type);
 
     template <typename Type>
-    inline constexpr bool isStruct = isClass<Type>;
+    inline constexpr bool isPolymorphicClass = __is_polymorphic(Type);
+
+    template <typename Type>
+    inline constexpr bool isAbstractClass = __is_abstract(Type);
+
+    template <typename Type>
+    inline constexpr bool isFinalClass = __is_final(Type);
 
     template <typename Type>
     inline constexpr bool isUnion = __is_union(Type);
+
+    template <typename Type>
+    inline constexpr bool isArithmeticType = isIntegralType<Type> || isFloatType<Type>;
+
+    template <typename Type>
+    inline constexpr bool isBasicType = isArithmeticType<Type> || isVoidType<Type> || isNullType<Type>;
+
+    template <typename Type>
+    inline constexpr bool isCompoundType = !isBasicType<Type>;
+
+#ifdef COMPILER_GCC
+    template <typename From, typename To>
+    inline constexpr bool isConvertible = false;
+
+    template <typename From, typename To>
+    requires isVoidType<From> && isVoidType<To>
+    inline constexpr bool isConvertible<From, To> = true;
+
+    template <typename From, typename To>
+    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(weakCast<To>(declvalue<From>()))>
+    inline constexpr bool isConvertible<From, To> = true;
+#else
+    template <typename From, typename To>
+    inline constexpr bool isConvertible = __is_convertible_to(From, To);
+#endif
+
+    template <typename From, typename To>
+    inline constexpr bool isGeneralConvertible = false;
+
+    template <typename From, typename To>
+    requires isVoidType<To>
+    inline constexpr bool isGeneralConvertible<From, To> = true;
+
+    template <typename From, typename To>
+    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype((To) declvalue<From>())>
+    inline constexpr bool isGeneralConvertible<From, To> = true;
+
+    template <typename From, typename To>
+    inline constexpr bool isStaticConvertible = false;
+
+    template <typename From, typename To>
+    requires isVoidType<To>
+    inline constexpr bool isStaticConvertible<From, To> = true;
+
+    template <typename From, typename To>
+    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(static_cast<To>(declvalue<From>()))>
+    inline constexpr bool isStaticConvertible<From, To> = true;
+
+    template <typename From, typename To>
+    inline constexpr bool isReintConvertible = false;
+
+    template <typename From, typename To>
+    requires assume<decltype(reinterpret_cast<To>(declvalue<From>()))>
+    inline constexpr bool isReintConvertible<From, To> = true;
+
+    template <typename From, typename To>
+    inline constexpr bool isCvConvertible = false;
+
+    template <typename From, typename To>
+    requires assume<decltype(const_cast<To>(declvalue<From>()))>
+    inline constexpr bool isCvConvertible<From, To> = true;
+
+    template <typename Type>
+    inline constexpr bool isScopedEnum = false;
+
+    template <typename Type>
+    requires isEnum<Type> && assume<decltype(sizeof(Type))> && (!isConvertible<Type, int>)
+    inline constexpr bool isScopedEnum<Type> = true;
 
     template <typename, template <typename...> typename>
     inline constexpr bool isSpecialization = false;
 
     template <template <typename...> typename Template, typename... Types>
     inline constexpr bool isSpecialization<Template<Types...>, Template> = true;
+
+    template <typename Type>
+    inline constexpr bool isComparable = false;
+
+    template <typename Type>
+    requires assume<decltype(declvalue<Type>() == declvalue<Type>()), decltype(declvalue<Type>() != declvalue<Type>()),
+                    decltype(declvalue<Type>() < declvalue<Type>()), decltype(declvalue<Type>() > declvalue<Type>()),
+                    decltype(declvalue<Type>() <= declvalue<Type>()), decltype(declvalue<Type>() >= declvalue<Type>())>
+    inline constexpr bool isComparable<Type> = true;
 
     // Only function types and reference types cannot be const qualified.
 
@@ -730,6 +892,31 @@ namespace enhanced::util::inline traits {
 
     template <typename Type>
     inline constexpr bool isFunction = !isReference<Type> && !isConst<const Type>;
+
+    template <typename Type, typename... Args>
+    inline constexpr bool isConstructible = __is_constructible(Type, Args...);
+
+    template <typename Type>
+    inline constexpr bool isCopyConstructible = isConstructible<Type, AddLvalueRef<const Type>>;
+
+    template <typename Type>
+    inline constexpr bool isMoveConstructible = isConstructible<Type, AddRvalueRef<Type>>;
+
+#ifdef ABI_GCC
+    template <typename Type>
+    inline constexpr bool isDestructible = false;
+
+    template <typename Type>
+    requires isObject<Type> && (!isClass<Type>)
+    inline constexpr bool isDestructible<Type> = true;
+
+    template <typename Type>
+    requires isClass<Type> && assume<decltype(declvalue<Type>().~Type())>
+    inline constexpr bool isDestructible<Type> = true;
+#else
+    template <typename Type>
+    inline constexpr bool isDestructible = __is_destructible(Type);
+#endif
 
     enum class CallingConvention : uint8 {
         Cdecl, Fastcall, Stdcall, Thiscall,
@@ -754,11 +941,11 @@ namespace enhanced::util::inline traits {
         static constexpr bool hasVarargs = false; \
         static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
-        static constexpr bool isLimitedConst = enhancedInternal::util::traits::FunctionParserImpl::isLimitedConstImpl(#CV_OPT); \
-        static constexpr bool isLimitedVolatile = enhancedInternal::util::traits::FunctionParserImpl::isLimitedVolatileImpl(#CV_OPT); \
-        static constexpr bool isLimitedReference = enhancedInternal::util::traits::FunctionParserImpl::isLimitedReferenceImpl(#REF_OPT); \
-        static constexpr bool isLimitedLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedLvalueRefImpl(#REF_OPT); \
-        static constexpr bool isLimitedRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedRvalueRefImpl(#REF_OPT); \
+        static constexpr bool isObjectConst = enhancedInternal::util::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
+        static constexpr bool isObjectVolatile = enhancedInternal::util::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
+        static constexpr bool isObjectReference = enhancedInternal::util::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
+        static constexpr bool isObjectLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
+        static constexpr bool isObjectRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
     };
 
     _FUNC_TEMPLATE
@@ -773,11 +960,11 @@ namespace enhanced::util::inline traits {
         static constexpr bool hasVarargs = true; \
         static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
-        static constexpr bool isLimitedConst = enhancedInternal::util::traits::FunctionParserImpl::isLimitedConstImpl(#CV_OPT); \
-        static constexpr bool isLimitedVolatile = enhancedInternal::util::traits::FunctionParserImpl::isLimitedVolatileImpl(#CV_OPT); \
-        static constexpr bool isLimitedReference = enhancedInternal::util::traits::FunctionParserImpl::isLimitedReferenceImpl(#REF_OPT); \
-        static constexpr bool isLimitedLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedLvalueRefImpl(#REF_OPT); \
-        static constexpr bool isLimitedRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedRvalueRefImpl(#REF_OPT); \
+        static constexpr bool isObjectConst = enhancedInternal::util::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
+        static constexpr bool isObjectVolatile = enhancedInternal::util::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
+        static constexpr bool isObjectReference = enhancedInternal::util::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
+        static constexpr bool isObjectLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
+        static constexpr bool isObjectRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
     };
 
     _FUNC_WITH_VARARGS_TEMPLATE
@@ -861,6 +1048,9 @@ namespace enhanced::util::inline traits {
 #endif
 
     template <typename Type>
+    inline constexpr bool isScalarType = isArithmeticType<Type> || isEnum<Type> || isPointer<Type> || isMemberPointer<Type> || isNullType<Type>;
+
+    template <typename Type>
     requires isMemberPointer<Type>
     struct MemberPointerParser {};
 
@@ -894,11 +1084,11 @@ namespace enhanced::util::inline traits {
         static constexpr bool hasVarargs = false; \
         static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
-        static constexpr bool isLimitedConst = enhancedInternal::util::traits::FunctionParserImpl::isLimitedConstImpl(#CV_OPT); \
-        static constexpr bool isLimitedVolatile = enhancedInternal::util::traits::FunctionParserImpl::isLimitedVolatileImpl(#CV_OPT); \
-        static constexpr bool isLimitedReference = enhancedInternal::util::traits::FunctionParserImpl::isLimitedReferenceImpl(#REF_OPT); \
-        static constexpr bool isLimitedLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedLvalueRefImpl(#REF_OPT); \
-        static constexpr bool isLimitedRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedRvalueRefImpl(#REF_OPT); \
+        static constexpr bool isObjectConst = enhancedInternal::util::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
+        static constexpr bool isObjectVolatile = enhancedInternal::util::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
+        static constexpr bool isObjectReference = enhancedInternal::util::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
+        static constexpr bool isObjectLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
+        static constexpr bool isObjectRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
     };
 
     _MEMBER_FUNC_PTR_TEMPLATE
@@ -915,112 +1105,15 @@ namespace enhanced::util::inline traits {
         static constexpr bool hasVarargs = true; \
         static constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static constexpr bool isNothrow = enhancedInternal::util::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
-        static constexpr bool isLimitedConst = enhancedInternal::util::traits::FunctionParserImpl::isLimitedConstImpl(#CV_OPT); \
-        static constexpr bool isLimitedVolatile = enhancedInternal::util::traits::FunctionParserImpl::isLimitedVolatileImpl(#CV_OPT); \
-        static constexpr bool isLimitedReference = enhancedInternal::util::traits::FunctionParserImpl::isLimitedReferenceImpl(#REF_OPT); \
-        static constexpr bool isLimitedLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedLvalueRefImpl(#REF_OPT); \
-        static constexpr bool isLimitedRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isLimitedRvalueRefImpl(#REF_OPT); \
+        static constexpr bool isObjectConst = enhancedInternal::util::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
+        static constexpr bool isObjectVolatile = enhancedInternal::util::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
+        static constexpr bool isObjectReference = enhancedInternal::util::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
+        static constexpr bool isObjectLvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
+        static constexpr bool isObjectRvalueRef = enhancedInternal::util::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
     };
 
     _MEMBER_FUNC_WITH_VARARGS_PTR_TEMPLATE
 #undef _TEMPLATE
-
-    template <typename Type>
-    inline constexpr bool isScalarType = isArithmeticType<Type> || isEnum<Type> || isPointer<Type> || isMemberPointer<Type> || isNullType<Type>;
-
-    template <typename Type>
-    inline constexpr bool isPolymorphicClass = __is_polymorphic(Type);
-
-    template <typename Type>
-    inline constexpr bool isAbstractClass = __is_abstract(Type);
-
-    template <typename Type>
-    inline constexpr bool isFinalClass = __is_final(Type);
-
-#ifdef COMPILER_GCC
-    template <typename From, typename To>
-    inline constexpr bool isConvertible = false;
-
-    template <typename From, typename To>
-    requires isVoidType<From> && isVoidType<To>
-    inline constexpr bool isConvertible<From, To> = true;
-
-    template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(weakCast<To>(declvalue<From>()))>
-    inline constexpr bool isConvertible<From, To> = true;
-#else
-    template <typename From, typename To>
-    inline constexpr bool isConvertible = __is_convertible_to(From, To);
-#endif
-
-    template <typename From, typename To>
-    inline constexpr bool isGeneralConvertible = false;
-
-    template <typename From, typename To>
-    requires isVoidType<To>
-    inline constexpr bool isGeneralConvertible<From, To> = true;
-
-    template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype((To) declvalue<From>())>
-    inline constexpr bool isGeneralConvertible<From, To> = true;
-
-    template <typename From, typename To>
-    inline constexpr bool isStaticConvertible = false;
-
-    template <typename From, typename To>
-    requires isVoidType<To>
-    inline constexpr bool isStaticConvertible<From, To> = true;
-
-    template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(static_cast<To>(declvalue<From>()))>
-    inline constexpr bool isStaticConvertible<From, To> = true;
-
-    template <typename From, typename To>
-    inline constexpr bool isReintConvertible = false;
-
-    template <typename From, typename To>
-    requires isVoidType<From> && isVoidType<To>
-    inline constexpr bool isReintConvertible<From, To> = true;
-
-    template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(reinterpret_cast<To>(declvalue<From>()))>
-    inline constexpr bool isReintConvertible<From, To> = true;
-
-    template <typename From, typename To>
-    inline constexpr bool isCvConvertible = false;
-
-    template <typename From, typename To>
-    requires isVoidType<From> && isVoidType<To>
-    inline constexpr bool isCvConvertible<From, To> = true;
-
-    template <typename From, typename To>
-    requires (!isVoidType<From> && !isVoidType<To>) && assume<decltype(const_cast<To>(declvalue<From>()))>
-    inline constexpr bool isCvConvertible<From, To> = true;
-
-    template <typename Type, typename... Args>
-    inline constexpr bool isConstructible = __is_constructible(Type, Args...);
-
-    template <typename Type>
-    inline constexpr bool isCopyConstructible = isConstructible<Type, AddLvalueRef<const Type>>;
-
-    template <typename Type>
-    inline constexpr bool isMoveConstructible = isConstructible<Type, AddRvalueRef<Type>>;
-
-#ifdef ABI_GCC
-    template <typename Type>
-    inline constexpr bool isDestructible = false;
-
-    template <typename Type>
-    requires isObject<Type> && (!isClass<Type>)
-    inline constexpr bool isDestructible<Type> = true;
-
-    template <typename Type>
-    requires isClass<Type> && assume<decltype(declvalue<Type>().~Type())>
-    inline constexpr bool isDestructible<Type> = true;
-#else
-    template <typename Type>
-    inline constexpr bool isDestructible = __is_destructible(Type);
-#endif
 
     template <typename Type>
     [[RetNotIgnored]]

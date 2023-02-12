@@ -22,7 +22,7 @@
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API FileNotFoundException : public IOException {
     public:
-        DEFINE_EXCEPTION_NAME(enhanced::exceptions::FileNotFoundException)
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::FileNotFoundException)
 
         explicit FileNotFoundException(const String& name) noexcept;
     };

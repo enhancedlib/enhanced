@@ -19,12 +19,16 @@
 #include <enhanced/Types.h>
 #include <enhanced/exceptions/Exception.h>
 
-#define UNSUPPORTED_OPERATION() throw enhanced::exceptions::UnsupportedOperationException()
+#define E_UNSUPPORTED_OPERATION throw enhanced::exceptions::UnsupportedOperationException
+
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define UNSUPPORTED_OPERATION E_UNSUPPORTED_OPERATION
+#endif
 
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API UnsupportedOperationException : public Exception {
     public:
-        DEFINE_EXCEPTION_NAME(enhanced::exceptions::UnsupportedOperationException)
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::UnsupportedOperationException)
 
         explicit UnsupportedOperationException(const String& message = "") noexcept;
 

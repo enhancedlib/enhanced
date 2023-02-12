@@ -23,7 +23,7 @@
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API IndexOutOfBoundsException : public RuntimeException {
     public:
-        DEFINE_EXCEPTION_NAME(enhanced::exceptions::IndexOutOfBoundsException)
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::IndexOutOfBoundsException)
 
         explicit IndexOutOfBoundsException(const String& message = "") noexcept;
 

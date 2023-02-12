@@ -70,7 +70,7 @@ namespace enhanced {
     requires util::isCharType<CharType>
     [[RetNotIgnored]]
     TMutString<CharType> TString<CharType>::join(InitializerList<TString> list) {
-        return join(list.getArray(), list.getSize());
+        return join(list.toArray(), list.getSize());
     }
 
     template <typename CharType>

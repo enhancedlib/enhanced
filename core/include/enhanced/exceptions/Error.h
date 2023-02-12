@@ -22,7 +22,7 @@
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API Error : public Exception {
     public:
-        DEFINE_EXCEPTION_NAME(enhanced::exceptions::Error)
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::Error)
 
         explicit Error(const String& message = "") noexcept;
 

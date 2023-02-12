@@ -38,14 +38,19 @@ namespace enhanced {
         }
 
         [[RetNotIgnored]]
-        inline constexpr const Type* getArray() const noexcept {
+        inline constexpr const Type* toArray() const noexcept {
             return initList.begin();
         }
 
         [[RetNotIgnored]]
         inline constexpr sizetype getSize() const noexcept {
             return initList.size();
-}
+        }
+
+        [[RetNotIgnored]]
+        inline constexpr Type& get(sizetype index) const noexcept {
+            return toArray()[index];
+        }
     };
 }
 

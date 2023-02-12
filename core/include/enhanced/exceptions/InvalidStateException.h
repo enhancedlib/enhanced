@@ -23,7 +23,7 @@
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API InvalidStateException : public RuntimeException {
     public:
-        DEFINE_EXCEPTION_NAME(enhanced::exceptions::InvalidStateException)
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::InvalidStateException)
 
         explicit InvalidStateException(const String& message = "") noexcept;
 

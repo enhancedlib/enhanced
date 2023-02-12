@@ -38,7 +38,7 @@ namespace enhanced {
 
         inline explicit Array(sizetype size, const Type* elements) noexcept : size(size), elements(elements) {}
 
-        inline Array(InitializerList<Type> list) noexcept : size(list.getArray()), elements(util::removePtrConst(list.getArray())) {}
+        inline Array(InitializerList<Type> list) noexcept : size(list.toArray()), elements(util::removePtrConst(list.toArray())) {}
 
         inline E_INIT_LIST_CONSTRUCTOR(Array, noexcept) CTIDY_NOLINT(cppcoreguidelines-pro-type-member-init)
 

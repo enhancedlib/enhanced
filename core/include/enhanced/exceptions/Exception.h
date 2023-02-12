@@ -22,11 +22,15 @@
 #include <enhanced/String.h>
 #include <enhanced/MutString.h>
 
-#define DEFINE_EXCEPTION_NAME(NAME) \
+#define E_DEFINE_EXCEPTION_NAME(NAME) \
     [[RetNotIgnored]] \
     const String getName() const override { \
         return #NAME; \
     }
+
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define DEFINE_EXCEPTION_NAME E_DEFINE_EXCEPTION_NAME
+#endif
 
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API Exception {

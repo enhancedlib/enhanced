@@ -22,7 +22,7 @@
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API RuntimeException : public Exception {
     public:
-        DEFINE_EXCEPTION_NAME(enhanced::exceptions::RuntimeException)
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::RuntimeException)
 
         explicit RuntimeException(const String& message = "") noexcept;
 

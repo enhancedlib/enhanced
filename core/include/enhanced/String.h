@@ -60,7 +60,7 @@ namespace enhanced {
         }
 
         template <typename... Args>
-        requires (util::typeCounter<Args...> >= 2)
+        requires (util::typeVecCount<Args...> >= 2)
         [[RetNotIgnored]]
         static TMutString<CharType> join(Args&&... values) {
             return join({values...});

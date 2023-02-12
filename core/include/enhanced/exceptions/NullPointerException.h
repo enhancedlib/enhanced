@@ -22,7 +22,7 @@
 namespace enhanced::exceptions {
     class ENHANCED_CORE_API NullPointerException : public Exception {
     public:
-        DEFINE_EXCEPTION_NAME(enhanced::exceptions::NullPointerException)
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::NullPointerException)
 
         explicit NullPointerException(const String& message = "") noexcept;
     };
