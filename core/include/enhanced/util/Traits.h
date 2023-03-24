@@ -166,12 +166,12 @@ namespace enhancedInternal::util::traits {
     // ======================================================================
 
     template <sizetype index, typename, typename... OtherTypes>
-    struct AtTypePackImpl final {
-        using Type = typename AtTypePackImpl<index - 1, OtherTypes...>::Type;
+    struct AtTypeVecImpl final {
+        using Type = typename AtTypeVecImpl<index - 1, OtherTypes...>::Type;
     };
 
     template <typename Result, typename... OtherTypes>
-    struct AtTypePackImpl<0, Result, OtherTypes...> final {
+    struct AtTypeVecImpl<0, Result, OtherTypes...> final {
         using Type = Result;
     };
 
@@ -436,7 +436,7 @@ namespace enhanced::util::inline traits {
     using Conditional = typename enhancedInternal::util::traits::ConditionalImpl<condition, Type1, Type2>::Type;
 
     template <sizetype index, typename... Types>
-    using AtTypePack = typename enhancedInternal::util::traits::AtTypePackImpl<index, Types...>::Type;
+    using AtTypeVec = typename enhancedInternal::util::traits::AtTypeVecImpl<index, Types...>::Type;
 
     template <bool first, bool... conditions>
     inline constexpr bool allOfTrue = first;
@@ -490,15 +490,15 @@ namespace enhanced::util::inline traits {
 
     template <sizetype index>
     [[RetNotIgnored]]
-    inline constexpr auto& atValuePack(auto&& result, auto&&...) noexcept {
+    inline constexpr auto& atValueVec(auto&& result, auto&&...) noexcept {
         return result;
     }
 
     template <sizetype index>
     requires (index > 0)
     [[RetNotIgnored]]
-    inline constexpr auto& atValuePack(auto&&, auto&&... values) noexcept {
-        return atValuePack<index - 1>(values...);
+    inline constexpr auto& atValueVec(auto&&, auto&&... values) noexcept {
+        return atValueVec<index - 1>(values...);
     }
 
 #ifdef COMPILER_MSVC
@@ -902,6 +902,51 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isMoveConstructible = isConstructible<Type, AddRvalueRef<Type>>;
 
+    template <typename Type, typename... Args>
+    inline constexpr bool isTriviallyConstructible = __is_trivially_constructible(Type, Args...);
+
+    template <typename Type>
+    inline constexpr bool isTriviallyCopyConstructible = isTriviallyConstructible<Type, AddLvalueRef<const Type>>;
+
+    template <typename Type>
+    inline constexpr bool isTriviallyMoveConstructible = isTriviallyConstructible<Type, AddRvalueRef<Type>>;
+
+    template <typename Type, typename... Args>
+    inline constexpr bool isNothrowConstructible = __is_nothrow_constructible(Type, Args...);
+
+    template <typename Type>
+    inline constexpr bool isNothrowCopyConstructible = isNothrowConstructible<Type, AddLvalueRef<const Type>>;
+
+    template <typename Type>
+    inline constexpr bool isNothrowMoveConstructible = isNothrowConstructible<Type, AddRvalueRef<Type>>;
+
+    template <typename From, typename To>
+    inline constexpr bool isAssignable = __is_assignable(To, From);
+
+    template <typename From, typename To>
+    inline constexpr bool isCopyAssignable = isAssignable<AddLvalueRef<const From>, AddLvalueRef<To>>;
+
+    template <typename From, typename To>
+    inline constexpr bool isMoveAssignable = isAssignable<From, AddLvalueRef<To>>;
+
+    template <typename From, typename To>
+    inline constexpr bool isTriviallyAssignable = __is_trivially_assignable(To, From);
+
+    template <typename From, typename To>
+    inline constexpr bool isTriviallyCopyAssignable = isTriviallyAssignable<AddLvalueRef<const From>, AddLvalueRef<To>>;
+
+    template <typename From, typename To>
+    inline constexpr bool isTriviallyMoveAssignable = isTriviallyAssignable<From, AddLvalueRef<To>>;
+
+    template <typename From, typename To>
+    inline constexpr bool isNothrowAssignable = __is_nothrow_assignable(To, From);
+
+    template <typename From, typename To>
+    inline constexpr bool isNothrowCopyAssignable = isNothrowAssignable<AddLvalueRef<const From>, AddLvalueRef<To>>;
+
+    template <typename From, typename To>
+    inline constexpr bool isNothrowMoveAssignable = isNothrowAssignable<From, AddLvalueRef<To>>;
+
 #ifdef ABI_GCC
     template <typename Type>
     inline constexpr bool isDestructible = false;
@@ -917,6 +962,44 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isDestructible = __is_destructible(Type);
 #endif
+
+#ifdef COMPILER_GCC
+    template <typename Type>
+    inline constexpr bool isTriviallyDestructible = __has_trivial_destructor(Type);
+#else
+    template <typename Type>
+    inline constexpr bool isTriviallyDestructible = __is_trivially_destructible(Type);
+#endif
+
+#ifdef COMPILER_GCC
+    template <typename Type>
+    inline constexpr bool isNothrowDestructible = false;
+
+    template <typename Type>
+    requires isObject<Type> && (!isClass<Type>)
+    inline constexpr bool isNothrowDestructible<Type> = true;
+
+    template <typename Type>
+    requires isClass<Type> && assume<decltype(declvalue<Type>().~Type())>
+    inline constexpr bool isNothrowDestructible<Type> = noexcept(declvalue<Type>().~Type());
+#else
+    template <typename Type>
+    inline constexpr bool isNothrowDestructible = __is_nothrow_destructible(Type);
+#endif
+
+    template <typename Type>
+    inline constexpr bool isTriviallyCopyable = __is_trivially_copyable(Type);
+
+#ifdef ABI_GCC
+    template <typename Type>
+    inline constexpr bool isTrivial = __is_trivial(Type);
+#else
+    template <typename Type>
+    inline constexpr bool isTrivial = isTriviallyConstructible<Type> && isTriviallyCopyable<Type>;
+#endif
+
+    template <typename Type>
+    inline constexpr bool hasVirtualDestructor = __has_virtual_destructor(Type);
 
     enum class CallingConvention : uint8 {
         Cdecl, Fastcall, Stdcall, Thiscall,

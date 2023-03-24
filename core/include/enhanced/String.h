@@ -55,14 +55,14 @@ namespace enhanced {
         template <typename IntTypeNs>
         requires util::isIntegralTypeNs<IntTypeNs>
         [[RetNotIgnored]]
-        static TMutString<CharType> from(IntTypeNs value) {
+        static inline TMutString<CharType> from(IntTypeNs value) {
             return from(value, value < 0);
         }
 
         template <typename... Args>
         requires (util::typeVecCount<Args...> >= 2)
         [[RetNotIgnored]]
-        static TMutString<CharType> join(Args&&... values) {
+        static inline TMutString<CharType> join(Args&&... values) {
             return join({values...});
         }
 

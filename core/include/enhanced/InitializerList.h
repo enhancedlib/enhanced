@@ -18,6 +18,13 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 
+#define E_INIT_LIST_CONSTRUCTOR(NAME) inline NAME(std::initializer_list<Type> list) \
+    noexcept(noexcept(NAME(enhanced::InitializerList(list)))) : NAME(enhanced::InitializerList(list)) {}
+
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define INIT_LIST_CONSTRUCTOR E_INIT_LIST_CONSTRUCTOR
+#endif
+
 namespace enhanced {
     template <typename Type>
     class InitializerList {
@@ -53,9 +60,3 @@ namespace enhanced {
         }
     };
 }
-
-#define E_INIT_LIST_CONSTRUCTOR(NAME, ...) NAME(std::initializer_list<Type> list) __VA_ARGS__ : NAME(enhanced::InitializerList(list)) {}
-
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
-    #define INIT_LIST_CONSTRUCTOR E_INIT_LIST_CONSTRUCTOR
-#endif

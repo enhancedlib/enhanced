@@ -22,6 +22,8 @@
 namespace enhanced::collections {
     template <typename Type>
     struct Collection {
+        using Element = Type;
+
         virtual ~Collection() noexcept = default;
 
         [[RetNotIgnored]]

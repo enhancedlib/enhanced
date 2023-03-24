@@ -130,39 +130,6 @@ namespace enhanced {
     using ::sizetype;
 }
 
-#if defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_LIMITS)
-    #pragma push_macro("INT8_MIN")
-    #pragma push_macro("INT16_MIN")
-    #pragma push_macro("INT32_MIN")
-    #pragma push_macro("INT64_MIN")
-    #pragma push_macro("CHAR_MIN")
-    #pragma push_macro("WCHAR_MIN")
-    #pragma push_macro("SCHAR_MIN")
-    #pragma push_macro("INT_MIN")
-    #pragma push_macro("LONG_MIN")
-    #pragma push_macro("LLONG_MIN")
-    #pragma push_macro("INT8_MAX")
-    #pragma push_macro("INT16_MAX")
-    #pragma push_macro("INT32_MAX")
-    #pragma push_macro("INT64_MAX")
-    #pragma push_macro("UINT8_MAX")
-    #pragma push_macro("UINT16_MAX")
-    #pragma push_macro("UINT32_MAX")
-    #pragma push_macro("UINT64_MAX")
-    #pragma push_macro("CHAR_MAX")
-    #pragma push_macro("WCHAR_MAX")
-    #pragma push_macro("SCHAR_MAX")
-    #pragma push_macro("INT_MAX")
-    #pragma push_macro("LONG_MAX")
-    #pragma push_macro("LLONG_MAX")
-    #pragma push_macro("UCHAR_MAX")
-    #pragma push_macro("UINT_MAX")
-    #pragma push_macro("ULONG_MAX")
-    #pragma push_macro("ULLONG_MAX")
-    #pragma push_macro("INFINITY")
-    #pragma push_macro("NAN")
-#endif
-
 #undef INT8_MIN
 #undef INT16_MIN
 #undef INT32_MIN
@@ -194,15 +161,15 @@ namespace enhanced {
 #undef INFINITY
 #undef NAN
 
-#define INT8_MIN ((int8) -0x80) // -128
-#define INT16_MIN ((int16) -0x8000) // -32768
-#define INT32_MIN ((int32) -0x80000000) // -2147483648
-#define INT64_MIN ((int64) -0x8000000000000000) // -9223372036854775808
+#define INT8_MIN (-0x80) // -128
+#define INT16_MIN (-0x8000) // -32768
+#define INT32_MIN (-0x80000000) // -2147483648
+#define INT64_MIN (-0x8000000000000000) // -9223372036854775808
 
-#define UINT8_MIN ((uint8) 0x0)
-#define UINT16_MIN ((uint16) 0x0)
-#define UINT32_MIN ((uint32) 0x0)
-#define UINT64_MIN ((uint64) 0x0)
+#define UINT8_MIN 0
+#define UINT16_MIN 0
+#define UINT32_MIN 0
+#define UINT64_MIN 0
 
 #define FLOAT32_MIN 1.17549435082228750796873653722224568e-38f
 #define FLOAT64_MIN 2.22507385850720138309023271733240406e-308
@@ -262,15 +229,15 @@ namespace enhanced {
     #define SIZE_TYPE_MIN UINT64_MIN
 #endif
 
-#define INT8_MAX ((int8) 0x7F) // 127
-#define INT16_MAX ((int16) 0x7FFF) // 32767
-#define INT32_MAX ((int32) 0x7FFFFFFF) // 2147483647
-#define INT64_MAX ((int64) 0x7FFFFFFFFFFFFFFF) // 9223372036854775807
+#define INT8_MAX 0x7F // 127
+#define INT16_MAX 0x7FFF // 32767
+#define INT32_MAX 0x7FFFFFFF // 2147483647
+#define INT64_MAX 0x7FFFFFFFFFFFFFFF // 9223372036854775807
 
-#define UINT8_MAX ((uint8) 0xFFu) // 255
-#define UINT16_MAX ((uint16) 0xFFFFu) // 65535
-#define UINT32_MAX ((uint32) 0xFFFFFFFFu) // 4294967295
-#define UINT64_MAX ((uint64) 0xFFFFFFFFFFFFFFFFu) // 18446744073709551615
+#define UINT8_MAX 0xFFu // 255
+#define UINT16_MAX 0xFFFFu // 65535
+#define UINT32_MAX 0xFFFFFFFFu // 4294967295
+#define UINT64_MAX 0xFFFFFFFFFFFFFFFFu // 18446744073709551615
 
 #define FLOAT32_MAX 3.40282346638528859811704183484516925e+38f
 #define FLOAT64_MAX 1.79769313486231570814527423731704357e+308
@@ -343,36 +310,3 @@ namespace enhanced {
 #endif
 
 #define INVALID_SIZE SIZE_TYPE_MAX
-
-#if defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_LIMITS)
-    #pragma pop_macro("INT8_MIN")
-    #pragma pop_macro("INT16_MIN")
-    #pragma pop_macro("INT32_MIN")
-    #pragma pop_macro("INT64_MIN")
-    #pragma pop_macro("CHAR_MIN")
-    #pragma pop_macro("WCHAR_MIN")
-    #pragma pop_macro("SCHAR_MIN")
-    #pragma pop_macro("INT_MIN")
-    #pragma pop_macro("LONG_MIN")
-    #pragma pop_macro("LLONG_MIN")
-    #pragma pop_macro("INT8_MAX")
-    #pragma pop_macro("INT16_MAX")
-    #pragma pop_macro("INT32_MAX")
-    #pragma pop_macro("INT64_MAX")
-    #pragma pop_macro("UINT8_MAX")
-    #pragma pop_macro("UINT16_MAX")
-    #pragma pop_macro("UINT32_MAX")
-    #pragma pop_macro("UINT64_MAX")
-    #pragma pop_macro("CHAR_MAX")
-    #pragma pop_macro("WCHAR_MAX")
-    #pragma pop_macro("SCHAR_MAX")
-    #pragma pop_macro("INT_MAX")
-    #pragma pop_macro("LONG_MAX")
-    #pragma pop_macro("LLONG_MAX")
-    #pragma pop_macro("UCHAR_MAX")
-    #pragma pop_macro("UINT_MAX")
-    #pragma pop_macro("ULONG_MAX")
-    #pragma pop_macro("ULLONG_MAX")
-    #pragma pop_macro("INFINITY")
-    #pragma pop_macro("NAN")
-#endif

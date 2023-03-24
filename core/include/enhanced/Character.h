@@ -20,6 +20,10 @@
 
 #define E_SWITCH_CHAR(TYPE, CH) enhanced::util::switchType<TYPE>(CH, L##CH, u8##CH, u##CH, U##CH)
 
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define SWITCH_CHAR E_SWITCH_CHAR
+#endif
+
 namespace enhanced {
     template <typename CharType>
     requires util::isCharType<CharType>

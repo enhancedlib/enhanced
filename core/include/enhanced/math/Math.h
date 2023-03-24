@@ -169,6 +169,7 @@ namespace enhanced::math {
             return value;
         }
 
+    #ifndef COMPILER_MSVC
         inline constexpr operator const UIntTypeNs() const {
             return value;
         }
@@ -176,6 +177,7 @@ namespace enhanced::math {
         inline constexpr operator UIntTypeNs&() const {
             return value;
         }
+    #endif
 
         inline constexpr TInt& operator++() noexcept {
             return ++value;

@@ -49,7 +49,16 @@ namespace enhancedInternal::collections {
 
             mutable void** indexer;
 
-            ArrayListIteratorImpl(const ArrayListImpl* arrayList);
+            ArrayListIteratorImpl(const ArrayListImpl* arrayList, void** init);
+
+            [[RetNotIgnored]]
+            void* get0() const;
+
+            [[RetNotIgnored]]
+            bool hasNext0() const;
+
+            [[RetNotIgnored]]
+            bool hasPrev0() const;
 
             [[RetNotIgnored]]
             bool isBegin0() const;
@@ -57,17 +66,17 @@ namespace enhancedInternal::collections {
             [[RetNotIgnored]]
             bool isEnd0() const;
 
-            [[RetNotIgnored]]
-            bool hasNext0() const;
-
             void next0() const;
+
+            void next0(sizetype count) const;
 
             void prev0() const;
 
-            [[RetNotIgnored]]
-            void* get0() const;
+            void prev0(sizetype count) const;
 
-            void reset0() const;
+            void setBegin0() const;
+
+            void setEnd0() const;
         };
 
         ArrayListImpl(sizetype capacity);
@@ -142,7 +151,17 @@ namespace enhanced::collections {
     public:
         class ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
         public:
-            inline explicit ArrayListIterator(const ArrayList<Type>* arrayList) : ArrayListIteratorImpl(arrayList) {}
+            inline explicit ArrayListIterator(const ArrayList<Type>* arrayList, void** init) : ArrayListIteratorImpl(arrayList, init) {}
+
+            [[RetNotIgnored]]
+            inline Type& get() const override {
+                return *reinterpret_cast<Type*>(get0());
+            }
+
+            [[RetNotIgnored]]
+            inline sizetype count() const override {
+                return static_cast<const ArrayList<Type>*>(arrayList)->size;
+            }
 
             [[RetNotIgnored]]
             inline bool isBegin() const override {
@@ -159,9 +178,20 @@ namespace enhanced::collections {
                 return hasNext0();
             }
 
+            [[RetNotIgnored]]
+            inline bool hasPrev() const override {
+                return hasPrev0();
+            }
+
             [[ReturnSelf]]
             inline const Iterator<Type>& next() const override {
                 next0();
+                return *this;
+            }
+
+            [[ReturnSelf]]
+            inline const Iterator<Type>& next(sizetype count) const override {
+                next0(count);
                 return *this;
             }
 
@@ -171,18 +201,22 @@ namespace enhanced::collections {
                 return *this;
             }
 
-            [[RetNotIgnored]]
-            inline Type& get() const override {
-                return *reinterpret_cast<Type*>(get0());
+            [[ReturnSelf]]
+            inline const Iterator<Type>& prev(sizetype count) const override {
+                prev0(count);
+                return *this;
             }
 
-            inline void reset() const override {
-                reset0();
+            [[ReturnSelf]]
+            inline const Iterator<Type>& setBegin() const override {
+                setBegin0();
+                return *this;
             }
 
-            [[RetNotIgnored]]
-            inline sizetype count() const override {
-                return static_cast<const ArrayList<Type>*>(arrayList)->size;
+            [[ReturnSelf]]
+            inline const Iterator<Type>& setEnd() const override {
+                setEnd0();
+                return *this;
             }
         };
 
@@ -196,7 +230,7 @@ namespace enhanced::collections {
             }
         }
 
-        inline E_INIT_LIST_CONSTRUCTOR(ArrayList) CTIDY_NOLINT(cppcoreguidelines-pro-type-member-init)
+        E_INIT_LIST_CONSTRUCTOR(ArrayList) CTIDY_NOLINT(cppcoreguidelines-pro-type-member-init)
 
         inline explicit ArrayList(sizetype capacity) : ArrayListImpl(capacity) {}
 
@@ -225,21 +259,21 @@ namespace enhanced::collections {
         }
 
         [[RetNotIgnored]]
-        inline ArrayListIterator begin() const noexcept {
-            auto it = iterator();
-            it.next();
-            return it;
-        }
-
-        [[RetNotIgnored]]
-        inline constexpr byte end() const noexcept {
-            return 0;
-        }
-
-        [[RetNotIgnored]]
         inline ArrayListIterator iterator() const noexcept {
-            return ArrayListIterator {this};
+            return ArrayListIterator {this, elements - 1};
         }
+
+        [[RetNotIgnored]]
+        inline ForwardIterator<ArrayListIterator> forwardIterator() const noexcept {
+            return iterator();
+        }
+
+        [[RetNotIgnored]]
+        inline ReverseIterator<ArrayListIterator> reverseIterator() const noexcept {
+            return {this, elements + size};
+        }
+
+        E_DEFINE_FOREACH_FUNC(ArrayListIterator)
 
         [[RetNotIgnored]]
         inline sizetype indexOf(const Type& value) const override {
@@ -305,7 +339,7 @@ namespace enhanced::collections {
 
         inline Type removeFirst() override {
             Type value = getFirst();
-            removeLast0(destroy);
+            removeFirst0(destroy);
             return value;
         }
 
@@ -325,7 +359,7 @@ namespace enhanced::collections {
 
         inline bool removeFirstIf() override {
             if (size == 0) return false;
-            removeLast0(destroy);
+            removeFirst0(destroy);
             return true;
         }
 

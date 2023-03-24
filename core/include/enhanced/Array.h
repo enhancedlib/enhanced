@@ -33,14 +33,20 @@ namespace enhanced {
         Type* elements;
 
     public:
+        using Element = Type;
+
+        inline Array() noexcept : size(0), elements(nullptr) {}
+
         template <sizetype size>
         inline Array(const Type (&elements)[size]) noexcept : size(size), elements(elements) {}
 
+        inline Array(const Type* begin, const Type* end) noexcept : size(end - begin), elements(begin) {}
+
         inline explicit Array(sizetype size, const Type* elements) noexcept : size(size), elements(elements) {}
 
-        inline Array(InitializerList<Type> list) noexcept : size(list.toArray()), elements(util::removePtrConst(list.toArray())) {}
+        inline Array(InitializerList<Type> list) noexcept : size(list.getSize()), elements(util::removePtrConst(list.toArray())) {}
 
-        inline E_INIT_LIST_CONSTRUCTOR(Array, noexcept) CTIDY_NOLINT(cppcoreguidelines-pro-type-member-init)
+        E_INIT_LIST_CONSTRUCTOR(Array) CTIDY_NOLINT(cppcoreguidelines-pro-type-member-init)
 
         inline Array(const Array& other) noexcept : size(other.size), elements(other.elements) {}
 

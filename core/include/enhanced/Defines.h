@@ -143,20 +143,12 @@
 #ifdef ABI_MSVC
     #define FORCE_INLINE __forceinline
     #define NO_INLINE __declspec(noinline)
+    #define ALLOCATOR __declspec(allocator)
+    #define RET_RESTRICT __declspec(restrict)
 #elif defined(COMPILER_GCC) || defined(COMPILER_CLANG)
     #define FORCE_INLINE __attribute__((always_inline))
     #define NO_INLINE __attribute__((noinline))
-#endif
-
-#ifdef ABI_MSVC
-    #define ALLOCATOR __declspec(allocator)
-#elif defined(COMPILER_GCC) || defined(COMPILER_CLANG)
     #define ALLOCATOR
-#endif
-
-#ifdef ABI_MSVC
-    #define RET_RESTRICT __declspec(restrict)
-#elif defined(COMPILER_GCC) || defined(COMPILER_CLANG)
     #define RET_RESTRICT [[gnu::malloc]]
 #endif
 
@@ -185,3 +177,5 @@
 #include <new> // std::nothrow_t, std::align_val_t
 #include <typeinfo> // std::type_info, typeid (keyword)
 #include <initializer_list> // std::initializer_list
+
+#include <functional>

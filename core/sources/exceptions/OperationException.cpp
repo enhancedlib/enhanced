@@ -12,14 +12,14 @@
  * if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
  */
 
-#include <enhanced/exceptions/UnsupportedOperationException.h>
+#include <enhanced/exceptions/OperationException.h>
 
 #include <enhanced/exceptions/Exception.h>
 
 namespace enhanced::exceptions {
-    UnsupportedOperationException::UnsupportedOperationException(const String& message) noexcept : Exception(message) {}
+    OperationException::OperationException(const String& message) noexcept : Exception(message) {}
 
-    UnsupportedOperationException::UnsupportedOperationException(const Exception* cause) noexcept : Exception(cause) {}
+    OperationException::OperationException(const Exception* cause) noexcept : Exception(cause) {}
 
-    UnsupportedOperationException::UnsupportedOperationException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
+    OperationException::OperationException(const String& message, const Exception* cause) noexcept : Exception(message, cause) {}
 }

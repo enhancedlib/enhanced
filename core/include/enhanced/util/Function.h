@@ -18,31 +18,37 @@
 #include <enhanced/Types.h>
 #include <enhanced/util/Traits.h>
 #include <enhanced/util/Functional.h>
-#include <enhanced/exceptions/NotImplementedError.h>
+// #include <enhanced/exceptions/NotImplementedError.h>
 
 namespace enhanced::util {
     template <typename FunctionType>
     requires isFunction<FunctionType> && (!FunctionParser<FunctionType>::hasVarargs)
     class Function : public Functional {
+    private:
+        std::function<FunctionType> function;
+
     public:
         using ReturnType = typename FunctionParser<FunctionType>::ReturnType;
         using NeatFunctionType = typename FunctionParser<FunctionType>::NeatFunctionType;
 
         Function() = default;
 
-        template <typename Callable>
-        Function(Callable callable) {
-            E_NOT_IMPLEMENTED();
-        }
+        Function(std::function<FunctionType> function) : function(function) {}
 
-        Function(FunctionType *function) {
-            E_NOT_IMPLEMENTED();
-        }
+        // template <typename Callable>
+        // Function(Callable callable) {
+        //     E_NOT_IMPLEMENTED();
+        // }
+
+        // Function(FunctionType *function) {
+        //     E_NOT_IMPLEMENTED();
+        // }
 
         template <typename... Args>
         requires isSame<NeatFunctionType, ReturnType (Args...)>
         inline ReturnType invoke(Args... args) const {
-            E_NOT_IMPLEMENTED();
+            // E_NOT_IMPLEMENTED();
+            return function(args...);
         }
 
         template <typename... Args>

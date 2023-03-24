@@ -19,21 +19,15 @@
 #include <enhanced/Types.h>
 #include <enhanced/exceptions/Exception.h>
 
-#define E_UNSUPPORTED_OPERATION throw enhanced::exceptions::UnsupportedOperationException
-
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
-    #define UNSUPPORTED_OPERATION E_UNSUPPORTED_OPERATION
-#endif
-
 namespace enhanced::exceptions {
-    class ENHANCED_CORE_API UnsupportedOperationException : public Exception {
+    class ENHANCED_CORE_API OperationException : public Exception {
     public:
-        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::UnsupportedOperationException)
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::OperationException)
 
-        explicit UnsupportedOperationException(const String& message = "") noexcept;
+        explicit OperationException(const String& message = "") noexcept;
 
-        explicit UnsupportedOperationException(const Exception* cause) noexcept;
+        explicit OperationException(const Exception* cause) noexcept;
 
-        UnsupportedOperationException(const String& message, const Exception* cause) noexcept;
+        OperationException(const String& message, const Exception* cause) noexcept;
     };
 }

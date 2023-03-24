@@ -21,18 +21,19 @@
 #include <enhanced/Assert.h>
 #include <enhanced/Memory.h>
 #include <enhanced/exceptions/IndexOutOfBoundsException.h>
-#include <enhanced/exceptions/InvalidStateException.h>
-#include <enhanced/exceptions/NotImplementedError.h>
+#include <enhanced/exceptions/OperationException.h>
 
 using enhanced::arrayCopy;
 using enhanced::exceptions::IndexOutOfBoundsException;
-using enhanced::exceptions::InvalidStateException;
+using enhanced::exceptions::OperationException;
 
 namespace enhancedInternal::collections {
     ArrayListImpl::ArrayListImpl(sizetype capacity) :
-        elements(new void*[capacity]), size(0), capacity(capacity), expSizeFallback([](sizetype capacity) {return capacity;}) {}
+        elements(new void*[capacity]), size(0), capacity(capacity),
+        expSizeFallback([](sizetype capacity) {return capacity;}) {}
 
-    ArrayListImpl::ArrayListImpl(const ArrayListImpl& other, OpCopy opCopy) : elements(new void*[other.capacity]), size(other.size),
+    ArrayListImpl::ArrayListImpl(const ArrayListImpl& other, OpCopy opCopy) :
+        elements(new void*[other.capacity]), size(other.size),
         capacity(other.capacity), expSizeFallback([](sizetype capacity) {return capacity;}) {
         E_ASSERT(other.capacity >= other.size);
         for (sizetype index = 0; index < other.size; ++index) {
@@ -49,14 +50,14 @@ namespace enhancedInternal::collections {
 
     [[RetNotIgnored]]
     void* ArrayListImpl::getFirst0() const {
-        if (size == 0) throw InvalidStateException("The list is empty");
+        if (size == 0) throw OperationException("The list is empty");
 
         return elements[0];
     }
 
     [[RetNotIgnored]]
     void* ArrayListImpl::getLast0() const {
-        if (size == 0) throw InvalidStateException("The list is empty");
+        if (size == 0) throw OperationException("The list is empty");
 
         return elements[size - 1];
     }
@@ -124,6 +125,8 @@ namespace enhancedInternal::collections {
     }
 
     void ArrayListImpl::removeFirst0(OpDestroy opDestroy) {
+        if (size == 0) throw OperationException("The list is empty");
+
         opDestroy(elements[0]);
 
         void** array = new void*[capacity];
@@ -135,7 +138,7 @@ namespace enhancedInternal::collections {
     }
 
     void ArrayListImpl::removeLast0(OpDestroy opDestroy) {
-        if (size == 0) throw InvalidStateException("The list is empty");
+        if (size == 0) throw OperationException("The list is empty");
 
         opDestroy(elements[--size]);
     }
@@ -177,8 +180,26 @@ namespace enhancedInternal::collections {
         setCapacity0(newCapacity);
     }
 
-    ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList) :
-        arrayList(arrayList), indexer(arrayList->elements - 1) {}
+    ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList, void** init) :
+        arrayList(arrayList), indexer(init) {}
+
+    [[RetNotIgnored]]
+    void* ArrayListImpl::ArrayListIteratorImpl::get0() const {
+        if (isBegin0() || isEnd0()) {
+            throw OperationException("The iterator has not element at the current location (begin or end)");
+        }
+        return *indexer;
+    }
+
+    [[RetNotIgnored]]
+    bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
+        return indexer != arrayList->elements + arrayList->size - 1;
+    }
+
+    [[RetNotIgnored]]
+    bool ArrayListImpl::ArrayListIteratorImpl::hasPrev0() const {
+        return indexer != arrayList->elements;
+    }
 
     [[RetNotIgnored]]
     bool ArrayListImpl::ArrayListIteratorImpl::isBegin0() const {
@@ -190,28 +211,35 @@ namespace enhancedInternal::collections {
         return indexer == arrayList->elements + arrayList->size;
     }
 
-    [[RetNotIgnored]]
-    bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
-        return indexer != arrayList->elements + arrayList->size - 1;
-    }
-
     void ArrayListImpl::ArrayListIteratorImpl::next0() const {
-        if (isEnd0()) throw InvalidStateException("The iterator is at the end of the list");
+        if (isEnd0()) throw OperationException("The iterator is at the end of the list");
         ++indexer;
     }
 
+    void ArrayListImpl::ArrayListIteratorImpl::next0(sizetype count) const {
+        if (indexer + count > arrayList->elements + arrayList->size) {
+            throw OperationException("The iterator is at the end of the list");
+        }
+        indexer += count;
+    }
+
     void ArrayListImpl::ArrayListIteratorImpl::prev0() const {
-        if (isBegin0()) throw InvalidStateException("The iterator is at the begin of the list");
+        if (isBegin0()) throw OperationException("The iterator is at the begin of the list");
         --indexer;
     }
 
-    [[RetNotIgnored]]
-    void* ArrayListImpl::ArrayListIteratorImpl::get0() const {
-        if (isBegin0() || isEnd0()) throw InvalidStateException("Current location of the iterator is not valid");
-        return *indexer;
+    void ArrayListImpl::ArrayListIteratorImpl::prev0(sizetype count) const {
+        if (indexer < arrayList->elements - 1 + count) {
+            throw OperationException("The iterator is at the begin of the list");
+        }
+        indexer -= count;
     }
 
-    void ArrayListImpl::ArrayListIteratorImpl::reset0() const {
+    void ArrayListImpl::ArrayListIteratorImpl::setBegin0() const {
         indexer = arrayList->elements - 1;
+    }
+
+    void ArrayListImpl::ArrayListIteratorImpl::setEnd0() const {
+        indexer = arrayList->elements + arrayList->size;
     }
 }
