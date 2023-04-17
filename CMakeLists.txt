@@ -1,15 +1,13 @@
 ##
 ## Copyright (C) 2023 Liu Baihao. All rights reserved.
 ##
-## Licensed under the Enhanced Software License.
-##
-## This file is part of the Enhanced Software, and IT ALWAYS
-## PROVIDES "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-## INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+## Licensed under the MIT License with "Fairness" Exception.
 ##
 ## You may not use this file except in compliance with the License.
-## You should obtain a copy of the License in the distribution,
-## if not, see <https://sharedwonder.github.io/enhanced/LICENSE.txt>
+##
+## This file is part of The Enhanced Software, and IT ALWAYS
+## PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+## INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
 ##
 
 cmake_minimum_required(VERSION 3.13)
@@ -18,7 +16,7 @@ project("Enhanced")
 
 message("* The Enhanced Project")
 message("* Copyright (C) 2023 Liu Baihao. All rights reserved.")
-message("* Licensed under the Enhanced Software License.")
+message("* Licensed under the MIT License with \"Fairness\" Exception.")
 
 function (setup_module MODULE_NAME)
     file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp)
@@ -28,14 +26,14 @@ function (setup_module MODULE_NAME)
 
     set(INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include")
     foreach (DEPENDENT_MODULE IN ITEMS ${DEPENDENT_MODULES})
-        set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${CMAKE_SOURCE_DIR}/${DEPENDENT_MODULE}/include")
+        set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${CMAKE_SOURCE_DIR}/modules/${DEPENDENT_MODULE}/include")
     endforeach ()
 
-    install(DIRECTORY "include" DESTINATION "${CMAKE_INSTALL_PREFIX}")
+    install(DIRECTORY "include/" DESTINATION "${CMAKE_INSTALL_PREFIX}/include/${MODULE_NAME}")
 
     # static library
 
-    add_library(${MODULE_NAME}-static STATIC ${SOURCES} ${HEADERS})
+    add_library(${MODULE_NAME}-static STATIC ${SOURCES})
 
     target_include_directories(${MODULE_NAME}-static PRIVATE ${INCLUDE_DIRECTORIES})
 
@@ -69,7 +67,7 @@ function (setup_module MODULE_NAME)
 
     # shared library
 
-    add_library(${MODULE_NAME}-shared SHARED ${SOURCES} ${HEADERS})
+    add_library(${MODULE_NAME}-shared SHARED ${SOURCES})
 
     target_compile_definitions(${MODULE_NAME}-shared PRIVATE ENHANCED_BUILDING)
     target_compile_definitions(${MODULE_NAME}-shared PRIVATE ENHANCED_${MODULE_NAME_UPPER}_BUILDING)
@@ -133,16 +131,16 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/targets)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/targets)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/targets)
 
-file(STRINGS ".modules" MODULES)
+file(GLOB MODULES RELATIVE "${CMAKE_SOURCE_DIR}/modules" "${CMAKE_SOURCE_DIR}/modules/*")
 
 foreach (MODULE_NAME IN ITEMS ${MODULES})
-    add_subdirectory("${CMAKE_SOURCE_DIR}/${MODULE_NAME}")
+    add_subdirectory("${CMAKE_SOURCE_DIR}/modules/${MODULE_NAME}")
 endforeach ()
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/test")
     set(INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/test")
     foreach (DEPENDENT_MODULE IN ITEMS ${MODULES})
-        set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${CMAKE_SOURCE_DIR}/${DEPENDENT_MODULE}/include")
+        set(INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${CMAKE_SOURCE_DIR}/modules/${DEPENDENT_MODULE}/include")
     endforeach ()
 
     file(GLOB_RECURSE SOURCES test/*.cpp)
@@ -172,9 +170,7 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/test")
     endif ()
 endif ()
 
-install(FILES "README.md" DESTINATION ".")
-install(FILES "LICENSE" DESTINATION ".")
-install(FILES "COPYRIGHT" DESTINATION ".")
+install(FILES "README.md" "LICENSE" "COPYRIGHT" DESTINATION ".")
 
 # Output information.
 

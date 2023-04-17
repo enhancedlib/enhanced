@@ -1,0 +1,60 @@
+/*
+ * Copyright (C) 2023 Liu Baihao. All rights reserved.
+ *
+ * Licensed under the MIT License with "Fairness" Exception.
+ *
+ * You may not use this file except in compliance with the License.
+ *
+ * This file is part of The Enhanced Software, and IT ALWAYS
+ * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+ */
+
+#pragma once
+
+#include <enhanced/Defines.h>
+#include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
+
+#define E_INIT_LIST_CONSTRUCTOR(NAME) inline NAME(std::initializer_list<Type> list) \
+    noexcept(noexcept(NAME(enhanced::InitializerList(list)))) : NAME(enhanced::InitializerList(list)) {}
+
+#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+    #define INIT_LIST_CONSTRUCTOR E_INIT_LIST_CONSTRUCTOR
+#endif
+
+namespace enhanced {
+    template <typename Type>
+    class InitializerList {
+    private:
+        std::initializer_list<Type> initList;
+
+    public:
+        inline constexpr InitializerList(std::initializer_list<Type> initList) : initList(initList) {}
+
+        [[RetNotIgnored]]
+        inline constexpr const Type* begin() const noexcept {
+            return initList.begin();
+        }
+
+        [[RetNotIgnored]]
+        inline constexpr const Type* end() const noexcept {
+            return initList.end();
+        }
+
+        [[RetNotIgnored]]
+        inline constexpr const Type* toArray() const noexcept {
+            return initList.begin();
+        }
+
+        [[RetNotIgnored]]
+        inline constexpr sizetype getSize() const noexcept {
+            return initList.size();
+        }
+
+        [[RetNotIgnored]]
+        inline constexpr Type& get(sizetype index) const noexcept {
+            return toArray()[index];
+        }
+    };
+}

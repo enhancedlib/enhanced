@@ -1,41 +1,29 @@
-                  Enhanced Software License
+MIT License
 
-        Copyright © 2023 Liu Baihao. All rights reserved.
-       https://sharedwonder.github.io/enhanced/LICENSE.txt
+Copyright (c) 2023 Liu Baihao. All rights reserved.
 
-1. Definition
-- "License" shall mean all sections of this documentation.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-- "Licensor" shall mean the author(s) and/or the copyright holder(s).
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-- "Software" shall mean all parts of the software licensed under the License.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-2. Notice of the License
-- The Licensor reserves the right to change the License and
-  the License is subject to change without notice.
+===============================================================================
 
-- Everyone can copy the License, but cannot change it except the Licensor.
+"FAIRNESS" EXCEPTION
 
-- Modified editions of the Software and other softwares that depends on
-  the Software shall indicate that it is based on the Software
-  and contains or offers the License.
-
-3. Permissions
-- Unless otherwise stated, anyone can deal in the Software without restriction,
-  including but not limited to use, copy, modify, merge, publish or distribute.
-
-- You may not receive any remuneration for distributing the Software without permissions,
-  including but not limited to sale the Software, bundle other softwares or product placement.
-
-- You may not remove any licenses, copyright notices, or agreements in the Software
-  that accompany the distribution of the Software.
-
-4. Disclaimer
-- UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING,
-  THE SOFTWARE IS ALWAYS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
-
-- FOR ANY LOSS OR DAMAGE CAUSED BY THE SOFTWARE OR YOUR ACCESS TO OR
-  USE OF THIRD-PARTY CONTENT, PRODUCTS, ETC, THE LICENSOR MAY PROVIDE POSSIBLE SOLUTIONS,
-  BUT IT DOES NOT MEAN THAT THE LICENSOR WILL DEFINITELY SOLVE THE PROBLEM.
-  IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIMS, DAMAGES OR OTHER LIABILITIES.
+UNLESS OTHERWISE PERMITTED, YOU MAY NOT ALLOW OTHERS TO ACCESS THE SOFTWARE IN
+AN UNFAIR MANNER. YOU ALSO CANNOT POST ANY CONTENT ON BEHALF OF THE COPYRIGHT
+HOLDERS.
