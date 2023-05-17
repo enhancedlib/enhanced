@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -28,16 +27,16 @@ namespace enhancedInternal::collections {
     protected:
         void** elements;
 
-        sizetype size;
+        enhanced::sizetype size;
 
-        sizetype capacity;
+        enhanced::sizetype capacity;
 
         using OpCopy = void* (*)(void*);
         using OpMove = void* (*)(void*);
         using OpDestroy = void (*)(void*);
         using OpEqual = bool (*)(void*, void*);
 
-        using ExpSizeFallbackFunc = sizetype (*)(sizetype);
+        using ExpSizeFallbackFunc = enhanced::sizetype (*)(enhanced::sizetype);
 
         ExpSizeFallbackFunc expSizeFallback;
 
@@ -49,51 +48,51 @@ namespace enhancedInternal::collections {
 
             ArrayListIteratorImpl(const ArrayListImpl* arrayList, void** init);
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             void* get0() const;
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             bool hasNext0() const;
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             bool hasPrev0() const;
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             bool isBegin0() const;
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             bool isEnd0() const;
 
             void next0() const;
 
-            void next0(sizetype count) const;
+            void next0(enhanced::sizetype count) const;
 
             void prev0() const;
 
-            void prev0(sizetype count) const;
+            void prev0(enhanced::sizetype count) const;
 
             void setBegin0() const;
 
             void setEnd0() const;
         };
 
-        ArrayListImpl(sizetype capacity);
+        ArrayListImpl(enhanced::sizetype capacity);
 
         ArrayListImpl(const ArrayListImpl& other, OpCopy opCopy);
 
         ArrayListImpl(ArrayListImpl&& other) noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         void* getFirst0() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         void* getLast0() const;
 
-        [[RetNotIgnored]]
-        void* get0(sizetype index) const;
+        E_ANNOTATE(RetNotIgnored)
+        void* get0(enhanced::sizetype index) const;
 
-        [[RetNotIgnored]]
-        sizetype indexOf0(void* value, OpEqual opEqual) const;
+        E_ANNOTATE(RetNotIgnored)
+        enhanced::sizetype indexOf0(void* value, OpEqual opEqual) const;
 
         void addLast0(void* element, OpCopy opCopy);
 
@@ -109,15 +108,15 @@ namespace enhancedInternal::collections {
 
         void clear0(OpDestroy opDestroy);
 
-        void setCapacity0(sizetype newCapacity);
+        void setCapacity0(enhanced::sizetype newCapacity);
 
         void expand0();
 
-        void expand0(sizetype expSize);
+        void expand0(enhanced::sizetype expSize);
 
         void shrink0();
 
-        void shrink0(sizetype shrSize, OpDestroy opDestroy);
+        void shrink0(enhanced::sizetype shrSize, OpDestroy opDestroy);
     };
 }
 
@@ -127,12 +126,12 @@ namespace enhanced::collections {
     private:
         using ArrayListImpl = enhancedInternal::collections::ArrayListImpl;
 
-        [[RetRequiresRelease]]
+        E_ANNOTATE(RetRequiresRelease)
         static void* copy(void* element) {
             return new Type(*reinterpret_cast<Type*>(element));
         }
 
-        [[RetRequiresRelease]]
+        E_ANNOTATE(RetRequiresRelease)
         static void* move(void* element) {
             return new Type(util::move(*reinterpret_cast<Type*>(element)));
         }
@@ -141,7 +140,7 @@ namespace enhanced::collections {
             delete reinterpret_cast<Type*>(element);
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         static bool equal(void* element, void* value) {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
@@ -151,67 +150,67 @@ namespace enhanced::collections {
         public:
             inline explicit ArrayListIterator(const ArrayList<Type>* arrayList, void** init) : ArrayListIteratorImpl(arrayList, init) {}
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             inline Type& get() const override {
                 return *reinterpret_cast<Type*>(get0());
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             inline sizetype count() const override {
                 return static_cast<const ArrayList<Type>*>(arrayList)->size;
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             inline bool isBegin() const override {
                 return isBegin0();
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             inline bool isEnd() const override {
                 return isEnd0();
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             inline bool hasNext() const override {
                 return hasNext0();
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             inline bool hasPrev() const override {
                 return hasPrev0();
             }
 
-            [[ReturnSelf]]
+            E_ANNOTATE(ReturnSelf)
             inline const Iterator<Type>& next() const override {
                 next0();
                 return *this;
             }
 
-            [[ReturnSelf]]
+            E_ANNOTATE(ReturnSelf)
             inline const Iterator<Type>& next(sizetype count) const override {
                 next0(count);
                 return *this;
             }
 
-            [[ReturnSelf]]
+            E_ANNOTATE(ReturnSelf)
             inline const Iterator<Type>& prev() const override {
                 prev0();
                 return *this;
             }
 
-            [[ReturnSelf]]
+            E_ANNOTATE(ReturnSelf)
             inline const Iterator<Type>& prev(sizetype count) const override {
                 prev0(count);
                 return *this;
             }
 
-            [[ReturnSelf]]
+            E_ANNOTATE(ReturnSelf)
             inline const Iterator<Type>& setBegin() const override {
                 setBegin0();
                 return *this;
             }
 
-            [[ReturnSelf]]
+            E_ANNOTATE(ReturnSelf)
             inline const Iterator<Type>& setEnd() const override {
                 setEnd0();
                 return *this;
@@ -222,13 +221,12 @@ namespace enhanced::collections {
 
         inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE) {}
 
+        E_INIT_LIST_CONSTRUCTOR(ArrayList, Type)
         inline ArrayList(InitializerList<Type> list) : ArrayListImpl(list.getSize() * 2) {
             for (auto item : list) {
                 addLast(util::move(item));
             }
         }
-
-        E_INIT_LIST_CONSTRUCTOR(ArrayList) CTIDY_NOLINT(cppcoreguidelines-pro-type-member-init)
 
         inline explicit ArrayList(sizetype capacity) : ArrayListImpl(capacity) {}
 
@@ -241,64 +239,64 @@ namespace enhanced::collections {
             delete[] elements;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline sizetype getSize() const noexcept override {
             return size;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline bool isEmpty() const noexcept override {
             return size == 0;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline bool contain(const Type& value) const override {
-            return indexOf(value) != INVALID_SIZE;
+            return indexOf(value) != SIZE_TYPE_MAX;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline ArrayListIterator iterator() const noexcept {
             return ArrayListIterator {this, elements - 1};
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline ForwardIterator<ArrayListIterator> forwardIterator() const noexcept {
             return iterator();
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline ReverseIterator<ArrayListIterator> reverseIterator() const noexcept {
             return {this, elements + size};
         }
 
         E_DEFINE_FOREACH_FUNC(ArrayListIterator)
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline sizetype indexOf(const Type& value) const override {
             return indexOf0(util::removePtrConst(&value), equal);
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type& getFirst() const override {
             return *reinterpret_cast<Type*>(getFirst0());
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type& getLast() const override {
             return *reinterpret_cast<Type*>(getLast0());
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type& get(sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline sizetype getCapacity() const noexcept {
             return capacity;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type& operator[](sizetype index) const override {
             return get(index);
         }

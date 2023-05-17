@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -16,19 +15,19 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Types.h>
-#include <enhanced/MutString.h>
+#include <enhanced/String.h>
 #include <enhanced/io/Closeable.h>
 #include <enhanced/io/Flushable.h>
 
 namespace enhanced::io {
     class ENHANCED_CORE_API InputStream : public Closeable, Flushable {
     public:
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual byte get() const;
 
         virtual void read(byte* buffer, sizetype size) const;
 
-        [[RetNotIgnored]]
-        virtual MutString readLine() const;
+        E_ANNOTATE(RetNotIgnored)
+        virtual String readLine() const;
     };
 }

@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -23,9 +22,8 @@
 #include <enhanced/io/FileReader.h>
 #include <enhanced/io/FileWriter.h>
 
-#ifndef EOF
-    #define EOF (-1)
-#endif
+#undef EOF
+#define EOF (-1)
 
 namespace enhanced::io {
     class File {
@@ -36,31 +34,31 @@ namespace enhanced::io {
 
         File(File&& file) noexcept;
 
-        [[RetNotIgnored]]
-        MutString getFilename() const;
+        E_ANNOTATE(RetNotIgnored)
+        String getFilename() const;
 
-        [[RetNotIgnored]]
-        MutString getExtension() const;
+        E_ANNOTATE(RetNotIgnored)
+        String getExtension() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         const String& getPath() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         bool isExist() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         bool isReadOnly() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         bool isFile() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         bool isDirectory() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         bool isSymlink() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         bool isJunction() const;
 
         void create() const;
@@ -71,19 +69,19 @@ namespace enhanced::io {
 
         bool removeIf() const; CTIDY_NOLINT(modernize-use-nodiscard)
 
-        [[RetNotIgnored]]
-        collections::ArrayList<MutString> splitPath() const;
+        E_ANNOTATE(RetNotIgnored)
+        collections::ArrayList<String> splitPath() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         FileInputStream inStream() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         FileOutputStream outStream() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         FileReader reader() const;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         FileWriter writer() const;
     };
 }

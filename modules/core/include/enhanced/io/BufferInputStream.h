@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -19,7 +18,7 @@
 namespace enhanced::io {
     class ENHANCED_CORE_API BufferInputStream : public InputStream {
     public:
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         byte get() const override;
 
         void read(byte* buffer, sizetype size) const override;

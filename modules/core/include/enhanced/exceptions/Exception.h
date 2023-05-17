@@ -1,11 +1,10 @@
  /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -18,10 +17,9 @@
 #include <enhanced/Memory.h>
 #include <enhanced/Process.h>
 #include <enhanced/String.h>
-#include <enhanced/MutString.h>
 
 #define E_DEFINE_EXCEPTION_NAME(NAME) \
-    [[RetNotIgnored]] \
+    E_ANNOTATE(RetNotIgnored) \
     const String getName() const override { \
         return #NAME; \
     }
@@ -38,7 +36,7 @@ namespace enhanced::exceptions {
         const Exception* cause;
 
     public:
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual const String getName() const {
             return "enhanced::exceptions::Exception";
         }
@@ -53,13 +51,13 @@ namespace enhanced::exceptions {
 
         void printInfo() const;
 
-        [[RetNotIgnored]]
-        virtual MutString getInfo() const noexcept;
+        E_ANNOTATE(RetNotIgnored)
+        virtual String getInfo() const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual const Exception* getCause() const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual const String& getMessage() const noexcept;
     };
 

@@ -4,7 +4,7 @@
 
 A Powerful C++ Development Framework
 
-This software is licensed under the [MIT License with "Fairness" Exception](LICENSE).
+This software is licensed under the [MIT License with the Distribution Exception](LICENSE).
 
 Please report bugs at [GitHub Issues](https://github.com/sharedwonder/enhanced/issues).
 
@@ -61,7 +61,7 @@ A: Because I want this software to make C++ development more efficient and easy.
 
 ### Q: Is this software free?
 
-A: Yes, this software is free and open source. However, use of this software must abide by [the License (MIT License with "Fairness" Exception)](LICENSE), otherwise, you may not use this software.
+A: Yes, this software is free and open source. However, use of this software must abide by [the License (MIT License with the Distribution Exception)](LICENSE), otherwise, you may not use this software.
 
 ## About the Author
 

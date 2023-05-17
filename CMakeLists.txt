@@ -1,7 +1,7 @@
 ##
 ## Copyright (C) 2023 Liu Baihao. All rights reserved.
 ##
-## Licensed under the MIT License with "Fairness" Exception.
+## Licensed under the MIT License with the Distribution Exception.
 ##
 ## You may not use this file except in compliance with the License.
 ##
@@ -16,7 +16,7 @@ project("Enhanced")
 
 message("* The Enhanced Project")
 message("* Copyright (C) 2023 Liu Baihao. All rights reserved.")
-message("* Licensed under the MIT License with \"Fairness\" Exception.")
+message("* Licensed under the MIT License with \"Distribution\" Exception.")
 
 function (setup_module MODULE_NAME)
     file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp)
@@ -112,9 +112,9 @@ if (NOT DEFINED CMAKE_CONFIGURATION_TYPES)
     if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
         set(CMAKE_BUILD_TYPE "Release")
     endif ()
-    set(BUILD_TYPE ${CMAKE_BUILD_TYPE})
+    set(BUILD_CONFIG ${CMAKE_BUILD_TYPE})
 else ()
-    set(BUILD_TYPE ${CMAKE_CONFIGURATION_TYPES})
+    set(BUILD_CONFIG ${CMAKE_CONFIGURATION_TYPES})
 endif ()
 
 if (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
@@ -181,5 +181,5 @@ message("> Installation directory: \"${CMAKE_INSTALL_PREFIX}\"")
 message("> Generator: ${CMAKE_GENERATOR}")
 message("> C++ compiler path: \"${CMAKE_CXX_COMPILER}\"")
 message("> C++ standard: ${CMAKE_CXX_STANDARD}")
-message("> Build config: ${BUILD_TYPE}")
+message("> Build config: ${BUILD_CONFIG}")
 message("> All modules: ${MODULES}")

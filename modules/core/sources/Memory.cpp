@@ -1,44 +1,43 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
-#include "enhanced/Annotations.h"
 #include <malloc.h>
 
 #include <enhanced/Memory.h>
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
 #include <enhanced/exceptions/MemoryAllocationError.h>
 
-using enhanced::memoryAlloc;
-using enhanced::memoryFree;
+using enhanced::allocate;
+using enhanced::release;
 using enhanced::exceptions::MemoryAllocationError;
 
 namespace enhanced {
     const Nothrow nothrow {};
 
-    [[MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease]]
-    ALLOCATOR RET_RESTRICT void* memoryAlloc(sizetype size) {
+    E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
+    ALLOCATOR RET_RESTRICT void* allocate(sizetype size) {
         if (size == 0) return nullptr;
 
         return malloc(size);
     }
 
-    void memoryFree(void* pointer) {
+    void release(void* pointer) {
         free(pointer);
     }
 
-    void memorySet(void* ptr, byte aByte, sizetype size) {
+    void memoryFill(void* ptr, byte aByte, sizetype size) {
     #ifndef COMPILER_MSVC
         __builtin_memset(ptr, aByte, size);
     #else
@@ -75,34 +74,34 @@ using enhanced::nothrow;
 
 // TODO
 
-[[RetNotNull]]
-ALLOCATOR void* operator new(sizetype size) {
-    void* space = memoryAlloc(size);
+E_ANNOTATE(RetNotNull)
+ALLOCATOR void* operator new(enhanced::sizetype size) {
+    void* space = allocate(size);
     if (space == nullptr) {
         throw MemoryAllocationError("Cannot allocate memory");
     }
     return space;
 }
 
-[[RetNotNull]]
-ALLOCATOR void* operator new[](sizetype size) {
+E_ANNOTATE(RetNotNull)
+ALLOCATOR void* operator new[](enhanced::sizetype size) {
     return operator new(size);
 }
 
-[[MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease]]
-ALLOCATOR RET_RESTRICT void* operator new(sizetype size, enhanced::NothrowRef) noexcept {
-    return memoryAlloc(size);
+E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
+ALLOCATOR RET_RESTRICT void* operator new(enhanced::sizetype size, enhanced::NothrowRef) noexcept {
+    return allocate(size);
 }
 
-[[MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease]]
-ALLOCATOR RET_RESTRICT void* operator new[](sizetype size, enhanced::NothrowRef) noexcept {
+E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
+ALLOCATOR RET_RESTRICT void* operator new[](enhanced::sizetype size, enhanced::NothrowRef) noexcept {
     return operator new(size, nothrow);
 }
 
 GCC_WARNING_PAD("-Wsized-deallocation")
 
 void operator delete(void* block) noexcept {
-    memoryFree(block);
+    release(block);
 }
 
 void operator delete[](void* block) noexcept {

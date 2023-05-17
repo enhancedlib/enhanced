@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -18,9 +17,9 @@
 #include <enhanced/Annotations.h>
 
 namespace enhanced {
-    [[NoReturn]]
+    E_ANNOTATE(NoReturn)
     ENHANCED_CORE_API void processExit(int status);
 
-    [[NoReturn]]
+    E_ANNOTATE(NoReturn)
     ENHANCED_CORE_API void processAbort();
 }

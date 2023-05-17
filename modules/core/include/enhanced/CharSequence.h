@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -24,16 +23,16 @@ namespace enhanced {
     class ENHANCED_CORE_API CharSequence {
         template <typename Type>
         requires util::isCharType<Type>
-        friend class TMutString;
+        friend class TString;
 
     protected:
         CharType* value;
 
         sizetype length;
 
-        bool isMutable = false;
+        bool isOwn = false;
 
-        CharSequence(const CharType* value, sizetype length, bool isMutable);
+        CharSequence(const CharType* value, sizetype length, bool isOwn);
 
     public:
         CharSequence(const CharType* value, sizetype length);
@@ -44,30 +43,30 @@ namespace enhanced {
 
         ~CharSequence() noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
+        CharType* chars() const noexcept;
+
+        E_ANNOTATE(RetNotIgnored)
         sizetype getLength() const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         bool isEmpty() const noexcept;
 
-        [[RetNotIgnored]]
-        const CharType* chars() const noexcept;
-
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         const byte* toBytes() const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         const CharType at(sizetype index) const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         const CharType operator[](sizetype index) const noexcept;
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         CharSequence& operator=(const CharSequence& other) noexcept;
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         CharSequence& operator=(CharSequence&& other) noexcept;
 
-        explicit operator const CharType*() const noexcept;
+        operator CharType*() const noexcept;
     };
 }

@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -25,7 +24,7 @@
 namespace enhancedInternal::util {
     class ENHANCED_CORE_API SharedPtrImpl {
     protected:
-        mutable sizetype* referenceCount;
+        mutable enhanced::sizetype* referenceCount;
 
         void* pointer;
 
@@ -75,7 +74,7 @@ namespace enhanced::util {
 
         inline SharedPtr(Type* ptr, Type* end) : SharedPtrImpl(static_cast<void*>(ptr), static_cast<void*>(end)) {}
 
-      public:
+    public:
         template <typename... Args>
         static inline SharedPtr make(Args&&... args) {
             return new Type {args...};
@@ -110,23 +109,23 @@ namespace enhanced::util {
             release();
         }
 
-        [[RetNotIgnored, RetNotNull]]
+        E_ANNOTATE(RetNotIgnored, RetNotNull)
         inline Type* get() const noexcept {
             nullPointerCheck();
             return static_cast<Type*>(pointer);
         }
 
-        [[RetNotIgnored, RetNullable]]
+        E_ANNOTATE(RetNotIgnored, RetNullable)
         inline Type* self() const noexcept {
             return static_cast<Type*>(pointer);
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline const SharedPtr* addressOf() const noexcept {
             return &self();
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type* endOf() const noexcept {
             return static_cast<Type*>(end);
         }
@@ -135,43 +134,43 @@ namespace enhanced::util {
             release0(destroy);
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type* operator+(sizetype offset) const noexcept {
             return self() + offset;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type* operator-(sizetype offset) const noexcept {
             return self() - offset;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type* operator->() const {
             return get();
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type& operator*() const {
             return *get();
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline Type& operator[](sizetype offset) const {
             return get()[offset];
         }
 
-        [[RetNotIgnored, ReturnSelf]]
+        E_ANNOTATE(RetNotIgnored, ReturnSelf)
         inline operator Type*() const noexcept {
             return self();
         }
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline SharedPtr<Type>& operator=(const SharedPtr<Type>& other) noexcept {
             assign0(other, destroy);
             return *this;
         }
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline SharedPtr<Type>& operator=(SharedPtr<Type>&& other) noexcept {
             assign0(other, destroy);
             return *this;

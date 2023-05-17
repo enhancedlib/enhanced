@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -17,25 +16,12 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/String.h>
-#include <enhanced/MutString.h>
 #include <enhanced/util/Traits.h>
 #include <enhanced/io/OutputStream.h>
 
-#define E_DECLARE_TYPE_IMPL_DISPLAY(TYPE, ...) \
-    template <> \
-    struct __VA_ARGS__ Display<TYPE> { \
-        using DisplayType = TYPE; \
-        static void display(const OutputStream& out, util::AddConstLvaRef<DisplayType> value); \
-    }
-
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
-    #define DECLARE_TYPE_IMPL_DISPLAY E_DECLARE_TYPE_IMPL_DISPLAY
-#endif
+#define E_DECLARE_TYPE_IMPL_DISPLAY(TYPE, ...) void __VA_ARGS__ display(const io::OutputStream& out, TYPE const& value);
 
 namespace enhanced::io {
-    template <typename Type>
-    struct Display {};
-
     E_DECLARE_TYPE_IMPL_DISPLAY(char, ENHANCED_CORE_API);
     E_DECLARE_TYPE_IMPL_DISPLAY(wchar, ENHANCED_CORE_API);
     E_DECLARE_TYPE_IMPL_DISPLAY(u8char, ENHANCED_CORE_API);
@@ -52,21 +38,18 @@ namespace enhanced::io {
     E_DECLARE_TYPE_IMPL_DISPLAY(bool, ENHANCED_CORE_API);
     E_DECLARE_TYPE_IMPL_DISPLAY(const char*, ENHANCED_CORE_API);
     E_DECLARE_TYPE_IMPL_DISPLAY(String, ENHANCED_CORE_API);
-    E_DECLARE_TYPE_IMPL_DISPLAY(MutString, ENHANCED_CORE_API);
+#ifdef WCHAR_IS_BUILTIN_TYPE
+    E_DECLARE_TYPE_IMPL_DISPLAY(WideString, ENHANCED_CORE_API);
+#endif
+    E_DECLARE_TYPE_IMPL_DISPLAY(U8String, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(U16String, ENHANCED_CORE_API);
+    E_DECLARE_TYPE_IMPL_DISPLAY(U32String, ENHANCED_CORE_API);
     E_DECLARE_TYPE_IMPL_DISPLAY(nulltype, ENHANCED_CORE_API);
-
-    template <sizetype size>
-    struct Display<char[size]> {
-        static inline void display(const OutputStream& out, const char (&value)[size]) {
-            Display<String>::display(out, {value, size});
-        }
-    };
 
     template <typename Type>
     inline constexpr bool isDisplayable = false;
 
     template <typename Type>
-    requires util::assume<decltype(Display<util::RemoveRefAndCv<Type>>::
-        display(util::declvalue<const OutputStream&>(), util::declvalue<const Type&>()))>
+    requires util::assume<decltype(display(util::declvalue<const OutputStream&>(), util::declvalue<const Type&>()))>
     inline constexpr bool isDisplayable<Type> = true;
 }

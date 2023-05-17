@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -28,7 +27,7 @@ using enhanced::util::move;
 using enhanced::util::forceCast;
 using enhanced::util::removeConst;
 using enhanced::util::removeRefConst;
-using enhanced::io::errstream;
+using enhanced::io::eerr;
 
 namespace enhanced::exceptions {
     void defaultExceptionHandler() noexcept {
@@ -37,10 +36,10 @@ namespace enhanced::exceptions {
         } catch (const Exception& exception) {
             exception.printInfo();
         } catch (const std::exception& exception) {
-            errstream.print("Exception [based on std::exception]: ");
-            errstream.println(exception.what());
+            eerr.print("Exception [based on std::exception]: ");
+            eerr.println(exception.what());
         } catch (...) {
-            errstream.println("Exception [unknown]");
+            eerr.println("Exception [unknown]");
         }
     }
 
@@ -63,11 +62,11 @@ namespace enhanced::exceptions {
     // TODO: Implementes for tracing exceptions
 
     void Exception::printInfo() const {
-        errstream.println(getInfo());
+        eerr.println(getInfo());
     }
 
-    MutString Exception::getInfo() const noexcept {
-        return String::join("Exception [", getName(), "]: ", message);
+    String Exception::getInfo() const noexcept {
+        return String {"Exception [", getName(), "]: ", message};
     }
 
     const Exception* Exception::getCause() const noexcept {

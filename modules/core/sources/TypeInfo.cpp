@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -20,12 +19,12 @@
 using enhanced::util::removeConst;
 
 namespace enhanced {
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     String TypeInfo::getName() const {
         return removeConst(info.name());
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     sizetype TypeInfo::hashCode() const {
         return info.hash_code();
     }

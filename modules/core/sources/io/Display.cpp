@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -16,13 +15,10 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/String.h>
-#include <enhanced/MutString.h>
 
 namespace enhanced::io {
-    // TODO: Support encoding
-
 #define _TEMPLATE(TYPE) \
-    void Display<TYPE>::display(const OutputStream& out, const TYPE& value) { \
+    void display(const OutputStream& out, const TYPE& value) { \
         auto string = TString<TYPE>::from(value); \
         out.write(string.toBytes(), string.getLength() * sizeof(TYPE)); \
     } \
@@ -36,7 +32,7 @@ namespace enhanced::io {
 #undef _TEMPLATE
 
 #define _TEMPLATE(TYPE) \
-    void Display<TYPE>::display(const OutputStream& out, const TYPE& value) { \
+    void display(const OutputStream& out, const TYPE& value) { \
         auto string = String::from(value); \
         out.write(string.toBytes(), string.getLength() * sizeof(char)); \
     } \
@@ -53,19 +49,16 @@ namespace enhanced::io {
 
 #undef _TEMPLATE
 
-    void Display<const char*>::display(const OutputStream& out, const char* const& value) {
-        out.write(String(const_cast<const char*&>(value)).toBytes(), String::from(value).getLength() * sizeof(char));
+    void display(const OutputStream& out, const char* const& value) {
+        auto str = String::from(value);
+        out.write(str.toBytes(), str.getLength() * sizeof(char));
     }
 
-    void Display<String>::display(const OutputStream& out, const String& value) {
+    void display(const OutputStream& out, const String& value) {
         out.write(value.toBytes(), value.getLength() * sizeof(char));
     }
 
-    void Display<MutString>::display(const OutputStream& out, const MutString& value) {
-        out.write(value.toBytes(), value.getLength() * sizeof(char));
-    }
-
-    void Display<nulltype>::display(const OutputStream& out, const nulltype&) {
-        out.write("null"_ES.toBytes(), 4 * sizeof(char));
+    void display(const OutputStream& out, const nulltype&) {
+        out.write("null"_e.toBytes(), 4 * sizeof(char));
     }
 }

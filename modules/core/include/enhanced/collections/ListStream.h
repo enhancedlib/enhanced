@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -38,17 +37,17 @@ namespace enhanced::collections {
         private:
             Iterator<Element>& agent;
 
-            mutable sizetype index = INVALID_SIZE;
+            mutable sizetype index = SIZE_TYPE_MAX;
 
             explicit ListStreamIterator(Iterator<Element>& agent) : agent(agent) {}
 
         public:
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             bool isBegin() const override {
                 return agent.isBegin();
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             bool isEnd() const override {
                 if (index == agent.count() + 1) {
                     generator();
@@ -57,7 +56,7 @@ namespace enhanced::collections {
                 return false;
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             bool hasNext() const override {
                 if (index == agent.count()) {
                     generator();
@@ -66,36 +65,36 @@ namespace enhanced::collections {
                 return true;
             }
 
-            [[ReturnSelf]]
+            E_ANNOTATE(ReturnSelf)
             const Iterator<Element>& next() const override {
                 if (isEnd()) throw exceptions::InvalidStateException("The iterator is at the end of the list");
                 ++index;
                 return agent.next();
             }
 
-            [[ReturnSelf]]
+            E_ANNOTATE(ReturnSelf)
             const Iterator<Element>& prev() const override {
                 if (isBegin()) throw exceptions::InvalidStateException("The iterator is at the begin of the list");
                 --index;
                 return agent.prev();
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             Element& get() const override {
                 return agent.get();
             }
 
             void reset() const override {
                 agent.reset();
-                index = INVALID_SIZE;
+                index = SIZE_TYPE_MAX;
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             sizetype count() const override {
                 return agent.count();
             }
 
-            [[RetNotIgnored]]
+            E_ANNOTATE(RetNotIgnored)
             sizetype getIndex() const {
                 return index;
             }
@@ -103,19 +102,19 @@ namespace enhanced::collections {
 
         ListStream() = default;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline ListStreamIterator iterator() const {
             return ListStreamIterator {list.iterator()};
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline ListStreamIterator begin() const {
             auto it = iterator();
             it.next();
             return it;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline byte end() const {
             return 0;
         }

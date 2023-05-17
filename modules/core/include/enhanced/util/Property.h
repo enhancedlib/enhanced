@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -19,24 +18,24 @@
 
 #define __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) \
 ACCESS_MODIFIER: \
-    [[RetNotIgnored]] \
+    E_ANNOTATE(RetNotIgnored) \
     inline const Self* operator->() const { \
         return &self; \
     } \
-    [[RetNotIgnored]] \
+    E_ANNOTATE(RetNotIgnored) \
     inline const Self& operator*() const { \
         return operator()(); \
     } \
-    [[RetNotIgnored]] \
+    E_ANNOTATE(RetNotIgnored) \
     inline operator const Self&() const { \
         return operator()(); \
     } \
-    [[RetNotIgnored]] \
+    E_ANNOTATE(RetNotIgnored) \
     inline const Self& operator()() const
 
 #define __E_PROPERTY_SETTER_set(ACCESS_MODIFIER) \
 ACCESS_MODIFIER: \
-    [[ReturnSelf]] \
+    E_ANNOTATE(ReturnSelf) \
     inline Self& operator=(const Self& value)
 
 #define __E_PROPERTY_GETTER_getter(ACCESS_MODIFIER) \

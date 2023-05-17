@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -168,12 +167,3 @@
         #define CLRCALL __clrcall
     #endif
 #endif
-
-// Some identifiers in the stantard library has special meaning and cannot
-// be implemented in other header files, so we must include the header files of them
-
-#include <new> // std::nothrow_t, std::align_val_t
-#include <typeinfo> // std::type_info, typeid (keyword)
-#include <initializer_list> // std::initializer_list
-
-#include <functional>

@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -32,153 +31,203 @@
 namespace enhanced {
     template <typename CharType>
     requires util::isCharType<CharType>
-    class ENHANCED_CORE_API TMutString;
-
-    template <typename CharType>
-    requires util::isCharType<CharType>
     class ENHANCED_CORE_API TString : public CharSequence<CharType> {
     protected:
-        TString(const CharType* value, sizetype length, bool isMutable) noexcept;
+        TString(const CharType* value, sizetype length, bool isOwn) noexcept;
 
-        [[RetNotIgnored]]
-        static TMutString<CharType> from(qword value, bool isNegative);
+        E_ANNOTATE(RetNotIgnored)
+        static TString from(qword value, bool isNegative);
 
     public:
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         static TString<CharType> from(bool value);
 
-        [[RetNotIgnored]]
-        static TMutString<CharType> from(CharType value);
+        E_ANNOTATE(RetNotIgnored)
+        static TString from(CharType value);
 
         template <typename IntTypeNs>
         requires util::isIntegralTypeNs<IntTypeNs>
-        [[RetNotIgnored]]
-        static inline TMutString<CharType> from(IntTypeNs value) {
+        E_ANNOTATE(RetNotIgnored)
+        static inline TString from(IntTypeNs value) {
             return from(value, value < 0);
         }
 
-        template <typename... Args>
-        requires (util::typeVecCount<Args...> >= 2)
-        [[RetNotIgnored]]
-        static inline TMutString<CharType> join(Args&&... values) {
-            return join({values...});
+        E_ANNOTATE(RetNotIgnored)
+        static inline TString<CharType> from(const CharType* value) {
+            return TString(static_cast<const CharType*&>(value));
         }
 
-        template <sizetype count>
-        [[RetNotIgnored]]
-        static inline TMutString<CharType> join(TString (&strings)[count]) {
-            return join(strings, count);
+        E_ANNOTATE(RetNotIgnored)
+        static TString<CharType> own(const CharType* value, sizetype length);
+
+        E_ANNOTATE(RetNotIgnored)
+        static TString<CharType> own(const CharType* value);
+
+        template <sizetype size>
+        E_ANNOTATE(RetNotIgnored)
+        static inline TString own(const wrap<CharType[size]>& value) {
+            return own(value, size);
         }
-
-        [[RetNotIgnored]]
-        static TMutString<CharType> join(InitializerList<TString> list);
-
-        [[RetNotIgnored]]
-        static TMutString<CharType> join(const TString* strings, sizetype count);
 
         TString() noexcept;
 
         TString(const CharType* value, sizetype length) noexcept;
 
         template <sizetype size>
-        inline TString(const CharType (&value)[size]) noexcept : TString((CharType*) value, size - 1) {}
+        inline TString(const wrap<CharType[size]>& value) noexcept : TString((CharType*) value, size - 1) {}
 
-        TString(const CharType*& value);
+        TString(const CharType*& value) noexcept;
 
-        TString(CharType*& value);
+        TString(CharType*& value) noexcept;
 
-        TString(CharType* const& value);
+        TString(CharType* const& value) noexcept;
+
+        explicit TString(sizetype length);
+        TString(const TString* strings, sizetype count);
+
+        E_INIT_LIST_CONSTRUCTOR(TString, TString)
+        TString(InitializerList<TString> list);
 
         TString(const TString& other);
 
         TString(TString&& other) noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         sizetype indexOf(CharType ch) const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         sizetype indexOf(CharType ch, sizetype getN) const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         sizetype indexOf(const TString& string) const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         sizetype indexOf(const TString& string, sizetype getN) const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         sizetype indexOfLast(const TString& string) const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         sizetype indexOfLast(const TString& string, sizetype getN) const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         sizetype indexOfLast(CharType ch) const noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         sizetype indexOfLast(CharType ch, sizetype getN) const noexcept;
 
-        [[RetRequiresRelease]]
+        E_ANNOTATE(RetRequiresRelease)
         collections::ArrayList<sizetype> indexOfAll(CharType ch) const noexcept;
 
-        [[RetRequiresRelease]]
+        E_ANNOTATE(RetRequiresRelease)
         collections::ArrayList<sizetype> indexOfAll(const TString& string) const noexcept;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> toMutable() const;
+        E_ANNOTATE(RetNotIgnored)
+        bool ownStorage() const noexcept;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replace(sizetype start, sizetype end, CharType newChar) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replace(sizetype start, sizetype end, CharType newChar) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replace(sizetype start, sizetype end, const TString& newSubstring) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replace(sizetype start, sizetype end, const TString& newSubstring) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replace(CharType oldChar, CharType newChar) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replace(CharType oldChar, CharType newChar) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replace(const TString& oldSubstring, const TString& newSubstring) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replace(const TString& oldSubstring, const TString& newSubstring) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replace(CharType oldChar, const TString& newSubstring) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replace(CharType oldChar, const TString& newSubstring) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replace(const TString& oldSubstring, CharType newChar) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replace(const TString& oldSubstring, CharType newChar) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replaceAll(CharType oldChar, CharType newChar) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replaceAll(CharType oldChar, CharType newChar) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replaceAll(const TString& oldSubstring, const TString& newSubstring) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replaceAll(const TString& oldSubstring, const TString& newSubstring) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replaceAll(CharType oldChar, const TString& newSubstring) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replaceAll(CharType oldChar, const TString& newSubstring) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> replaceAll(const TString& oldSubstring, CharType newChar) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString replaceAll(const TString& oldSubstring, CharType newChar) const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> uppercase() const;
+        E_ANNOTATE(RetNotIgnored)
+        TString uppercase() const;
 
-        [[RetNotIgnored]]
-        TMutString<CharType> lowercase() const;
+        E_ANNOTATE(RetNotIgnored)
+        TString lowercase() const;
 
-        [[RetNotIgnored]]
+        TString& toOwn();
+
+        TString& set(sizetype index, CharType ch);
+
+        TString& append(CharType ch);
+
+        TString& append(const TString<CharType>& string);
+
+        TString& insertFirst(CharType ch);
+
+        TString& insertFirst(const TString<CharType>& string);
+
+        TString& replaceTo(sizetype start, sizetype end, CharType newChar);
+
+        TString& replaceTo(sizetype start, sizetype end, const TString<CharType>& newSubstring);
+
+        TString& replaceTo(CharType oldChar, CharType newChar);
+
+        TString& replaceTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring);
+
+        TString& replaceTo(CharType oldChar, const TString<CharType>& newSubstring);
+
+        TString& replaceTo(const TString<CharType>& oldSubstring, CharType newChar);
+
+        TString& replaceAllTo(CharType oldChar, CharType newChar);
+
+        TString& replaceAllTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring);
+
+        TString& replaceAllTo(CharType oldChar, const TString<CharType>& newSubstring);
+
+        TString& replaceAllTo(const TString<CharType>& oldSubstring, CharType newChar);
+
+        TString& fill(CharType ch) noexcept;
+
+        TString& toUppercase();
+
+        TString& toLowercase();
+
+        E_ANNOTATE(RetNotIgnored)
         bool operator==(const TString& string) const noexcept;
 
-        [[RetNotIgnored]]
-        bool operator!=(const TString& string) const noexcept;
+        E_ANNOTATE(RetNotIgnored)
+        inline bool operator==(const CharType* string) const noexcept {
+            return operator==(TString::from(string));
+        }
 
-        [[RetNotIgnored]]
-        TMutString<CharType> operator+(const TString& string) const;
+        template <sizetype size>
+        E_ANNOTATE(RetNotIgnored)
+        inline bool operator==(const CharType (&string)[size]) const noexcept {
+            return operator==(TString(string));
+        }
 
-        [[RetNotIgnored]]
-        TMutString<CharType> operator+(CharType ch) const;
+        E_ANNOTATE(RetNotIgnored)
+        TString operator+(const TString& string) const;
 
-        [[ReturnSelf]]
+        E_ANNOTATE(RetNotIgnored)
+        TString operator+(CharType ch) const;
+
+        E_ANNOTATE(ReturnSelf)
         TString& operator=(const TString& other) noexcept;
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         TString& operator=(TString&& other) noexcept;
+
+        TString& operator+=(const TString<CharType>& string);
+
+        TString& operator+=(CharType ch);
     };
 
     template <typename CharType>
@@ -188,39 +237,67 @@ namespace enhanced {
 
         ~TStringUtil() = delete;
 
-        [[RetRequiresRelease]]
+        E_ANNOTATE(RetRequiresRelease)
         static CharType* make(sizetype length);
 
-        [[RetRequiresRelease]]
+        E_ANNOTATE(RetRequiresRelease)
         static CharType* copy(const CharType* source);
 
-        [[RetRequiresRelease]]
+        template <sizetype size>
+        E_ANNOTATE(RetRequiresRelease)
+        static inline CharType* copy(const wrap<CharType[size]>& source) {
+            return copy(source, size);
+        }
+
+        E_ANNOTATE(RetRequiresRelease)
         static CharType* copy(const CharType* source, sizetype length);
 
-        [[RetRequiresRelease]]
-        static CharType* copy(const CharType* source, sizetype oldLength, sizetype newLength);
+        E_ANNOTATE(RetRequiresRelease)
+        static CharType* copy(sizetype newLength, const CharType* source, sizetype oldLength);
 
-        [[RetNotIgnored]]
+        template <sizetype size>
+        E_ANNOTATE(RetRequiresRelease)
+        static inline CharType* copy(sizetype newLength, const wrap<CharType[size]>& source) {
+            return copy(newLength, source, size);
+        }
+
+        E_ANNOTATE(RetNotIgnored)
         static sizetype calcLength(const CharType* string) noexcept;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         static bool isEqual(const CharType* string1, const CharType* string2) noexcept;
 
-        [[RetNotIgnored]]
-        static bool isEqual(const CharType* string1, const CharType* string2, sizetype length1, sizetype length2) noexcept;
+        E_ANNOTATE(RetNotIgnored)
+        static bool isEqual(const CharType* string1, sizetype length1, const CharType* string2) noexcept;
+
+        E_ANNOTATE(RetNotIgnored)
+        static bool isEqual(const CharType* string1, const CharType* string2, sizetype length2) noexcept;
+
+        E_ANNOTATE(RetNotIgnored)
+        static bool isEqual(const CharType* string1, sizetype length1, const CharType* string2, sizetype length2) noexcept;
+
+        template <sizetype size2>
+        E_ANNOTATE(RetNotIgnored)
+        static inline bool isEqual(const CharType* string1, sizetype length1, const wrap<CharType[size2]>& string2) noexcept {
+            return isEqual(string1, length1, string2, size2);
+        }
+
+        template <sizetype size1>
+        E_ANNOTATE(RetNotIgnored)
+        static inline bool isEqual(const wrap<CharType[size1]>& string1, const CharType* string2, sizetype length2) noexcept {
+            return isEqual(string1, size1, string2, length2);
+        }
 
         template <sizetype size1, sizetype size2>
-        [[RetNotIgnored]]
-        static constexpr bool isEqual(const CharType (&string1)[size1], const CharType (&string2)[size2]) noexcept {
+        E_ANNOTATE(RetNotIgnored)
+        static constexpr bool isEqual(const wrap<CharType[size1]>& string1, const wrap<CharType[size2]>& string2) noexcept {
             if (size1 != size2) return false;
 
-            for (sizetype index = 0;; ++index) {
-                if ((string1[index] == E_SWITCH_CHAR(CharType, '\0')) ^ (string2[index] == E_SWITCH_CHAR(CharType, '\0'))) {
-                    return false;
-                }
-
+            for (sizetype index = 0; index < size1; ++index) {
                 if (string1[index] != string2[index]) return false;
             }
+
+            return true;
         }
     };
 
@@ -241,26 +318,48 @@ namespace enhanced {
     using U32StringUtil = TStringUtil<u32char>;
 
     inline namespace literals {
-        inline String operator""_ES(const char* string, sizetype size) {
+        inline String operator""_e(const char* string, sizetype size) {
             return {string, size};
         }
 
     #ifdef WCHAR_IS_BUILTIN_TYPE
-        inline WideString operator""_ES(const wchar* string, sizetype size) {
+        inline WideString operator""_e(const wchar* string, sizetype size) {
             return {string, size};
         }
     #endif
 
-        inline U8String operator""_ES(const u8char* string, sizetype size) {
+        inline U8String operator""_e(const u8char* string, sizetype size) {
             return {string, size};
         }
 
-        inline U16String operator""_ES(const u16char* string, sizetype size) {
+        inline U16String operator""_e(const u16char* string, sizetype size) {
             return {string, size};
         }
 
-        inline U32String operator""_ES(const u32char* string, sizetype size) {
+        inline U32String operator""_e(const u32char* string, sizetype size) {
             return {string, size};
+        }
+
+        inline String operator""_eo(const char* string, sizetype size) {
+            return String::own(string, size);
+        }
+
+    #ifdef WCHAR_IS_BUILTIN_TYPE
+        inline WideString operator""_eo(const wchar* string, sizetype size) {
+            return WideString::own(string, size);
+        }
+    #endif
+
+        inline U8String operator""_eo(const u8char* string, sizetype size) {
+            return U8String::own(string, size);
+        }
+
+        inline U16String operator""_eo(const u16char* string, sizetype size) {
+            return U16String::own(string, size);
+        }
+
+        inline U32String operator""_eo(const u32char* string, sizetype size) {
+            return U32String::own(string, size);
         }
     }
 }

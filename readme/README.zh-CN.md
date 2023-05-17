@@ -4,7 +4,7 @@
 
 一个强大的C++开发框架
 
-此软件遵循[MIT License with "Fairness" Exception](../LICENSE)。
+此软件遵循[MIT License with the Distribution Exception](../LICENSE)。
 
 请在[GitHub Issues](https://github.com/sharedwonder/enhanced/issues)提交bug。
 
@@ -61,7 +61,7 @@
 
 ### 问：这个软件免费吗？
 
-答：是的，这个软件免费并且开源。但使用此软件必须遵守[许可协议（MIT License with "Fairness" Exception）](../LICENSE)，否则，你不得使用此软件。
+答：是的，这个软件免费并且开源。但使用此软件必须遵守[许可协议（MIT License with the Distribution Exception）](../LICENSE)，否则，你不得使用此软件。
 
 ## 关于作者
 

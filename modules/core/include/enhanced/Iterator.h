@@ -1,31 +1,29 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
 #pragma once
 
-#include "enhanced/Iterator.h"
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/util/Traits.h>
 
 #define E_DEFINE_FOREACH_FUNC(TYPE) \
-    [[RetNotIgnored]] \
+    E_ANNOTATE(RetNotIgnored) \
     inline ForEachIterator<TYPE> begin() const noexcept { \
         auto it = forwardIterator(); \
         it.step(); \
         return it; \
     } \
-    [[RetNotIgnored]] \
+    E_ANNOTATE(RetNotIgnored) \
     inline constexpr byte end() const noexcept { \
         return 0; \
     }
@@ -44,55 +42,55 @@ namespace enhanced {
         /*!
          * Gets the current element.
          */
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual Type& get() const = 0;
 
         /*!
          * Gets the number of elements.
          */
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual sizetype count() const = 0;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual bool hasNext() const = 0;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual bool hasPrev() const = 0;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual bool isBegin() const = 0;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual bool isEnd() const = 0;
 
         /*!
          * Let the iterator pointer return to the next element.
          */
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         virtual const Iterator<Type>& next() const = 0;
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         virtual const Iterator<Type>& next(sizetype count) const = 0;
 
         /*!
          * Let the iterator pointer return to the previous element.
          */
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         virtual const Iterator<Type>& prev() const = 0;
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         virtual const Iterator<Type>& prev(sizetype count) const = 0;
 
         /*!
          * Let the iterator pointer return to the begin.
          */
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         virtual const Iterator<Type>& setBegin() const = 0;
 
         /*!
          * Let the iterator pointer return to the end.
          */
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         virtual const Iterator<Type>& setEnd() const = 0;
     };
 
@@ -112,7 +110,7 @@ namespace enhanced {
 
         virtual const DirectedIterator& reset() const = 0;
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         virtual bool continueable() const = 0;
     };
 
@@ -121,13 +119,13 @@ namespace enhanced {
         template <typename... Args>
         inline ForwardIterator(Args&&... args) : DirectedIterator<Iter>(args...) {}
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline const ForwardIterator& step() const {
             Iter::next();
             return *this;
         }
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline const ForwardIterator& step(sizetype count) const {
             Iter::next(count);
             return *this;
@@ -143,13 +141,13 @@ namespace enhanced {
             return *this;
         }
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline const ForwardIterator& reset() const {
             Iter::setBegin();
             return *this;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline bool continueable() const {
             return !Iter::isEnd();
         }
@@ -160,37 +158,37 @@ namespace enhanced {
         template <typename... Args>
         inline ReverseIterator(Args&&... args) : DirectedIterator<Iter>(args...) {}
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline const ReverseIterator& step() const {
             Iter::prev();
             return *this;
         }
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline const ReverseIterator& step(sizetype count) const {
             Iter::prev(count);
             return *this;
         }
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline const ReverseIterator& back() const {
             Iter::next();
             return *this;
         }
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline const ReverseIterator& back(sizetype count) const {
             Iter::next(count);
             return *this;
         }
 
-        [[ReturnSelf]]
+        E_ANNOTATE(ReturnSelf)
         inline const ReverseIterator& reset() const {
             Iter::setEnd();
             return *this;
         }
 
-        [[RetNotIgnored]]
+        E_ANNOTATE(RetNotIgnored)
         inline bool continueable() const {
             return !Iter::isBegin();
         }

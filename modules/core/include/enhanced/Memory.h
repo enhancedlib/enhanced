@@ -1,16 +1,17 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
 
 #pragma once
+
+#include <new> // std::nothrow_t, std::align_val_t
 
 #include <enhanced/Defines.h>
 #include <enhanced/ExportCore.h>
@@ -30,7 +31,7 @@ namespace enhanced {
     };
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr Type* addressOf(Type& value) noexcept {
         return __builtin_addressof(value);
     }
@@ -57,33 +58,33 @@ namespace enhanced {
     /*!
      * Allocates space in memory. \n
      *
-     * @example memoryAlloc(100 * sizeof(int))
+     * @example allocate(100 * sizeof(int))
      *
      * @param size     The size to be allocated (unit: byte).
      * @return void*   A pointer to the newly allocated space.
      */
-    [[MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease]]
-    ENHANCED_CORE_API ALLOCATOR RET_RESTRICT void* memoryAlloc(sizetype size);
+    E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
+    ENHANCED_CORE_API ALLOCATOR RET_RESTRICT void* allocate(sizetype size);
 
     /*!
      * Frees a memory space to which the pointer points. \n
      *
-     * @example memoryFree(pointer)
+     * @example release(pointer)
      *
      * @param pointer A pointer.
      */
-    ENHANCED_CORE_API void memoryFree(void* pointer);
+    ENHANCED_CORE_API void release(void* pointer);
 
     /*!
      * Sets a memory space of a pointer to the same value.
      *
-     * @example memorySet(pointer, 0, 10 * sizeof(int))
+     * @example memoryFill(pointer, 0, 10 * sizeof(int))
      *
      * @param ptr     A pointer.
      * @param aByte   A byte (range: 0 ~ 255).
      * @param size    The byte size of the pointer. (generally: "<memory size> * sizeof(<type>)").
      */
-    ENHANCED_CORE_API void memorySet(void* ptr, byte aByte, sizetype size);
+    ENHANCED_CORE_API void memoryFill(void* ptr, byte aByte, sizetype size);
 
     /*!
      * Copies a memory space.

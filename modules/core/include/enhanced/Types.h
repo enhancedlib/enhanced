@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -38,95 +37,78 @@
     #define LDOUBLE_EQUALS_DOUBLE
 #endif
 
-using llong = long long;
-using ldouble = long double;
+namespace enhanced {
+    using llong = long long;
+    using ldouble = long double;
 
-using schar = signed char;
+    using schar = signed char;
 
-using uchar = unsigned char;
-using ushort = unsigned short;
-using uint = unsigned int;
-using ulong = unsigned long;
-using ullong = unsigned long long;
+    using uchar = unsigned char;
+    using ushort = unsigned short;
+    using uint = unsigned int;
+    using ulong = unsigned long;
+    using ullong = unsigned long long;
 
-using int8 = schar;
-using int16 = short;
-using int32 = int;
+    using int8 = schar;
+    using int16 = short;
+    using int32 = int;
 #ifdef LONG_EQUALS_INT
-using int64 = llong;
+    using int64 = llong;
 #else
-using int64 = long;
+    using int64 = long;
 #endif
 
-using uint8 = uchar;
-using uint16 = ushort;
-using uint32 = uint;
+    using uint8 = uchar;
+    using uint16 = ushort;
+    using uint32 = uint;
 #ifdef LONG_EQUALS_INT
-using uint64 = ullong;
+    using uint64 = ullong;
 #else
-using uint64 = ulong;
+    using uint64 = ulong;
 #endif
 
-using float32 = float;
-using float64 = double;
+    using float32 = float;
+    using float64 = double;
 
 #ifdef WCHAR_IS_BUILTIN_TYPE
-using wchar = wchar_t;
+    using wchar = wchar_t;
 #else
 #ifdef WCHAR_16BIT
-using wchar = uint16;
+    using wchar = uint16;
 #else
-using wchar = int32;
+    using wchar = int32;
 #endif
 #endif
 
-using u8char = char8_t;
-using u16char = char16_t;
-using u32char = char32_t;
+    using u8char = char8_t;
+    using u16char = char16_t;
+    using u32char = char32_t;
 
-using byte = uint8;
-using word = uint16;
-using dword = uint32;
-using qword = uint64;
+    using byte = uint8;
+    using word = uint16;
+    using dword = uint32;
+    using qword = uint64;
 
 // The name "sizetype" is used instead of "size" because "size" is often used as a variable/function name.
 #ifdef SIZE_TYPE_32BIT
-using sizetype = uint32;
+    using sizetype = uint32;
 #else
-using sizetype = uint64;
+    using sizetype = uint64;
 #endif
 
-using nulltype = decltype(nullptr);
+    using nulltype = decltype(nullptr);
 
-namespace enhanced {
-    using ::llong;
-    using ::ldouble;
-    using ::schar;
-    using ::uchar;
-    using ::ushort;
-    using ::uint;
-    using ::ulong;
-    using ::ullong;
-    using ::int8;
-    using ::int16;
-    using ::int32;
-    using ::int64;
-    using ::uint8;
-    using ::uint16;
-    using ::uint32;
-    using ::uint64;
-    using ::float32;
-    using ::float64;
-    using ::wchar;
-    using ::u8char;
-    using ::u16char;
-    using ::u32char;
-    using ::byte;
-    using ::word;
-    using ::dword;
-    using ::qword;
-    using ::sizetype;
+    // Uses to declare variables, wrap array declarators and function declarators so that they are written before the identifier
+    template <typename Type>
+    using wrap = Type;
 }
+
+// Prevents duplicate macro definition warnings (MSVC C4005)
+#ifdef COMPILER_MSVC
+    #include <limits.h>
+    #include <stdint.h>
+    #include <corecrt_math.h>
+#endif
 
 #undef INT8_MIN
 #undef INT16_MIN
@@ -306,5 +288,3 @@ namespace enhanced {
     #define INFINITY POSITIVE_INFINITY
     #define NAN (0.0 / 0.0)
 #endif
-
-#define INVALID_SIZE SIZE_TYPE_MAX

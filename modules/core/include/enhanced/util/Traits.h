@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -163,7 +162,7 @@ namespace enhancedInternal::util::traits {
 
     // ======================================================================
 
-    template <sizetype index, typename, typename... OtherTypes>
+    template <enhanced::sizetype index, typename, typename... OtherTypes>
     struct AtTypeVecImpl final {
         using Type = typename AtTypeVecImpl<index - 1, OtherTypes...>::Type;
     };
@@ -267,13 +266,13 @@ namespace enhancedInternal::util::traits {
     // ======================================================================
 
     template <bool, typename Type>
-    struct AddReferenceImpl final {
+    struct ReferenceImpl final {
         using LvalueRef = Type;
         using RvalueRef = Type;
     };
 
     template <typename Type>
-    struct AddReferenceImpl<true, Type> final {
+    struct ReferenceImpl<true, Type> final {
         using LvalueRef = Type&;
         using RvalueRef = Type&&;
     };
@@ -312,7 +311,7 @@ namespace enhancedInternal::util::traits {
 
     // ======================================================================
 
-    template <typename, sizetype>
+    template <typename, enhanced::sizetype>
     struct RemoveExtentImpl final {};
 
     template <typename Result>
@@ -320,17 +319,17 @@ namespace enhancedInternal::util::traits {
         using Type = Result;
     };
 
-    template <typename InterType, sizetype extent>
+    template <typename InterType, enhanced::sizetype extent>
     struct RemoveExtentImpl<InterType[], extent> final {
         using Type = typename RemoveExtentImpl<InterType, extent - 1>::Type[];
     };
 
-    template <typename Result, sizetype size>
+    template <typename Result, enhanced::sizetype size>
     struct RemoveExtentImpl<Result[size], 0> final {
         using Type = Result;
     };
 
-    template <typename InterType, sizetype extent, sizetype size>
+    template <typename InterType, enhanced::sizetype extent, enhanced::sizetype size>
     struct RemoveExtentImpl<InterType[size], extent> final {
         using Type = typename RemoveExtentImpl<InterType, extent - 1>::Type[size];
     };
@@ -347,7 +346,7 @@ namespace enhancedInternal::util::traits {
         using Type = typename RemoveAllExtentsImpl<InterType>::Type;
     };
 
-    template <typename InterType, sizetype size>
+    template <typename InterType, enhanced::sizetype size>
     struct RemoveAllExtentsImpl<InterType[size]> final {
         using Type = typename RemoveAllExtentsImpl<InterType>::Type;
     };
@@ -361,7 +360,7 @@ namespace enhancedInternal::util::traits {
 
     template <>
     struct ToSignedImpl<char> final {
-        using Type = schar;
+        using Type = enhanced::schar;
     };
 
 #define _TEMPLATE(BASE_INT_TYPE) \
@@ -382,7 +381,7 @@ namespace enhancedInternal::util::traits {
 
     template <>
     struct ToUnsignedImpl<char> final {
-        using Type = uchar;
+        using Type = enhanced::uchar;
     };
 
 #define _TEMPLATE(BASE_INT_TYPE) \
@@ -395,33 +394,33 @@ namespace enhancedInternal::util::traits {
 #undef _TEMPLATE
 
     struct FunctionParserImpl {
-        template <sizetype size>
-        static consteval bool isNothrowImpl(const char (&arg)[size]) {
+        template <enhanced::sizetype size>
+        static consteval bool isNothrowImpl(const enhanced::wrap<char[size]>& arg) {
             return arg[0] == 'n'; // "noexcept"
         }
 
-        template <sizetype size>
-        static consteval bool isObjectConstImpl(const char (&arg)[size]) {
+        template <enhanced::sizetype size>
+        static consteval bool isObjectConstImpl(const enhanced::wrap<char[size]>& arg) {
             return arg[0] == 'c'; // "const" or "const volatile"
         }
 
-        template <sizetype size>
-        static consteval bool isObjectVolatileImpl(const char (&arg)[size]) {
+        template <enhanced::sizetype size>
+        static consteval bool isObjectVolatileImpl(const enhanced::wrap<char[size]>& arg) {
             return arg[0] == 'v' || (arg[0] != '\0' && arg[5] != '\0' && arg[6] == 'v'); // "volatile" or "const volatile"
         }
 
-        template <sizetype size>
-        static consteval bool isObjectReferenceImpl(const char (&arg)[size]) {
+        template <enhanced::sizetype size>
+        static consteval bool isObjectReferenceImpl(const enhanced::wrap<char[size]>& arg) {
             return isObjectLvalueRefImpl(arg) || isObjectRvalueRefImpl(arg);
         }
 
-        template <sizetype size>
-        static consteval bool isObjectLvalueRefImpl(const char (&arg)[size]) {
+        template <enhanced::sizetype size>
+        static consteval bool isObjectLvalueRefImpl(const enhanced::wrap<char[size]>& arg) {
             return arg[0] == '&' && arg[1] == '\0'; // "&"
         }
 
-        template <sizetype size>
-        static consteval bool isObjectRvalueRefImpl(const char (&arg)[size]) {
+        template <enhanced::sizetype size>
+        static consteval bool isObjectRvalueRefImpl(const enhanced::wrap<char[size]>& arg) {
             return arg[0] == '&' && arg[1] == '&'; // "&&"
         }
     };
@@ -437,16 +436,16 @@ namespace enhanced::util::inline traits {
     using AtTypeVec = typename enhancedInternal::util::traits::AtTypeVecImpl<index, Types...>::Type;
 
     template <bool first, bool... conditions>
-    inline constexpr bool allOfTrue = first;
+    inline constexpr bool allOf = first;
 
     template <bool next, bool... conditions>
-    inline constexpr bool allOfTrue<true, next, conditions...> = allOfTrue<next, conditions...>;
+    inline constexpr bool allOf<true, next, conditions...> = allOf<next, conditions...>;
 
     template <bool first, bool... conditions>
-    inline constexpr bool anyOfTrue = first;
+    inline constexpr bool anyOf = first;
 
     template <bool next, bool... conditions>
-    inline constexpr bool anyOfTrue<false, next, conditions...> = anyOfTrue<next, conditions...>;
+    inline constexpr bool anyOf<false, next, conditions...> = anyOf<next, conditions...>;
 
     template <typename...>
     inline constexpr sizetype typeVecCount = 0;
@@ -461,18 +460,18 @@ namespace enhanced::util::inline traits {
     inline constexpr bool assume = true;
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     constexpr Type declvalue() noexcept; // Used for compile-time type inference, no implementation required.
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr Type& weakCast(Type&& value) noexcept {
         return value;
     }
 
 #define _TEMPLATE(CV_OPT) \
     template <typename Type> \
-    [[RetNotIgnored]] \
+    E_ANNOTATE(RetNotIgnored) \
     inline constexpr Type& weakCast(CV_OPT Type& value) noexcept { \
         return const_cast<Type&>(value); \
     }
@@ -481,20 +480,20 @@ namespace enhanced::util::inline traits {
 #undef _TEMPLATE
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr Type& forceCast(auto&& value) noexcept {
         return *((Type*) &value);
     }
 
     template <sizetype index>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr auto& atValueVec(auto&& result, auto&&...) noexcept {
         return result;
     }
 
     template <sizetype index>
     requires (index > 0)
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr auto& atValueVec(auto&&, auto&&... values) noexcept {
         return atValueVec<index - 1>(values...);
     }
@@ -511,25 +510,25 @@ namespace enhanced::util::inline traits {
 #endif
 
     template <typename Type, typename... Others>
-    inline constexpr bool isAnyOf = anyOfTrue<isSame<Type, Others>...>;
+    inline constexpr bool isAnyOf = anyOf<isSame<Type, Others>...>;
 
     template <typename Base, typename Derived>
     inline constexpr bool isBaseOf = __is_base_of(Base, Derived);
 
     template <typename Base, typename... Derived>
-    inline constexpr bool isAllBaseOf = allOfTrue<isBaseOf<Base, Derived>...>;
+    inline constexpr bool isAllBaseOf = allOf<isBaseOf<Base, Derived>...>;
 
     template <typename Base, typename... Derived>
-    inline constexpr bool isAnyBaseOf = anyOfTrue<isBaseOf<Base, Derived>...>;
+    inline constexpr bool isAnyBaseOf = anyOf<isBaseOf<Base, Derived>...>;
 
     template <typename Base, typename Derived>
     inline constexpr bool isBaseOfNs = isBaseOf<Base, Derived> && !isSame<Base, Derived>;
 
     template <typename Base, typename... Derived>
-    inline constexpr bool isAllBaseOfNs = allOfTrue<isBaseOfNs<Base, Derived>...>;
+    inline constexpr bool isAllBaseOfNs = allOf<isBaseOfNs<Base, Derived>...>;
 
     template <typename Base, typename... Derived>
-    inline constexpr bool isAnyBaseOfNs = anyOfTrue<isBaseOfNs<Base, Derived>...>;
+    inline constexpr bool isAnyBaseOfNs = anyOf<isBaseOfNs<Base, Derived>...>;
 
     template <typename>
     inline constexpr bool isConst = false;
@@ -657,19 +656,19 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isArray = isBoundedArray<Type> || isUnboundedArray<Type>;
 
     template <typename Type>
-    using AddLvalueRef = typename enhancedInternal::util::traits::AddReferenceImpl<isReferenceable<Type>, Type>::LvalueRef;
+    using LvalueRef = typename enhancedInternal::util::traits::ReferenceImpl<isReferenceable<Type>, Type>::LvalueRef;
 
     template <typename Type>
-    using AddRvalueRef = typename enhancedInternal::util::traits::AddReferenceImpl<isReferenceable<Type>, Type>::RvalueRef;
+    using RvalueRef = typename enhancedInternal::util::traits::ReferenceImpl<isReferenceable<Type>, Type>::RvalueRef;
 
     template <typename Type>
-    using AddConst = const Type; // Use this type-alias to constify the type to prevent the MSVC C4180 warning.
+    using Const = const Type; // Use this type-alias to constify the type to prevent the MSVC C4180 warning.
 
     template <typename Type>
-    using AddConstLvaRef = AddLvalueRef<const Type>;
+    using ConstLvaRef = LvalueRef<const Type>;
 
     template <typename Type>
-    using AddConstRvaRef = AddRvalueRef<const Type>;
+    using ConstRvaRef = RvalueRef<const Type>;
 
     template <typename Type>
     using RemoveConst = typename enhancedInternal::util::traits::RemoveConstImpl<Type>::Type;
@@ -898,55 +897,55 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isConstructible = __is_constructible(Type, Args...);
 
     template <typename Type>
-    inline constexpr bool isCopyConstructible = isConstructible<Type, AddLvalueRef<const Type>>;
+    inline constexpr bool isCopyConstructible = isConstructible<Type, LvalueRef<const Type>>;
 
     template <typename Type>
-    inline constexpr bool isMoveConstructible = isConstructible<Type, AddRvalueRef<Type>>;
+    inline constexpr bool isMoveConstructible = isConstructible<Type, RvalueRef<Type>>;
 
     template <typename Type, typename... Args>
     inline constexpr bool isTriviallyConstructible = __is_trivially_constructible(Type, Args...);
 
     template <typename Type>
-    inline constexpr bool isTriviallyCopyConstructible = isTriviallyConstructible<Type, AddLvalueRef<const Type>>;
+    inline constexpr bool isTriviallyCopyConstructible = isTriviallyConstructible<Type, LvalueRef<const Type>>;
 
     template <typename Type>
-    inline constexpr bool isTriviallyMoveConstructible = isTriviallyConstructible<Type, AddRvalueRef<Type>>;
+    inline constexpr bool isTriviallyMoveConstructible = isTriviallyConstructible<Type, RvalueRef<Type>>;
 
     template <typename Type, typename... Args>
     inline constexpr bool isNothrowConstructible = __is_nothrow_constructible(Type, Args...);
 
     template <typename Type>
-    inline constexpr bool isNothrowCopyConstructible = isNothrowConstructible<Type, AddLvalueRef<const Type>>;
+    inline constexpr bool isNothrowCopyConstructible = isNothrowConstructible<Type, LvalueRef<const Type>>;
 
     template <typename Type>
-    inline constexpr bool isNothrowMoveConstructible = isNothrowConstructible<Type, AddRvalueRef<Type>>;
+    inline constexpr bool isNothrowMoveConstructible = isNothrowConstructible<Type, RvalueRef<Type>>;
 
     template <typename From, typename To>
     inline constexpr bool isAssignable = __is_assignable(To, From);
 
     template <typename From, typename To>
-    inline constexpr bool isCopyAssignable = isAssignable<AddLvalueRef<const From>, AddLvalueRef<To>>;
+    inline constexpr bool isCopyAssignable = isAssignable<LvalueRef<const From>, LvalueRef<To>>;
 
     template <typename From, typename To>
-    inline constexpr bool isMoveAssignable = isAssignable<From, AddLvalueRef<To>>;
+    inline constexpr bool isMoveAssignable = isAssignable<From, LvalueRef<To>>;
 
     template <typename From, typename To>
     inline constexpr bool isTriviallyAssignable = __is_trivially_assignable(To, From);
 
     template <typename From, typename To>
-    inline constexpr bool isTriviallyCopyAssignable = isTriviallyAssignable<AddLvalueRef<const From>, AddLvalueRef<To>>;
+    inline constexpr bool isTriviallyCopyAssignable = isTriviallyAssignable<LvalueRef<const From>, LvalueRef<To>>;
 
     template <typename From, typename To>
-    inline constexpr bool isTriviallyMoveAssignable = isTriviallyAssignable<From, AddLvalueRef<To>>;
+    inline constexpr bool isTriviallyMoveAssignable = isTriviallyAssignable<From, LvalueRef<To>>;
 
     template <typename From, typename To = From>
     inline constexpr bool isNothrowAssignable = __is_nothrow_assignable(To, From);
 
     template <typename From, typename To = From>
-    inline constexpr bool isNothrowCopyAssignable = isNothrowAssignable<AddLvalueRef<const From>, AddLvalueRef<To>>;
+    inline constexpr bool isNothrowCopyAssignable = isNothrowAssignable<LvalueRef<const From>, LvalueRef<To>>;
 
     template <typename From, typename To = From>
-    inline constexpr bool isNothrowMoveAssignable = isNothrowAssignable<From, AddLvalueRef<To>>;
+    inline constexpr bool isNothrowMoveAssignable = isNothrowAssignable<From, LvalueRef<To>>;
 
 #ifdef ABI_GCC
     template <typename Type>
@@ -1200,40 +1199,40 @@ namespace enhanced::util::inline traits {
 #undef _TEMPLATE
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemoveCv<RemoveRef<Type>>&& move(Type&& value) noexcept {
         return const_cast<RemoveCv<RemoveRef<Type>>&&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemoveRef<Type>&& moveIf(Type&& value) noexcept {
         return static_cast<RemoveRef<Type>&&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr Type&& forward(RemoveRef<Type>& value) noexcept {
         return static_cast<Type&&>(value);
     }
 
     template <typename Type>
     requires (!isLvalueRef<Type>)
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr Type&& forward(RemoveRef<Type>&& value) noexcept {
         return static_cast<Type&&>(value);
     }
 
     template <typename Case, typename First, typename... Types>
     requires isSame<Case, First>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr Case& switchType(First&& first, Types&&...) noexcept {
         return first;
     }
 
     template <typename Case, typename First, typename... Types>
     requires (!isSame<Case, First>)
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr Case& switchType(First&&, Types&&... values) noexcept {
         return switchType<Case, Types...>(static_cast<Types&&>(values)...);
     }
@@ -1272,108 +1271,108 @@ namespace enhanced::util::inline traits {
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr const RemoveRef<Type>& addConst(Type&& value) noexcept {
         return const_cast<const RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr volatile RemoveRef<Type>& addVolatile(Type&& value) noexcept {
         return const_cast<volatile RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr const volatile RemoveRef<Type>& addCv(Type&& value) noexcept {
         return const_cast<const volatile RemoveRef<Type>&>(value);
     }
 
     template <typename Type>
     requires isPointer<RemoveRef<Type>>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr const RemovePointer<RemoveRef<Type>>*& addPtrConst(Type&& value) noexcept {
         return const_cast<const RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
     requires isPointer<RemoveRef<Type>>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr volatile RemovePointer<RemoveRef<Type>>*& addPtrVolatile(Type&& value) noexcept {
         return const_cast<volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
     requires isPointer<RemoveRef<Type>>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr const volatile RemovePointer<RemoveRef<Type>>*& addPtrCv(Type&& value) noexcept {
         return const_cast<const volatile RemovePointer<RemoveRef<Type>>*&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemoveConst<RemoveRef<Type>>& removeConst(Type&& value) noexcept {
         return const_cast<RemoveConst<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemoveVolatile<RemoveRef<Type>>& removeVolatile(Type&& value) noexcept {
         return const_cast<RemoveVolatile<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemoveCv<RemoveRef<Type>>& removeCv(Type&& value) noexcept {
         return const_cast<RemoveCv<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemoveRefConst<Type> removeRefConst(Type&& value) noexcept {
         return const_cast<RemoveRefConst<Type>>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemoveRefVolatile<Type> removeRefVolatile(Type&& value) noexcept {
         return const_cast<RemoveRefVolatile<Type>>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemoveRefCv<Type> removeRefCv(Type&& value) noexcept {
         return const_cast<RemoveRefCv<Type>>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemovePtrConst<RemoveRef<Type>> removePtrConst(Type&& value) noexcept {
         return const_cast<RemovePtrConst<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemovePtrVolatile<RemoveRef<Type>> removePtrVolatile(Type&& value) noexcept {
         return const_cast<RemovePtrVolatile<RemoveRef<Type>>&>(value);
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr RemovePtrCv<RemoveRef<Type>>& removePtrCv(Type&& value) noexcept {
         return const_cast<RemovePtrCv<RemoveRef<Type>&>>(value);
     }
 
     template <typename Derived, typename Base>
     requires isPolymorphicClass<RemoveRef<Base>> && isSame<Derived, RemoveRef<Base>>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr bool isInstanceOf(Base&&) noexcept {
         return true;
     }
 
     template <typename Derived, typename Base>
     requires isPolymorphicClass<RemoveRef<Base>> && isBaseOfNs<RemoveRef<Base>, Derived>
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     inline constexpr bool isInstanceOf(Base&& value) noexcept {
         return dynamic_cast<Derived*>(&value) != nullptr;
     }

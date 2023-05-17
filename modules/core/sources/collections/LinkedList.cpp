@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -20,6 +19,7 @@
 #include <enhanced/exceptions/IndexOutOfBoundsException.h>
 #include <enhanced/exceptions/OperationException.h>
 
+using enhanced::sizetype;
 using enhanced::exceptions::IndexOutOfBoundsException;
 using enhanced::exceptions::OperationException;
 
@@ -39,10 +39,10 @@ namespace enhancedInternal::collections {
         first(other.first), last(other.last), size(other.size) {
         other.first = nullptr;
         other.last = nullptr;
-        other.size = INVALID_SIZE;
+        other.size = SIZE_TYPE_MAX;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     sizetype LinkedListImpl::indexOf0(void* value, OpEqual opEqual) const {
         Node* indexer = first;
         for (sizetype index = 0; index < size; ++index) {
@@ -52,24 +52,24 @@ namespace enhancedInternal::collections {
             nextNode(indexer);
         }
 
-        return INVALID_SIZE;
+        return SIZE_TYPE_MAX;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     void* LinkedListImpl::getFirst0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return first->value;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     void* LinkedListImpl::getLast0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return last->value;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     void* LinkedListImpl::get0(sizetype index) const {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
@@ -182,7 +182,7 @@ namespace enhancedInternal::collections {
     }
 
     void LinkedListImpl::clear0(OpDestroy opDestroy) {
-        if (size == INVALID_SIZE) return;
+        if (size == SIZE_TYPE_MAX) return;
 
         while (size-- > 1) {
             prevNode(last);
@@ -200,7 +200,7 @@ namespace enhancedInternal::collections {
     LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl* linkedList, Node* init) :
         linkedList(linkedList), indexer(init) {}
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     void* LinkedListImpl::LinkedListIteratorImpl::get0() const {
         if (isBegin0() || isEnd0()) {
             throw OperationException("The iterator has not element at the current location (begin or end)");
@@ -208,22 +208,22 @@ namespace enhancedInternal::collections {
         return indexer->value;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     bool LinkedListImpl::LinkedListIteratorImpl::isBegin0() const {
-        return indexer == (Node*) INVALID_SIZE;
+        return indexer == (Node*) SIZE_TYPE_MAX;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     bool LinkedListImpl::LinkedListIteratorImpl::isEnd0() const {
         return indexer == nullptr;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
         return (isBegin0() && linkedList->size != 0) || (!isEnd0() && indexer->next != nullptr);
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     bool LinkedListImpl::LinkedListIteratorImpl::hasPrev0() const {
         return (isEnd0() && linkedList->size != 0) || (!isBegin0() && indexer->prev != nullptr);
     }
@@ -257,7 +257,7 @@ namespace enhancedInternal::collections {
     }
 
     void LinkedListImpl::LinkedListIteratorImpl::setBegin0() const {
-        indexer = (Node*) INVALID_SIZE;
+        indexer = (Node*) SIZE_TYPE_MAX;
     }
 
     void LinkedListImpl::LinkedListIteratorImpl::setEnd0() const {

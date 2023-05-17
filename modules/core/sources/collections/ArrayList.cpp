@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -21,6 +20,7 @@
 #include <enhanced/exceptions/IndexOutOfBoundsException.h>
 #include <enhanced/exceptions/OperationException.h>
 
+using enhanced::sizetype;
 using enhanced::arrayCopy;
 using enhanced::exceptions::IndexOutOfBoundsException;
 using enhanced::exceptions::OperationException;
@@ -42,32 +42,32 @@ namespace enhancedInternal::collections {
     ArrayListImpl::ArrayListImpl(ArrayListImpl&& other) noexcept : elements(other.elements), size(other.size),
         capacity(other.capacity), expSizeFallback([](sizetype capacity) {return capacity;}) {
         other.elements = nullptr;
-        other.size = INVALID_SIZE;
-        other.capacity = INVALID_SIZE;
+        other.size = SIZE_TYPE_MAX;
+        other.capacity = SIZE_TYPE_MAX;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     void* ArrayListImpl::getFirst0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return elements[0];
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     void* ArrayListImpl::getLast0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return elements[size - 1];
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     void* ArrayListImpl::get0(sizetype index) const {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
         return elements[index];
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     sizetype ArrayListImpl::indexOf0(void* value, OpEqual opEqual) const {
         for (sizetype index = 0; index < size; ++index) {
             if (opEqual(elements[index], value)) {
@@ -75,7 +75,7 @@ namespace enhancedInternal::collections {
             }
         }
 
-        return INVALID_SIZE;
+        return SIZE_TYPE_MAX;
     }
 
     void ArrayListImpl::addFirst0(void* element, OpCopy opCopy) {
@@ -181,7 +181,7 @@ namespace enhancedInternal::collections {
     ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList, void** init) :
         arrayList(arrayList), indexer(init) {}
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     void* ArrayListImpl::ArrayListIteratorImpl::get0() const {
         if (isBegin0() || isEnd0()) {
             throw OperationException("The iterator has not element at the current location (begin or end)");
@@ -189,22 +189,22 @@ namespace enhancedInternal::collections {
         return *indexer;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
         return indexer != arrayList->elements + arrayList->size - 1;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     bool ArrayListImpl::ArrayListIteratorImpl::hasPrev0() const {
         return indexer != arrayList->elements;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     bool ArrayListImpl::ArrayListIteratorImpl::isBegin0() const {
         return indexer == arrayList->elements - 1;
     }
 
-    [[RetNotIgnored]]
+    E_ANNOTATE(RetNotIgnored)
     bool ArrayListImpl::ArrayListIteratorImpl::isEnd0() const {
         return indexer == arrayList->elements + arrayList->size;
     }

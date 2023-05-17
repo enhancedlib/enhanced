@@ -1,11 +1,10 @@
 /*
  * Copyright (C) 2023 Liu Baihao. All rights reserved.
  *
- * Licensed under the MIT License with "Fairness" Exception.
- *
+ * Licensed under the MIT License with the Distribution Exception.
  * You may not use this file except in compliance with the License.
  *
- * This file is part of The Enhanced Software, and IT ALWAYS
+ * THIS FILE IS PART OF THE ENHANCED SOFTWARE, and IT ALWAYS
  * PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
  */
@@ -49,28 +48,28 @@ namespace enhanced::math {
 #undef min
 
     template <typename Type>
-    [[RetNotIgnored]]
-    inline constexpr const Type& max(Type x, Type y) {
+    E_ANNOTATE(RetNotIgnored)
+    inline constexpr const Type& max(const Type& x, const Type& y) noexcept(noexcept(x > y)) {
         return (x > y) ? x : y;
     }
 
     template <typename X, typename Y>
     requires util::isIntegralType<X> && util::isIntegralType<Y>
-    [[RetNotIgnored]]
-    inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> max(X x, Y y) {
+    E_ANNOTATE(RetNotIgnored)
+    inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> max(const X& x, const Y& y) noexcept {
         return (x > y) ? x : y;
     }
 
     template <typename Type>
-    [[RetNotIgnored]]
-    inline constexpr const Type& min(Type x, Type y) {
+    E_ANNOTATE(RetNotIgnored)
+    inline constexpr const Type& min(const Type& x, const Type& y) noexcept(noexcept(x < y)) {
         return (x < y) ? x : y;
     }
 
     template <typename X, typename Y>
     requires util::isIntegralType<X> && util::isIntegralType<Y>
-    [[RetNotIgnored]]
-    inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> min(X x, Y y) {
+    E_ANNOTATE(RetNotIgnored)
+    inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> min(const X& x, const Y& y) noexcept {
         return (x < y) ? x : y;
     }
 
@@ -81,15 +80,15 @@ namespace enhanced::math {
 
     template <typename IntegralType>
     requires util::isIntegralType<IntegralType>
-    [[RetNotIgnored]]
-    inline constexpr util::ToUnsigned<IntegralType> abs(IntegralType number) {
+    E_ANNOTATE(RetNotIgnored)
+    inline constexpr util::ToUnsigned<IntegralType> abs(IntegralType number) noexcept {
         return (number >= 0) ? number : -number;
     }
 
     template <typename X, typename Y>
     requires util::isIntegralType<X> && util::isIntegralType<Y>
-    [[RetNotIgnored]]
-    inline constexpr util::ToUnsigned<util::Conditional<(sizeof(X) > sizeof(Y)), X, Y>> difference(X x, Y y) {
+    E_ANNOTATE(RetNotIgnored)
+    inline constexpr util::ToUnsigned<util::Conditional<(sizeof(X) > sizeof(Y)), X, Y>> difference(X x, Y y) noexcept(noexcept(x < y)) {
         CLANG_WARNING_PAD("-Wsign-compare") GCC_WARNING_PAD("-Wsign-compare")
 
         return (x < y) ? y - x : x - y;

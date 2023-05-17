@@ -1,7 +1,7 @@
 ##
 ## Copyright (C) 2023 Liu Baihao. All rights reserved.
 ##
-## Licensed under the MIT License with "Fairness" Exception.
+## Licensed under the MIT License with the Distribution Exception.
 ##
 ## You may not use this file except in compliance with the License.
 ##
