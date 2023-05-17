@@ -6,9 +6,9 @@
 
 此软件遵循[MIT License with the Distribution Exception](../LICENSE)。
 
-请在[GitHub Issues](https://github.com/sharedwonder/enhanced/issues)提交bug。
+请在[GitHub Issues](https://github.com/enhancedlib/enhanced/issues)提交bug。
 
-[其它语言](LANGUAGES.md) | [版权声明](../COPYRIGHT) | [网站](https://sharedwonder.github.io/enhanced/) | [GitHub仓库](https://github.com/sharedwonder/enhanced/)
+[其它语言](LANGUAGES.md) | [版权声明](../COPYRIGHT) | [网站](https://enhancedlib.github.io/) | [GitHub仓库](https://github.com/enhancedlib/enhanced/)
 
 ---
 

@@ -6,9 +6,9 @@ A Powerful C++ Development Framework
 
 This software is licensed under the [MIT License with the Distribution Exception](LICENSE).
 
-Please report bugs at [GitHub Issues](https://github.com/sharedwonder/enhanced/issues).
+Please report bugs at [GitHub Issues](https://github.com/enhancedlib/enhanced/issues).
 
-[Other Languages](readme/LANGUAGES.md) | [Copyright Notice](COPYRIGHT) | [Website](https://sharedwonder.github.io/enhanced/) | [GitHub Repository](https://github.com/sharedwonder/enhanced/)
+[Other Languages](readme/LANGUAGES.md) | [Copyright Notice](COPYRIGHT) | [Website](https://enhancedlib.github.io/) | [GitHub Repository](https://github.com/enhancedlib/enhanced/)
 
 ---
 
