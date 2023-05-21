@@ -1,4 +1,4 @@
-# The Enhanced Project
+# Enhanced
 
 ***In Development***
 
