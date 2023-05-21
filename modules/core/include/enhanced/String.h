@@ -83,6 +83,7 @@ namespace enhanced {
         TString(CharType* const& value) noexcept;
 
         explicit TString(sizetype length);
+
         TString(const TString* strings, sizetype count);
 
         E_INIT_LIST_CONSTRUCTOR(TString, TString)

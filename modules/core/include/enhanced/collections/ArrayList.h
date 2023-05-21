@@ -36,9 +36,9 @@ namespace enhancedInternal::collections {
         using OpDestroy = void (*)(void*);
         using OpEqual = bool (*)(void*, void*);
 
-        using ExpSizeFallbackFunc = enhanced::sizetype (*)(enhanced::sizetype);
+        using ExpansionSizeFunc = enhanced::sizetype (*)(enhanced::sizetype);
 
-        ExpSizeFallbackFunc expSizeFallback;
+        ExpansionSizeFunc expansionSizeFunc;
 
         class ENHANCED_CORE_API ArrayListIteratorImpl {
         protected:
@@ -108,15 +108,7 @@ namespace enhancedInternal::collections {
 
         void clear0(OpDestroy opDestroy);
 
-        void setCapacity0(enhanced::sizetype newCapacity);
-
-        void expand0();
-
-        void expand0(enhanced::sizetype expSize);
-
-        void shrink0();
-
-        void shrink0(enhanced::sizetype shrSize, OpDestroy opDestroy);
+        void setCapacity0(enhanced::sizetype newCapacity, OpDestroy opDestroy);
     };
 }
 
@@ -217,7 +209,7 @@ namespace enhanced::collections {
             }
         };
 
-        using ExpSizeFallbackFunc = ArrayListImpl::ExpSizeFallbackFunc;
+        using ExpansionSizeFunc = ArrayListImpl::ExpansionSizeFunc;
 
         inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE) {}
 
@@ -256,12 +248,12 @@ namespace enhanced::collections {
 
         E_ANNOTATE(RetNotIgnored)
         inline ArrayListIterator iterator() const noexcept {
-            return ArrayListIterator {this, elements - 1};
+            return forwardIterator();
         }
 
         E_ANNOTATE(RetNotIgnored)
         inline ForwardIterator<ArrayListIterator> forwardIterator() const noexcept {
-            return iterator();
+            return ArrayListIterator {this, elements - 1};
         }
 
         E_ANNOTATE(RetNotIgnored)
@@ -377,28 +369,33 @@ namespace enhanced::collections {
             clear0(destroy);
         }
 
-        inline void setExpSizeFallback(ExpSizeFallbackFunc expSizeFallbackFunc) noexcept {
-            this->expSizeFallback = expSizeFallbackFunc;
+        inline void setExpansionSize(ExpansionSizeFunc expansionSizeFunc) noexcept {
+            this->expansionSizeFunc = expansionSizeFunc;
         }
 
         inline void setCapacity(sizetype newCapacity) {
-            setCapacity0(newCapacity);
+            setCapacity0(newCapacity, destroy);
+        }
+
+        inline void reserve(sizetype newCapacity) {
+            if (newCapacity < capacity) return;
+            setCapacity(newCapacity);
         }
 
         inline void expand() {
-            expand0();
+            setCapacity(expSizeFallback(capacity));
         }
 
         inline void expand(sizetype size) {
-            expand0(size);
+            setCapacity(capacity + size);
         }
 
         inline void shrink() {
-            shrink0();
+            setCapacity(size);
         }
 
         inline void shrink(sizetype size) {
-            shrink0(size, destroy);
+            setCapacity(capacity - size);
         }
     };
 }

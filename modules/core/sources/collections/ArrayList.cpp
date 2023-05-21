@@ -28,11 +28,11 @@ using enhanced::exceptions::OperationException;
 namespace enhancedInternal::collections {
     ArrayListImpl::ArrayListImpl(sizetype capacity) :
         elements(new void*[capacity]), size(0), capacity(capacity),
-        expSizeFallback([](sizetype capacity) {return capacity;}) {}
+        expansionSizeFunc([](sizetype capacity) {return capacity;}) {}
 
     ArrayListImpl::ArrayListImpl(const ArrayListImpl& other, OpCopy opCopy) :
         elements(new void*[other.capacity]), size(other.size),
-        capacity(other.capacity), expSizeFallback([](sizetype capacity) {return capacity;}) {
+        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity; }) {
         E_ASSERT(other.capacity >= other.size);
         for (sizetype index = 0; index < other.size; ++index) {
             elements[index] = opCopy(other.elements[index]);
@@ -40,7 +40,7 @@ namespace enhancedInternal::collections {
     }
 
     ArrayListImpl::ArrayListImpl(ArrayListImpl&& other) noexcept : elements(other.elements), size(other.size),
-        capacity(other.capacity), expSizeFallback([](sizetype capacity) {return capacity;}) {
+        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity; }) {
         other.elements = nullptr;
         other.size = SIZE_TYPE_MAX;
         other.capacity = SIZE_TYPE_MAX;
@@ -80,7 +80,7 @@ namespace enhancedInternal::collections {
 
     void ArrayListImpl::addFirst0(void* element, OpCopy opCopy) {
         if (size == capacity) {
-            capacity = expSizeFallback(capacity);
+            capacity = expansionSizeFunc(capacity);
         }
 
         void** array = new void*[capacity];
@@ -93,7 +93,7 @@ namespace enhancedInternal::collections {
 
     void ArrayListImpl::addFirst1(void* element, OpMove opMove) {
         if (size == capacity) {
-            capacity = expSizeFallback(capacity);
+            capacity = expansionSizeFunc(capacity);
         }
 
         void** array = new void*[capacity];
@@ -106,7 +106,7 @@ namespace enhancedInternal::collections {
 
     void ArrayListImpl::addLast0(void* element, OpCopy opCopy) {
         if (size == capacity) {
-            expand0();
+            setCapacity0(expansionSizeFunc(capacity), nullptr);
         }
 
         elements[size] = opCopy(element);
@@ -115,7 +115,7 @@ namespace enhancedInternal::collections {
 
     void ArrayListImpl::addLast1(void* element, OpMove opMove) {
         if (size == capacity) {
-            expand0();
+            setCapacity0(expansionSizeFunc(capacity), nullptr);
         }
 
         elements[size] = opMove(element);
@@ -149,7 +149,12 @@ namespace enhancedInternal::collections {
         }
     }
 
-    void ArrayListImpl::setCapacity0(sizetype newCapacity) {
+    void ArrayListImpl::setCapacity0(sizetype newCapacity, OpDestroy opDestroy) {
+        if (newCapacity == capacity) return;
+        while (newCapacity < size) {
+            removeLast0(opDestroy);
+        }
+
         void** array = new void*[newCapacity];
         arrayCopy(array, elements, size);
         delete[] elements;
@@ -158,28 +163,7 @@ namespace enhancedInternal::collections {
         capacity = newCapacity;
     }
 
-    void ArrayListImpl::expand0() {
-        expand0(expSizeFallback(capacity));
-    }
-
-    void ArrayListImpl::expand0(sizetype expSize) {
-        setCapacity0(capacity + expSize);
-    }
-
-    void ArrayListImpl::shrink0() {
-        shrink0(size, nullptr);
-    }
-
-    void ArrayListImpl::shrink0(sizetype shrSize, OpDestroy opDestroy) {
-        sizetype newCapacity = capacity - shrSize;
-        while (newCapacity < size) {
-            removeLast0(opDestroy);
-        }
-        setCapacity0(newCapacity);
-    }
-
-    ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList, void** init) :
-        arrayList(arrayList), indexer(init) {}
+    ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList, void** init) : arrayList(arrayList), indexer(init) {}
 
     E_ANNOTATE(RetNotIgnored)
     void* ArrayListImpl::ArrayListIteratorImpl::get0() const {

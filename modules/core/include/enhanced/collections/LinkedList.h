@@ -252,12 +252,12 @@ namespace enhanced::collections {
 
         E_ANNOTATE(RetNotIgnored)
         inline LinkedListIterator iterator() const {
-            return LinkedListIterator {this, (Node*) SIZE_TYPE_MAX};
+            return forwardIterator();
         }
 
         E_ANNOTATE(RetNotIgnored)
         inline ForwardIterator<LinkedListIterator> forwardIterator() const {
-            return iterator();
+            return LinkedListIterator {this, (Node*) SIZE_TYPE_MAX};
         }
 
         E_ANNOTATE(RetNotIgnored)
