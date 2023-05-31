@@ -21,7 +21,7 @@
 #define FallThrough fallthrough
 #define Likely likely
 #define Unlikely unlikely
-#if HAS_CPP_ATTRIBUTE(assume)
+#if E_HAS_CPP_ATTRIBUTE(assume)
     #define Assume assume
 #else
     #define Assume(EXPRESSION)
@@ -29,7 +29,7 @@
 
 #define RetRequiresRelease RetNotIgnored("The return value needs to be released")
 #define ReturnSelf
-#if defined(COMPILER_GCC) || defined(COMPILER_CLANG)
+#if defined(E_SM_COMPILER_GCC) || defined(E_SM_COMPILER_CLANG)
     #define RetNotNull gnu::returns_nonnull
 #else
     #define RetNotNull

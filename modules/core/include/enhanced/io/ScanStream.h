@@ -18,7 +18,7 @@
 #include <enhanced/io/InputStream.h>
 
 namespace enhanced::io {
-    class ENHANCED_CORE_API ScanStream : public InputStream {
+    class E_CORE_API ScanStream : public InputStream {
     public:
         void close() const override;
 

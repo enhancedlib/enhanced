@@ -8,7 +8,7 @@ This software is licensed under the [MIT License with the Distribution Exception
 
 Please report bugs at [GitHub Issues](https://github.com/enhancedlib/enhanced/issues).
 
-[Other Languages](readme/LANGUAGES.md) | [Copyright Notice](COPYRIGHT) | [Website](https://enhancedlib.github.io/) | [GitHub Repository](https://github.com/enhancedlib/enhanced/)
+[Languages](readme/LANGUAGES.md) | [Copyright Notice](COPYRIGHT) | [Website](https://enhancedlib.github.io/) | [GitHub Repository](https://github.com/enhancedlib/enhanced/)
 
 ---
 
@@ -51,7 +51,7 @@ Environments:
 
 ## Wish
 
-I hope this library can make the C++ language software development more convenient and efficient.
+I hope this library can make developing software in C++ easier and more efficient.
 
 ## Help & Support
 
@@ -62,9 +62,3 @@ A: Because I want this software to make C++ development more efficient and easy.
 ### Q: Is this software free?
 
 A: Yes, this software is free and open source. However, use of this software must abide by [the License (MIT License with the Distribution Exception)](LICENSE), otherwise, you may not use this software.
-
-## About the Author
-
-- *Author*: Liu Baihao
-- *Job*: middle school student
-- *Email*: <liubaihaohello@outlook.com>

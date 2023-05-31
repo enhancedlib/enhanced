@@ -35,5 +35,5 @@ namespace enhanced::collections {
         virtual void clear() = 0;
     };
 
-    ENHANCED_CORE_API extern sizetype ARRAY_INIT_SIZE; // Default value: 256
+    E_CORE_API extern sizetype ARRAY_INIT_SIZE; // Default value: 256
 }

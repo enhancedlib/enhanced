@@ -19,18 +19,18 @@
 #include <enhanced/io/Display.h>
 
 namespace enhanced::io {
-    class ENHANCED_CORE_API PrintStream : public OutputStream {
+    class E_CORE_API PrintStream : public OutputStream {
     public:
         template <typename Type>
         requires isDisplayable<util::RemoveRefAndCv<Type>>
         void print(Type&& value) const {
-            display(*this, value);
+            E_DISPLAY(*this, value);
         }
 
         template <typename Type>
         requires isDisplayable<util::RemoveRefAndCv<Type>>
         void println(Type&& value) const {
-            display(*this, value);
+            E_DISPLAY(*this, value);
             println();
         }
 

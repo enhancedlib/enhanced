@@ -1,4 +1,4 @@
-# The Enhanced Project
+# Enhanced
 
 ***开发中***
 
@@ -8,7 +8,7 @@
 
 请在[GitHub Issues](https://github.com/enhancedlib/enhanced/issues)提交bug。
 
-[其它语言](LANGUAGES.md) | [版权声明](../COPYRIGHT) | [网站](https://enhancedlib.github.io/) | [GitHub仓库](https://github.com/enhancedlib/enhanced/)
+[语言](LANGUAGES.md) | [版权声明](../COPYRIGHT) | [网站](https://enhancedlib.github.io/) | [GitHub仓库](https://github.com/enhancedlib/enhanced/)
 
 ---
 
@@ -51,9 +51,9 @@
 
 ## 愿望
 
-我希望这个库能使C++语言的软件开发更加方便和高效。
+我希望这个库可以让使用C++语言开发软件更加方便和高效。
 
-## 帮助&支持
+## 帮助与支持
 
 ### 问：为什么叫做“Enhanced”？
 
@@ -62,9 +62,3 @@
 ### 问：这个软件免费吗？
 
 答：是的，这个软件免费并且开源。但使用此软件必须遵守[许可协议（MIT License with the Distribution Exception）](../LICENSE)，否则，你不得使用此软件。
-
-## 关于作者
-
-- *作者*：刘柏豪
-- *职业*：中学生
-- *邮箱*：<liubaihaohello@outlook.com>

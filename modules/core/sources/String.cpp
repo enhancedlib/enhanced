@@ -149,7 +149,7 @@ namespace enhanced {
             if (this->value[index] == ch) return index;
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     template <typename CharType>
@@ -165,7 +165,7 @@ namespace enhanced {
             if (substringIndex == string.length) return index - string.length + 1;
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     template <typename CharType>
@@ -181,7 +181,7 @@ namespace enhanced {
             }
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     template <typename CharType>
@@ -201,7 +201,7 @@ namespace enhanced {
             }
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     template <typename CharType>
@@ -213,7 +213,7 @@ namespace enhanced {
             if (index == 0) break;
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     template <typename CharType>
@@ -233,7 +233,7 @@ namespace enhanced {
             if (index == 0) break;
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     template <typename CharType>
@@ -251,7 +251,7 @@ namespace enhanced {
             if (index == 0) break;
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     template <typename CharType>
@@ -273,7 +273,7 @@ namespace enhanced {
             if (index == 0) break;
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     template <typename CharType>
@@ -535,7 +535,7 @@ namespace enhanced {
     requires util::isCharType<CharType>
     TString<CharType>& TString<CharType>::replaceTo(const CharType oldChar, const CharType newChar) {
         sizetype index = this->indexOf(oldChar);
-        if (index == SIZE_TYPE_MAX) return *this;
+        if (index == E_SIZE_TYPE_MAX) return *this;
         toOwn();
         this->value[index] = newChar;
         return *this;
@@ -545,7 +545,7 @@ namespace enhanced {
     requires util::isCharType<CharType>
     TString<CharType>& TString<CharType>::replaceTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring) {
         sizetype index = this->indexOf(oldSubstring);
-        if (index == SIZE_TYPE_MAX) return *this;
+        if (index == E_SIZE_TYPE_MAX) return *this;
         return this->replaceTo(index, index + oldSubstring.length, newSubstring);
     }
 
@@ -553,7 +553,7 @@ namespace enhanced {
     requires util::isCharType<CharType>
     TString<CharType>& TString<CharType>::replaceTo(CharType oldChar, const TString<CharType>& newSubstring) {
         sizetype index = this->indexOf(oldChar);
-        if (index == SIZE_TYPE_MAX) return *this;
+        if (index == E_SIZE_TYPE_MAX) return *this;
         return this->replaceTo(index, index + 1, newSubstring);
     }
 
@@ -561,7 +561,7 @@ namespace enhanced {
     requires util::isCharType<CharType>
     TString<CharType>& TString<CharType>::replaceTo(const TString<CharType>& oldSubstring, CharType newChar) {
         sizetype index = this->indexOf(oldSubstring);
-        if (index == SIZE_TYPE_MAX) return *this;
+        if (index == E_SIZE_TYPE_MAX) return *this;
         return this->replaceTo(index, index + oldSubstring.length, newChar);
     }
 
@@ -827,7 +827,7 @@ namespace enhanced {
     requires util::isCharType<CharType>
     E_ANNOTATE(RetNotIgnored)
     sizetype TStringUtil<CharType>::calcLength(const CharType* string) noexcept {
-        if (string == nullptr) return SIZE_TYPE_MAX;
+        if (string == nullptr) return E_SIZE_TYPE_MAX;
 
         sizetype length;
         for (length = 0; string[length] != E_SWITCH_CHAR(CharType, '\0'); ++length) {}

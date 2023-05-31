@@ -24,14 +24,14 @@
 #define E_SWITCH_STR(TYPE, STRING) enhanced::util::switchType<const TYPE(&)[sizeof(STRING) / sizeof(char)]> \
     (STRING, L##STRING, u8##STRING, u##STRING, U##STRING)
 
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
     #define SWITCH_STR E_SWITCH_STR
 #endif
 
 namespace enhanced {
     template <typename CharType>
     requires util::isCharType<CharType>
-    class ENHANCED_CORE_API TString : public CharSequence<CharType> {
+    class E_CORE_API TString : public CharSequence<CharType> {
     protected:
         TString(const CharType* value, sizetype length, bool isOwn) noexcept;
 

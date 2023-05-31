@@ -17,11 +17,11 @@
 #include <enhanced/io/PrintStream.h>
 
 namespace enhanced::io {
-    ENHANCED_CORE_API extern const ScanStream& ein;
-    ENHANCED_CORE_API extern const PrintStream& eout;
-    ENHANCED_CORE_API extern const PrintStream& eerr;
+    E_CORE_API extern const ScanStream& ein;
+    E_CORE_API extern const PrintStream& eout;
+    E_CORE_API extern const PrintStream& eerr;
 
-    ENHANCED_CORE_API void setIn(const ScanStream& in);
-    ENHANCED_CORE_API void setOut(const PrintStream& out);
-    ENHANCED_CORE_API void setErr(const PrintStream& err);
+    E_CORE_API void setIn(const ScanStream& in);
+    E_CORE_API void setOut(const PrintStream& out);
+    E_CORE_API void setErr(const PrintStream& err);
 }

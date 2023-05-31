@@ -22,7 +22,7 @@
 #include <enhanced/exceptions/NotImplementedError.h>
 
 namespace enhancedInternal::util {
-    class ENHANCED_CORE_API SharedPtrImpl {
+    class E_CORE_API SharedPtrImpl {
     protected:
         mutable enhanced::sizetype* referenceCount;
 

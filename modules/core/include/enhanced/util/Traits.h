@@ -17,7 +17,7 @@
 #include <enhanced/Warnings.h>
 
 #define _CV_OPT_TEMPLATE \
-    _TEMPLATE(EMPTY_MACRO_ARG) \
+    _TEMPLATE(E_EMPTY_MACRO_ARG) \
     _TEMPLATE(const) \
     _TEMPLATE(volatile) \
     _TEMPLATE(const volatile)
@@ -83,28 +83,28 @@
 
 // ======================================================================
 
-#define _FUNC_TEMPLATE_CDECL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Cdecl, CDECL)
+#define _FUNC_TEMPLATE_CDECL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Cdecl, E_CDECL)
 
-#if defined(ARCH_X86) && !defined(ABI_MS_CLR)
-    #define _FUNC_TEMPLATE_FASTCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Fastcall, FASTCALL)
+#if defined(E_SM_ARCH_X86) && !defined(E_SM_MS_CLR)
+    #define _FUNC_TEMPLATE_FASTCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Fastcall, E_FASTCALL)
 #else
     #define _FUNC_TEMPLATE_FASTCALL(SUFFIX)
 #endif
 
-#ifdef ARCH_X86
-    #define _FUNC_TEMPLATE_STDCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Stdcall, STDCALL)
-    #define _FUNC_TEMPLATE_THISCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Thiscall, THISCALL)
+#ifdef E_SM_ARCH_X86
+    #define _FUNC_TEMPLATE_STDCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Stdcall, E_STDCALL)
+    #define _FUNC_TEMPLATE_THISCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Thiscall, E_THISCALL)
 #else
     #define _FUNC_TEMPLATE_STDCALL(SUFFIX)
     #define _FUNC_TEMPLATE_THISCALL(SUFFIX)
 #endif
 
-#ifdef ABI_MSVC
-    #ifdef ABI_MS_CLR
+#ifdef E_SM_COMPATIBILITY_MS
+    #ifdef E_SM_MS_CLR
         #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX)
-        #define _FUNC_TEMPLATE_CLRCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Clrcall, CLRCALL)
-    #elif (defined(ARCH_X86) && _M_IX86_FP >= 2) || defined(ARCH_X64)
-        #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Vectorcall, VECTORCALL)
+        #define _FUNC_TEMPLATE_CLRCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Clrcall, E_CLRCALL)
+    #elif (defined(E_SM_ARCH_X86) && _M_IX86_FP >= 2) || defined(E_SM_ARCH_X64)
+        #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::util::CallingConvention::Vectorcall, E_VECTORCALL)
         #define _FUNC_TEMPLATE_CLRCALL(SUFFIX)
     #endif
 #else
@@ -147,7 +147,7 @@
 
 // ======================================================================
 
-CTIDY_NOLINTBEGIN(bugprone-macro-parentheses)
+E_CTIDY_NOLINTBEGIN(bugprone-macro-parentheses)
 
 namespace enhancedInternal::util::traits {
     template <bool, typename, typename Result>
@@ -426,7 +426,7 @@ namespace enhancedInternal::util::traits {
     };
 }
 
-CLANG_WARNING_PAD("-Wdeprecated-volatile") MSVC_WARNING_PAD(4180) GCC_WARNING_PAD("-Wattributes")
+E_CLANG_WARNING_PAD("-Wdeprecated-volatile") E_MSVC_WARNING_PAD(4180) E_GCC_WARNING_PAD("-Wattributes")
 
 namespace enhanced::util::inline traits {
     template <bool condition, typename Type1, typename Type2>
@@ -498,7 +498,7 @@ namespace enhanced::util::inline traits {
         return atValueVec<index - 1>(values...);
     }
 
-#ifdef COMPILER_MSVC
+#ifdef E_SM_COMPILER_MSVC
     template <typename, typename>
     inline constexpr bool isSame = false;
 
@@ -811,7 +811,7 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isCompoundType = !isBasicType<Type>;
 
-#ifdef COMPILER_GCC
+#ifdef E_SM_COMPILER_GCC
     template <typename From, typename To>
     inline constexpr bool isConvertible = false;
 
@@ -947,7 +947,7 @@ namespace enhanced::util::inline traits {
     template <typename From, typename To = From>
     inline constexpr bool isNothrowMoveAssignable = isNothrowAssignable<From, LvalueRef<To>>;
 
-#ifdef ABI_GCC
+#ifdef E_SM_COMPATIBILITY_GNU
     template <typename Type>
     inline constexpr bool isDestructible = false;
 
@@ -963,7 +963,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isDestructible = __is_destructible(Type);
 #endif
 
-#ifdef COMPILER_GCC
+#ifdef E_SM_COMPILER_GCC
     template <typename Type>
     inline constexpr bool isTriviallyDestructible = __has_trivial_destructor(Type);
 #else
@@ -971,7 +971,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool isTriviallyDestructible = __is_trivially_destructible(Type);
 #endif
 
-#ifdef COMPILER_GCC
+#ifdef E_SM_COMPILER_GCC
     template <typename Type>
     inline constexpr bool isNothrowDestructible = false;
 
@@ -990,7 +990,7 @@ namespace enhanced::util::inline traits {
     template <typename Type>
     inline constexpr bool isTriviallyCopyable = __is_trivially_copyable(Type);
 
-#ifdef ABI_GCC
+#ifdef E_SM_COMPATIBILITY_GNU
     template <typename Type>
     inline constexpr bool isTrivial = __is_trivial(Type);
 #else
@@ -1002,13 +1002,7 @@ namespace enhanced::util::inline traits {
     inline constexpr bool hasVirtualDestructor = __has_virtual_destructor(Type);
 
     enum class CallingConvention : uint8 {
-        Cdecl, Fastcall, Stdcall, Thiscall,
-    #ifdef ABI_MSVC
-        Vectorcall,
-        #ifdef ABI_MS_CLR
-        Clrcall
-        #endif
-    #endif
+        Cdecl, Fastcall, Stdcall, Thiscall, Vectorcall, Clrcall
     };
 
     template <typename Type>
@@ -1096,7 +1090,7 @@ namespace enhanced::util::inline traits {
     _FUNC_WITH_VARARGS_PTR_TEMPLATE
 #undef _TEMPLATE
 
-#ifdef COMPILER_CLANG
+#ifdef E_SM_COMPILER_CLANG
     template <typename Type>
     inline constexpr bool isMemObjPtr = __is_member_object_pointer(Type);
 
@@ -1378,9 +1372,9 @@ namespace enhanced::util::inline traits {
     }
 }
 
-CLANG_WARNING_POP MSVC_WARNING_POP GCC_WARNING_POP
+E_CLANG_WARNING_POP E_MSVC_WARNING_POP E_GCC_WARNING_POP
 
-CTIDY_NOLINTEND(bugprone-macro-parentheses)
+E_CTIDY_NOLINTEND(bugprone-macro-parentheses)
 
 #undef _CV_OPT_TEMPLATE
 #undef _BASE_INT_TYPE_TEMPLATE

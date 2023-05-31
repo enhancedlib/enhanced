@@ -23,18 +23,18 @@
 
 #define E_LARGE_NUM(NUMBER) enhanced::math::LargeNumber(#NUMBER)
 
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
     #define LARGE_NUM E_LARGE_NUM
 #endif
 
 namespace enhanced::math {
-    class ENHANCED_CORE_API LargeNumber : public util::Comparable<LargeNumber> {
+    class E_CORE_API LargeNumber : public util::Comparable<LargeNumber> {
     private:
-        MSVC_WARNING_PAD(4251)
+        E_MSVC_WARNING_PAD(4251)
 
         collections::ArrayList<byte> storage;
 
-        MSVC_WARNING_POP
+        E_MSVC_WARNING_POP
 
         bool isNegative;
 

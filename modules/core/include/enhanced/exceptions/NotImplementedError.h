@@ -19,12 +19,12 @@
 
 #define E_NOT_IMPLEMENTED throw enhanced::exceptions::NotImplementedError
 
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
-    #define NOT_IMPLEMENTED throw enhanced::exceptions::NotImplementedError
+#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
+    #define NOT_IMPLEMENTED E_NOT_IMPLEMENTED
 #endif
 
 namespace enhanced::exceptions {
-    class ENHANCED_CORE_API NotImplementedError : public AssertionError {
+    class E_CORE_API NotImplementedError : public AssertionError {
     public:
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::NotImplementedError)
 
@@ -33,6 +33,6 @@ namespace enhanced::exceptions {
 }
 
 // Disable the 'unused parameter' warning for not implemented functions.
-CLANG_WARNING_DISABLE("-Wunused-parameter")
-MSVC_WARNING_DISABLE(4100)
-GCC_WARNING_DISABLE("-Wunused-parameter")
+E_CLANG_WARNING_DISABLE("-Wunused-parameter")
+E_MSVC_WARNING_DISABLE(4100)
+E_GCC_WARNING_DISABLE("-Wunused-parameter")

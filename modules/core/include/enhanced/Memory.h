@@ -64,7 +64,7 @@ namespace enhanced {
      * @return void*   A pointer to the newly allocated space.
      */
     E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
-    ENHANCED_CORE_API ALLOCATOR RET_RESTRICT void* allocate(sizetype size);
+    E_CORE_API E_ALLOCATOR E_RET_RESTRICT void* allocate(sizetype size);
 
     /*!
      * Frees a memory space to which the pointer points. \n
@@ -73,7 +73,7 @@ namespace enhanced {
      *
      * @param pointer A pointer.
      */
-    ENHANCED_CORE_API void release(void* pointer);
+    E_CORE_API void release(void* pointer);
 
     /*!
      * Sets a memory space of a pointer to the same value.
@@ -84,7 +84,7 @@ namespace enhanced {
      * @param aByte   A byte (range: 0 ~ 255).
      * @param size    The byte size of the pointer. (generally: "<memory size> * sizeof(<type>)").
      */
-    ENHANCED_CORE_API void memoryFill(void* ptr, byte aByte, sizetype size);
+    E_CORE_API void memoryFill(void* ptr, byte aByte, sizetype size);
 
     /*!
      * Copies a memory space.
@@ -95,5 +95,5 @@ namespace enhanced {
      * @param source        A source pointer.
      * @param size          The byte size of the source pointer. (generally: "<count> * sizeof(<type>)").
      */
-    ENHANCED_CORE_API void memoryCopy(void* destination, const void* source, sizetype size);
+    E_CORE_API void memoryCopy(void* destination, const void* source, sizetype size);
 }

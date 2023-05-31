@@ -26,7 +26,7 @@
     inline constexpr NAME& operator=(const NAME& other) noexcept = default; \
     inline constexpr NAME& operator=(NAME&& other) noexcept = default;
 
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
     #define INTEGRAL_EXTENSION_DEFAULT_METHODS E_INTEGRAL_EXTENSION_DEFAULT_METHODS
 #endif
 

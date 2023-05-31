@@ -21,7 +21,7 @@
 
 namespace enhanced::io {
     // TODO: Support encoding
-    class ENHANCED_CORE_API OutputStream : public Closeable, Flushable {
+    class E_CORE_API OutputStream : public Closeable, Flushable {
     public:
         virtual void write(byte b) const;
 

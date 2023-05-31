@@ -16,7 +16,7 @@
 #include <enhanced/io/InputStream.h>
 
 namespace enhanced::io {
-    class ENHANCED_CORE_API BufferInputStream : public InputStream {
+    class E_CORE_API BufferInputStream : public InputStream {
     public:
         E_ANNOTATE(RetNotIgnored)
         byte get() const override;

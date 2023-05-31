@@ -38,7 +38,7 @@ namespace enhanced {
     requires util::isCharType<CharType>
     CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept : value(other.value), length(other.length), isOwn(other.isOwn) {
         other.value = nullptr;
-        other.length = SIZE_TYPE_MAX;
+        other.length = E_SIZE_TYPE_MAX;
         other.isOwn = false;
     }
 
@@ -118,7 +118,7 @@ namespace enhanced {
         isOwn = other.isOwn;
 
         other.value = nullptr;
-        other.length = SIZE_TYPE_MAX;
+        other.length = E_SIZE_TYPE_MAX;
         other.isOwn = false;
 
         return *this;

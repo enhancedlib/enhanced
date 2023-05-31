@@ -39,7 +39,7 @@ namespace enhancedInternal::collections {
         first(other.first), last(other.last), size(other.size) {
         other.first = nullptr;
         other.last = nullptr;
-        other.size = SIZE_TYPE_MAX;
+        other.size = E_SIZE_TYPE_MAX;
     }
 
     E_ANNOTATE(RetNotIgnored)
@@ -52,7 +52,7 @@ namespace enhancedInternal::collections {
             nextNode(indexer);
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     E_ANNOTATE(RetNotIgnored)
@@ -182,7 +182,7 @@ namespace enhancedInternal::collections {
     }
 
     void LinkedListImpl::clear0(OpDestroy opDestroy) {
-        if (size == SIZE_TYPE_MAX) return;
+        if (size == E_SIZE_TYPE_MAX) return;
 
         while (size-- > 1) {
             prevNode(last);
@@ -210,7 +210,7 @@ namespace enhancedInternal::collections {
 
     E_ANNOTATE(RetNotIgnored)
     bool LinkedListImpl::LinkedListIteratorImpl::isBegin0() const {
-        return indexer == (Node*) SIZE_TYPE_MAX;
+        return indexer == (Node*) E_SIZE_TYPE_MAX;
     }
 
     E_ANNOTATE(RetNotIgnored)
@@ -257,7 +257,7 @@ namespace enhancedInternal::collections {
     }
 
     void LinkedListImpl::LinkedListIteratorImpl::setBegin0() const {
-        indexer = (Node*) SIZE_TYPE_MAX;
+        indexer = (Node*) E_SIZE_TYPE_MAX;
     }
 
     void LinkedListImpl::LinkedListIteratorImpl::setEnd0() const {

@@ -47,7 +47,7 @@ namespace enhanced {
         inline Array(const Array& other) noexcept : size(other.size), elements(other.elements) {}
 
         inline Array(Array&& other) noexcept : size(other.size), elements(other.elements) {
-            other.size = SIZE_TYPE_MAX;
+            other.size = E_SIZE_TYPE_MAX;
             other.elements = nullptr;
         }
 
@@ -97,7 +97,7 @@ namespace enhanced {
             size = other.size;
             elements = other.elements;
 
-            other.size = SIZE_TYPE_MAX;
+            other.size = E_SIZE_TYPE_MAX;
             other.elements = nullptr;
 
             return *this;
@@ -117,7 +117,7 @@ namespace enhanced {
      * @param count        The number of elements.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<array-type>)").
      */
-    ENHANCED_CORE_API void arrayFill(E_ANNOTATE(InOut) void* array, qword value, sizetype count, sizetype sizeOfType);
+    E_CORE_API void arrayFill(E_ANNOTATE(InOut) void* array, qword value, sizetype count, sizetype sizeOfType);
 
     /*!
      * Sets elements of an array to the same value (pointer edition).
@@ -132,7 +132,7 @@ namespace enhanced {
      * @param valuePtr     A pointer to the value.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<type>)").
      */
-    ENHANCED_CORE_API void arrayFillPtr(E_ANNOTATE(InOut) void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
+    E_CORE_API void arrayFillPtr(E_ANNOTATE(InOut) void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
 
     /*!
      * Sets elements of an array to the same value (template edition).
@@ -170,7 +170,7 @@ namespace enhanced {
      * @param count         The number of elements.
      * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
      */
-    ENHANCED_CORE_API void arrayCopy(E_ANNOTATE(InOut) void* destination, const void* source, sizetype count, sizetype sizeOfType);
+    E_CORE_API void arrayCopy(E_ANNOTATE(InOut) void* destination, const void* source, sizetype count, sizetype sizeOfType);
 
 
     /*!

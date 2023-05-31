@@ -18,7 +18,7 @@
 #include <enhanced/io/OutputStream.h>
 
 namespace enhanced::io {
-    class ENHANCED_CORE_API FileOutputStream : public OutputStream {
+    class E_CORE_API FileOutputStream : public OutputStream {
     public:
         void close() const override;
 

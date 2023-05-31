@@ -20,7 +20,7 @@
 namespace enhanced {
     template <typename CharType>
     requires util::isCharType<CharType>
-    class ENHANCED_CORE_API CharSequence {
+    class E_CORE_API CharSequence {
         template <typename Type>
         requires util::isCharType<Type>
         friend class TString;

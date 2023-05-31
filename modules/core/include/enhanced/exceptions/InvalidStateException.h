@@ -18,7 +18,7 @@
 #include <enhanced/exceptions/RuntimeException.h>
 
 namespace enhanced::exceptions {
-    class ENHANCED_CORE_API InvalidStateException : public RuntimeException {
+    class E_CORE_API InvalidStateException : public RuntimeException {
     public:
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::InvalidStateException)
 

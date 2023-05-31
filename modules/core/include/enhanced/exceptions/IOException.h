@@ -17,7 +17,7 @@
 #include <enhanced/exceptions/Exception.h>
 
 namespace enhanced::exceptions {
-    class ENHANCED_CORE_API IOException : public Exception {
+    class E_CORE_API IOException : public Exception {
     public:
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::IOException)
 

@@ -24,12 +24,12 @@
         return #NAME; \
     }
 
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
     #define DEFINE_EXCEPTION_NAME E_DEFINE_EXCEPTION_NAME
 #endif
 
 namespace enhanced::exceptions {
-    class ENHANCED_CORE_API Exception {
+    class E_CORE_API Exception {
     protected:
         String message;
 
@@ -63,9 +63,9 @@ namespace enhanced::exceptions {
 
     using ExceptionHandler = void (*)();
 
-    ENHANCED_CORE_API void defaultExceptionHandler() noexcept;
+    E_CORE_API void defaultExceptionHandler() noexcept;
 
-    ENHANCED_CORE_API const ExceptionHandler& setupExceptionHandler(const ExceptionHandler& handler) noexcept;
+    E_CORE_API const ExceptionHandler& setupExceptionHandler(const ExceptionHandler& handler) noexcept;
 
-    ENHANCED_CORE_API extern ExceptionHandler exceptionHandler;
+    E_CORE_API extern ExceptionHandler exceptionHandler;
 }

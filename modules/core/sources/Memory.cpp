@@ -27,7 +27,7 @@ namespace enhanced {
     const Nothrow nothrow {};
 
     E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
-    ALLOCATOR RET_RESTRICT void* allocate(sizetype size) {
+    E_ALLOCATOR E_RET_RESTRICT void* allocate(sizetype size) {
         if (size == 0) return nullptr;
 
         return malloc(size);
@@ -38,7 +38,7 @@ namespace enhanced {
     }
 
     void memoryFill(void* ptr, byte aByte, sizetype size) {
-    #ifndef COMPILER_MSVC
+    #ifndef E_SM_COMPILER_MSVC
         __builtin_memset(ptr, aByte, size);
     #else
         if (ptr == nullptr || size == 0) return;
@@ -50,7 +50,7 @@ namespace enhanced {
     }
 
     void memoryCopy(void* destination, const void* source, sizetype size) {
-    #ifndef COMPILER_MSVC
+    #ifndef E_SM_COMPILER_MSVC
         __builtin_memcpy(destination, source, size);
     #else
         if (destination == nullptr || source == nullptr || size == 0) return;
@@ -75,7 +75,7 @@ using enhanced::nothrow;
 // TODO
 
 E_ANNOTATE(RetNotNull)
-ALLOCATOR void* operator new(enhanced::sizetype size) {
+E_ALLOCATOR void* operator new(enhanced::sizetype size) {
     void* space = allocate(size);
     if (space == nullptr) {
         throw MemoryAllocationError("Cannot allocate memory");
@@ -84,21 +84,21 @@ ALLOCATOR void* operator new(enhanced::sizetype size) {
 }
 
 E_ANNOTATE(RetNotNull)
-ALLOCATOR void* operator new[](enhanced::sizetype size) {
+E_ALLOCATOR void* operator new[](enhanced::sizetype size) {
     return operator new(size);
 }
 
 E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
-ALLOCATOR RET_RESTRICT void* operator new(enhanced::sizetype size, enhanced::NothrowRef) noexcept {
+E_ALLOCATOR E_RET_RESTRICT void* operator new(enhanced::sizetype size, enhanced::NothrowRef) noexcept {
     return allocate(size);
 }
 
 E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
-ALLOCATOR RET_RESTRICT void* operator new[](enhanced::sizetype size, enhanced::NothrowRef) noexcept {
+E_ALLOCATOR E_RET_RESTRICT void* operator new[](enhanced::sizetype size, enhanced::NothrowRef) noexcept {
     return operator new(size, nothrow);
 }
 
-GCC_WARNING_PAD("-Wsized-deallocation")
+E_GCC_WARNING_PAD("-Wsized-deallocation")
 
 void operator delete(void* block) noexcept {
     release(block);
@@ -116,4 +116,4 @@ void operator delete[](void* block, enhanced::NothrowRef) noexcept {
     operator delete(block);
 }
 
-GCC_WARNING_POP
+E_GCC_WARNING_POP

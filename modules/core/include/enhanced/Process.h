@@ -18,8 +18,8 @@
 
 namespace enhanced {
     E_ANNOTATE(NoReturn)
-    ENHANCED_CORE_API void processExit(int status);
+    E_CORE_API void processExit(int status);
 
     E_ANNOTATE(NoReturn)
-    ENHANCED_CORE_API void processAbort();
+    E_CORE_API void processAbort();
 }

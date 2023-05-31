@@ -20,7 +20,7 @@
 #include <enhanced/io/Flushable.h>
 
 namespace enhanced::io {
-    class ENHANCED_CORE_API InputStream : public Closeable, Flushable {
+    class E_CORE_API InputStream : public Closeable, Flushable {
     public:
         E_ANNOTATE(RetNotIgnored)
         virtual byte get() const;

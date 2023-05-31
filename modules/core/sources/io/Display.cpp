@@ -18,7 +18,7 @@
 
 namespace enhanced::io {
 #define _TEMPLATE(TYPE) \
-    void display(const OutputStream& out, const TYPE& value) { \
+    void E_DISPLAY(const OutputStream& out, const TYPE& value) { \
         auto string = TString<TYPE>::from(value); \
         out.write(string.toBytes(), string.getLength() * sizeof(TYPE)); \
     } \
@@ -32,7 +32,7 @@ namespace enhanced::io {
 #undef _TEMPLATE
 
 #define _TEMPLATE(TYPE) \
-    void display(const OutputStream& out, const TYPE& value) { \
+    void E_DISPLAY(const OutputStream& out, const TYPE& value) { \
         auto string = String::from(value); \
         out.write(string.toBytes(), string.getLength() * sizeof(char)); \
     } \
@@ -49,16 +49,16 @@ namespace enhanced::io {
 
 #undef _TEMPLATE
 
-    void display(const OutputStream& out, const char* const& value) {
+    void E_DISPLAY(const OutputStream& out, const char* const& value) {
         auto str = String::from(value);
         out.write(str.toBytes(), str.getLength() * sizeof(char));
     }
 
-    void display(const OutputStream& out, const String& value) {
+    void E_DISPLAY(const OutputStream& out, const String& value) {
         out.write(value.toBytes(), value.getLength() * sizeof(char));
     }
 
-    void display(const OutputStream& out, const nulltype&) {
+    void E_DISPLAY(const OutputStream& out, const nulltype&) {
         out.write("null"_e.toBytes(), 4 * sizeof(char));
     }
 }

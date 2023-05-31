@@ -18,7 +18,7 @@
 #include <enhanced/exceptions/Error.h>
 
 namespace enhanced::exceptions {
-    class ENHANCED_CORE_API MemoryAllocationError : public Error {
+    class E_CORE_API MemoryAllocationError : public Error {
     public:
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::MemoryAllocationError)
 

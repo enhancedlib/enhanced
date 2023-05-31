@@ -58,16 +58,13 @@ namespace enhanced::io {
         E_ANNOTATE(RetNotIgnored)
         bool isSymlink() const;
 
-        E_ANNOTATE(RetNotIgnored)
-        bool isJunction() const;
-
         void create() const;
 
-        bool createIf() const; CTIDY_NOLINT(modernize-use-nodiscard)
+        bool createIf() const; E_CTIDY_NOLINT(modernize-use-nodiscard)
 
         void remove() const;
 
-        bool removeIf() const; CTIDY_NOLINT(modernize-use-nodiscard)
+        bool removeIf() const; E_CTIDY_NOLINT(modernize-use-nodiscard)
 
         E_ANNOTATE(RetNotIgnored)
         collections::ArrayList<String> splitPath() const;

@@ -28,7 +28,7 @@
         return 0; \
     }
 
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
     #define DEFINE_FOREACH_FUNC E_DEFINE_FOREACH_FUNC
 #endif
 

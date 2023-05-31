@@ -37,8 +37,8 @@ function (setup_module MODULE_NAME)
 
     target_include_directories(${MODULE_NAME}-static PRIVATE ${INCLUDE_DIRECTORIES})
 
-    target_compile_definitions(${MODULE_NAME}-static PRIVATE ENHANCED_BUILDING)
-    target_compile_definitions(${MODULE_NAME}-static PRIVATE ENHANCED_${MODULE_NAME_UPPER}_BUILDING)
+    target_compile_definitions(${MODULE_NAME}-static PRIVATE E_SM_BUILDING)
+    target_compile_definitions(${MODULE_NAME}-static PRIVATE E_SM_${MODULE_NAME_UPPER}_BUILDING)
 
     set_target_properties(${MODULE_NAME}-static PROPERTIES OUTPUT_NAME enhanced.${MODULE_NAME})
     if (WIN32)
@@ -69,9 +69,9 @@ function (setup_module MODULE_NAME)
 
     add_library(${MODULE_NAME}-shared SHARED ${SOURCES})
 
-    target_compile_definitions(${MODULE_NAME}-shared PRIVATE ENHANCED_BUILDING)
-    target_compile_definitions(${MODULE_NAME}-shared PRIVATE ENHANCED_${MODULE_NAME_UPPER}_BUILDING)
-    target_compile_definitions(${MODULE_NAME}-shared PUBLIC ENHANCED_${MODULE_NAME_UPPER}_SHARED_LIBRARY)
+    target_compile_definitions(${MODULE_NAME}-shared PRIVATE E_SM_BUILDING)
+    target_compile_definitions(${MODULE_NAME}-shared PRIVATE E_SM_${MODULE_NAME_UPPER}_BUILDING)
+    target_compile_definitions(${MODULE_NAME}-shared PUBLIC E_SM_${MODULE_NAME_UPPER}_SHARED_LIBRARY)
 
     target_include_directories(${MODULE_NAME}-shared PRIVATE ${INCLUDE_DIRECTORIES})
 

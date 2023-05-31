@@ -16,7 +16,7 @@
 #include <enhanced/io/OutputStream.h>
 
 namespace enhanced::io {
-    class ENHANCED_CORE_API BufferOutputStream : public OutputStream {
+    class E_CORE_API BufferOutputStream : public OutputStream {
     public:
         void write(byte ch) const override;
 

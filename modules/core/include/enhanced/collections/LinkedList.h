@@ -22,7 +22,7 @@
 #include <enhanced/collections/List.h>
 
 namespace enhancedInternal::collections {
-    class ENHANCED_CORE_API LinkedListImpl {
+    class E_CORE_API LinkedListImpl {
     protected:
         struct Node {
             void* value;
@@ -43,7 +43,7 @@ namespace enhancedInternal::collections {
         using OpDestroy = void (*)(void*);
         using OpEqual = bool (*)(void*, void*);
 
-        class ENHANCED_CORE_API LinkedListIteratorImpl {
+        class E_CORE_API LinkedListIteratorImpl {
         protected:
             const LinkedListImpl* linkedList;
 
@@ -247,7 +247,7 @@ namespace enhanced::collections {
 
         E_ANNOTATE(RetNotIgnored)
         inline bool contain(const Type& value) const override {
-            return indexOf(value) != SIZE_TYPE_MAX;
+            return indexOf(value) != E_SIZE_TYPE_MAX;
         }
 
         E_ANNOTATE(RetNotIgnored)
@@ -257,12 +257,12 @@ namespace enhanced::collections {
 
         E_ANNOTATE(RetNotIgnored)
         inline ForwardIterator<LinkedListIterator> forwardIterator() const {
-            return LinkedListIterator {this, (Node*) SIZE_TYPE_MAX};
+            return LinkedListIterator {this, (Node*) E_SIZE_TYPE_MAX};
         }
 
         E_ANNOTATE(RetNotIgnored)
         inline ReverseIterator<LinkedListIterator> reverseIterator() const {
-            return {this, nullptr};
+            return LinkedListIterator {this, nullptr};
         }
 
         E_DEFINE_FOREACH_FUNC(LinkedListIterator)

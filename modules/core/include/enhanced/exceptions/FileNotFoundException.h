@@ -17,7 +17,7 @@
 #include <enhanced/exceptions/IOException.h>
 
 namespace enhanced::exceptions {
-    class ENHANCED_CORE_API FileNotFoundException : public IOException {
+    class E_CORE_API FileNotFoundException : public IOException {
     public:
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::FileNotFoundException)
 

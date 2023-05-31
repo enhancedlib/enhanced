@@ -40,7 +40,7 @@ namespace enhanced::math {
     using NInt32 = TInt<uint32, TIntMode::NEGATIVE>;
     using NInt64 = TInt<uint64, TIntMode::NEGATIVE>;
 
-#if defined(ENHANCED_SUPPRESS_OVERWRITE) || defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_MATH_MACRO)
+#if defined(E_SM_SUPPRESS_OVERWRITE) || defined(E_SM_CORE_SUPPRESS_OVERWRITE_MATH_MACRO)
     #pragma push_macro("max")
     #pragma push_macro("min")
 #endif
@@ -73,7 +73,7 @@ namespace enhanced::math {
         return (x < y) ? x : y;
     }
 
-#if defined(ENHANCED_SUPPRESS_OVERWRITE) || defined(ENHANCED_CORE_SUPPRESS_OVERWRITE_MATH_MACRO)
+#if defined(E_SM_SUPPRESS_OVERWRITE) || defined(E_SM_CORE_SUPPRESS_OVERWRITE_MATH_MACRO)
     #pragma pop_macro("max")
     #pragma pop_macro("min")
 #endif
@@ -89,10 +89,10 @@ namespace enhanced::math {
     requires util::isIntegralType<X> && util::isIntegralType<Y>
     E_ANNOTATE(RetNotIgnored)
     inline constexpr util::ToUnsigned<util::Conditional<(sizeof(X) > sizeof(Y)), X, Y>> difference(X x, Y y) noexcept(noexcept(x < y)) {
-        CLANG_WARNING_PAD("-Wsign-compare") GCC_WARNING_PAD("-Wsign-compare")
+        E_CLANG_WARNING_PAD("-Wsign-compare") E_GCC_WARNING_PAD("-Wsign-compare")
 
         return (x < y) ? y - x : x - y;
 
-        CLANG_WARNING_POP GCC_WARNING_POP
+        E_CLANG_WARNING_POP E_GCC_WARNING_POP
     }
 }

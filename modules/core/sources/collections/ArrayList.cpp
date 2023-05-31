@@ -42,8 +42,8 @@ namespace enhancedInternal::collections {
     ArrayListImpl::ArrayListImpl(ArrayListImpl&& other) noexcept : elements(other.elements), size(other.size),
         capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity; }) {
         other.elements = nullptr;
-        other.size = SIZE_TYPE_MAX;
-        other.capacity = SIZE_TYPE_MAX;
+        other.size = E_SIZE_TYPE_MAX;
+        other.capacity = E_SIZE_TYPE_MAX;
     }
 
     E_ANNOTATE(RetNotIgnored)
@@ -75,7 +75,7 @@ namespace enhancedInternal::collections {
             }
         }
 
-        return SIZE_TYPE_MAX;
+        return E_SIZE_TYPE_MAX;
     }
 
     void ArrayListImpl::addFirst0(void* element, OpCopy opCopy) {

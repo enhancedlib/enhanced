@@ -18,7 +18,7 @@
 #include <enhanced/exceptions/Error.h>
 
 namespace enhanced::exceptions {
-    class ENHANCED_CORE_API AssertionError : public Error {
+    class E_CORE_API AssertionError : public Error {
     public:
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::AssertionError)
 

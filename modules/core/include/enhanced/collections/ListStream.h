@@ -37,7 +37,7 @@ namespace enhanced::collections {
         private:
             Iterator<Element>& agent;
 
-            mutable sizetype index = SIZE_TYPE_MAX;
+            mutable sizetype index = E_SIZE_TYPE_MAX;
 
             explicit ListStreamIterator(Iterator<Element>& agent) : agent(agent) {}
 
@@ -86,7 +86,7 @@ namespace enhanced::collections {
 
             void reset() const override {
                 agent.reset();
-                index = SIZE_TYPE_MAX;
+                index = E_SIZE_TYPE_MAX;
             }
 
             E_ANNOTATE(RetNotIgnored)

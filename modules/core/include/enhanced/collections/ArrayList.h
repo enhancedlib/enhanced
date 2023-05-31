@@ -23,7 +23,7 @@
 #include <enhanced/collections/List.h>
 
 namespace enhancedInternal::collections {
-    class ENHANCED_CORE_API ArrayListImpl {
+    class E_CORE_API ArrayListImpl {
     protected:
         void** elements;
 
@@ -40,7 +40,7 @@ namespace enhancedInternal::collections {
 
         ExpansionSizeFunc expansionSizeFunc;
 
-        class ENHANCED_CORE_API ArrayListIteratorImpl {
+        class E_CORE_API ArrayListIteratorImpl {
         protected:
             const ArrayListImpl* arrayList;
 
@@ -243,7 +243,7 @@ namespace enhanced::collections {
 
         E_ANNOTATE(RetNotIgnored)
         inline bool contain(const Type& value) const override {
-            return indexOf(value) != SIZE_TYPE_MAX;
+            return indexOf(value) != E_SIZE_TYPE_MAX;
         }
 
         E_ANNOTATE(RetNotIgnored)
@@ -258,7 +258,7 @@ namespace enhanced::collections {
 
         E_ANNOTATE(RetNotIgnored)
         inline ReverseIterator<ArrayListIterator> reverseIterator() const noexcept {
-            return {this, elements + size};
+            return ArrayListIterator {this, elements + size};
         }
 
         E_DEFINE_FOREACH_FUNC(ArrayListIterator)

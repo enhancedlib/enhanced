@@ -19,7 +19,7 @@
 
 #define E_INIT_LIST_CONSTRUCTOR(NAME, TYPE) inline NAME(std::initializer_list<TYPE> list) : NAME(enhanced::InitializerList(list)) {}
 
-#ifdef ENHANCED_MACRO_NO_PREFIX_ALIAS
+#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
     #define INIT_LIST_CONSTRUCTOR E_INIT_LIST_CONSTRUCTOR
 #endif
 
