@@ -1,14 +1,10 @@
 # Enhanced
 
-***開發中***
+***開發中 - 請在[GitHub Issues](https://github.com/enhancedlib/enhanced/issues)提交bug***
 
 一個強大的C++開發框架
 
-此軟件遵循[MIT License with the Distribution Exception](../LICENSE)。
-
-請在[GitHub Issues](https://github.com/enhancedlib/enhanced/issues)提交bug。
-
-[語言](LANGUAGES.md) | [版權聲明](../COPYRIGHT) | [網站](https://enhancedlib.github.io/) | [GitHub倉庫](https://github.com/enhancedlib/enhanced/)
+[語言](LANGUAGES.md) | [許可證](../LICENSE) | [版權聲明](../COPYRIGHT) | [網站](https://enhancedlib.github.io/) | [GitHub倉庫](https://github.com/enhancedlib/enhanced/)
 
 ---
 

@@ -1,14 +1,10 @@
 # Enhanced
 
-***In Development***
+***In Development - Please Report Bugs at [GitHub Issues](https://github.com/enhancedlib/enhanced/issues)***
 
 A Powerful C++ Development Framework
 
-This software is licensed under the [MIT License with the Distribution Exception](LICENSE).
-
-Please report bugs at [GitHub Issues](https://github.com/enhancedlib/enhanced/issues).
-
-[Languages](readme/LANGUAGES.md) | [Copyright Notice](COPYRIGHT) | [Website](https://enhancedlib.github.io/) | [GitHub Repository](https://github.com/enhancedlib/enhanced/)
+[Languages](readme/LANGUAGES.md) | [License](LICENSE) | [Copyright Notice](COPYRIGHT) | [Website](https://enhancedlib.github.io/) | [GitHub Repository](https://github.com/enhancedlib/enhanced/)
 
 ---
 

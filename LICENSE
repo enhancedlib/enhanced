@@ -1,16 +1,24 @@
-MIT License
+Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
 
-Copyright (c) 2023 Liu Baihao. All rights reserved.
+Permission is hereby granted, to any person obtaining a copy of this software
+and associated documentation files (the "Software"), to deal in the Software,
+including without limitation the rights to use, copy, modify, merge,
+distribute, subject to the following restrictions:
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
+1. The above copyright notice and this permission notice shall be included in
+   all copies of the Software and modified versions.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. You may not charge any fees or receive other compensation for the
+   distribution of the Software.
+
+3. You may not misrepresent the source of the Software, and you may not claim
+   that you wrote the original version.
+
+4. If you use this Software in your product, you should indicate the it in
+   the product documentation.
+
+Unless you have obtained the written consent of the copyright holders,
+you may not break these restrictions.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,12 +27,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
--------------------------------------------------------------------------------
-
-"DISTRIBUTION" EXCEPTION
-
-You may not distribute the Software in an unfair manner, including without
-limitation to sales, conditions attached and/or bundling other softwares. The
-original address, software website or source code repository shall be indicated
-at the time of distribution.
