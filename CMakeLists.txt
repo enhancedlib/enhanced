@@ -1,22 +1,44 @@
+## This file is part of Enhanced Framework.
 ##
-## Copyright (C) 2023 Liu Baihao. All rights reserved.
+## Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
 ##
-## Licensed under the MIT License with the Distribution Exception.
+## Permission is hereby granted, to any person obtaining a copy of this software
+## and associated documentation files (the "Software"), to deal in the Software,
+## including without limitation the rights to use, copy, modify, merge,
+## distribute. Unless you have obtained permission from the copyright holders,
+## subject to the following restrictions:
 ##
-## You may not use this file except in compliance with the License.
+## 1. The above copyright notice and this permission notice shall be included in
+##    all copies of the Software and modified versions.
 ##
-## This file is part of The Enhanced Software, and IT ALWAYS
-## PROVIDES "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-## INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY.
+## 2. You may not misrepresent the source of the Software, and you may not claim
+##    that you wrote the original version.
 ##
+## 3. You may not misrepresent the modified version as the original version.
+##
+## 4. You may not charge any fees or receive other compensation for the
+##    distribution of the Software, excluding distribution of modified versions
+##    and products using the Software.
+##
+## 5. If you use this Software in your product, you shall indicate it.
+##
+## 6. Neither the name of the author nor the names of its contributors may
+##    be used to endorse or promote products derived from the Software
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+## AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+## SOFTWARE.
 
 cmake_minimum_required(VERSION 3.13)
 
 project("Enhanced")
 
-message("* The Enhanced Project")
+message("* Enhanced Framework")
 message("* Copyright (C) 2023 Liu Baihao. All rights reserved.")
-message("* Licensed under the MIT License with \"Distribution\" Exception.")
 
 function (setup_module MODULE_NAME)
     file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp)

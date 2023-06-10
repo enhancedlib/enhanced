@@ -4,7 +4,7 @@
 
 一個強大的C++開發框架
 
-[語言](LANGUAGES.md) | [許可證](../LICENSE) | [版權聲明](../COPYRIGHT) | [網站](https://enhancedlib.github.io/) | [GitHub倉庫](https://github.com/enhancedlib/enhanced/)
+[語言](LANGUAGES.md) | [許可協議](../LICENSE) | [版權聲明](../COPYRIGHT) | [網站](https://enhancedlib.github.io/) | [GitHub倉庫](https://github.com/enhancedlib/enhanced/)
 
 ---
 
@@ -57,4 +57,4 @@
 
 ### 問：這個軟件免費嗎？
 
-答：是的，這個軟件免費並且開源。但使用此軟件必須遵守[許可協議（MIT License with the Distribution Exception）](../LICENSE)，否則，你不得使用此軟件。
+答：是的，這個軟件免費並且開源。但使用此軟件必須遵守[許可協議](../LICENSE)，否則，你不得使用此軟件。
