@@ -45,12 +45,12 @@
 using enhanced::util::removeConst;
 
 namespace enhanced {
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     String TypeInfo::getName() const {
         return removeConst(info.name());
     }
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TypeInfo::hashCode() const {
         return info.hash_code();
     }

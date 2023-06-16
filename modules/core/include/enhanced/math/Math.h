@@ -74,27 +74,27 @@ namespace enhanced::math {
 #undef min
 
     template <typename Type>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     inline constexpr const Type& max(const Type& x, const Type& y) noexcept(noexcept(x > y)) {
         return (x > y) ? x : y;
     }
 
     template <typename X, typename Y>
     requires util::isIntegralType<X> && util::isIntegralType<Y>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> max(const X& x, const Y& y) noexcept {
         return (x > y) ? x : y;
     }
 
     template <typename Type>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     inline constexpr const Type& min(const Type& x, const Type& y) noexcept(noexcept(x < y)) {
         return (x < y) ? x : y;
     }
 
     template <typename X, typename Y>
     requires util::isIntegralType<X> && util::isIntegralType<Y>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> min(const X& x, const Y& y) noexcept {
         return (x < y) ? x : y;
     }
@@ -106,14 +106,14 @@ namespace enhanced::math {
 
     template <typename IntegralType>
     requires util::isIntegralType<IntegralType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     inline constexpr util::ToUnsigned<IntegralType> abs(IntegralType number) noexcept {
         return (number >= 0) ? number : -number;
     }
 
     template <typename X, typename Y>
     requires util::isIntegralType<X> && util::isIntegralType<Y>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     inline constexpr util::ToUnsigned<util::Conditional<(sizeof(X) > sizeof(Y)), X, Y>> difference(X x, Y y) noexcept(noexcept(x < y)) {
         E_CLANG_WARNING_PAD("-Wsign-compare") E_GCC_WARNING_PAD("-Wsign-compare")
 

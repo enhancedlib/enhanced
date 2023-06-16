@@ -41,61 +41,43 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/util/Traits.h>
+#include <enhanced/Iterator.h>
 
-#define __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) \
-ACCESS_MODIFIER: \
-    E_ANNOTATE(RetNoDiscard) \
-    inline const Self* operator->() const { \
-        return &self; \
-    } \
-    E_ANNOTATE(RetNoDiscard) \
-    inline const Self& operator*() const { \
-        return operator()(); \
-    } \
-    E_ANNOTATE(RetNoDiscard) \
-    inline operator const Self&() const { \
-        return operator()(); \
-    } \
-    E_ANNOTATE(RetNoDiscard) \
-    inline const Self& operator()() const
+namespace enhanced {
+    template <typename Type>
+    struct Iterable {
+        using Impl = Type;
 
-#define __E_PROPERTY_SETTER_set(ACCESS_MODIFIER) \
-ACCESS_MODIFIER: \
-    E_ANNOTATE(ReturnSelf) \
-    inline Self& operator=(const Self& value)
+        E_ANNOTATE(RetNoDiscard)
+        inline constexpr auto begin() const noexcept {
+            auto it = ForEachIterator<decltype(static_cast<const Type*>(this)->forwardIterator())>(static_cast<const Type*>(this)->forwardIterator());
+            it.step();
+            return it;
+        }
 
-#define __E_PROPERTY_GETTER_getter(ACCESS_MODIFIER) \
-    __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) { \
-        return self; \
-    }
+        E_ANNOTATE(RetNoDiscard)
+        inline constexpr byte end() const noexcept {
+            return 0;
+        }
+    };
 
-#define __E_PROPERTY_SETTER_setter(ACCESS_MODIFIER) \
-    __E_PROPERTY_SETTER_set(ACCESS_MODIFIER) { \
-        return self = value; \
-    }
+    template <typename Type>
+    struct ReversedIterable : Type {
+        const Type& iterable;
 
-#define E_PROPERTIES_CLASS(NAME) using __PROPERTIES_CLASS_SELF = NAME
+        ReversedIterable(const Type& iterable) noexcept
+        requires util::isBaseOf<Iterable<Type>, Type> : iterable(iterable) {}
 
-#define E_PROPERTIES_STRUCT(NAME) \
-    private: \
-        E_PROPERTIES_CLASS(NAME); \
-    public:
+        E_ANNOTATE(RetNoDiscard)
+        inline constexpr auto begin() const noexcept {
+            auto it = ForEachIterator<decltype(iterable.reverseIterator())>(iterable.reverseIterator());
+            it.step();
+            return it;
+        }
 
-#define E_PROPERTY(TYPE, NAME, GETTER, SETTER, ...) \
-    struct Property_##NAME final { \
-        friend __PROPERTIES_CLASS_SELF; \
-    private: \
-        using Self = TYPE; \
-        Self self; \
-        inline Property_##NAME(Self value) : self(enhanced::util::move(value)) {} \
-        __E_PROPERTY_GETTER_##GETTER \
-        __E_PROPERTY_SETTER_##SETTER \
-    public: \
-        __VA_ARGS__ \
-    } NAME
-
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define PROPERTIES_CLASS E_PROPERTIES_CLASS
-    #define PROPERTIES_STRUCT E_PROPERTIES_STRUCT
-    #define PROPERTY E_PROPERTY
-#endif
+        E_ANNOTATE(RetNoDiscard)
+        inline constexpr byte end() const noexcept {
+            return 0;
+        }
+    };
+}

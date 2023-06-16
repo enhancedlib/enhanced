@@ -43,6 +43,7 @@
 #include <enhanced/Annotations.h>
 #include <enhanced/Memory.h>
 #include <enhanced/Iterator.h>
+#include <enhanced/Iterable.h>
 #include <enhanced/InitializerList.h>
 #include <enhanced/util/Traits.h>
 #include <enhanced/collections/List.h>
@@ -77,19 +78,19 @@ namespace enhancedInternal::collections {
 
             LinkedListIteratorImpl(const LinkedListImpl* linkedList, Node* init);
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             void* get0() const;
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             bool hasNext0() const;
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             bool hasPrev0() const;
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             bool isBegin0() const;
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             bool isEnd0() const;
 
             void next0() const;
@@ -119,16 +120,16 @@ namespace enhancedInternal::collections {
 
         LinkedListImpl(LinkedListImpl&& other) noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         void* getLast0() const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         void* getFirst0() const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         void* get0(enhanced::sizetype index) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         enhanced::sizetype indexOf0(void* value, OpEqual opEqual) const;
 
         void addFirst0(void* element, OpCopy opCopy);
@@ -149,7 +150,7 @@ namespace enhancedInternal::collections {
 
 namespace enhanced::collections {
     template <typename Type>
-    class LinkedList : public List<Type>, private enhancedInternal::collections::LinkedListImpl {
+    class LinkedList : public List<Type>, public Iterable<LinkedList<Type>>, private enhancedInternal::collections::LinkedListImpl {
     private:
         using LinkedListImpl = enhancedInternal::collections::LinkedListImpl;
 
@@ -167,7 +168,7 @@ namespace enhanced::collections {
             delete reinterpret_cast<Type*>(element);
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static bool equal(void* element, void* value) {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
@@ -177,32 +178,32 @@ namespace enhanced::collections {
         public:
             inline explicit LinkedListIterator(const LinkedList<Type>* linkedList, Node* init) : LinkedListIteratorImpl(linkedList, init) {}
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             inline Type& get() const override {
                 return *reinterpret_cast<Type*>(get0());
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             inline sizetype count() const override {
                 return static_cast<const LinkedList<Type>*>(linkedList)->size;
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             inline bool hasNext() const override {
                 return hasNext0();
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             inline bool hasPrev() const override {
                 return hasPrev0();
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             inline bool isBegin() const override {
                 return isBegin0();
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             inline bool isEnd() const override {
                 return isEnd0();
             }
@@ -261,59 +262,62 @@ namespace enhanced::collections {
             clear();
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline sizetype getSize() const override {
             return size;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline bool isEmpty() const override {
             return size == 0;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline bool contain(const Type& value) const override {
             return indexOf(value) != E_SIZE_TYPE_MAX;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline LinkedListIterator iterator() const {
-            return forwardIterator();
+            return LinkedListIterator {this, (Node*) E_SIZE_TYPE_MAX};
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline ForwardIterator<LinkedListIterator> forwardIterator() const {
             return LinkedListIterator {this, (Node*) E_SIZE_TYPE_MAX};
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline ReverseIterator<LinkedListIterator> reverseIterator() const {
             return LinkedListIterator {this, nullptr};
         }
 
-        E_DEFINE_FOREACH_FUNC(LinkedListIterator)
+        E_ANNOTATE(RetNoDiscard)
+        inline ReversedIterable<LinkedList<Type>> reversed() const noexcept {
+            return ReversedIterable<LinkedList<Type>>(*this);
+        }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline sizetype indexOf(const Type& value) const override {
             return indexOf0(util::removePtrConst(&value), equal);
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type& getLast() const override {
             return *reinterpret_cast<Type*>(getLast0());
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type& getFirst() const override {
             return *reinterpret_cast<Type*>(getFirst0());
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type& get(sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type& operator[](sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }

@@ -58,27 +58,27 @@ namespace enhanced {
     public:
         inline constexpr InitializerList(std::initializer_list<Type> initList) noexcept : initList(initList) {}
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr const Type* begin() const noexcept {
             return initList.begin();
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr const Type* end() const noexcept {
             return initList.end();
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr const Type* toArray() const noexcept {
             return initList.begin();
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr sizetype getSize() const noexcept {
             return initList.size();
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Type& get(sizetype index) const noexcept {
             return toArray()[index];
         }

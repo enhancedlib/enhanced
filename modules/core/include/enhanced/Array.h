@@ -77,17 +77,17 @@ namespace enhanced {
             other.elements = nullptr;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type& operator[](sizetype index) const noexcept {
             return elements[index];
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline sizetype getSize() const noexcept {
             return size;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type* raw() const noexcept {
             return elements;
         }
@@ -96,17 +96,17 @@ namespace enhanced {
             delete[] elements;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type* begin() const noexcept {
             return raw();
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type* end() const noexcept {
             return elements + size;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Array& operator=(const Array& other) noexcept {
             if (this == &other) return *this;
 
@@ -116,7 +116,7 @@ namespace enhanced {
             return *this;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Array& operator=(Array&& other) noexcept {
             if (this == &other) return *this;
 

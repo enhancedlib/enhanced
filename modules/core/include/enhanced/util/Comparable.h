@@ -49,44 +49,44 @@ namespace enhanced::util {
 
     template <typename Type>
     struct Comparable {
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool equal(const Type& other) const {
             return static_cast<const Type*>(this)->compare(other) == ComparisonResult::EQUAL;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator==(const Type& other) const {
             return equal(other);
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator!=(const Type& other) const {
             return !equal(other);
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator<(const Type& other) const {
             return static_cast<const Type*>(this)->compare(other) == ComparisonResult::LESS;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator>(const Type& other) const {
             return static_cast<const Type*>(this)->compare(other) == ComparisonResult::GREATER;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator<=(const Type& other) const {
             auto result = static_cast<const Type*>(this)->compare(other);
             return result == ComparisonResult::LESS || result == ComparisonResult::EQUAL;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator>=(const Type& other) const {
             auto result = static_cast<const Type*>(this)->compare(other);
             return result == ComparisonResult::GREATER || result == ComparisonResult::EQUAL;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr ComparisonResult operator<=>(const Type& other) const {
             return static_cast<const Type*>(this)->compare(other);
         }

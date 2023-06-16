@@ -61,14 +61,14 @@ using enhanced::exceptions::NullPointerException;
 namespace enhanced {
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::from(bool value) {
-        return value ? TString(E_SWITCH_STR(CharType, "true")) : E_SWITCH_STR(CharType, "false");
+        return value ? TString(E_SWITCH_STR(CharType, "true")) : TString(E_SWITCH_STR(CharType, "false"));
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::from(CharType value) {
         TString<CharType> string {1};
         string.set(0, value);
@@ -77,7 +77,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::from(qword value, bool isNegative) {
         // TODO: Faster implementation
         if (isNegative) value = -((int64) value);
@@ -93,14 +93,14 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::own(const CharType* value, sizetype length) {
         return {TStringUtil<CharType>::copy(value), length, true};
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::own(const CharType* value) {
         return own(value, TStringUtil<CharType>::calcLength(value));
     }
@@ -169,7 +169,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TString<CharType>::indexOf(const CharType ch) const noexcept {
         for (sizetype index = 0; index < this->length; ++index) {
             if (this->value[index] == ch) return index;
@@ -180,7 +180,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TString<CharType>::indexOf(const TString& string) const noexcept {
         sizetype substringIndex = 0;
 
@@ -196,7 +196,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TString<CharType>::indexOf(CharType ch, sizetype getN) const noexcept {
         sizetype indexN = 0;
 
@@ -212,7 +212,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TString<CharType>::indexOf(const TString& string, sizetype getN) const noexcept {
         sizetype indexN = 0;
         sizetype substringIndex = 0;
@@ -232,7 +232,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TString<CharType>::indexOfLast(CharType ch) const noexcept {
         for (sizetype index = this->length - 1;; --index) {
             if (this->value[index] == ch) return index;
@@ -244,7 +244,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TString<CharType>::indexOfLast(const TString& string) const noexcept {
         sizetype substringIndex = string.length - 1;
 
@@ -264,7 +264,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TString<CharType>::indexOfLast(CharType ch, sizetype getN) const noexcept {
         sizetype indexN = 0;
 
@@ -282,7 +282,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TString<CharType>::indexOfLast(const TString& string, sizetype getN) const noexcept {
         sizetype indexN = 0;
         sizetype substringIndex = string.length - 1;
@@ -337,91 +337,91 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool TString<CharType>::ownStorage() const noexcept {
         return this->isOwn;
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replace(sizetype start, sizetype end, CharType newChar) const {
         return TString<CharType>(this->value).replaceTo(start, end, newChar);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replace(sizetype start, sizetype end, const TString& newSubstring) const {
         return TString<CharType>(this->value).replaceTo(start, end, newSubstring);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replace(CharType oldChar, CharType newChar) const {
         return TString<CharType>(this->value).replaceTo(oldChar, newChar);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replace(const TString& oldSubstring, const TString& newSubstring) const {
         return TString<CharType>(this->value).replaceTo(oldSubstring, newSubstring);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replace(CharType oldChar, const TString& newSubstring) const {
         return TString<CharType>(this->value).replaceTo(oldChar, newSubstring);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replace(const TString& oldSubstring, CharType newChar) const {
         return TString<CharType>(this->value).replaceTo(oldSubstring, newChar);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replaceAll(CharType oldChar, CharType newChar) const {
         return TString<CharType>(this->value).replaceAllTo(oldChar, newChar);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replaceAll(const TString& oldSubstring, const TString& newSubstring) const {
         return TString<CharType>(this->value).replaceAllTo(oldSubstring, newSubstring);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replaceAll(CharType oldChar, const TString& newSubstring) const {
         return TString<CharType>(this->value).replaceAllTo(oldChar, newSubstring);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::replaceAll(const TString& oldSubstring, CharType newChar) const {
         return TString<CharType>(this->value).replaceAllTo(oldSubstring, newChar);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::uppercase() const {
         return TString<CharType>(this->value).toUppercase();
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::lowercase() const {
         return TString<CharType>(this->value).toLowercase();
     }
@@ -748,14 +748,14 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool TString<CharType>::operator==(const TString& string) const noexcept {
         return TStringUtil<CharType>::isEqual(this->value, this->length, string.value, string.length);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::operator+(CharType ch) const {
         sizetype newLength = this->length + 1;
         TString newString(newLength);
@@ -768,7 +768,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType> TString<CharType>::operator+(const TString& string) const {
         sizetype newLength = this->length + string.length;
         TString newString(newLength);
@@ -781,14 +781,14 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType>& TString<CharType>::operator+=(CharType ch) {
         return append(ch);
     }
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     TString<CharType>& TString<CharType>::operator+=(const TString& string) {
         return append(string);
     }
@@ -851,7 +851,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype TStringUtil<CharType>::calcLength(const CharType* string) noexcept {
         if (string == nullptr) return E_SIZE_TYPE_MAX;
 
@@ -863,7 +863,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool TStringUtil<CharType>::isEqual(const CharType* string1, const CharType* string2) noexcept {
         if (string1 == string2) return true;
         else if (string1 == nullptr || string2 == nullptr) return false;
@@ -879,7 +879,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool TStringUtil<CharType>::isEqual(const CharType* string1, sizetype length1, const CharType* string2) noexcept {
         if (length1 != calcLength(string2)) return false;
         if (string1 == string2) return true;
@@ -894,7 +894,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool TStringUtil<CharType>::isEqual(const CharType* string1, const CharType* string2, sizetype length2) noexcept {
         if (calcLength(string1) != length2) return false;
         if (string1 == string2) return true;
@@ -909,7 +909,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires util::isCharType<CharType>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool TStringUtil<CharType>::isEqual(const CharType* string1, sizetype length1, const CharType* string2, sizetype length2) noexcept {
         if (length1 != length2) return false;
         if (string1 == string2) return true;

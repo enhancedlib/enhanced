@@ -61,36 +61,36 @@ namespace enhanced {
     protected:
         TString(const CharType* value, sizetype length, bool isOwn) noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static TString from(qword value, bool isNegative);
 
     public:
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static TString<CharType> from(bool value);
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static TString from(CharType value);
 
         template <typename IntTypeNs>
         requires util::isIntegralTypeNs<IntTypeNs>
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static inline TString from(IntTypeNs value) {
             return from(value, value < 0);
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static inline TString<CharType> from(const CharType* value) {
             return TString(static_cast<const CharType*&>(value));
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static TString<CharType> own(const CharType* value, sizetype length);
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static TString<CharType> own(const CharType* value);
 
         template <sizetype size>
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static inline TString own(const wrap<CharType[size]>& value) {
             return own(value, size);
         }
@@ -119,28 +119,28 @@ namespace enhanced {
 
         TString(TString&& other) noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         sizetype indexOf(CharType ch) const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         sizetype indexOf(CharType ch, sizetype getN) const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         sizetype indexOf(const TString& string) const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         sizetype indexOf(const TString& string, sizetype getN) const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         sizetype indexOfLast(const TString& string) const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         sizetype indexOfLast(const TString& string, sizetype getN) const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         sizetype indexOfLast(CharType ch) const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         sizetype indexOfLast(CharType ch, sizetype getN) const noexcept;
 
         E_ANNOTATE(RetRequiresRelease)
@@ -149,43 +149,43 @@ namespace enhanced {
         E_ANNOTATE(RetRequiresRelease)
         collections::ArrayList<sizetype> indexOfAll(const TString& string) const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         bool ownStorage() const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replace(sizetype start, sizetype end, CharType newChar) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replace(sizetype start, sizetype end, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replace(CharType oldChar, CharType newChar) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replace(const TString& oldSubstring, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replace(CharType oldChar, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replace(const TString& oldSubstring, CharType newChar) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replaceAll(CharType oldChar, CharType newChar) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replaceAll(const TString& oldSubstring, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replaceAll(CharType oldChar, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString replaceAll(const TString& oldSubstring, CharType newChar) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString uppercase() const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString lowercase() const;
 
         TString& toOwn();
@@ -226,24 +226,24 @@ namespace enhanced {
 
         TString& toLowercase();
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         bool operator==(const TString& string) const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline bool operator==(const CharType* string) const noexcept {
             return operator==(TString::from(string));
         }
 
         template <sizetype size>
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline bool operator==(const CharType (&string)[size]) const noexcept {
             return operator==(TString(string));
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString operator+(const TString& string) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         TString operator+(CharType ch) const;
 
         E_ANNOTATE(ReturnSelf)
@@ -288,35 +288,35 @@ namespace enhanced {
             return copy(newLength, source, size);
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static sizetype calcLength(const CharType* string) noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static bool isEqual(const CharType* string1, const CharType* string2) noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static bool isEqual(const CharType* string1, sizetype length1, const CharType* string2) noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static bool isEqual(const CharType* string1, const CharType* string2, sizetype length2) noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static bool isEqual(const CharType* string1, sizetype length1, const CharType* string2, sizetype length2) noexcept;
 
         template <sizetype size2>
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static inline bool isEqual(const CharType* string1, sizetype length1, const wrap<CharType[size2]>& string2) noexcept {
             return isEqual(string1, length1, string2, size2);
         }
 
         template <sizetype size1>
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static inline bool isEqual(const wrap<CharType[size1]>& string1, const CharType* string2, sizetype length2) noexcept {
             return isEqual(string1, size1, string2, length2);
         }
 
         template <sizetype size1, sizetype size2>
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         static constexpr bool isEqual(const wrap<CharType[size1]>& string1, const wrap<CharType[size2]>& string2) noexcept {
             if (size1 != size2) return false;
 

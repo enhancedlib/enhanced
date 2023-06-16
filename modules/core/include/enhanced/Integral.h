@@ -70,108 +70,108 @@ namespace enhanced {
 
         inline constexpr Integral(Integral&& other) noexcept = default;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr util::ComparisonResult compare(const Integral& other) const {
             return value == other.value ? util::ComparisonResult::EQUAL :
                 (value > other.value ? util::ComparisonResult::GREATER : util::ComparisonResult::LESS);
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator+() const noexcept {
             return +value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator-() const noexcept {
             return -value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator+(const Integral& other) const noexcept {
             return value + other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator-(const Integral& other) const noexcept {
             return value - other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator*(const Integral& other) const noexcept {
             return value * other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator/(const Integral& other) const noexcept {
             return value / other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator%(const Integral& other) const noexcept {
             return value % other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator~() const noexcept {
             return ~value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator&(const Integral& other) const noexcept {
             return value & other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator|(const Integral& other) const noexcept {
             return value | other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator^(const Integral& other) const noexcept {
             return value ^ other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator<<(const Integral& other) const noexcept {
             return value << other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator>>(const Integral& other) const noexcept {
             return value >> other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator!() const noexcept {
             return !value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator&&(const Integral& other) const noexcept {
             return value && other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr Integral operator||(const Integral& other) const noexcept {
             return value || other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator<(const Integral& other) const noexcept {
             return value < other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator>(const Integral& other) const noexcept {
             return value > other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator<=(const Integral& other) const noexcept {
             return value <= other.value;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline constexpr bool operator>=(const Integral& other) const noexcept {
             return value >= other.value;
         }

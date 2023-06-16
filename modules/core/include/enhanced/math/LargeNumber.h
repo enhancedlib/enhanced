@@ -91,7 +91,7 @@ namespace enhanced::math {
 
         LargeNumber(LargeNumber&& other) noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         util::ComparisonResult compare(const LargeNumber& other) const;
 
         LargeNumber operator+() const;

@@ -44,7 +44,7 @@
 namespace enhanced::io {
     class E_CORE_API BufferInputStream : public InputStream {
     public:
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         byte get() const override;
 
         void read(byte* buffer, sizetype size) const override;

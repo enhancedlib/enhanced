@@ -57,7 +57,7 @@ namespace enhanced {
     };
 
     template <typename Type>
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     inline constexpr Type* addressOf(Type& value) noexcept {
         return __builtin_addressof(value);
     }

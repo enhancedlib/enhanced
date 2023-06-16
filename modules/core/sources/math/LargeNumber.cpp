@@ -72,7 +72,7 @@ namespace enhanced::math {
     LargeNumber::LargeNumber(LargeNumber&& other) noexcept :
         storage(move(other.storage)), isNegative(other.isNegative), length(other.length), point(other.point) {}
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     util::ComparisonResult LargeNumber::compare(const LargeNumber& other) const {
         E_NOT_IMPLEMENTED();
     }

@@ -42,7 +42,7 @@
 
 #define Unused maybe_unused
 #define NoReturn noreturn
-#define RetNotIgnored nodiscard
+#define RetNoDiscard nodiscard
 #define Deprecated deprecated
 #define FallThrough fallthrough
 #define Likely likely
@@ -53,7 +53,7 @@
     #define Assume(EXPRESSION)
 #endif
 
-#define RetRequiresRelease RetNotIgnored("The return value needs to be released")
+#define RetRequiresRelease RetNoDiscard("The return value needs to be released")
 #define ReturnSelf
 #if defined(E_SM_COMPILER_GCC) || defined(E_SM_COMPILER_CLANG)
     #define RetNotNull gnu::returns_nonnull

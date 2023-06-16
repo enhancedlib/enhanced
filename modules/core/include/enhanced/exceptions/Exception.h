@@ -45,7 +45,7 @@
 #include <enhanced/String.h>
 
 #define E_DEFINE_EXCEPTION_NAME(NAME) \
-    E_ANNOTATE(RetNotIgnored) \
+    E_ANNOTATE(RetNoDiscard) \
     const String getName() const override { \
         return #NAME; \
     }
@@ -62,7 +62,7 @@ namespace enhanced::exceptions {
         const Exception* cause;
 
     public:
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual const String getName() const {
             return "enhanced::exceptions::Exception";
         }
@@ -77,13 +77,13 @@ namespace enhanced::exceptions {
 
         void printInfo() const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual String getInfo() const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual const Exception* getCause() const noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual const String& getMessage() const noexcept;
     };
 

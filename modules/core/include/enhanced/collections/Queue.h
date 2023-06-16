@@ -46,19 +46,19 @@
 namespace enhanced::collections {
     template <typename Type>
     struct Queue : Collection<Type> {
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual sizetype indexOf(const Type& value) const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual Type& getFirst() const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual Type& getLast() const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual Type& get(sizetype index) const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual Type& operator[](sizetype index) const = 0;
 
         virtual void addLast(const Type& element) = 0;

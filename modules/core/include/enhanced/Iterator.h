@@ -43,13 +43,13 @@
 #include <enhanced/util/Traits.h>
 
 #define E_DEFINE_FOREACH_FUNC(TYPE) \
-    E_ANNOTATE(RetNotIgnored) \
+    E_ANNOTATE(RetNoDiscard) \
     inline ForEachIterator<TYPE> begin() const noexcept { \
-        auto it = forwardIterator(); \
+        auto it = iterator(); \
         it.step(); \
         return it; \
     } \
-    E_ANNOTATE(RetNotIgnored) \
+    E_ANNOTATE(RetNoDiscard) \
     inline constexpr byte end() const noexcept { \
         return 0; \
     }
@@ -68,25 +68,25 @@ namespace enhanced {
         /*!
          * Gets the current element.
          */
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual Type& get() const = 0;
 
         /*!
          * Gets the number of elements.
          */
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual sizetype count() const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual bool hasNext() const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual bool hasPrev() const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual bool isBegin() const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual bool isEnd() const = 0;
 
         /*!
@@ -123,6 +123,8 @@ namespace enhanced {
     template <typename Iter>
     requires util::isBaseOf<Iterator<typename Iter::Element>, Iter>
     struct DirectedIterator : Iter {
+        using BaseIterator = Iter;
+
         template <typename... Args>
         inline DirectedIterator(Args&&... args) : Iter(args...) {}
 
@@ -136,7 +138,7 @@ namespace enhanced {
 
         virtual const DirectedIterator& reset() const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual bool continueable() const = 0;
     };
 
@@ -173,7 +175,7 @@ namespace enhanced {
             return *this;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline bool continueable() const {
             return !Iter::isEnd();
         }
@@ -214,18 +216,19 @@ namespace enhanced {
             return *this;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline bool continueable() const {
             return !Iter::isBegin();
         }
     };
 
     template <typename Iter>
-    struct ForEachIterator : ForwardIterator<Iter> {
-        inline ForEachIterator(ForwardIterator<Iter> iter) : ForwardIterator<Iter>(iter) {}
+    requires util::isBaseOf<DirectedIterator<typename Iter::BaseIterator>, Iter>
+    struct ForEachIterator : Iter {
+        inline ForEachIterator(const Iter& iter) : Iter(iter) {}
 
         inline void operator++() const {
-            ForwardIterator<Iter>::step();
+            Iter::step();
         }
 
         inline auto operator*() const -> decltype(Iter::get()) {
@@ -233,7 +236,7 @@ namespace enhanced {
         }
 
         inline bool operator!=(byte) const {
-            return ForwardIterator<Iter>::continueable();
+            return Iter::continueable();
         }
     };
 }

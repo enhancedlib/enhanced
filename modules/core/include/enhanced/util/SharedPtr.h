@@ -135,23 +135,23 @@ namespace enhanced::util {
             release();
         }
 
-        E_ANNOTATE(RetNotIgnored, RetNotNull)
+        E_ANNOTATE(RetNoDiscard, RetNotNull)
         inline Type* get() const noexcept {
             nullPointerCheck();
             return static_cast<Type*>(pointer);
         }
 
-        E_ANNOTATE(RetNotIgnored, RetNullable)
+        E_ANNOTATE(RetNoDiscard, RetNullable)
         inline Type* self() const noexcept {
             return static_cast<Type*>(pointer);
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline const SharedPtr* addressOf() const noexcept {
             return &self();
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type* endOf() const noexcept {
             return static_cast<Type*>(end);
         }
@@ -160,32 +160,32 @@ namespace enhanced::util {
             release0(destroy);
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type* operator+(sizetype offset) const noexcept {
             return self() + offset;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type* operator-(sizetype offset) const noexcept {
             return self() - offset;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type* operator->() const {
             return get();
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type& operator*() const {
             return *get();
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline Type& operator[](sizetype offset) const {
             return get()[offset];
         }
 
-        E_ANNOTATE(RetNotIgnored, ReturnSelf)
+        E_ANNOTATE(RetNoDiscard, ReturnSelf)
         inline operator Type*() const noexcept {
             return self();
         }

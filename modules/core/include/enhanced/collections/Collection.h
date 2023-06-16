@@ -49,13 +49,13 @@ namespace enhanced::collections {
 
         virtual ~Collection() noexcept = default;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual sizetype getSize() const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual bool isEmpty() const = 0;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual bool contain(const Type& value) const = 0;
 
         virtual void clear() = 0;

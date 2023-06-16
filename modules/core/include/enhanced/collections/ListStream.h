@@ -68,12 +68,12 @@ namespace enhanced::collections {
             explicit ListStreamIterator(Iterator<Element>& agent) : agent(agent) {}
 
         public:
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             bool isBegin() const override {
                 return agent.isBegin();
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             bool isEnd() const override {
                 if (index == agent.count() + 1) {
                     generator();
@@ -82,7 +82,7 @@ namespace enhanced::collections {
                 return false;
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             bool hasNext() const override {
                 if (index == agent.count()) {
                     generator();
@@ -105,7 +105,7 @@ namespace enhanced::collections {
                 return agent.prev();
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             Element& get() const override {
                 return agent.get();
             }
@@ -115,12 +115,12 @@ namespace enhanced::collections {
                 index = E_SIZE_TYPE_MAX;
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             sizetype count() const override {
                 return agent.count();
             }
 
-            E_ANNOTATE(RetNotIgnored)
+            E_ANNOTATE(RetNoDiscard)
             sizetype getIndex() const {
                 return index;
             }
@@ -128,19 +128,19 @@ namespace enhanced::collections {
 
         ListStream() = default;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline ListStreamIterator iterator() const {
             return ListStreamIterator {list.iterator()};
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline ListStreamIterator begin() const {
             auto it = iterator();
             it.next();
             return it;
         }
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         inline byte end() const {
             return 0;
         }

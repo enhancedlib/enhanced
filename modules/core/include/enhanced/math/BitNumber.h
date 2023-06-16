@@ -70,7 +70,7 @@ namespace enhanced::math {
 
         BitNumber(BitNumber&& number) noexcept;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         util::ComparisonResult compare(const BitNumber& other) const;
     };
 }

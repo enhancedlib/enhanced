@@ -72,28 +72,28 @@ namespace enhancedInternal::collections {
         other.capacity = E_SIZE_TYPE_MAX;
     }
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     void* ArrayListImpl::getFirst0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return elements[0];
     }
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     void* ArrayListImpl::getLast0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return elements[size - 1];
     }
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     void* ArrayListImpl::get0(sizetype index) const {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
         return elements[index];
     }
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     sizetype ArrayListImpl::indexOf0(void* value, OpEqual opEqual) const {
         for (sizetype index = 0; index < size; ++index) {
             if (opEqual(elements[index], value)) {
@@ -191,7 +191,7 @@ namespace enhancedInternal::collections {
 
     ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList, void** init) : arrayList(arrayList), indexer(init) {}
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     void* ArrayListImpl::ArrayListIteratorImpl::get0() const {
         if (isBegin0() || isEnd0()) {
             throw OperationException("The iterator has not element at the current location (begin or end)");
@@ -199,22 +199,22 @@ namespace enhancedInternal::collections {
         return *indexer;
     }
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
         return indexer != arrayList->elements + arrayList->size - 1;
     }
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool ArrayListImpl::ArrayListIteratorImpl::hasPrev0() const {
         return indexer != arrayList->elements;
     }
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool ArrayListImpl::ArrayListIteratorImpl::isBegin0() const {
         return indexer == arrayList->elements - 1;
     }
 
-    E_ANNOTATE(RetNotIgnored)
+    E_ANNOTATE(RetNoDiscard)
     bool ArrayListImpl::ArrayListIteratorImpl::isEnd0() const {
         return indexer == arrayList->elements + arrayList->size;
     }

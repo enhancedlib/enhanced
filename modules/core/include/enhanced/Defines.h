@@ -189,7 +189,7 @@
     #error Unsupported operating system
 #endif
 
-#ifndef COMPILER_MSVC
+#ifndef E_SM_COMPILER_MSVC
     #define E_CXX_STANDARD __cplusplus
 #else
     #define E_CXX_STANDARD _MSVC_LANG

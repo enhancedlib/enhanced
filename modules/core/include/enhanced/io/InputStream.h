@@ -48,12 +48,12 @@
 namespace enhanced::io {
     class E_CORE_API InputStream : public Closeable, Flushable {
     public:
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual byte get() const;
 
         virtual void read(byte* buffer, sizetype size) const;
 
-        E_ANNOTATE(RetNotIgnored)
+        E_ANNOTATE(RetNoDiscard)
         virtual String readLine() const;
     };
 }
