@@ -42,17 +42,17 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Traits.h>
 #include <enhanced/String.h>
 #include <enhanced/TypeInfo.h>
 #include <enhanced/Process.h>
 #include <enhanced/io/IOStream.h>
-#include <enhanced/util/Traits.h>
 #include <enhanced/exceptions/NotImplementedError.h>
 
-using enhanced::util::move;
-using enhanced::util::forceCast;
-using enhanced::util::removeConst;
-using enhanced::util::removeRefConst;
+using enhanced::move;
+using enhanced::forceCast;
+using enhanced::removeConst;
+using enhanced::removeRefConst;
 using enhanced::io::eerr;
 
 namespace enhanced::exceptions {

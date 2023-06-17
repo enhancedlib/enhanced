@@ -40,7 +40,7 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/util/Traits.h>
+#include <enhanced/Traits.h>
 #include <enhanced/Iterator.h>
 
 namespace enhanced {
@@ -48,14 +48,19 @@ namespace enhanced {
     struct Iterable {
         using Impl = Type;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
+        inline constexpr auto forwardIterator(auto&&... args) const noexcept {
+            return static_cast<const Type*>(this)->forwardIterator(args...);
+        }
+
+        E_RET_NO_DISCARD()
         inline constexpr auto begin() const noexcept {
-            auto it = ForEachIterator<decltype(static_cast<const Type*>(this)->forwardIterator())>(static_cast<const Type*>(this)->forwardIterator());
+            auto it = ForEachIterator<decltype(forwardIterator())>(forwardIterator());
             it.step();
             return it;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr byte end() const noexcept {
             return 0;
         }
@@ -66,16 +71,16 @@ namespace enhanced {
         const Type& iterable;
 
         ReversedIterable(const Type& iterable) noexcept
-        requires util::isBaseOf<Iterable<Type>, Type> : iterable(iterable) {}
+        requires isBaseOf<Iterable<Type>, Type> : iterable(iterable) {}
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr auto begin() const noexcept {
             auto it = ForEachIterator<decltype(iterable.reverseIterator())>(iterable.reverseIterator());
             it.step();
             return it;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr byte end() const noexcept {
             return 0;
         }

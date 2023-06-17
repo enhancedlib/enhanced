@@ -41,56 +41,52 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Traits.h>
 #include <enhanced/Character.h>
 #include <enhanced/CharSequence.h>
 #include <enhanced/InitializerList.h>
-#include <enhanced/util/Traits.h>
 #include <enhanced/collections/ArrayList.h>
 
-#define E_SWITCH_STR(TYPE, STRING) enhanced::util::switchType<const TYPE(&)[sizeof(STRING) / sizeof(char)]> \
+#define E_SWITCH_STR(TYPE, STRING) enhanced::switchType<const TYPE(&)[sizeof(STRING) / sizeof(char)]> \
     (STRING, L##STRING, u8##STRING, u##STRING, U##STRING)
-
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define SWITCH_STR E_SWITCH_STR
-#endif
 
 namespace enhanced {
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     class E_CORE_API TString : public CharSequence<CharType> {
     protected:
         TString(const CharType* value, sizetype length, bool isOwn) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static TString from(qword value, bool isNegative);
 
     public:
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static TString<CharType> from(bool value);
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static TString from(CharType value);
 
         template <typename IntTypeNs>
-        requires util::isIntegralTypeNs<IntTypeNs>
-        E_ANNOTATE(RetNoDiscard)
+        requires isIntegralTypeNs<IntTypeNs>
+        E_RET_NO_DISCARD()
         static inline TString from(IntTypeNs value) {
             return from(value, value < 0);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static inline TString<CharType> from(const CharType* value) {
             return TString(static_cast<const CharType*&>(value));
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static TString<CharType> own(const CharType* value, sizetype length);
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static TString<CharType> own(const CharType* value);
 
         template <sizetype size>
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static inline TString own(const wrap<CharType[size]>& value) {
             return own(value, size);
         }
@@ -119,73 +115,73 @@ namespace enhanced {
 
         TString(TString&& other) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype indexOf(CharType ch) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype indexOf(CharType ch, sizetype getN) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype indexOf(const TString& string) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype indexOf(const TString& string, sizetype getN) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype indexOfLast(const TString& string) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype indexOfLast(const TString& string, sizetype getN) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype indexOfLast(CharType ch) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype indexOfLast(CharType ch, sizetype getN) const noexcept;
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         collections::ArrayList<sizetype> indexOfAll(CharType ch) const noexcept;
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         collections::ArrayList<sizetype> indexOfAll(const TString& string) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         bool ownStorage() const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replace(sizetype start, sizetype end, CharType newChar) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replace(sizetype start, sizetype end, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replace(CharType oldChar, CharType newChar) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replace(const TString& oldSubstring, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replace(CharType oldChar, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replace(const TString& oldSubstring, CharType newChar) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replaceAll(CharType oldChar, CharType newChar) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replaceAll(const TString& oldSubstring, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replaceAll(CharType oldChar, const TString& newSubstring) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString replaceAll(const TString& oldSubstring, CharType newChar) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString uppercase() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString lowercase() const;
 
         TString& toOwn();
@@ -226,30 +222,30 @@ namespace enhanced {
 
         TString& toLowercase();
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         bool operator==(const TString& string) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline bool operator==(const CharType* string) const noexcept {
             return operator==(TString::from(string));
         }
 
         template <sizetype size>
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline bool operator==(const CharType (&string)[size]) const noexcept {
             return operator==(TString(string));
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString operator+(const TString& string) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         TString operator+(CharType ch) const;
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         TString& operator=(const TString& other) noexcept;
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         TString& operator=(TString&& other) noexcept;
 
         TString& operator+=(const TString<CharType>& string);
@@ -258,65 +254,65 @@ namespace enhanced {
     };
 
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     struct TStringUtil {
         TStringUtil() = delete;
 
         ~TStringUtil() = delete;
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static CharType* make(sizetype length);
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static CharType* copy(const CharType* source);
 
         template <sizetype size>
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static inline CharType* copy(const wrap<CharType[size]>& source) {
             return copy(source, size);
         }
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static CharType* copy(const CharType* source, sizetype length);
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static CharType* copy(sizetype newLength, const CharType* source, sizetype oldLength);
 
         template <sizetype size>
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static inline CharType* copy(sizetype newLength, const wrap<CharType[size]>& source) {
             return copy(newLength, source, size);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static sizetype calcLength(const CharType* string) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static bool isEqual(const CharType* string1, const CharType* string2) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static bool isEqual(const CharType* string1, sizetype length1, const CharType* string2) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static bool isEqual(const CharType* string1, const CharType* string2, sizetype length2) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static bool isEqual(const CharType* string1, sizetype length1, const CharType* string2, sizetype length2) noexcept;
 
         template <sizetype size2>
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static inline bool isEqual(const CharType* string1, sizetype length1, const wrap<CharType[size2]>& string2) noexcept {
             return isEqual(string1, length1, string2, size2);
         }
 
         template <sizetype size1>
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static inline bool isEqual(const wrap<CharType[size1]>& string1, const CharType* string2, sizetype length2) noexcept {
             return isEqual(string1, size1, string2, length2);
         }
 
         template <sizetype size1, sizetype size2>
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static constexpr bool isEqual(const wrap<CharType[size1]>& string1, const wrap<CharType[size2]>& string2) noexcept {
             if (size1 != size2) return false;
 
@@ -329,7 +325,7 @@ namespace enhanced {
     };
 
     using String = TString<char>;
-#ifdef WCHAR_IS_BUILTIN_TYPE
+#ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
     using WideString = TString<wchar>;
 #endif
     using U8String = TString<u8char>;
@@ -337,7 +333,7 @@ namespace enhanced {
     using U32String = TString<u32char>;
 
     using StringUtil = TStringUtil<char>;
-#ifdef WCHAR_IS_BUILTIN_TYPE
+#ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
     using WideStringUtil = TStringUtil<wchar>;
 #endif
     using U8StringUtil = TStringUtil<u8char>;
@@ -349,7 +345,7 @@ namespace enhanced {
             return {string, size};
         }
 
-    #ifdef WCHAR_IS_BUILTIN_TYPE
+    #ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
         inline WideString operator""_e(const wchar* string, sizetype size) {
             return {string, size};
         }
@@ -371,7 +367,7 @@ namespace enhanced {
             return String::own(string, size);
         }
 
-    #ifdef WCHAR_IS_BUILTIN_TYPE
+    #ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
         inline WideString operator""_eo(const wchar* string, sizetype size) {
             return WideString::own(string, size);
         }

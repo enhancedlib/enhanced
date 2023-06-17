@@ -40,23 +40,19 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/util/Traits.h>
+#include <enhanced/Traits.h>
 
 #define E_DEFINE_FOREACH_FUNC(TYPE) \
-    E_ANNOTATE(RetNoDiscard) \
+    E_RET_NO_DISCARD() \
     inline ForEachIterator<TYPE> begin() const noexcept { \
         auto it = iterator(); \
         it.step(); \
         return it; \
     } \
-    E_ANNOTATE(RetNoDiscard) \
+    E_RET_NO_DISCARD() \
     inline constexpr byte end() const noexcept { \
         return 0; \
     }
-
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define DEFINE_FOREACH_FUNC E_DEFINE_FOREACH_FUNC
-#endif
 
 namespace enhanced {
     template <typename Type>
@@ -68,60 +64,60 @@ namespace enhanced {
         /*!
          * Gets the current element.
          */
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual Type& get() const = 0;
 
         /*!
          * Gets the number of elements.
          */
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual sizetype count() const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual bool hasNext() const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual bool hasPrev() const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual bool isBegin() const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual bool isEnd() const = 0;
 
         /*!
          * Let the iterator pointer return to the next element.
          */
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         virtual const Iterator<Type>& next() const = 0;
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         virtual const Iterator<Type>& next(sizetype count) const = 0;
 
         /*!
          * Let the iterator pointer return to the previous element.
          */
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         virtual const Iterator<Type>& prev() const = 0;
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         virtual const Iterator<Type>& prev(sizetype count) const = 0;
 
         /*!
          * Let the iterator pointer return to the begin.
          */
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         virtual const Iterator<Type>& setBegin() const = 0;
 
         /*!
          * Let the iterator pointer return to the end.
          */
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         virtual const Iterator<Type>& setEnd() const = 0;
     };
 
     template <typename Iter>
-    requires util::isBaseOf<Iterator<typename Iter::Element>, Iter>
+    requires isBaseOf<Iterator<typename Iter::Element>, Iter>
     struct DirectedIterator : Iter {
         using BaseIterator = Iter;
 
@@ -138,7 +134,7 @@ namespace enhanced {
 
         virtual const DirectedIterator& reset() const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual bool continueable() const = 0;
     };
 
@@ -147,13 +143,13 @@ namespace enhanced {
         template <typename... Args>
         inline ForwardIterator(Args&&... args) : DirectedIterator<Iter>(args...) {}
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline const ForwardIterator& step() const {
             Iter::next();
             return *this;
         }
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline const ForwardIterator& step(sizetype count) const {
             Iter::next(count);
             return *this;
@@ -169,13 +165,13 @@ namespace enhanced {
             return *this;
         }
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline const ForwardIterator& reset() const {
             Iter::setBegin();
             return *this;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline bool continueable() const {
             return !Iter::isEnd();
         }
@@ -186,44 +182,44 @@ namespace enhanced {
         template <typename... Args>
         inline ReverseIterator(Args&&... args) : DirectedIterator<Iter>(args...) {}
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline const ReverseIterator& step() const {
             Iter::prev();
             return *this;
         }
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline const ReverseIterator& step(sizetype count) const {
             Iter::prev(count);
             return *this;
         }
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline const ReverseIterator& back() const {
             Iter::next();
             return *this;
         }
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline const ReverseIterator& back(sizetype count) const {
             Iter::next(count);
             return *this;
         }
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline const ReverseIterator& reset() const {
             Iter::setEnd();
             return *this;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline bool continueable() const {
             return !Iter::isBegin();
         }
     };
 
     template <typename Iter>
-    requires util::isBaseOf<DirectedIterator<typename Iter::BaseIterator>, Iter>
+    requires isBaseOf<DirectedIterator<typename Iter::BaseIterator>, Iter>
     struct ForEachIterator : Iter {
         inline ForEachIterator(const Iter& iter) : Iter(iter) {}
 

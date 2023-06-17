@@ -48,8 +48,7 @@
 #include <enhanced/io/FileReader.h>
 #include <enhanced/io/FileWriter.h>
 
-#undef EOF
-#define EOF (-1)
+#define E_EOF (-1)
 
 namespace enhanced::io {
     class File {
@@ -60,28 +59,28 @@ namespace enhanced::io {
 
         File(File&& file) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         String getFilename() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         String getExtension() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         const String& getPath() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         bool isExist() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         bool isReadOnly() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         bool isFile() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         bool isDirectory() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         bool isSymlink() const;
 
         void create() const;
@@ -92,19 +91,19 @@ namespace enhanced::io {
 
         bool removeIf() const; E_CTIDY_NOLINT(modernize-use-nodiscard)
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         collections::ArrayList<String> splitPath() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         FileInputStream inStream() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         FileOutputStream outStream() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         FileReader reader() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         FileWriter writer() const;
     };
 }

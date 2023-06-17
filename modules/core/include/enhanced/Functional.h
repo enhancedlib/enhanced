@@ -38,15 +38,8 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
-#include <enhanced/io/InputStream.h>
+#include <enhanced/Types.h>
 
-namespace enhanced::io {
-    class E_CORE_API BufferInputStream : public InputStream {
-    public:
-        E_RET_NO_DISCARD()
-        byte get() const override;
-
-        void read(byte* buffer, sizetype size) const override;
-    };
+namespace enhanced {
+    struct Functional {};
 }

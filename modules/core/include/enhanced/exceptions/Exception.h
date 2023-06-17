@@ -45,14 +45,10 @@
 #include <enhanced/String.h>
 
 #define E_DEFINE_EXCEPTION_NAME(NAME) \
-    E_ANNOTATE(RetNoDiscard) \
+    E_RET_NO_DISCARD() \
     const String getName() const override { \
         return #NAME; \
     }
-
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define DEFINE_EXCEPTION_NAME E_DEFINE_EXCEPTION_NAME
-#endif
 
 namespace enhanced::exceptions {
     class E_CORE_API Exception {
@@ -62,7 +58,7 @@ namespace enhanced::exceptions {
         const Exception* cause;
 
     public:
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual const String getName() const {
             return "enhanced::exceptions::Exception";
         }
@@ -77,13 +73,13 @@ namespace enhanced::exceptions {
 
         void printInfo() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual String getInfo() const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual const Exception* getCause() const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual const String& getMessage() const noexcept;
     };
 

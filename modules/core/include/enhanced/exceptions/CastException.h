@@ -35,12 +35,18 @@
  * SOFTWARE.
  */
 
-#include <enhanced/collections/Collection.h>
+#pragma once
 
 #include <enhanced/Defines.h>
+#include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
-#include <enhanced/Annotations.h>
+#include <enhanced/exceptions/Exception.h>
 
-namespace enhanced::collections {
-    sizetype ARRAY_INIT_SIZE = 256;
+namespace enhanced::exceptions {
+    class E_CORE_API CastException : public Exception {
+    public:
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::Exception)
+
+        explicit CastException(const String& name) noexcept;
+    };
 }

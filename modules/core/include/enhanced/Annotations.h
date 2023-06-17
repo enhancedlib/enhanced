@@ -38,36 +38,57 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/Types.h>
 
-#define Unused maybe_unused
-#define NoReturn noreturn
-#define RetNoDiscard nodiscard
-#define Deprecated deprecated
-#define FallThrough fallthrough
-#define Likely likely
-#define Unlikely unlikely
+#define __E_ANNOTATE_IMPL(NAME, ARGS)
+
+#define __E_ANNOTATE(NAME, ARGS, CXX_DECLARATION) __E_ANNOTATE_IMPL(NAME, ARGS) CXX_DECLARATION
+
+#define E_RET_NO_DISCARD(...) __E_ANNOTATE(RET_NO_DISCARD, (MESSAGE), [[nodiscard E_BRACKET_IF(__VA_ARGS__)]])
+
+#define E_DEPRECATED(...) __E_ANNOTATE(DEPRECATED, (MESSAGE), [[deprecated E_BRACKET_IF(__VA_ARGS__)]])
+
+#define E_NO_RETURN() __E_ANNOTATE(NO_RETURN, (), [[noreturn]])
+
+#define E_UNUSED() __E_ANNOTATE(UNUSED, (), [[maybe_unused]])
+
+#define E_FALL_THROUGH() __E_ANNOTATE(FALL_THROUGH, (), [[fallthrough]])
+
+#define E_LIKELY() __E_ANNOTATE(LIKELY, (), [[likely]])
+
+#define E_UNLIKELY() __E_ANNOTATE(UNLIKELY, (), [[unlikely]])
+
 #if E_HAS_CPP_ATTRIBUTE(assume)
-    #define Assume assume
+    #define E_ASSUME(EXPRESSION) __E_ANNOTATE(ASSUME, (EXPRESSION), [[assume(EXPRESSION)]])
 #else
-    #define Assume(EXPRESSION)
+    #define E_ASSUME(EXPRESSION) __E_ANNOTATE(ASSUME, (EXPRESSION),)
 #endif
 
-#define RetRequiresRelease RetNoDiscard("The return value needs to be released")
-#define ReturnSelf
+#define E_RET_NEED_RELEASE(...) __E_ANNOTATE(RET_NEED_RELEASE, (MESSAGE), E_RET_NO_DISCARD(__VA_ARGS__))
+
+#define E_RETURN_SELF() __E_ANNOTATE(RETURN_SELF, (),)
+
 #if defined(E_SM_COMPILER_GCC) || defined(E_SM_COMPILER_CLANG)
-    #define RetNotNull gnu::returns_nonnull
+    #define E_RET_NOT_NULL() __E_ANNOTATE(RET_NOT_NULL, (), [[gnu::returns_nonnull]])
 #else
-    #define RetNotNull
+    #define E_RET_NOT_NULL() __E_ANNOTATE(RET_NOT_NULL, (),)
 #endif
-#define RetNullable
-#define MustInspectResult
-#define SuccessIf(CONDITION)
-#define Optional
-#define Out
-#define InOut
-#define OutOpt
-#define InOutOpt
-#define MayRequireRelease(FUNCTION)
 
-#define E_ANNOTATE(...) [[__VA_ARGS__]]
+#define E_RET_NULLABLE() __E_ANNOTATE(RET_NULLABLE, (),)
+
+#define E_RET_NULLABLE_IF(CONDITION) __E_ANNOTATE(RET_NULLABLE_IF, (CONDITION),)
+
+#define E_RET_INSPECT() __E_ANNOTATE(RET_INSPECT, (),)
+
+#define E_FUNC_SUCCESS_IF(CONDITION) __E_ANNOTATE(FUNC_SUCCESS_IF, (CONDITION),)
+
+#define E_NULLABLE() __E_ANNOTATE(NULLABLE, (),)
+
+#define E_RELEASE_FUNC(FUNCTION) __E_ANNOTATE(RELEASE_FUNC, (FUNCTION),)
+
+#define E_OUT() __E_ANNOTATE(OUT, (),)
+
+#define E_IN_OUT() __E_ANNOTATE(IN_OUT, (),)
+
+#define E_OUT_OPT() __E_ANNOTATE(OUT_OPT, (),)
+
+#define E_IN_OUT_OPT() __E_ANNOTATE(IN_OUT_OPT, (),)

@@ -40,12 +40,12 @@
 #include <enhanced/Process.h>
 
 namespace enhanced {
-    E_ANNOTATE(NoReturn)
+    E_NO_RETURN()
     void processExit(int status) {
         std::exit(status);
     }
 
-    E_ANNOTATE(NoReturn)
+    E_NO_RETURN()
     void processAbort() {
         std::abort();
     }

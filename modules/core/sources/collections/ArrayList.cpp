@@ -54,11 +54,11 @@ using enhanced::exceptions::OperationException;
 namespace enhancedInternal::collections {
     ArrayListImpl::ArrayListImpl(sizetype capacity) :
         elements(new void*[capacity]), size(0), capacity(capacity),
-        expansionSizeFunc([](sizetype capacity) {return capacity;}) {}
+        expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? capacity : 1; }) {}
 
     ArrayListImpl::ArrayListImpl(const ArrayListImpl& other, OpCopy opCopy) :
         elements(new void*[other.capacity]), size(other.size),
-        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity; }) {
+        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? capacity : 1; }) {
         E_ASSERT(other.capacity >= other.size);
         for (sizetype index = 0; index < other.size; ++index) {
             elements[index] = opCopy(other.elements[index]);
@@ -66,34 +66,34 @@ namespace enhancedInternal::collections {
     }
 
     ArrayListImpl::ArrayListImpl(ArrayListImpl&& other) noexcept : elements(other.elements), size(other.size),
-        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity; }) {
+        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? capacity : 1; }) {
         other.elements = nullptr;
         other.size = E_SIZE_TYPE_MAX;
         other.capacity = E_SIZE_TYPE_MAX;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     void* ArrayListImpl::getFirst0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return elements[0];
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     void* ArrayListImpl::getLast0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return elements[size - 1];
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     void* ArrayListImpl::get0(sizetype index) const {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
         return elements[index];
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     sizetype ArrayListImpl::indexOf0(void* value, OpEqual opEqual) const {
         for (sizetype index = 0; index < size; ++index) {
             if (opEqual(elements[index], value)) {
@@ -191,7 +191,7 @@ namespace enhancedInternal::collections {
 
     ArrayListImpl::ArrayListIteratorImpl::ArrayListIteratorImpl(const ArrayListImpl* arrayList, void** init) : arrayList(arrayList), indexer(init) {}
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     void* ArrayListImpl::ArrayListIteratorImpl::get0() const {
         if (isBegin0() || isEnd0()) {
             throw OperationException("The iterator has not element at the current location (begin or end)");
@@ -199,22 +199,22 @@ namespace enhancedInternal::collections {
         return *indexer;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     bool ArrayListImpl::ArrayListIteratorImpl::hasNext0() const {
         return indexer != arrayList->elements + arrayList->size - 1;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     bool ArrayListImpl::ArrayListIteratorImpl::hasPrev0() const {
         return indexer != arrayList->elements;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     bool ArrayListImpl::ArrayListIteratorImpl::isBegin0() const {
         return indexer == arrayList->elements - 1;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     bool ArrayListImpl::ArrayListIteratorImpl::isEnd0() const {
         return indexer == arrayList->elements + arrayList->size;
     }
@@ -250,4 +250,8 @@ namespace enhancedInternal::collections {
     void ArrayListImpl::ArrayListIteratorImpl::setEnd0() const {
         indexer = arrayList->elements + arrayList->size;
     }
+}
+
+namespace enhanced::collections {
+    sizetype ARRAY_LIST_DEFAULT_CAPACITY = 16;
 }

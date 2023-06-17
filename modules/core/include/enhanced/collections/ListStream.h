@@ -41,22 +41,22 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Traits.h>
 #include <enhanced/Iterator.h>
+#include <enhanced/Function.h>
 #include <enhanced/collections/List.h>
-#include <enhanced/util/Traits.h>
-#include <enhanced/util/Function.h>
 #include <enhanced/exceptions/InvalidStateException.h>
 
 namespace enhanced::collections {
     // TODO: Testing
 
     template <template <typename> typename ListType, typename Element>
-    requires util::isBaseOf<List<Element>, ListType<Element>> && (!util::isAbstractClass<ListType<Element>>)
+    requires isBaseOf<List<Element>, ListType<Element>> && (!isAbstractClass<ListType<Element>>)
     class ListStream {
     private:
         const ListType<Element> list {};
 
-        util::Function<void ()> generator;
+        Function<void ()> generator;
 
     public:
         class ListStreamIterator : public Iterator<Element> {
@@ -68,12 +68,12 @@ namespace enhanced::collections {
             explicit ListStreamIterator(Iterator<Element>& agent) : agent(agent) {}
 
         public:
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool isBegin() const override {
                 return agent.isBegin();
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool isEnd() const override {
                 if (index == agent.count() + 1) {
                     generator();
@@ -82,7 +82,7 @@ namespace enhanced::collections {
                 return false;
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool hasNext() const override {
                 if (index == agent.count()) {
                     generator();
@@ -91,21 +91,21 @@ namespace enhanced::collections {
                 return true;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             const Iterator<Element>& next() const override {
                 if (isEnd()) throw exceptions::InvalidStateException("The iterator is at the end of the list");
                 ++index;
                 return agent.next();
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             const Iterator<Element>& prev() const override {
                 if (isBegin()) throw exceptions::InvalidStateException("The iterator is at the begin of the list");
                 --index;
                 return agent.prev();
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             Element& get() const override {
                 return agent.get();
             }
@@ -115,12 +115,12 @@ namespace enhanced::collections {
                 index = E_SIZE_TYPE_MAX;
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             sizetype count() const override {
                 return agent.count();
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             sizetype getIndex() const {
                 return index;
             }
@@ -128,19 +128,19 @@ namespace enhanced::collections {
 
         ListStream() = default;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline ListStreamIterator iterator() const {
             return ListStreamIterator {list.iterator()};
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline ListStreamIterator begin() const {
             auto it = iterator();
             it.next();
             return it;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline byte end() const {
             return 0;
         }

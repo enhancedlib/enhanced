@@ -68,7 +68,7 @@ namespace enhancedInternal::collections {
         other.size = E_SIZE_TYPE_MAX;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     sizetype LinkedListImpl::indexOf0(void* value, OpEqual opEqual) const {
         Node* indexer = first;
         for (sizetype index = 0; index < size; ++index) {
@@ -81,21 +81,21 @@ namespace enhancedInternal::collections {
         return E_SIZE_TYPE_MAX;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     void* LinkedListImpl::getFirst0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return first->value;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     void* LinkedListImpl::getLast0() const {
         if (size == 0) throw OperationException("The list is empty");
 
         return last->value;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     void* LinkedListImpl::get0(sizetype index) const {
         if (index >= size) throw IndexOutOfBoundsException(index, size);
 
@@ -226,7 +226,7 @@ namespace enhancedInternal::collections {
     LinkedListImpl::LinkedListIteratorImpl::LinkedListIteratorImpl(const LinkedListImpl* linkedList, Node* init) :
         linkedList(linkedList), indexer(init) {}
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     void* LinkedListImpl::LinkedListIteratorImpl::get0() const {
         if (isBegin0() || isEnd0()) {
             throw OperationException("The iterator has not element at the current location (begin or end)");
@@ -234,22 +234,22 @@ namespace enhancedInternal::collections {
         return indexer->value;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     bool LinkedListImpl::LinkedListIteratorImpl::isBegin0() const {
         return indexer == (Node*) E_SIZE_TYPE_MAX;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     bool LinkedListImpl::LinkedListIteratorImpl::isEnd0() const {
         return indexer == nullptr;
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     bool LinkedListImpl::LinkedListIteratorImpl::hasNext0() const {
         return (isBegin0() && linkedList->size != 0) || (!isEnd0() && indexer->next != nullptr);
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     bool LinkedListImpl::LinkedListIteratorImpl::hasPrev0() const {
         return (isEnd0() && linkedList->size != 0) || (!isBegin0() && indexer->prev != nullptr);
     }

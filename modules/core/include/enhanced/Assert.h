@@ -46,18 +46,13 @@
 // TODO: In the future, don't need to provide the current file and the current line for arguments
 #define E_DYNAMIC_ASSERT(EXPRESSION, ...) \
     if (EXPRESSION) { \
-        throw enhanced::exceptions::AssertionError(#EXPRESSION, E_CURRENT_FILE, E_CURRENT_LINE, ##__VA_ARGS__); \
+        throw enhanced::exceptions::AssertionError(#EXPRESSION, E_CURRENT_FILE, E_CURRENT_LINE __VA_OPT__(,) __VA_ARGS__); \
     }
 
 #if (defined(E_SM_DEBUG) && !defined(E_SM_ASSERT_DISABLE)) || defined(E_SM_ASSERT_ENABLE)
-    #define E_ASSERT(EXPRESSION, ...) E_DYNAMIC_ASSERT(EXPRESSION, ##__VA_ARGS__)
+    #define E_ASSERT(EXPRESSION, ...) E_DYNAMIC_ASSERT(EXPRESSION __VA_OPT__(,) __VA_ARGS__)
 #else
     #define E_ASSERT(EXPRESSION, ...) (void) 0
-#endif
-
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define DYNAMIC_ASSERT E_DYNAMIC_ASSERT
-    #define ASSERT E_ASSERT
 #endif
 
 #if defined(E_SM_COMPILER_GCC) || defined(E_SM_COMPILER_CLANG)

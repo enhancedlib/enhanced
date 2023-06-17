@@ -48,13 +48,13 @@ namespace enhanced::io {
     class E_CORE_API PrintStream : public OutputStream {
     public:
         template <typename Type>
-        requires isDisplayable<util::RemoveRefAndCv<Type>>
+        requires isDisplayable<RemoveRefAndCv<Type>>
         void print(Type&& value) const {
             E_DISPLAY(*this, value);
         }
 
         template <typename Type>
-        requires isDisplayable<util::RemoveRefAndCv<Type>>
+        requires isDisplayable<RemoveRefAndCv<Type>>
         void println(Type&& value) const {
             E_DISPLAY(*this, value);
             println();

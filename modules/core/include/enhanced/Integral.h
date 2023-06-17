@@ -41,8 +41,8 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
-#include <enhanced/util/Traits.h>
-#include <enhanced/util/Comparable.h>
+#include <enhanced/Traits.h>
+#include <enhanced/Comparable.h>
 
 #define E_INTEGRAL_EXTENSION_DEFAULT_METHODS(NAME, TYPE) \
     inline constexpr NAME() noexcept : Integral<TYPE>() {} \
@@ -52,14 +52,10 @@
     inline constexpr NAME& operator=(const NAME& other) noexcept = default; \
     inline constexpr NAME& operator=(NAME&& other) noexcept = default;
 
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define INTEGRAL_EXTENSION_DEFAULT_METHODS E_INTEGRAL_EXTENSION_DEFAULT_METHODS
-#endif
-
 namespace enhanced {
     template <typename IntegralType>
-    requires util::isIntegralType<IntegralType>
-    struct Integral : public util::Comparable<Integral<IntegralType>> {
+    requires isIntegralType<IntegralType>
+    struct Integral : public Comparable<Integral<IntegralType>> {
         IntegralType value;
 
         inline constexpr Integral() noexcept : value() {}
@@ -70,108 +66,108 @@ namespace enhanced {
 
         inline constexpr Integral(Integral&& other) noexcept = default;
 
-        E_ANNOTATE(RetNoDiscard)
-        inline constexpr util::ComparisonResult compare(const Integral& other) const {
-            return value == other.value ? util::ComparisonResult::EQUAL :
-                (value > other.value ? util::ComparisonResult::GREATER : util::ComparisonResult::LESS);
+        E_RET_NO_DISCARD()
+        inline constexpr ComparisonResult compare(const Integral& other) const {
+            return value == other.value ? ComparisonResult::EQUAL :
+                (value > other.value ? ComparisonResult::GREATER : ComparisonResult::LESS);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator+() const noexcept {
             return +value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator-() const noexcept {
             return -value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator+(const Integral& other) const noexcept {
             return value + other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator-(const Integral& other) const noexcept {
             return value - other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator*(const Integral& other) const noexcept {
             return value * other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator/(const Integral& other) const noexcept {
             return value / other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator%(const Integral& other) const noexcept {
             return value % other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator~() const noexcept {
             return ~value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator&(const Integral& other) const noexcept {
             return value & other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator|(const Integral& other) const noexcept {
             return value | other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator^(const Integral& other) const noexcept {
             return value ^ other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator<<(const Integral& other) const noexcept {
             return value << other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator>>(const Integral& other) const noexcept {
             return value >> other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator!() const noexcept {
             return !value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator&&(const Integral& other) const noexcept {
             return value && other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Integral operator||(const Integral& other) const noexcept {
             return value || other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr bool operator<(const Integral& other) const noexcept {
             return value < other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr bool operator>(const Integral& other) const noexcept {
             return value > other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr bool operator<=(const Integral& other) const noexcept {
             return value <= other.value;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr bool operator>=(const Integral& other) const noexcept {
             return value >= other.value;
         }

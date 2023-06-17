@@ -40,28 +40,28 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Traits.h>
 #include <enhanced/String.h>
-#include <enhanced/util/Traits.h>
 
-using enhanced::util::removePtrConst;
+using enhanced::removePtrConst;
 
 namespace enhanced {
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     CharSequence<CharType>::CharSequence(const CharType* value, sizetype length, bool isOwn) :
         value(removePtrConst(value)), length(length), isOwn(isOwn) {}
 
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     CharSequence<CharType>::CharSequence(const CharType* value, sizetype length) : value(removePtrConst(value)), length(length) {}
 
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     CharSequence<CharType>::CharSequence(const CharSequence& other) :
         value(other.isOwn ? TStringUtil<CharType>::copy(other.value) : other.value), length(other.length), isOwn(other.isOwn) {}
 
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept : value(other.value), length(other.length), isOwn(other.isOwn) {
         other.value = nullptr;
         other.length = E_SIZE_TYPE_MAX;
@@ -69,56 +69,60 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     CharSequence<CharType>::~CharSequence() noexcept {
         if (isOwn) delete[] value;
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
-    E_ANNOTATE(RetNoDiscard)
+    requires isCharType<CharType>
+    E_RET_NO_DISCARD()
     bool CharSequence<CharType>::isEmpty() const noexcept {
         return length == 0;
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
-    E_ANNOTATE(RetNoDiscard)
+    requires isCharType<CharType>
+    E_RET_NO_DISCARD()
     sizetype CharSequence<CharType>::getLength() const noexcept {
         return length;
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
-    E_ANNOTATE(RetNoDiscard)
+    requires isCharType<CharType>
+    E_RET_NO_DISCARD()
     CharType* CharSequence<CharType>::chars() const noexcept {
         return value;
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
-    E_ANNOTATE(RetNoDiscard)
+    requires isCharType<CharType>
+    E_RET_NO_DISCARD()
     const byte* CharSequence<CharType>::toBytes() const noexcept {
         return reinterpret_cast<const byte*>(value);
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
-    E_ANNOTATE(RetNoDiscard)
+    requires isCharType<CharType>
+    E_RET_NO_DISCARD()
     const CharType CharSequence<CharType>::at(sizetype index) const noexcept {
         return value[index];
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
-    E_ANNOTATE(RetNoDiscard)
+    requires isCharType<CharType>
+    E_RET_NO_DISCARD()
+#ifdef E_SM_SIZE_TYPE_32BIT
+    const CharType CharSequence<CharType>::operator[](int index) const noexcept {
+#else
     const CharType CharSequence<CharType>::operator[](sizetype index) const noexcept {
+#endif
         return value[index];
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
-    E_ANNOTATE(ReturnSelf)
+    requires isCharType<CharType>
+    E_RETURN_SELF()
     CharSequence<CharType>& CharSequence<CharType>::operator=(const CharSequence& other) noexcept {
         if (this == &other) return *this;
 
@@ -132,8 +136,8 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
-    E_ANNOTATE(ReturnSelf)
+    requires isCharType<CharType>
+    E_RETURN_SELF()
     CharSequence<CharType>& CharSequence<CharType>::operator=(CharSequence&& other) noexcept {
         if (this == &other) return *this;
 
@@ -151,7 +155,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     CharSequence<CharType>::operator CharType*() const noexcept {
         return chars();
     }

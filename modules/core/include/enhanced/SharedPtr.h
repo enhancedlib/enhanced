@@ -41,13 +41,13 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Traits.h>
 #include <enhanced/Memory.h>
 #include <enhanced/Array.h>
-#include <enhanced/util/Traits.h>
 #include <enhanced/exceptions/NullPointerException.h>
 #include <enhanced/exceptions/NotImplementedError.h>
 
-namespace enhancedInternal::util {
+namespace enhancedInternal {
     class E_CORE_API SharedPtrImpl {
     protected:
         mutable enhanced::sizetype* referenceCount;
@@ -74,9 +74,9 @@ namespace enhancedInternal::util {
     };
 }
 
-namespace enhanced::util {
+namespace enhanced {
     template <typename Type>
-    class SharedPtr final : private enhancedInternal::util::SharedPtrImpl {
+    class SharedPtr final : private enhancedInternal::SharedPtrImpl {
     private:
         static void destroy(void* ptr, void* end) {
             if (ptr == (static_cast<Type*>(end) - 1)) {
@@ -135,23 +135,23 @@ namespace enhanced::util {
             release();
         }
 
-        E_ANNOTATE(RetNoDiscard, RetNotNull)
+        E_RET_NO_DISCARD() E_RET_NOT_NULL()
         inline Type* get() const noexcept {
             nullPointerCheck();
             return static_cast<Type*>(pointer);
         }
 
-        E_ANNOTATE(RetNoDiscard, RetNullable)
+        E_RET_NO_DISCARD() E_RET_NULLABLE_IF(pointer == null)
         inline Type* self() const noexcept {
             return static_cast<Type*>(pointer);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline const SharedPtr* addressOf() const noexcept {
             return &self();
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type* endOf() const noexcept {
             return static_cast<Type*>(end);
         }
@@ -160,43 +160,43 @@ namespace enhanced::util {
             release0(destroy);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type* operator+(sizetype offset) const noexcept {
             return self() + offset;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type* operator-(sizetype offset) const noexcept {
             return self() - offset;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type* operator->() const {
             return get();
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& operator*() const {
             return *get();
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& operator[](sizetype offset) const {
             return get()[offset];
         }
 
-        E_ANNOTATE(RetNoDiscard, ReturnSelf)
+        E_RET_NO_DISCARD() E_RETURN_SELF()
         inline operator Type*() const noexcept {
             return self();
         }
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline SharedPtr<Type>& operator=(const SharedPtr<Type>& other) noexcept {
             assign0(other, destroy);
             return *this;
         }
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         inline SharedPtr<Type>& operator=(SharedPtr<Type>&& other) noexcept {
             assign0(other, destroy);
             return *this;

@@ -41,14 +41,14 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/util/Traits.h>
+#include <enhanced/Traits.h>
 
 namespace enhanced {
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     class E_CORE_API CharSequence {
         template <typename Type>
-        requires util::isCharType<Type>
+        requires isCharType<Type>
         friend class TString;
 
     protected:
@@ -69,28 +69,33 @@ namespace enhanced {
 
         ~CharSequence() noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         CharType* chars() const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype getLength() const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         bool isEmpty() const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         const byte* toBytes() const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         const CharType at(sizetype index) const noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+    #ifdef E_SM_SIZE_TYPE_32BIT
+        E_RET_NO_DISCARD()
+        const CharType operator[](int index) const noexcept;
+    #else
+        E_RET_NO_DISCARD()
         const CharType operator[](sizetype index) const noexcept;
+    #endif
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         CharSequence& operator=(const CharSequence& other) noexcept;
 
-        E_ANNOTATE(ReturnSelf)
+        E_RETURN_SELF()
         CharSequence& operator=(CharSequence&& other) noexcept;
 
         operator CharType*() const noexcept;

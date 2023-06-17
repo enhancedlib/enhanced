@@ -42,53 +42,58 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 
-namespace enhanced::util {
+namespace enhanced {
     enum class ComparisonResult : int8 {
         EQUAL = 0, LESS = -1, GREATER = 1
     };
 
     template <typename Type>
     struct Comparable {
-        E_ANNOTATE(RetNoDiscard)
-        inline constexpr bool equal(const Type& other) const {
-            return static_cast<const Type*>(this)->compare(other) == ComparisonResult::EQUAL;
+        E_RET_NO_DISCARD()
+        inline constexpr ComparisonResult compare(const Type& other) const {
+            return static_cast<const Type*>(this)->compare(other);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
+        inline constexpr bool equal(const Type& other) const {
+            return compare(other) == ComparisonResult::EQUAL;
+        }
+
+        E_RET_NO_DISCARD()
         inline constexpr bool operator==(const Type& other) const {
             return equal(other);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr bool operator!=(const Type& other) const {
             return !equal(other);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr bool operator<(const Type& other) const {
-            return static_cast<const Type*>(this)->compare(other) == ComparisonResult::LESS;
+            return compare(other) == ComparisonResult::LESS;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr bool operator>(const Type& other) const {
-            return static_cast<const Type*>(this)->compare(other) == ComparisonResult::GREATER;
+            return compare(other) == ComparisonResult::GREATER;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr bool operator<=(const Type& other) const {
-            auto result = static_cast<const Type*>(this)->compare(other);
+            auto result = compare(other);
             return result == ComparisonResult::LESS || result == ComparisonResult::EQUAL;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr bool operator>=(const Type& other) const {
-            auto result = static_cast<const Type*>(this)->compare(other);
+            auto result = compare(other);
             return result == ComparisonResult::GREATER || result == ComparisonResult::EQUAL;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr ComparisonResult operator<=>(const Type& other) const {
-            return static_cast<const Type*>(this)->compare(other);
+            return compare(other);
         }
     };
 }

@@ -39,11 +39,11 @@
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
-#include <enhanced/util/Traits.h>
+#include <enhanced/Traits.h>
 #include <enhanced/exceptions/InvalidArgumentException.h>
 #include <enhanced/exceptions/NotImplementedError.h>
 
-using enhanced::util::move;
+using enhanced::move;
 using enhanced::exceptions::InvalidArgumentException;
 
 namespace enhanced::math {
@@ -72,8 +72,8 @@ namespace enhanced::math {
     LargeNumber::LargeNumber(LargeNumber&& other) noexcept :
         storage(move(other.storage)), isNegative(other.isNegative), length(other.length), point(other.point) {}
 
-    E_ANNOTATE(RetNoDiscard)
-    util::ComparisonResult LargeNumber::compare(const LargeNumber& other) const {
+    E_RET_NO_DISCARD()
+    ComparisonResult LargeNumber::compare(const LargeNumber& other) const {
         E_NOT_IMPLEMENTED();
     }
 

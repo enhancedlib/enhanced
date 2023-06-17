@@ -41,11 +41,11 @@
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
-#include <enhanced/util/Traits.h>
-#include <enhanced/util/Functional.h>
+#include <enhanced/Traits.h>
+#include <enhanced/Functional.h>
 // #include <enhanced/exceptions/NotImplementedError.h>
 
-namespace enhanced::util {
+namespace enhanced {
     template <typename FunctionType>
     requires isFunction<FunctionType> && (!FunctionParser<FunctionType>::hasVarargs)
     class Function : public Functional {

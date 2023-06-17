@@ -42,19 +42,15 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
+#include <enhanced/Traits.h>
 #include <enhanced/String.h>
-#include <enhanced/util/Traits.h>
-#include <enhanced/util/Comparable.h>
+#include <enhanced/Comparable.h>
 #include <enhanced/collections/ArrayList.h>
 
 #define E_LARGE_NUM(NUMBER) enhanced::math::LargeNumber(#NUMBER)
 
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define LARGE_NUM E_LARGE_NUM
-#endif
-
 namespace enhanced::math {
-    class E_CORE_API LargeNumber : public util::Comparable<LargeNumber> {
+    class E_CORE_API LargeNumber : public Comparable<LargeNumber> {
     private:
         E_MSVC_WARNING_PAD(4251)
 
@@ -69,8 +65,8 @@ namespace enhanced::math {
         sizetype point = 0;
 
         template <typename NumberType>
-        requires util::isIntegralType<NumberType>
-        inline LargeNumber(NumberType number) : storage(0), isNegative(util::isSigned<NumberType> && number < 0) {
+        requires isIntegralType<NumberType>
+        inline LargeNumber(NumberType number) : storage(0), isNegative(isSigned<NumberType> && number < 0) {
             sizetype count = 1;
             for (NumberType value = number; value != 0; value /= 10, ++count);
 
@@ -80,7 +76,7 @@ namespace enhanced::math {
 
     public:
         template <typename NumberType>
-        requires util::isIntegralType<NumberType>
+        requires isIntegralType<NumberType>
         static inline LargeNumber from(NumberType number) {
             return {number};
         }
@@ -91,8 +87,8 @@ namespace enhanced::math {
 
         LargeNumber(LargeNumber&& other) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
-        util::ComparisonResult compare(const LargeNumber& other) const;
+        E_RET_NO_DISCARD()
+        ComparisonResult compare(const LargeNumber& other) const;
 
         LargeNumber operator+() const;
 

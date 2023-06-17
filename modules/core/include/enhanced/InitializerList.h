@@ -45,10 +45,6 @@
 
 #define E_INIT_LIST_CONSTRUCTOR(NAME, TYPE) inline NAME(std::initializer_list<TYPE> list) : NAME(enhanced::InitializerList(list)) {}
 
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define INIT_LIST_CONSTRUCTOR E_INIT_LIST_CONSTRUCTOR
-#endif
-
 namespace enhanced {
     template <typename Type>
     class InitializerList {
@@ -58,27 +54,27 @@ namespace enhanced {
     public:
         inline constexpr InitializerList(std::initializer_list<Type> initList) noexcept : initList(initList) {}
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr const Type* begin() const noexcept {
             return initList.begin();
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr const Type* end() const noexcept {
             return initList.end();
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr const Type* toArray() const noexcept {
             return initList.begin();
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr sizetype getSize() const noexcept {
             return initList.size();
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline constexpr Type& get(sizetype index) const noexcept {
             return toArray()[index];
         }

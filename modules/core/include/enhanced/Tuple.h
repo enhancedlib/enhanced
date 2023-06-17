@@ -39,7 +39,7 @@
 
 #include <enhanced/Defines.h>
 
-namespace enhanced::util {
+namespace enhanced {
     template <typename... Types>
     struct Tuple final {
         // TODO

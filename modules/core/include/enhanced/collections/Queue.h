@@ -40,25 +40,25 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/util/Traits.h>
+#include <enhanced/Traits.h>
 #include <enhanced/collections/Collection.h>
 
 namespace enhanced::collections {
     template <typename Type>
     struct Queue : Collection<Type> {
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual sizetype indexOf(const Type& value) const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual Type& getFirst() const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual Type& getLast() const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual Type& get(sizetype index) const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual Type& operator[](sizetype index) const = 0;
 
         virtual void addLast(const Type& element) = 0;

@@ -39,18 +39,18 @@
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
+#include <enhanced/Traits.h>
 #include <enhanced/String.h>
-#include <enhanced/util/Traits.h>
 
-using enhanced::util::removeConst;
+using enhanced::removeConst;
 
 namespace enhanced {
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     String TypeInfo::getName() const {
         return removeConst(info.name());
     }
 
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     sizetype TypeInfo::hashCode() const {
         return info.hash_code();
     }

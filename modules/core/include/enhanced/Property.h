@@ -39,7 +39,45 @@
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
+#include <enhanced/Traits.h>
 
-namespace enhanced::util {
-    struct Functional {};
-}
+#define __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) \
+ACCESS_MODIFIER: \
+    E_RET_NO_DISCARD() \
+    inline const Self& operator()() const
+
+#define __E_PROPERTY_SETTER_set(ACCESS_MODIFIER) \
+ACCESS_MODIFIER: \
+    E_RETURN_SELF() \
+    inline Self& operator=(const Self& value)
+
+#define __E_PROPERTY_GETTER_getter(ACCESS_MODIFIER) \
+    __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) { \
+        return self; \
+    }
+
+#define __E_PROPERTY_SETTER_setter(ACCESS_MODIFIER) \
+    __E_PROPERTY_SETTER_set(ACCESS_MODIFIER) { \
+        return self = value; \
+    }
+
+#define E_PROPERTIES_CLASS(NAME) using __PROPERTIES_CLASS_SELF = NAME
+
+#define E_PROPERTIES_STRUCT(NAME) \
+    private: \
+        E_PROPERTIES_CLASS(NAME); \
+    public:
+
+#define E_PROPERTY(TYPE, NAME, GETTER, SETTER, ...) \
+    struct Property_##NAME final { \
+        friend __PROPERTIES_CLASS_SELF; \
+    private: \
+        using Self = TYPE; \
+        Self self; \
+        inline Property_##NAME(Self value) : self(enhanced::move(value)) {} \
+        __E_PROPERTY_GETTER_##GETTER \
+        __E_PROPERTY_SETTER_##SETTER \
+    public: \
+        __VA_ARGS__ \
+    } NAME

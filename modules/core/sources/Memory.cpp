@@ -52,7 +52,7 @@ using enhanced::exceptions::MemoryAllocationError;
 namespace enhanced {
     const Nothrow nothrow {};
 
-    E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
+    E_RET_INSPECT() E_NULLABLE() E_FUNC_SUCCESS_IF(return != nullptr) E_RET_NEED_RELEASE()
     E_ALLOCATOR E_RET_RESTRICT void* allocate(sizetype size) {
         if (size == 0) return nullptr;
 
@@ -100,7 +100,7 @@ using enhanced::nothrow;
 
 // TODO
 
-E_ANNOTATE(RetNotNull)
+E_RET_NOT_NULL()
 E_ALLOCATOR void* operator new(enhanced::sizetype size) {
     void* space = allocate(size);
     if (space == nullptr) {
@@ -109,17 +109,17 @@ E_ALLOCATOR void* operator new(enhanced::sizetype size) {
     return space;
 }
 
-E_ANNOTATE(RetNotNull)
+E_RET_NOT_NULL()
 E_ALLOCATOR void* operator new[](enhanced::sizetype size) {
     return operator new(size);
 }
 
-E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
+E_RET_INSPECT() E_NULLABLE() E_FUNC_SUCCESS_IF(return != nullptr) E_RET_NEED_RELEASE()
 E_ALLOCATOR E_RET_RESTRICT void* operator new(enhanced::sizetype size, enhanced::NothrowRef) noexcept {
     return allocate(size);
 }
 
-E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
+E_RET_INSPECT() E_NULLABLE() E_FUNC_SUCCESS_IF(return != nullptr) E_RET_NEED_RELEASE()
 E_ALLOCATOR E_RET_RESTRICT void* operator new[](enhanced::sizetype size, enhanced::NothrowRef) noexcept {
     return operator new(size, nothrow);
 }

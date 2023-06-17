@@ -41,25 +41,21 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Traits.h>
 #include <enhanced/String.h>
-#include <enhanced/util/Traits.h>
-#include <enhanced/util/Comparable.h>
+#include <enhanced/Comparable.h>
 #include <enhanced/collections/ArrayList.h>
 
 #define E_BIT_NUM(NUMBER) enhanced::math::BitNumber(#NUMBER)
 
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define BIT_NUM E_BIT_NUM
-#endif
-
 namespace enhanced::math {
-    class E_CORE_API BitNumber : public util::Comparable<BitNumber> {
+    class E_CORE_API BitNumber : public Comparable<BitNumber> {
     private:
         collections::ArrayList<byte> bits;
 
     public:
         template <typename NumberType>
-        requires util::isIntegralType<NumberType>
+        requires isIntegralType<NumberType>
         static inline BitNumber from(NumberType number) {
             return {number};
         }
@@ -70,7 +66,7 @@ namespace enhanced::math {
 
         BitNumber(BitNumber&& number) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
-        util::ComparisonResult compare(const BitNumber& other) const;
+        E_RET_NO_DISCARD()
+        ComparisonResult compare(const BitNumber& other) const;
     };
 }

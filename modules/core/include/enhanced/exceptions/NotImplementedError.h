@@ -45,10 +45,6 @@
 
 #define E_NOT_IMPLEMENTED throw enhanced::exceptions::NotImplementedError
 
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define NOT_IMPLEMENTED E_NOT_IMPLEMENTED
-#endif
-
 namespace enhanced::exceptions {
     class E_CORE_API NotImplementedError : public AssertionError {
     public:

@@ -43,7 +43,7 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/util/Traits.h>
+#include <enhanced/Traits.h>
 
 namespace enhanced {
     using Nothrow = std::nothrow_t;
@@ -53,30 +53,30 @@ namespace enhanced {
 
     template <typename Type>
     struct Swappable {
-        static_assert(util::isVoidType<decltype(Type::swap())>);
+        static_assert(isVoidType<decltype(Type::swap())>);
     };
 
     template <typename Type>
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     inline constexpr Type* addressOf(Type& value) noexcept {
         return __builtin_addressof(value);
     }
 
     template <typename Type>
     constexpr const Type* addressOf(const Type&&) {
-        static_assert(!util::assume<Type>, "Cannot get address of a literal");
+        static_assert(!testValid<Type>, "Cannot get address of a literal");
     }
 
     template <typename Type>
     inline constexpr void swap(Type&& first, Type&& second)
-        noexcept(noexcept(util::isNothrowConstructible<Type> && util::isNothrowMoveAssignable<Type>)) {
+        noexcept(noexcept(isNothrowConstructible<Type> && isNothrowMoveAssignable<Type>)) {
         Type&& temp = first;
         first = second;
         second = temp;
     }
 
     template <typename Type>
-    requires util::isBaseOf<Swappable<Type>, Type>
+    requires isBaseOf<Swappable<Type>, Type>
     inline constexpr void swap(Type&& first, Type&& second) noexcept(noexcept(first.swap(second))) {
         first.swap(second);
     }
@@ -89,7 +89,7 @@ namespace enhanced {
      * @param size     The size to be allocated (unit: byte).
      * @return void*   A pointer to the newly allocated space.
      */
-    E_ANNOTATE(MustInspectResult, RetNullable, SuccessIf("return != nullptr"), RetRequiresRelease)
+    E_RET_INSPECT() E_NULLABLE() E_FUNC_SUCCESS_IF(return != nullptr) E_RET_NEED_RELEASE()
     E_CORE_API E_ALLOCATOR E_RET_RESTRICT void* allocate(sizetype size);
 
     /*!

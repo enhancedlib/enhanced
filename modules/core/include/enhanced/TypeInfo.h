@@ -61,10 +61,10 @@ namespace enhanced {
 
         TypeInfo& operator=(const TypeInfo& info) = delete;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         String getName() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         sizetype hashCode() const;
     };
 

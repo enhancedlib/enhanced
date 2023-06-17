@@ -41,9 +41,9 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
-#include <enhanced/util/Traits.h>
+#include <enhanced/Traits.h>
 #include <enhanced/Integral.h>
-#include <enhanced/util/Comparable.h>
+#include <enhanced/Comparable.h>
 
 namespace enhanced::math {
     enum class TIntMode : bool {
@@ -51,7 +51,7 @@ namespace enhanced::math {
     };
 
     template <typename UIntTypeNs, TIntMode mode>
-    requires util::isIntegralTypeNs<UIntTypeNs> && util::isUnsigned<UIntTypeNs>
+    requires isIntegralTypeNs<UIntTypeNs> && isUnsigned<UIntTypeNs>
     struct TInt : public Integral<UIntTypeNs> {
         E_INTEGRAL_EXTENSION_DEFAULT_METHODS(TInt, UIntTypeNs)
     };
@@ -74,28 +74,28 @@ namespace enhanced::math {
 #undef min
 
     template <typename Type>
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     inline constexpr const Type& max(const Type& x, const Type& y) noexcept(noexcept(x > y)) {
         return (x > y) ? x : y;
     }
 
     template <typename X, typename Y>
-    requires util::isIntegralType<X> && util::isIntegralType<Y>
-    E_ANNOTATE(RetNoDiscard)
-    inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> max(const X& x, const Y& y) noexcept {
+    requires isIntegralType<X> && isIntegralType<Y>
+    E_RET_NO_DISCARD()
+    inline constexpr Conditional<(sizeof(X) > sizeof(Y)), X, Y> max(const X& x, const Y& y) noexcept {
         return (x > y) ? x : y;
     }
 
     template <typename Type>
-    E_ANNOTATE(RetNoDiscard)
+    E_RET_NO_DISCARD()
     inline constexpr const Type& min(const Type& x, const Type& y) noexcept(noexcept(x < y)) {
         return (x < y) ? x : y;
     }
 
     template <typename X, typename Y>
-    requires util::isIntegralType<X> && util::isIntegralType<Y>
-    E_ANNOTATE(RetNoDiscard)
-    inline constexpr util::Conditional<(sizeof(X) > sizeof(Y)), X, Y> min(const X& x, const Y& y) noexcept {
+    requires isIntegralType<X> && isIntegralType<Y>
+    E_RET_NO_DISCARD()
+    inline constexpr Conditional<(sizeof(X) > sizeof(Y)), X, Y> min(const X& x, const Y& y) noexcept {
         return (x < y) ? x : y;
     }
 
@@ -105,16 +105,16 @@ namespace enhanced::math {
 #endif
 
     template <typename IntegralType>
-    requires util::isIntegralType<IntegralType>
-    E_ANNOTATE(RetNoDiscard)
-    inline constexpr util::ToUnsigned<IntegralType> abs(IntegralType number) noexcept {
+    requires isIntegralType<IntegralType>
+    E_RET_NO_DISCARD()
+    inline constexpr ToUnsigned<IntegralType> abs(IntegralType number) noexcept {
         return (number >= 0) ? number : -number;
     }
 
     template <typename X, typename Y>
-    requires util::isIntegralType<X> && util::isIntegralType<Y>
-    E_ANNOTATE(RetNoDiscard)
-    inline constexpr util::ToUnsigned<util::Conditional<(sizeof(X) > sizeof(Y)), X, Y>> difference(X x, Y y) noexcept(noexcept(x < y)) {
+    requires isIntegralType<X> && isIntegralType<Y>
+    E_RET_NO_DISCARD()
+    inline constexpr ToUnsigned<Conditional<(sizeof(X) > sizeof(Y)), X, Y>> difference(X x, Y y) noexcept(noexcept(x < y)) {
         E_CLANG_WARNING_PAD("-Wsign-compare") E_GCC_WARNING_PAD("-Wsign-compare")
 
         return (x < y) ? y - x : x - y;

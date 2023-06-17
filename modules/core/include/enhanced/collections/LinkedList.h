@@ -41,11 +41,11 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Traits.h>
 #include <enhanced/Memory.h>
 #include <enhanced/Iterator.h>
 #include <enhanced/Iterable.h>
 #include <enhanced/InitializerList.h>
-#include <enhanced/util/Traits.h>
 #include <enhanced/collections/List.h>
 
 namespace enhancedInternal::collections {
@@ -78,19 +78,19 @@ namespace enhancedInternal::collections {
 
             LinkedListIteratorImpl(const LinkedListImpl* linkedList, Node* init);
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             void* get0() const;
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool hasNext0() const;
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool hasPrev0() const;
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool isBegin0() const;
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool isEnd0() const;
 
             void next0() const;
@@ -120,16 +120,16 @@ namespace enhancedInternal::collections {
 
         LinkedListImpl(LinkedListImpl&& other) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         void* getLast0() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         void* getFirst0() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         void* get0(enhanced::sizetype index) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         enhanced::sizetype indexOf0(void* value, OpEqual opEqual) const;
 
         void addFirst0(void* element, OpCopy opCopy);
@@ -154,21 +154,21 @@ namespace enhanced::collections {
     private:
         using LinkedListImpl = enhancedInternal::collections::LinkedListImpl;
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static void* copy(void* element) {
             return new Type(*reinterpret_cast<Type*>(element));
         }
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static void* move(void* element) {
-            return new Type(util::move(*reinterpret_cast<Type*>(element)));
+            return new Type(traits::move(*reinterpret_cast<Type*>(element)));
         }
 
         static void destroy(void* element) {
             delete reinterpret_cast<Type*>(element);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static bool equal(void* element, void* value) {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
@@ -178,67 +178,67 @@ namespace enhanced::collections {
         public:
             inline explicit LinkedListIterator(const LinkedList<Type>* linkedList, Node* init) : LinkedListIteratorImpl(linkedList, init) {}
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline Type& get() const override {
                 return *reinterpret_cast<Type*>(get0());
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline sizetype count() const override {
                 return static_cast<const LinkedList<Type>*>(linkedList)->size;
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline bool hasNext() const override {
                 return hasNext0();
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline bool hasPrev() const override {
                 return hasPrev0();
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline bool isBegin() const override {
                 return isBegin0();
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline bool isEnd() const override {
                 return isEnd0();
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& next() const override {
                 next0();
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& next(sizetype count) const override {
                 next0(count);
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& prev() const override {
                 prev0();
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& prev(sizetype count) const override {
                 prev0(count);
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& setBegin() const override {
                 setBegin0();
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& setEnd() const override {
                 setBegin0();
                 return *this;
@@ -250,7 +250,7 @@ namespace enhanced::collections {
         E_INIT_LIST_CONSTRUCTOR(LinkedList, Type)
         inline LinkedList(InitializerList<Type> list) : LinkedListImpl() {
             for (auto item : list) {
-                addLast(util::move(item));
+                addLast(traits::move(item));
             }
         }
 
@@ -262,80 +262,80 @@ namespace enhanced::collections {
             clear();
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline sizetype getSize() const override {
             return size;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline bool isEmpty() const override {
             return size == 0;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline bool contain(const Type& value) const override {
             return indexOf(value) != E_SIZE_TYPE_MAX;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline LinkedListIterator iterator() const {
             return LinkedListIterator {this, (Node*) E_SIZE_TYPE_MAX};
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline ForwardIterator<LinkedListIterator> forwardIterator() const {
             return LinkedListIterator {this, (Node*) E_SIZE_TYPE_MAX};
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline ReverseIterator<LinkedListIterator> reverseIterator() const {
             return LinkedListIterator {this, nullptr};
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline ReversedIterable<LinkedList<Type>> reversed() const noexcept {
             return ReversedIterable<LinkedList<Type>>(*this);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline sizetype indexOf(const Type& value) const override {
-            return indexOf0(util::removePtrConst(&value), equal);
+            return indexOf0(removePtrConst(&value), equal);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& getLast() const override {
             return *reinterpret_cast<Type*>(getLast0());
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& getFirst() const override {
             return *reinterpret_cast<Type*>(getFirst0());
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& get(sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& operator[](sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }
 
         inline void addFirst(const Type& element) override {
-            addFirst0(util::removePtrConst(&element), copy);
+            addFirst0(removePtrConst(&element), copy);
         }
 
         inline void addFirst(Type&& element) override {
-            addFirst1(util::removePtrConst(&element), move);
+            addFirst1(removePtrConst(&element), move);
         }
 
         inline void addLast(const Type& element) override {
-            addLast0(util::removePtrConst(&element), copy);
+            addLast0(removePtrConst(&element), copy);
         }
 
         inline void addLast(Type&& element) override {
-            addLast1(util::removePtrConst(&element), move);
+            addLast1(removePtrConst(&element), move);
         }
 
         inline void push(const Type& element) override {
@@ -343,7 +343,7 @@ namespace enhanced::collections {
         }
 
         inline void push(Type&& element) override {
-            return addFirst(util::move(element));
+            return addFirst(traits::move(element));
         }
 
         inline void add(const Type& element) override {
@@ -351,7 +351,7 @@ namespace enhanced::collections {
         }
 
         inline void add(Type&& element) override {
-            addLast(util::move(element));
+            addLast(traits::move(element));
         }
 
         inline Type removeFirst() override {

@@ -42,11 +42,11 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
+#include <enhanced/Traits.h>
 #include <enhanced/Memory.h>
 #include <enhanced/Iterator.h>
 #include <enhanced/Iterable.h>
 #include <enhanced/InitializerList.h>
-#include <enhanced/util/Traits.h>
 #include <enhanced/collections/List.h>
 
 namespace enhancedInternal::collections {
@@ -75,19 +75,19 @@ namespace enhancedInternal::collections {
 
             ArrayListIteratorImpl(const ArrayListImpl* arrayList, void** init);
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             void* get0() const;
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool hasNext0() const;
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool hasPrev0() const;
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool isBegin0() const;
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             bool isEnd0() const;
 
             void next0() const;
@@ -109,16 +109,16 @@ namespace enhancedInternal::collections {
 
         ArrayListImpl(ArrayListImpl&& other) noexcept;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         void* getFirst0() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         void* getLast0() const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         void* get0(enhanced::sizetype index) const;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         enhanced::sizetype indexOf0(void* value, OpEqual opEqual) const;
 
         void addLast0(void* element, OpCopy opCopy);
@@ -140,26 +140,28 @@ namespace enhancedInternal::collections {
 }
 
 namespace enhanced::collections {
+    extern E_CORE_API sizetype ARRAY_LIST_DEFAULT_CAPACITY; // Default value: 16
+
     template <typename Type>
     class ArrayList : public List<Type>, public Iterable<ArrayList<Type>>, private enhancedInternal::collections::ArrayListImpl {
     private:
         using ArrayListImpl = enhancedInternal::collections::ArrayListImpl;
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static void* copy(void* element) {
             return new Type(*reinterpret_cast<Type*>(element));
         }
 
-        E_ANNOTATE(RetRequiresRelease)
+        E_RET_NEED_RELEASE()
         static void* move(void* element) {
-            return new Type(util::move(*reinterpret_cast<Type*>(element)));
+            return new Type(traits::move(*reinterpret_cast<Type*>(element)));
         }
 
         static void destroy(void* element) {
             delete reinterpret_cast<Type*>(element);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         static bool equal(void* element, void* value) {
             return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
         }
@@ -169,67 +171,67 @@ namespace enhanced::collections {
         public:
             inline explicit ArrayListIterator(const ArrayList<Type>* arrayList, void** init) : ArrayListIteratorImpl(arrayList, init) {}
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline Type& get() const override {
                 return *reinterpret_cast<Type*>(get0());
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline sizetype count() const override {
                 return static_cast<const ArrayList<Type>*>(arrayList)->size;
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline bool isBegin() const override {
                 return isBegin0();
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline bool isEnd() const override {
                 return isEnd0();
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline bool hasNext() const override {
                 return hasNext0();
             }
 
-            E_ANNOTATE(RetNoDiscard)
+            E_RET_NO_DISCARD()
             inline bool hasPrev() const override {
                 return hasPrev0();
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& next() const override {
                 next0();
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& next(sizetype count) const override {
                 next0(count);
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& prev() const override {
                 prev0();
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& prev(sizetype count) const override {
                 prev0(count);
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& setBegin() const override {
                 setBegin0();
                 return *this;
             }
 
-            E_ANNOTATE(ReturnSelf)
+            E_RETURN_SELF()
             inline const Iterator<Type>& setEnd() const override {
                 setEnd0();
                 return *this;
@@ -238,12 +240,12 @@ namespace enhanced::collections {
 
         using ExpansionSizeFunc = ArrayListImpl::ExpansionSizeFunc;
 
-        inline ArrayList() : ArrayListImpl(ARRAY_INIT_SIZE) {}
+        inline ArrayList() : ArrayListImpl(ARRAY_LIST_DEFAULT_CAPACITY) {}
 
         E_INIT_LIST_CONSTRUCTOR(ArrayList, Type)
-        inline ArrayList(InitializerList<Type> list) : ArrayListImpl(list.getSize() * 2) {
+        inline ArrayList(InitializerList<Type> list) : ArrayListImpl(list.getSize() + 1) {
             for (auto item : list) {
-                addLast(util::move(item));
+                addLast(traits::move(item));
             }
         }
 
@@ -251,92 +253,92 @@ namespace enhanced::collections {
 
         inline ArrayList(const ArrayList<Type>& other) : ArrayListImpl(other, copy) {}
 
-        inline ArrayList(ArrayList<Type>&& other) noexcept : ArrayListImpl(util::move(other)) {}
+        inline ArrayList(ArrayList<Type>&& other) noexcept : ArrayListImpl(traits::move(other)) {}
 
         inline ~ArrayList() noexcept {
             clear();
             delete[] elements;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline sizetype getSize() const noexcept override {
             return size;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline bool isEmpty() const noexcept override {
             return size == 0;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline bool contain(const Type& value) const override {
             return indexOf(value) != E_SIZE_TYPE_MAX;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline ArrayListIterator iterator() const noexcept {
             return ArrayListIterator {this, elements - 1};
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline ForwardIterator<ArrayListIterator> forwardIterator() const noexcept {
             return ArrayListIterator {this, elements - 1};
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline ReverseIterator<ArrayListIterator> reverseIterator() const noexcept {
             return ArrayListIterator {this, elements + size};
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline ReversedIterable<ArrayList<Type>> reversed() const noexcept {
             return ReversedIterable<ArrayList<Type>>(*this);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline sizetype indexOf(const Type& value) const override {
-            return indexOf0(util::removePtrConst(&value), equal);
+            return indexOf0(removePtrConst(&value), equal);
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& getFirst() const override {
             return *reinterpret_cast<Type*>(getFirst0());
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& getLast() const override {
             return *reinterpret_cast<Type*>(getLast0());
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& get(sizetype index) const override {
             return *reinterpret_cast<Type*>(get0(index));
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline sizetype getCapacity() const noexcept {
             return capacity;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& operator[](sizetype index) const override {
             return get(index);
         }
 
         inline void addFirst(const Type& element) override {
-            addFirst0(util::removePtrConst(&element), copy);
+            addFirst0(removePtrConst(&element), copy);
         }
 
         inline void addFirst(Type&& element) override {
-            addFirst1(util::removePtrConst(&element), move);
+            addFirst1(removePtrConst(&element), move);
         }
 
         inline void addLast(const Type& element) override {
-            addLast0(util::removePtrConst(&element), copy);
+            addLast0(removePtrConst(&element), copy);
         }
 
         inline void addLast(Type&& element) override {
-            addLast1(util::removePtrConst(&element), move);
+            addLast1(removePtrConst(&element), move);
         }
 
         inline void push(const Type& element) override {
@@ -344,7 +346,7 @@ namespace enhanced::collections {
         }
 
         inline void push(Type&& element) override {
-            return addFirst(util::move(element));
+            return addFirst(traits::move(element));
         }
 
         inline void add(const Type& element) override {
@@ -352,7 +354,7 @@ namespace enhanced::collections {
         }
 
         inline void add(Type&& element) override {
-            addLast(util::move(element));
+            addLast(traits::move(element));
         }
 
         inline Type removeFirst() override {

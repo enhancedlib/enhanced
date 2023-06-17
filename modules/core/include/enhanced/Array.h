@@ -42,9 +42,9 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
+#include <enhanced/Traits.h>
 #include <enhanced/InitializerList.h>
 #include <enhanced/Iterator.h>
-#include <enhanced/util/Traits.h>
 
 namespace enhanced {
     template <typename Type>
@@ -52,7 +52,7 @@ namespace enhanced {
     private:
         sizetype size;
 
-        E_ANNOTATE(MayRequireRelease(release))
+        E_RELEASE_FUNC(release)
         Type* elements;
 
     public:
@@ -68,7 +68,7 @@ namespace enhanced {
         inline explicit Array(sizetype size, const Type* elements) noexcept : size(size), elements(elements) {}
 
         E_INIT_LIST_CONSTRUCTOR(Array, Type)
-        inline Array(InitializerList<Type> list) noexcept : size(list.getSize()), elements(util::removePtrConst(list.toArray())) {}
+        inline Array(InitializerList<Type> list) noexcept : size(list.getSize()), elements(removePtrConst(list.toArray())) {}
 
         inline Array(const Array& other) noexcept : size(other.size), elements(other.elements) {}
 
@@ -77,17 +77,17 @@ namespace enhanced {
             other.elements = nullptr;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type& operator[](sizetype index) const noexcept {
             return elements[index];
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline sizetype getSize() const noexcept {
             return size;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type* raw() const noexcept {
             return elements;
         }
@@ -96,17 +96,17 @@ namespace enhanced {
             delete[] elements;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type* begin() const noexcept {
             return raw();
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Type* end() const noexcept {
             return elements + size;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Array& operator=(const Array& other) noexcept {
             if (this == &other) return *this;
 
@@ -116,7 +116,7 @@ namespace enhanced {
             return *this;
         }
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         inline Array& operator=(Array&& other) noexcept {
             if (this == &other) return *this;
 
@@ -143,7 +143,7 @@ namespace enhanced {
      * @param count        The number of elements.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<array-type>)").
      */
-    E_CORE_API void arrayFill(E_ANNOTATE(InOut) void* array, qword value, sizetype count, sizetype sizeOfType);
+    E_CORE_API void arrayFill(E_IN_OUT() void* array, qword value, sizetype count, sizetype sizeOfType);
 
     /*!
      * Sets elements of an array to the same value (pointer edition).
@@ -158,7 +158,7 @@ namespace enhanced {
      * @param valuePtr     A pointer to the value.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<type>)").
      */
-    E_CORE_API void arrayFillPtr(E_ANNOTATE(InOut) void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
+    E_CORE_API void arrayFillPtr(E_IN_OUT() void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
 
     /*!
      * Sets elements of an array to the same value (template edition).
@@ -171,8 +171,8 @@ namespace enhanced {
      * @param count        The number of elements.
      */
     template <typename Type>
-    requires util::isClass<Type>
-    inline void arrayFill(E_ANNOTATE(InOut) Type* array, const Type& value, sizetype count) {
+    requires isClass<Type>
+    inline void arrayFill(E_IN_OUT() Type* array, const Type& value, sizetype count) {
         if (array == nullptr) return;
         for (sizetype index = 0; index < count; ++index) {
             array[index] = value;
@@ -180,8 +180,8 @@ namespace enhanced {
     }
 
     template <typename Type>
-    requires (!util::isClass<Type>)
-    inline void arrayFill(E_ANNOTATE(InOut) Type* array, const Type& value, sizetype count) {
+    requires (!isClass<Type>)
+    inline void arrayFill(E_IN_OUT() Type* array, const Type& value, sizetype count) {
         arrayFillPtr(array, &value, count, sizeof(Type));
     }
 
@@ -196,7 +196,7 @@ namespace enhanced {
      * @param count         The number of elements.
      * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
      */
-    E_CORE_API void arrayCopy(E_ANNOTATE(InOut) void* destination, const void* source, sizetype count, sizetype sizeOfType);
+    E_CORE_API void arrayCopy(E_IN_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType);
 
 
     /*!
@@ -211,8 +211,8 @@ namespace enhanced {
      * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
      */
     template <typename Type>
-    requires util::isClass<Type>
-    void arrayCopy(E_ANNOTATE(InOut) Type* destination, const Type* source, sizetype count) {
+    requires isClass<Type>
+    void arrayCopy(E_IN_OUT() Type* destination, const Type* source, sizetype count) {
         if (destination == nullptr || source == nullptr) return;
         for (sizetype index = 0; index < count; ++index) {
             destination[index] = source[index];
@@ -220,8 +220,8 @@ namespace enhanced {
     }
 
     template <typename Type>
-    requires (!util::isClass<Type>)
-    void arrayCopy(E_ANNOTATE(InOut) Type* destination, const Type* source, sizetype count) {
+    requires (!isClass<Type>)
+    void arrayCopy(E_IN_OUT() Type* destination, const Type* source, sizetype count) {
         arrayCopy(destination, source, count, sizeof(Type));
     }
 }

@@ -49,17 +49,15 @@ namespace enhanced::collections {
 
         virtual ~Collection() noexcept = default;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual sizetype getSize() const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual bool isEmpty() const = 0;
 
-        E_ANNOTATE(RetNoDiscard)
+        E_RET_NO_DISCARD()
         virtual bool contain(const Type& value) const = 0;
 
         virtual void clear() = 0;
     };
-
-    E_CORE_API extern sizetype ARRAY_INIT_SIZE; // Default value: 256
 }

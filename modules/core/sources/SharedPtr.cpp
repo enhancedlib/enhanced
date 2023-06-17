@@ -35,7 +35,7 @@
  * SOFTWARE.
  */
 
-#include <enhanced/util/SharedPtr.h>
+#include <enhanced/SharedPtr.h>
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
@@ -44,7 +44,7 @@
 
 using enhanced::sizetype;
 
-namespace enhancedInternal::util {
+namespace enhancedInternal {
     SharedPtrImpl::SharedPtrImpl(void* ptr) : referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(ptr) {}
 
     SharedPtrImpl::SharedPtrImpl(void* ptr, void* end) : referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(end) {}

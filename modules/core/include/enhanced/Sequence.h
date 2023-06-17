@@ -38,11 +38,62 @@
 #pragma once
 
 #include <enhanced/Defines.h>
+#include <enhanced/ExportCore.h>
+#include <enhanced/Types.h>
+#include <enhanced/Annotations.h>
+#include <enhanced/Warnings.h>
+#include <enhanced/Traits.h>
+#include <enhanced/InitializerList.h>
+#include <enhanced/Iterator.h>
 
-namespace enhanced::util {
-    template <typename FirstType, typename SecondType>
-    struct Pair {
-        FirstType first;
-        SecondType second;
+namespace enhanced {
+    template <typename Type>
+    class Sequence final {
+    private:
+        E_RELEASE_FUNC(release)
+        Type* elements;
+
+    public:
+        using Element = Type;
+
+        inline Sequence() noexcept : elements(nullptr) {}
+
+        template <sizetype size>
+        inline Sequence(wrap<const Type[size]>& elements) noexcept : elements(elements) {}
+
+        inline Sequence(const Type* ptr) noexcept : elements(ptr) {}
+
+        E_INIT_LIST_CONSTRUCTOR(Sequence, Type)
+        inline Sequence(InitializerList<Type> list) noexcept : elements(removePtrConst(list.toArray())) {}
+
+        inline Sequence(const Sequence& other) noexcept : elements(other.elements) {}
+
+        E_RET_NO_DISCARD()
+        inline Type& operator[](sizetype index) const noexcept {
+            return elements[index];
+        }
+
+        E_RET_NO_DISCARD()
+        inline Type& operator*() const noexcept {
+            return *elements;
+        }
+
+        E_RET_NO_DISCARD()
+        inline Type* raw() const noexcept {
+            return elements;
+        }
+
+        inline void release() const noexcept {
+            delete[] elements;
+        }
+
+        E_RET_NO_DISCARD()
+        inline Sequence& operator=(const Sequence& other) noexcept {
+            if (this == &other) return *this;
+
+            elements = other.elements;
+
+            return *this;
+        }
     };
 }

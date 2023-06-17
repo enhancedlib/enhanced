@@ -43,9 +43,9 @@
 #include <enhanced/Annotations.h>
 
 namespace enhanced {
-    E_ANNOTATE(NoReturn)
+    E_NO_RETURN()
     E_CORE_API void processExit(int status);
 
-    E_ANNOTATE(NoReturn)
+    E_NO_RETURN()
     E_CORE_API void processAbort();
 }

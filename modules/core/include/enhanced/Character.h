@@ -39,17 +39,13 @@
 
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
-#include <enhanced/util/Traits.h>
+#include <enhanced/Traits.h>
 
-#define E_SWITCH_CHAR(TYPE, CH) enhanced::util::switchType<TYPE>(CH, L##CH, u8##CH, u##CH, U##CH)
-
-#ifdef E_SM_MACRO_NO_PREFIX_ALIAS
-    #define SWITCH_CHAR E_SWITCH_CHAR
-#endif
+#define E_SWITCH_CHAR(TYPE, CH) enhanced::switchType<TYPE>(CH, L##CH, u8##CH, u##CH, U##CH)
 
 namespace enhanced {
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     inline constexpr CharType uppercase(CharType ch) {
         if (ch >= E_SWITCH_CHAR(CharType, 'A') && ch <= E_SWITCH_CHAR(CharType, 'Z')) {
             (ch -= E_SWITCH_CHAR(CharType, 'A')) += E_SWITCH_CHAR(CharType, 'a');
@@ -58,7 +54,7 @@ namespace enhanced {
     }
 
     template <typename CharType>
-    requires util::isCharType<CharType>
+    requires isCharType<CharType>
     inline constexpr CharType lowercase(CharType ch) {
         if (ch >= E_SWITCH_CHAR(CharType, 'A') && ch <= E_SWITCH_CHAR(CharType, 'Z')) {
             (ch -= E_SWITCH_CHAR(CharType, 'A')) += E_SWITCH_CHAR(CharType, 'a');
