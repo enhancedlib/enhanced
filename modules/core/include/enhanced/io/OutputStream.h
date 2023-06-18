@@ -46,7 +46,6 @@
 #include <enhanced/io/Flushable.h>
 
 namespace enhanced::io {
-    // TODO: Support encoding
     class E_CORE_API OutputStream : public Closeable, Flushable {
     public:
         virtual void write(byte b) const;

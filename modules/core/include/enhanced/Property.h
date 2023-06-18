@@ -42,6 +42,8 @@
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
 
+// TODO
+
 #define __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) \
 ACCESS_MODIFIER: \
     E_RET_NO_DISCARD() \
@@ -54,30 +56,30 @@ ACCESS_MODIFIER: \
 
 #define __E_PROPERTY_GETTER_getter(ACCESS_MODIFIER) \
     __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) { \
-        return self; \
+        return value; \
     }
 
 #define __E_PROPERTY_SETTER_setter(ACCESS_MODIFIER) \
     __E_PROPERTY_SETTER_set(ACCESS_MODIFIER) { \
-        return self = value; \
+        return this->value = value; \
     }
 
-#define E_PROPERTIES_CLASS(NAME) using __PROPERTIES_CLASS_SELF = NAME
+#define E_PROPERTIES_CLASS(NAME) using __E_PROPERTIES_CLASS = NAME;
 
 #define E_PROPERTIES_STRUCT(NAME) \
     private: \
-        E_PROPERTIES_CLASS(NAME); \
+        E_PROPERTIES_CLASS(NAME) \
     public:
 
 #define E_PROPERTY(TYPE, NAME, GETTER, SETTER, ...) \
     struct Property_##NAME final { \
-        friend __PROPERTIES_CLASS_SELF; \
+        friend __E_PROPERTIES_CLASS; \
     private: \
         using Self = TYPE; \
-        Self self; \
-        inline Property_##NAME(Self value) : self(enhanced::move(value)) {} \
+        Self value; \
+        inline Property_##NAME(const Self& value) : value(enhanced::move(value)) {} \
         __E_PROPERTY_GETTER_##GETTER \
         __E_PROPERTY_SETTER_##SETTER \
     public: \
         __VA_ARGS__ \
-    } NAME
+    } NAME;

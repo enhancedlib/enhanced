@@ -41,17 +41,15 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
+#include <enhanced/Interface.h>
 #include <enhanced/Iterator.h>
 
 namespace enhanced {
-    template <typename Type>
+    E_INTERFACE()
     struct Iterable {
-        using Impl = Type;
+        using Impl = E_INTERFACE_IMPL;
 
-        E_RET_NO_DISCARD()
-        inline constexpr auto forwardIterator(auto&&... args) const noexcept {
-            return static_cast<const Type*>(this)->forwardIterator(args...);
-        }
+        E_INTERFACE_METHOD_RET_AUTO(forwardIterator, (), const);
 
         E_RET_NO_DISCARD()
         inline constexpr auto begin() const noexcept {

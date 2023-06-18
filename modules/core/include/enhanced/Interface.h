@@ -38,24 +38,34 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
-#include <enhanced/String.h>
-#include <enhanced/exceptions/AssertionError.h>
+#include <enhanced/Annotations.h>
+#include <enhanced/Traits.h>
 
-#define E_DYNAMIC_ASSERT(EXPRESSION, ...) \
-    if (EXPRESSION) { \
-        throw enhanced::exceptions::AssertionError(#EXPRESSION, E_CURRENT_FILE, E_CURRENT_LINE __VA_OPT__(,) __VA_ARGS__); \
-    }
+// TODO
 
-#if (defined(E_SM_DEBUG) && !defined(E_SM_ASSERT_DISABLE)) || defined(E_SM_ASSERT_ENABLE)
-    #define E_ASSERT(EXPRESSION, ...) E_DYNAMIC_ASSERT(EXPRESSION __VA_OPT__(,) __VA_ARGS__)
-#else
-    #define E_ASSERT(EXPRESSION, ...) (void) 0
-#endif
+#define E_INTERFACE() template <typename E_INTERFACE_IMPL>
 
-#if defined(E_SM_COMPILER_GCC) || defined(E_SM_COMPILER_CLANG)
-    #define E_UNREACHABLE_CODE() __builtin_unreachable();
-#elif defined(E_SM_COMPILER_MSVC)
-    #define E_UNREACHABLE_CODE() __assume(false);
-#endif
+#define E_INTERFACE_IMPL __E_INTERFACE_IMPLEMENTATION_CLASS
+
+#define E_INTERFACE_METHOD(NAME, RETURN, PARAMETERS, ...) \
+    private: \
+        inline constexpr void __e_interface_method_test_##NAME PARAMETERS __VA_ARGS__ {}; \
+        template <typename... Args> \
+        inline constexpr auto NAME(Args&&... args) __VA_ARGS__ \
+        noexcept(noexcept(static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) -> RETURN \
+        requires enhanced::testValid<decltype(this->__e_interface_method_test_##NAME(args...))> && enhanced::isSame<RETURN, \
+            decltype(static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))> { \
+            return static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
+        } \
+    public:
+
+#define E_INTERFACE_METHOD_RET_AUTO(NAME, PARAMETERS, ...) \
+    private: \
+        inline constexpr void __e_interface_method_test_##NAME PARAMETERS __VA_ARGS__ {}; \
+        template <typename... Args> \
+        inline constexpr auto NAME(Args&&... args) __VA_ARGS__ noexcept(noexcept(static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) \
+            requires enhanced::testValid<decltype(this->__e_interface_method_test_##NAME(args...))> { \
+            return static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
+        } \
+    public:

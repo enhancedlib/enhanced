@@ -459,20 +459,6 @@ namespace enhanced::inline traits {
     template <sizetype index, typename... Types>
     using TypeAt = typename enhancedInternal::traits::TypeAtImpl<index, Types...>::Type;
 
-    template <typename... Types>
-    struct TypeVector {
-        template <sizetype index>
-        using At = TypeAt<index, Types...>;
-
-        template <template <typename...> typename Type, typename... TypeArgs>
-        using Expand = Type<TypeArgs..., Types...>;
-
-        template <template <auto, typename...> typename Type, auto arg, typename... TypeArgs>
-        using ExpandWith = Type<arg, TypeArgs..., Types...>;
-
-        static inline constexpr sizetype count = sizeof...(Types);
-    };
-
     template <bool first, bool... conditions>
     inline constexpr bool allOf = first;
 
@@ -487,6 +473,20 @@ namespace enhanced::inline traits {
 
     template <typename...>
     inline constexpr bool testValid = true; // Uses to test whether a type expression is valid
+
+    template <typename... Types>
+    struct TypeVector {
+        template <sizetype index>
+        using At = TypeAt<index, Types...>;
+
+        template <template <typename...> typename Type, typename... TypeArgs>
+        using Expand = Type<TypeArgs..., Types...>;
+
+        template <template <auto, typename...> typename Type, auto arg, typename... TypeArgs>
+        using ExpandWith = Type<arg, TypeArgs..., Types...>;
+
+        static inline constexpr sizetype count = sizeof...(Types);
+    };
 
     template <typename Type>
     E_RET_NO_DISCARD()
@@ -1266,39 +1266,6 @@ namespace enhanced::inline traits {
         return switchType<Case, Types...>(static_cast<Types&&>(values)...);
     }
 
-    template <typename Callable, typename... Args>
-    requires (!isMemberPointer<RemoveRef<Callable>>)
-    inline constexpr auto invoke(Callable&& callable, Args&&... args)
-        noexcept(noexcept(static_cast<Callable&&>(callable)(static_cast<Args&&>(args)...))) {
-        return static_cast<Callable&&>(callable)(static_cast<Args&&>(args)...);
-    }
-
-    template <typename Callable, typename Class, typename... Args>
-    requires (isMemFuncPtr<RemoveRef<Callable>> && isBaseOf<typename MemFuncPtrParser<RemoveRef<Callable>>::ClassType, RemoveRef<Class>>)
-    inline constexpr auto invoke(Callable&& callable, Class&& object, Args&&... args)
-        noexcept(noexcept((static_cast<Class&&>(object).*callable)(static_cast<Args&&>(args)...))) {
-        return (static_cast<Class&&>(object).*callable)(static_cast<Args&&>(args)...);
-    }
-
-    template <typename Callable, typename Class, typename... Args>
-    requires (isMemFuncPtr<RemoveRef<Callable>> && !isBaseOf<typename MemFuncPtrParser<RemoveRef<Callable>>::ClassType, RemoveRef<Class>>)
-    inline constexpr auto invoke(Callable&& callable, Class&& object, Args&&... args)
-        noexcept(noexcept(((*static_cast<Class&&>(object)).*callable)(static_cast<Args&&>(args)...))) {
-        return ((*static_cast<Class&&>(object)).*callable)(static_cast<Args&&>(args)...);
-    }
-
-    template <typename Member, typename Class>
-    requires (isMemObjPtr<RemoveRef<Member>> && isBaseOf<typename MemObjPtrParser<RemoveRef<Member>>::ClassType, RemoveRef<Class>>)
-    inline constexpr auto invoke(Member&& member, Class&& object) noexcept {
-        return static_cast<Class&&>(object).*member;
-    }
-
-    template <typename Member, typename Class>
-    requires (isMemObjPtr<RemoveRef<Member>> && !isBaseOf<typename MemObjPtrParser<RemoveRef<Member>>::ClassType, RemoveRef<Class>>)
-    inline constexpr auto invoke(Member&& member, Class&& object) noexcept(noexcept((*static_cast<Class&&>(object)).*member)) {
-        return (*static_cast<Class&&>(object)).*member;
-    }
-
     template <typename Type>
     E_RET_NO_DISCARD()
     inline constexpr const RemoveRef<Type>& addConst(Type&& value) noexcept {
@@ -1390,6 +1357,39 @@ namespace enhanced::inline traits {
     E_RET_NO_DISCARD()
     inline constexpr RemovePtrCv<RemoveRef<Type>>& removePtrCv(Type&& value) noexcept {
         return const_cast<RemovePtrCv<RemoveRef<Type>&>>(value);
+    }
+
+    template <typename Callable, typename... Args>
+    requires (!isMemberPointer<RemoveRef<Callable>>)
+    inline constexpr auto invoke(Callable&& callable, Args&&... args)
+        noexcept(noexcept(static_cast<Callable&&>(callable)(forward<Args&&>(args)...))) {
+        return static_cast<Callable&&>(callable)(forward<Args&&>(args)...);
+    }
+
+    template <typename Callable, typename Class, typename... Args>
+    requires (isMemFuncPtr<RemoveRef<Callable>> && isBaseOf<typename MemFuncPtrParser<RemoveRef<Callable>>::ClassType, RemoveRef<Class>>)
+    inline constexpr auto invoke(Callable&& callable, Class&& object, Args&&... args)
+        noexcept(noexcept((static_cast<Class&&>(object).*callable)(forward<Args&&>(args)...))) {
+        return (static_cast<Class&&>(object).*callable)(forward<Args&&>(args)...);
+    }
+
+    template <typename Callable, typename Class, typename... Args>
+    requires (isMemFuncPtr<RemoveRef<Callable>> && !isBaseOf<typename MemFuncPtrParser<RemoveRef<Callable>>::ClassType, RemoveRef<Class>>)
+    inline constexpr auto invoke(Callable&& callable, Class&& object, Args&&... args)
+        noexcept(noexcept(((*static_cast<Class&&>(object)).*callable)(forward<Args&&>(args)...))) {
+        return ((*static_cast<Class&&>(object)).*callable)(forward<Args&&>(args)...);
+    }
+
+    template <typename Member, typename Class>
+    requires (isMemObjPtr<RemoveRef<Member>> && isBaseOf<typename MemObjPtrParser<RemoveRef<Member>>::ClassType, RemoveRef<Class>>)
+    inline constexpr auto invoke(Member&& member, Class&& object) noexcept {
+        return static_cast<Class&&>(object).*member;
+    }
+
+    template <typename Member, typename Class>
+    requires (isMemObjPtr<RemoveRef<Member>> && !isBaseOf<typename MemObjPtrParser<RemoveRef<Member>>::ClassType, RemoveRef<Class>>)
+    inline constexpr auto invoke(Member&& member, Class&& object) noexcept(noexcept((*static_cast<Class&&>(object)).*member)) {
+        return (*static_cast<Class&&>(object)).*member;
     }
 
     template <typename Derived, typename Base>

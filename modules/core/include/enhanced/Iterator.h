@@ -122,7 +122,7 @@ namespace enhanced {
         using BaseIterator = Iter;
 
         template <typename... Args>
-        inline DirectedIterator(Args&&... args) : Iter(args...) {}
+        inline DirectedIterator(Args&&... args) : Iter(forward<Args>(args)...) {}
 
         virtual const DirectedIterator& step() const = 0;
 
@@ -141,7 +141,7 @@ namespace enhanced {
     template <typename Iter>
     struct ForwardIterator : DirectedIterator<Iter> {
         template <typename... Args>
-        inline ForwardIterator(Args&&... args) : DirectedIterator<Iter>(args...) {}
+        inline ForwardIterator(Args&&... args) : DirectedIterator<Iter>(forward<Args>(args)...) {}
 
         E_RETURN_SELF()
         inline const ForwardIterator& step() const {
@@ -180,7 +180,7 @@ namespace enhanced {
     template <typename Iter>
     struct ReverseIterator : DirectedIterator<Iter> {
         template <typename... Args>
-        inline ReverseIterator(Args&&... args) : DirectedIterator<Iter>(args...) {}
+        inline ReverseIterator(Args&&... args) : DirectedIterator<Iter>(forward<Args>(args)...) {}
 
         E_RETURN_SELF()
         inline const ReverseIterator& step() const {

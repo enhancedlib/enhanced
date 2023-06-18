@@ -103,7 +103,7 @@ namespace enhanced {
     public:
         template <typename... Args>
         static inline SharedPtr make(Args&&... args) {
-            return new Type {args...};
+            return new Type {forward<Args>(args)...};
         }
 
         template <typename... Args>
@@ -112,7 +112,7 @@ namespace enhanced {
             auto end = ptr + size;
 
             for (Type* item = ptr; item != end; ++item) {
-                new (item) Type {args...};
+                new (item) Type {forward<Args>(args)...};
             }
 
             return {ptr, end};
@@ -120,7 +120,7 @@ namespace enhanced {
 
         template <sizetype size, typename... Args>
         static inline SharedPtr make(Args&&... args) {
-            return makeMulti(size, args...);
+            return makeMulti(size, forward<Args>(args)...);
         }
 
         inline SharedPtr() noexcept : SharedPtrImpl(nullptr) {}

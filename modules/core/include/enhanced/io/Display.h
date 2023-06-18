@@ -45,7 +45,7 @@
 #include <enhanced/String.h>
 #include <enhanced/io/OutputStream.h>
 
-#define E_DISPLAY __E_interface_display
+#define E_DISPLAY __e_interface_display
 #define E_DISPLAY_DECLARE(TYPE, ...) void __VA_ARGS__ E_DISPLAY(const io::OutputStream& out, const enhanced::wrap<TYPE>& value)
 
 namespace enhanced::io {

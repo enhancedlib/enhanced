@@ -41,18 +41,18 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Interface.h>
 
 namespace enhanced {
     enum class ComparisonResult : int8 {
         EQUAL = 0, LESS = -1, GREATER = 1
     };
 
-    template <typename Type>
+    E_INTERFACE()
     struct Comparable {
-        E_RET_NO_DISCARD()
-        inline constexpr ComparisonResult compare(const Type& other) const {
-            return static_cast<const Type*>(this)->compare(other);
-        }
+        using Type = E_INTERFACE_IMPL;
+
+        E_INTERFACE_METHOD(compare, ComparisonResult, (const Type&), const)
 
         E_RET_NO_DISCARD()
         inline constexpr bool equal(const Type& other) const {

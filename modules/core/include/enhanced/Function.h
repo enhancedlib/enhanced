@@ -73,13 +73,13 @@ namespace enhanced {
         requires isSame<NeatFunctionType, ReturnType (Args...)>
         inline ReturnType invoke(Args... args) const {
             // E_NOT_IMPLEMENTED();
-            return function(args...);
+            return function(forward<Args>(args)...);
         }
 
         template <typename... Args>
         requires isSame<NeatFunctionType, ReturnType (Args...)>
         inline ReturnType operator()(Args... args) const {
-            return invoke(args...);
+            return invoke(forward<Args>(args)...);
         }
     };
 }

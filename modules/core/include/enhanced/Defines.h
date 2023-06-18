@@ -170,6 +170,9 @@
 #define __E_STRING_LITERAL_IMPL(...) #__VA_ARGS__
 #define E_STRING_LITERAL(...) __E_STRING_LITERAL_IMPL(__VA_ARGS__)
 
+#define __E_UNPACK_IMPL(...) __VA_ARGS__
+#define E_UNPACK(...) __E_UNPACK_IMPL __VA_ARGS__
+
 #define E_CURRENT_FUNC __func__
 #define E_CURRENT_FILE __FILE__
 #define E_CURRENT_LINE __LINE__
