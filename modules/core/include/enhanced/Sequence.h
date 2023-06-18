@@ -49,6 +49,9 @@
 namespace enhanced {
     template <typename Type>
     class Sequence final {
+        E_CLASS(Sequence)
+
+    E_CLASS_BODY
     private:
         E_RELEASE_FUNC(release)
         Type* elements;
@@ -79,15 +82,20 @@ namespace enhanced {
         }
 
         E_RET_NO_DISCARD()
+        inline bool isEmpty() const noexcept {
+            return elements == nullptr;
+        }
+
+        E_RET_NO_DISCARD()
         inline Type* raw() const noexcept {
             return elements;
         }
 
         inline void release() const noexcept {
             delete[] elements;
+            elements = nullptr;
         }
 
-        E_RET_NO_DISCARD()
         inline Sequence& operator=(const Sequence& other) noexcept {
             if (this == &other) return *this;
 

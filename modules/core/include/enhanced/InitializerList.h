@@ -48,6 +48,9 @@
 namespace enhanced {
     template <typename Type>
     class InitializerList {
+        E_CLASS(InitializerList)
+
+    E_CLASS_BODY
     private:
         std::initializer_list<Type> initList;
 

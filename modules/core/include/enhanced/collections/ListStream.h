@@ -42,107 +42,158 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
+#include <enhanced/Iterable.h>
 #include <enhanced/Iterator.h>
 #include <enhanced/Function.h>
 #include <enhanced/collections/List.h>
-#include <enhanced/exceptions/InvalidStateException.h>
+#include <enhanced/exceptions/OperationException.h>
 
 namespace enhanced::collections {
-    // TODO: Testing
-
     template <template <typename> typename ListType, typename Element>
     requires isBaseOf<List<Element>, ListType<Element>> && (!isAbstractClass<ListType<Element>>)
-    class ListStream {
-    private:
-        const ListType<Element> list {};
+    class ListStream : public Iterable<ListStream<ListType, Element>> {
+        E_CLASS(ListStream)
 
-        Function<void ()> generator;
+    E_CLASS_BODY
+    private:
+        ListType<Element> list {};
+
+        const Function<bool (ListType<Element>&)> generator;
+
+        bool isCompleted = false;
 
     public:
         class ListStreamIterator : public Iterator<Element> {
+            E_CLASS(ListStreamIterator)
+
+        E_CLASS_BODY
         private:
-            Iterator<Element>& agent;
+            ListStream* stream;
+
+            decltype(stream->list.iterator()) delegate;
 
             mutable sizetype index = E_SIZE_TYPE_MAX;
 
-            explicit ListStreamIterator(Iterator<Element>& agent) : agent(agent) {}
-
         public:
-            E_RET_NO_DISCARD()
-            bool isBegin() const override {
-                return agent.isBegin();
-            }
-
-            E_RET_NO_DISCARD()
-            bool isEnd() const override {
-                if (index == agent.count() + 1) {
-                    generator();
-                    return agent.assume();
-                }
-                return false;
-            }
-
-            E_RET_NO_DISCARD()
-            bool hasNext() const override {
-                if (index == agent.count()) {
-                    generator();
-                    return agent.hasNext();
-                }
-                return true;
-            }
-
-            E_RETURN_SELF()
-            const Iterator<Element>& next() const override {
-                if (isEnd()) throw exceptions::InvalidStateException("The iterator is at the end of the list");
-                ++index;
-                return agent.next();
-            }
-
-            E_RETURN_SELF()
-            const Iterator<Element>& prev() const override {
-                if (isBegin()) throw exceptions::InvalidStateException("The iterator is at the begin of the list");
-                --index;
-                return agent.prev();
-            }
+            explicit ListStreamIterator(const ListStream* stream) : stream(const_cast<ListStream*>(stream)), delegate(stream->list.iterator()) {}
 
             E_RET_NO_DISCARD()
             Element& get() const override {
-                return agent.get();
-            }
-
-            void reset() const override {
-                agent.reset();
-                index = E_SIZE_TYPE_MAX;
+                return delegate.get();
             }
 
             E_RET_NO_DISCARD()
             sizetype count() const override {
-                return agent.count();
+                return delegate.count();
             }
 
             E_RET_NO_DISCARD()
-            sizetype getIndex() const {
+            bool isBegin() const override {
+                return index == E_SIZE_TYPE_MAX;
+            }
+
+            E_RET_NO_DISCARD()
+            bool isEnd() const override {
+                return index == count();
+            }
+
+            E_RET_NO_DISCARD()
+            bool hasPrev() const override {
+                return index != E_SIZE_TYPE_MAX;
+            }
+
+            E_RET_NO_DISCARD()
+            bool hasNext() const override {
+                return index == E_SIZE_TYPE_MAX || index < count();
+            }
+
+            E_RETURN_SELF()
+            const Iterator<Element>& prev() const override {
+                if (isBegin()) throw exceptions::OperationException("The iterator is at the begin of the list");
+                --index;
+                return delegate.prev();
+            }
+
+            E_RETURN_SELF()
+            const Iterator<Element>& prev(sizetype count) const override {
+                if (count > (index + 1)) throw exceptions::OperationException("Out of range");
+                index -= count;
+                return delegate.prev(count);
+            }
+
+            E_RETURN_SELF()
+            const Iterator<Element>& next() const override {
+                if (isEnd()) throw exceptions::OperationException("The iterator is at the end of the list");
+                if (!stream->isCompleted && (count() == 0 || index == count() - 1)) {
+                    if (!stream->generator(stream->list)) stream->isCompleted = true;
+                }
+
+                if (isBegin()) index = 0;
+                else ++index;
+                return delegate.next();
+            }
+
+            E_RETURN_SELF()
+            const Iterator<Element>& next(sizetype count) const override {
+                sizetype generationCount = ((index != E_SIZE_TYPE_MAX) ? index + 1 : 0) + count - this->count();
+                if (!stream->isCompleted) {
+                    while (--generationCount >= 0) {
+                        if (!stream->generator(stream->list)) {
+                            stream->isCompleted = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (isBegin()) index = count - 1;
+                else index += count;
+                return delegate.next(count);
+            }
+
+            E_RETURN_SELF()
+            const Iterator<Element>& setBegin() const override {
+                if (!stream->isCompleted) throw exceptions::OperationException("ListStream is not completed");
+                delegate.setBegin();
+                index = E_SIZE_TYPE_MAX;
+                return *this;
+            }
+
+            E_RETURN_SELF()
+            const Iterator<Element>& setEnd() const override {
+                if (!stream->isCompleted) throw exceptions::OperationException("ListStream is not completed");
+                delegate.setEnd();
+                index = count() + 1;
+                return *this;
+            }
+
+            E_RET_NO_DISCARD()
+            sizetype indexOf() const {
                 return index;
             }
         };
 
-        ListStream() = default;
+        template <typename Type>
+        ListStream(Type generator)
+        requires testValid<decltype(Function<bool (ListType<Element>&)>(move(generator)))> : generator(move(generator)) {}
 
         E_RET_NO_DISCARD()
-        inline ListStreamIterator iterator() const {
-            return ListStreamIterator {list.iterator()};
+        inline ListStreamIterator iterator() const noexcept {
+            return ListStreamIterator {this};
         }
 
         E_RET_NO_DISCARD()
-        inline ListStreamIterator begin() const {
-            auto it = iterator();
-            it.next();
-            return it;
+        inline ForwardIterator<ListStreamIterator> forwardIterator() const noexcept {
+            return ListStreamIterator {this};
         }
 
-        E_RET_NO_DISCARD()
-        inline byte end() const {
-            return 0;
+        inline const ListType<Element>& complete() const {
+            if (!isCompleted) {
+                auto iter = iterator();
+                while (!isCompleted) {
+                    iter.next();
+                }
+            }
+            return list;
         }
     };
 }

@@ -43,7 +43,9 @@
 
 namespace enhanced::io {
     class E_CORE_API BufferInputStream : public InputStream {
-    public:
+        E_CLASS(BufferInputStream)
+
+    E_CLASS_BODY
         E_RET_NO_DISCARD()
         byte get() const override;
 

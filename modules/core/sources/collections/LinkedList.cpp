@@ -254,20 +254,6 @@ namespace enhancedInternal::collections {
         return (isEnd0() && linkedList->size != 0) || (!isBegin0() && indexer->prev != nullptr);
     }
 
-    void LinkedListImpl::LinkedListIteratorImpl::next0() const {
-        if (isEnd0()) throw OperationException("The iterator is at the end of the list");
-        else if (isBegin0()) indexer = linkedList->first;
-        else nextNode(indexer);
-    }
-
-    void LinkedListImpl::LinkedListIteratorImpl::next0(sizetype count) const {
-        for (sizetype step = 0; step < count; ++step) {
-            if (isEnd0()) throw OperationException("Out of the list");
-            else if (isBegin0()) indexer = linkedList->first;
-            else nextNode(indexer);
-        }
-    }
-
     void LinkedListImpl::LinkedListIteratorImpl::prev0() const {
         if (isBegin0()) throw OperationException("The iterator is at the begin of the list");
         else if (isEnd0()) indexer = linkedList->last;
@@ -276,9 +262,23 @@ namespace enhancedInternal::collections {
 
     void LinkedListImpl::LinkedListIteratorImpl::prev0(sizetype count) const {
         for (sizetype step = 0; step < count; ++step) {
-            if (isEnd0()) throw OperationException("Out of the list");
+            if (isEnd0()) throw OperationException("Out of range");
             else if (isEnd0()) indexer = linkedList->last;
             else prevNode(indexer);
+        }
+    }
+
+    void LinkedListImpl::LinkedListIteratorImpl::next0() const {
+        if (isEnd0()) throw OperationException("The iterator is at the end of the list");
+        else if (isBegin0()) indexer = linkedList->first;
+        else nextNode(indexer);
+    }
+
+    void LinkedListImpl::LinkedListIteratorImpl::next0(sizetype count) const {
+        for (sizetype step = 0; step < count; ++step) {
+            if (isEnd0()) throw OperationException("Out of range");
+            else if (isBegin0()) indexer = linkedList->first;
+            else nextNode(indexer);
         }
     }
 

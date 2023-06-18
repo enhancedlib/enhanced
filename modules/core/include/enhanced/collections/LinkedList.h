@@ -50,6 +50,9 @@
 
 namespace enhancedInternal::collections {
     class E_CORE_API LinkedListImpl {
+        E_CLASS(LinkedListImpl)
+
+    E_CLASS_BODY
     protected:
         struct Node {
             void* value;
@@ -71,6 +74,9 @@ namespace enhancedInternal::collections {
         using OpEqual = bool (*)(void*, void*);
 
         class E_CORE_API LinkedListIteratorImpl {
+            E_CLASS(LinkedListIteratorImpl)
+
+        E_CLASS_BODY
         protected:
             const LinkedListImpl* linkedList;
 
@@ -93,13 +99,13 @@ namespace enhancedInternal::collections {
             E_RET_NO_DISCARD()
             bool isEnd0() const;
 
-            void next0() const;
-
-            void next0(enhanced::sizetype count) const;
-
             void prev0() const;
 
             void prev0(enhanced::sizetype count) const;
+
+            void next0() const;
+
+            void next0(enhanced::sizetype count) const;
 
             void setBegin0() const;
 
@@ -151,6 +157,9 @@ namespace enhancedInternal::collections {
 namespace enhanced::collections {
     template <typename Type>
     class LinkedList : public List<Type>, public Iterable<LinkedList<Type>>, private enhancedInternal::collections::LinkedListImpl {
+        E_CLASS(LinkedList)
+
+    E_CLASS_BODY
     private:
         using LinkedListImpl = enhancedInternal::collections::LinkedListImpl;
 
@@ -175,6 +184,9 @@ namespace enhanced::collections {
 
     public:
         class LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
+            E_CLASS(LinkedListIterator)
+
+        E_CLASS_BODY
         public:
             inline explicit LinkedListIterator(const LinkedList<Type>* linkedList, Node* init) : LinkedListIteratorImpl(linkedList, init) {}
 
@@ -209,18 +221,6 @@ namespace enhanced::collections {
             }
 
             E_RETURN_SELF()
-            inline const Iterator<Type>& next() const override {
-                next0();
-                return *this;
-            }
-
-            E_RETURN_SELF()
-            inline const Iterator<Type>& next(sizetype count) const override {
-                next0(count);
-                return *this;
-            }
-
-            E_RETURN_SELF()
             inline const Iterator<Type>& prev() const override {
                 prev0();
                 return *this;
@@ -229,6 +229,18 @@ namespace enhanced::collections {
             E_RETURN_SELF()
             inline const Iterator<Type>& prev(sizetype count) const override {
                 prev0(count);
+                return *this;
+            }
+
+            E_RETURN_SELF()
+            inline const Iterator<Type>& next() const override {
+                next0();
+                return *this;
+            }
+
+            E_RETURN_SELF()
+            inline const Iterator<Type>& next(sizetype count) const override {
+                next0(count);
                 return *this;
             }
 

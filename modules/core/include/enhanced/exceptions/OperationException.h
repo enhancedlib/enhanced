@@ -44,7 +44,9 @@
 
 namespace enhanced::exceptions {
     class E_CORE_API OperationException : public Exception {
-    public:
+        E_CLASS(OperationException)
+
+    E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::OperationException)
 
         explicit OperationException(const String& message = "") noexcept;

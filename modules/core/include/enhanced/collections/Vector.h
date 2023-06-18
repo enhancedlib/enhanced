@@ -43,8 +43,9 @@
 #include <enhanced/collections/List.h>
 
 namespace enhanced::collections {
+    // TODO
     template <typename Type>
     class Vector : public List<Type> {
-        // TODO
+        E_CLASS(Vector)
     };
 }

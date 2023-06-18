@@ -77,6 +77,9 @@ namespace enhancedInternal {
 namespace enhanced {
     template <typename Type>
     class SharedPtr final : private enhancedInternal::SharedPtrImpl {
+        E_CLASS(SharedPtr)
+
+    E_CLASS_BODY
     private:
         static void destroy(void* ptr, void* end) {
             if (ptr == (static_cast<Type*>(end) - 1)) {

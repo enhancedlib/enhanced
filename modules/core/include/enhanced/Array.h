@@ -49,6 +49,9 @@
 namespace enhanced {
     template <typename Type>
     class Array {
+        E_CLASS(Array)
+
+    E_CLASS_BODY
     private:
         sizetype size;
 
@@ -133,7 +136,7 @@ namespace enhanced {
     /*!
      * Sets elements of an array to the same value. \n
      * For float types, use the pointer edition (arrayFillPtr). \n
-     * For struct/class types, use the template edition.
+     * For class/struct types, use the template edition.
      *
      * @example arrayFill(str, 'a', 5, sizeof(char));
      * @example arrayFill(array, 0, 10, sizeof(int));

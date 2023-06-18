@@ -46,11 +46,13 @@
 
 namespace enhanced {
     E_INTERFACE()
-    struct Iterable {
-        using Impl = E_INTERFACE_IMPL;
+    class Iterable {
+        E_CLASS(Iterable)
 
-        E_INTERFACE_METHOD_RET_AUTO(forwardIterator, (), const);
+    E_CLASS_HEADER
+        E_INTERFACE_METHOD_RET_AUTO(forwardIterator, (), const)
 
+    E_CLASS_BODY
         E_RET_NO_DISCARD()
         inline constexpr auto begin() const noexcept {
             auto it = ForEachIterator<decltype(forwardIterator())>(forwardIterator());
@@ -65,11 +67,15 @@ namespace enhanced {
     };
 
     template <typename Type>
-    struct ReversedIterable : Type {
+    class ReversedIterable : Type {
+        E_CLASS(ReversedIterable)
+
+    E_CLASS_BODY
         const Type& iterable;
 
-        ReversedIterable(const Type& iterable) noexcept
-        requires isBaseOf<Iterable<Type>, Type> : iterable(iterable) {}
+        static_assert(isBaseOf<Iterable<Type>, Type>);
+
+        ReversedIterable(const Type& iterable) noexcept : iterable(iterable) {}
 
         E_RET_NO_DISCARD()
         inline constexpr auto begin() const noexcept {

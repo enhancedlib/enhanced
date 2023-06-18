@@ -43,9 +43,9 @@
 #include <enhanced/collections/ArrayList.h>
 
 namespace enhanced::collections {
+    // TODO
     template <typename Type>
     class Stack : public ArrayList<Type> {
-    public:
-        // TODO
+        E_CLASS(Stack)
     };
 }

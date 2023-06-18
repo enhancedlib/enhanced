@@ -43,6 +43,7 @@
 #include <enhanced/ExportCore.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Interface.h>
 #include <enhanced/Traits.h>
 
 namespace enhanced {
@@ -51,9 +52,12 @@ namespace enhanced {
 
     extern const Nothrow nothrow;
 
-    template <typename Type>
-    struct Swappable {
-        static_assert(isVoidType<decltype(Type::swap())>);
+    E_INTERFACE()
+    class Swappable {
+    E_CLASS_HEADER
+        using Type = E_INTERFACE_IMPL_CLASS;
+
+        E_INTERFACE_METHOD(swap, void, (const Type&))
     };
 
     template <typename Type>

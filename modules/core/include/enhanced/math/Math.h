@@ -52,8 +52,11 @@ namespace enhanced::math {
 
     template <typename UIntTypeNs, TIntMode mode>
     requires isIntegralTypeNs<UIntTypeNs> && isUnsigned<UIntTypeNs>
-    struct TInt : public Integral<UIntTypeNs> {
-        E_INTEGRAL_EXTENSION_DEFAULT_METHODS(TInt, UIntTypeNs)
+    class TInt : public Integral<UIntTypeNs> {
+        E_CLASS(TInt)
+
+    E_CLASS_BODY
+        E_INTEGRAL_DEFAULT_METHODS(TInt, UIntTypeNs)
     };
 
     using PInt8 = TInt<uint8, TIntMode::POSITIVE>;

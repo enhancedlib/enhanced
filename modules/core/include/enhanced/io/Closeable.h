@@ -40,9 +40,13 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/ExportCore.h>
 
 namespace enhanced::io {
-    struct Closeable {
+    class E_CORE_API Closeable {
+        E_CLASS(Closeable)
+
+    E_CLASS_BODY
         virtual void close() const = 0;
     };
 }

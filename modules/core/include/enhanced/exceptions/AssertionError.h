@@ -45,7 +45,9 @@
 
 namespace enhanced::exceptions {
     class E_CORE_API AssertionError : public Error {
-    public:
+        E_CLASS(AssertionError)
+
+    E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::AssertionError)
 
         explicit AssertionError(const String& message = "") noexcept;

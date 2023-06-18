@@ -45,7 +45,9 @@
 
 namespace enhanced::exceptions {
     class E_CORE_API IndexOutOfBoundsException : public RuntimeException {
-    public:
+        E_CLASS(IndexOutOfBoundsException)
+    
+    E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::IndexOutOfBoundsException)
 
         explicit IndexOutOfBoundsException(const String& message = "") noexcept;

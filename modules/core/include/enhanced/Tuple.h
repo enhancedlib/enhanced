@@ -40,8 +40,9 @@
 #include <enhanced/Defines.h>
 
 namespace enhanced {
+    // TODO
     template <typename... Types>
-    struct Tuple final {
-        // TODO
+    class Tuple final {
+        E_CLASS(Tuple)
     };
 }

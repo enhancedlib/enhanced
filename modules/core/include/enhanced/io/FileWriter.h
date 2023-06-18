@@ -42,5 +42,7 @@
 #include <enhanced/Types.h>
 
 namespace enhanced::io {
-    class E_CORE_API FileWriter {};
+    class E_CORE_API FileWriter {
+        E_CLASS(FileWriter)
+    };
 }

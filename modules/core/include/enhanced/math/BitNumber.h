@@ -50,6 +50,9 @@
 
 namespace enhanced::math {
     class E_CORE_API BitNumber : public Comparable<BitNumber> {
+        E_CLASS(BitNumber)
+
+    E_CLASS_BODY
     private:
         collections::ArrayList<byte> bits;
 

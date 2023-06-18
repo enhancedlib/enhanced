@@ -42,7 +42,10 @@
 #include <enhanced/Annotations.h>
 
 namespace enhanced::io {
-    struct Flushable {
+    class Flushable {
+        E_CLASS(Flushable)
+
+    E_CLASS_BODY
         virtual void flush() const = 0;
     };
 }

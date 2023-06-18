@@ -79,8 +79,7 @@ namespace enhanced {
     requires isCharType<CharType>
     E_RET_NO_DISCARD()
     TString<CharType> TString<CharType>::from(qword value, bool isNegative) {
-        // TODO: Faster implementation
-        if (isNegative) value = -((int64) value);
+        if (isNegative) value = -static_cast<int64>(value);
         wrap<CharType[21]> bits;
         sizetype index = 20;
         for (; value != 0; --index) {
@@ -928,9 +927,9 @@ namespace enhanced {
     template class TString<u16char>;
     template class TString<u32char>;
 
-    template struct TStringUtil<char>;
-    template struct TStringUtil<wchar>;
-    template struct TStringUtil<u8char>;
-    template struct TStringUtil<u16char>;
-    template struct TStringUtil<u32char>;
+    template class TStringUtil<char>;
+    template class TStringUtil<wchar>;
+    template class TStringUtil<u8char>;
+    template class TStringUtil<u16char>;
+    template class TStringUtil<u32char>;
 }

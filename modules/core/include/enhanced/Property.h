@@ -64,20 +64,13 @@ ACCESS_MODIFIER: \
         return this->value = value; \
     }
 
-#define E_PROPERTIES_CLASS(NAME) using __E_PROPERTIES_CLASS = NAME;
-
-#define E_PROPERTIES_STRUCT(NAME) \
-    private: \
-        E_PROPERTIES_CLASS(NAME) \
-    public:
-
 #define E_PROPERTY(TYPE, NAME, GETTER, SETTER, ...) \
-    struct Property_##NAME final { \
-        friend __E_PROPERTIES_CLASS; \
+    class __E_Property_##NAME final { \
+        friend __E_Class; \
     private: \
         using Self = TYPE; \
         Self value; \
-        inline Property_##NAME(const Self& value) : value(enhanced::move(value)) {} \
+        inline __E_Property_##NAME(const Self& value) : value(enhanced::move(value)) {} \
         __E_PROPERTY_GETTER_##GETTER \
         __E_PROPERTY_SETTER_##SETTER \
     public: \

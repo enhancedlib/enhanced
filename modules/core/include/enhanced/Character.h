@@ -41,7 +41,7 @@
 #include <enhanced/Types.h>
 #include <enhanced/Traits.h>
 
-#define E_SWITCH_CHAR(TYPE, CH) enhanced::switchType<TYPE>(CH, L##CH, u8##CH, u##CH, U##CH)
+#define E_SWITCH_CHAR(TYPE, CH) enhanced::select<TYPE>(CH, L##CH, u8##CH, u##CH, U##CH)
 
 namespace enhanced {
     template <typename CharType>

@@ -56,7 +56,10 @@
 
 namespace enhanced {
     template <typename Type>
-    struct Iterator {
+    class Iterator {
+        E_CLASS(Iterator)
+
+    E_CLASS_BODY
         using Element = Type;
 
         virtual ~Iterator() noexcept = default;
@@ -86,15 +89,6 @@ namespace enhanced {
         virtual bool isEnd() const = 0;
 
         /*!
-         * Let the iterator pointer return to the next element.
-         */
-        E_RETURN_SELF()
-        virtual const Iterator<Type>& next() const = 0;
-
-        E_RETURN_SELF()
-        virtual const Iterator<Type>& next(sizetype count) const = 0;
-
-        /*!
          * Let the iterator pointer return to the previous element.
          */
         E_RETURN_SELF()
@@ -102,6 +96,15 @@ namespace enhanced {
 
         E_RETURN_SELF()
         virtual const Iterator<Type>& prev(sizetype count) const = 0;
+
+        /*!
+         * Let the iterator pointer return to the next element.
+         */
+        E_RETURN_SELF()
+        virtual const Iterator<Type>& next() const = 0;
+
+        E_RETURN_SELF()
+        virtual const Iterator<Type>& next(sizetype count) const = 0;
 
         /*!
          * Let the iterator pointer return to the begin.
@@ -118,7 +121,10 @@ namespace enhanced {
 
     template <typename Iter>
     requires isBaseOf<Iterator<typename Iter::Element>, Iter>
-    struct DirectedIterator : Iter {
+    class DirectedIterator : public Iter {
+        E_CLASS(DirectedIterator)
+
+    E_CLASS_BODY
         using BaseIterator = Iter;
 
         template <typename... Args>
@@ -139,7 +145,10 @@ namespace enhanced {
     };
 
     template <typename Iter>
-    struct ForwardIterator : DirectedIterator<Iter> {
+    class ForwardIterator : public DirectedIterator<Iter> {
+        E_CLASS(ForwardIterator)
+
+    E_CLASS_BODY
         template <typename... Args>
         inline ForwardIterator(Args&&... args) : DirectedIterator<Iter>(forward<Args>(args)...) {}
 
@@ -178,7 +187,10 @@ namespace enhanced {
     };
 
     template <typename Iter>
-    struct ReverseIterator : DirectedIterator<Iter> {
+    class ReverseIterator : public DirectedIterator<Iter> {
+        E_CLASS(ReverseIterator)
+
+    E_CLASS_BODY
         template <typename... Args>
         inline ReverseIterator(Args&&... args) : DirectedIterator<Iter>(forward<Args>(args)...) {}
 
@@ -220,8 +232,11 @@ namespace enhanced {
 
     template <typename Iter>
     requires isBaseOf<DirectedIterator<typename Iter::BaseIterator>, Iter>
-    struct ForEachIterator : Iter {
-        inline ForEachIterator(const Iter& iter) : Iter(iter) {}
+    class ForEachIterator : public Iter {
+        E_CLASS(ForEachIterator)
+
+    E_CLASS_BODY
+        inline ForEachIterator(Iter&& iter) : Iter(move(iter)) {}
 
         inline void operator++() const {
             Iter::step();

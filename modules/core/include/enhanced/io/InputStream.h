@@ -47,7 +47,9 @@
 
 namespace enhanced::io {
     class E_CORE_API InputStream : public Closeable, Flushable {
-    public:
+        E_CLASS(InputStream)
+
+    E_CLASS_BODY
         E_RET_NO_DISCARD()
         virtual byte get() const;
 

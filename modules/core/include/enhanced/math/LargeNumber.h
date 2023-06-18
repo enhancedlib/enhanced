@@ -51,6 +51,9 @@
 
 namespace enhanced::math {
     class E_CORE_API LargeNumber : public Comparable<LargeNumber> {
+        E_CLASS(LargeNumber)
+    
+    E_CLASS_BODY
     private:
         E_MSVC_WARNING_PAD(4251)
 

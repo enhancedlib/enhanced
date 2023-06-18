@@ -44,28 +44,29 @@
 
 // TODO
 
-#define E_INTERFACE() template <typename E_INTERFACE_IMPL>
+#define E_INTERFACE() template <typename E_INTERFACE_IMPL_CLASS>
 
-#define E_INTERFACE_IMPL __E_INTERFACE_IMPLEMENTATION_CLASS
+#define E_INTERFACE_IMPL_CLASS __E_InterfaceImplementationClass
 
 #define E_INTERFACE_METHOD(NAME, RETURN, PARAMETERS, ...) \
     private: \
-        inline constexpr void __e_interface_method_test_##NAME PARAMETERS __VA_ARGS__ {}; \
+        inline constexpr void __e_interfaceMethodTest_##NAME PARAMETERS __VA_ARGS__ {}; \
         template <typename... Args> \
         inline constexpr auto NAME(Args&&... args) __VA_ARGS__ \
-        noexcept(noexcept(static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) -> RETURN \
-        requires enhanced::testValid<decltype(this->__e_interface_method_test_##NAME(args...))> && enhanced::isSame<RETURN, \
-            decltype(static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))> { \
-            return static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
+        noexcept(noexcept(static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) -> RETURN \
+        requires enhanced::testValid<decltype(this->__e_interfaceMethodTest_##NAME(args...))> && enhanced::isSame<RETURN, \
+            decltype(static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))> { \
+            return static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
         } \
     public:
 
 #define E_INTERFACE_METHOD_RET_AUTO(NAME, PARAMETERS, ...) \
     private: \
-        inline constexpr void __e_interface_method_test_##NAME PARAMETERS __VA_ARGS__ {}; \
+        inline constexpr void __e_interfaceMethodTest_##NAME PARAMETERS __VA_ARGS__ {}; \
         template <typename... Args> \
-        inline constexpr auto NAME(Args&&... args) __VA_ARGS__ noexcept(noexcept(static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) \
-            requires enhanced::testValid<decltype(this->__e_interface_method_test_##NAME(args...))> { \
-            return static_cast<__VA_ARGS__ E_INTERFACE_IMPL*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
+        inline constexpr auto NAME(Args&&... args) __VA_ARGS__ \
+        noexcept(noexcept(static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) \
+        requires enhanced::testValid<decltype(this->__e_interfaceMethodTest_##NAME(args...))> { \
+            return static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
         } \
     public:

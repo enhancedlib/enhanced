@@ -44,7 +44,9 @@
 
 namespace enhanced::exceptions {
     class E_CORE_API CastException : public Exception {
-    public:
+        E_CLASS(CastException)
+
+    E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::Exception)
 
         explicit CastException(const String& name) noexcept;

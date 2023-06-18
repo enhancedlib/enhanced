@@ -46,7 +46,9 @@
 
 namespace enhanced::io {
     class E_CORE_API PrintStream : public OutputStream {
-    public:
+        E_CLASS(PrintStream)
+
+    E_CLASS_BODY
         template <typename Type>
         requires isDisplayable<RemoveRefAndCv<Type>>
         void print(Type&& value) const {

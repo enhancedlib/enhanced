@@ -43,9 +43,9 @@
 #include <enhanced/collections/Queue.h>
 
 namespace enhanced::collections {
+    // TODO
     template <typename Type>
     class CircularQueue : public Queue<Type> {
-    public:
-        // TODO
+        E_CLASS(CircularQueue)
     };
 }

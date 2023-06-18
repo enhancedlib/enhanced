@@ -47,13 +47,15 @@
 #include <enhanced/InitializerList.h>
 #include <enhanced/collections/ArrayList.h>
 
-#define E_SWITCH_STR(TYPE, STRING) enhanced::switchType<const TYPE(&)[sizeof(STRING) / sizeof(char)]> \
-    (STRING, L##STRING, u8##STRING, u##STRING, U##STRING)
+#define E_SWITCH_STR(TYPE, STRING) enhanced::select<const TYPE(&)[sizeof(STRING) / sizeof(char)]>(STRING, L##STRING, u8##STRING, u##STRING, U##STRING)
 
 namespace enhanced {
     template <typename CharType>
     requires isCharType<CharType>
     class E_CORE_API TString : public CharSequence<CharType> {
+        E_CLASS(TString)
+
+    E_CLASS_BODY
     protected:
         TString(const CharType* value, sizetype length, bool isOwn) noexcept;
 
@@ -255,7 +257,10 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    struct TStringUtil {
+    class TStringUtil {
+        E_CLASS(TStringUtil)
+
+    E_CLASS_BODY
         TStringUtil() = delete;
 
         ~TStringUtil() = delete;

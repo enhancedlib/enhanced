@@ -49,11 +49,15 @@ namespace enhanced {
     };
 
     E_INTERFACE()
-    struct Comparable {
-        using Type = E_INTERFACE_IMPL;
+    class Comparable {
+        E_CLASS(Comparable)
+
+    E_CLASS_HEADER
+        using Type = E_INTERFACE_IMPL_CLASS;
 
         E_INTERFACE_METHOD(compare, ComparisonResult, (const Type&), const)
 
+    E_CLASS_BODY
         E_RET_NO_DISCARD()
         inline constexpr bool equal(const Type& other) const {
             return compare(other) == ComparisonResult::EQUAL;

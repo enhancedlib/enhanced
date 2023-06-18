@@ -164,14 +164,14 @@
 #define E_LEFT_BRACKET (
 #define E_RIGHT_BRACKET )
 
-#define E_BRACKET_IF(...) __VA_OPT__(E_LEFT_BRACKET) __VA_ARGS__ __VA_OPT__(E_RIGHT_BRACKET)
+#define E_PACK_BRACKET_IF(...) __VA_OPT__(E_LEFT_BRACKET) __VA_ARGS__ __VA_OPT__(E_RIGHT_BRACKET)
+
+#define __E_UNPACK_BRACKET_IMPL(...) __VA_ARGS__
+#define E_UNPACK_BRACKET(...) __E_UNPACK_BRACKET_IMPL __VA_ARGS__
 
 // Uses to expand macros to be converted into a string literal
 #define __E_STRING_LITERAL_IMPL(...) #__VA_ARGS__
 #define E_STRING_LITERAL(...) __E_STRING_LITERAL_IMPL(__VA_ARGS__)
-
-#define __E_UNPACK_IMPL(...) __VA_ARGS__
-#define E_UNPACK(...) __E_UNPACK_IMPL __VA_ARGS__
 
 #define E_CURRENT_FUNC __func__
 #define E_CURRENT_FILE __FILE__
@@ -230,3 +230,10 @@
     #define E_LIB_EXPORT
     #define E_LIB_IMPORT
 #endif
+
+#define E_CLASS(NAME) \
+    private: \
+        using __E_Class = NAME;
+
+#define E_CLASS_HEADER private:
+#define E_CLASS_BODY public:

@@ -45,7 +45,10 @@
 
 namespace enhanced::collections {
     template <typename Type>
-    struct Queue : Collection<Type> {
+    class Queue : Collection<Type> {
+        E_CLASS(Queue)
+
+    E_CLASS_BODY
         E_RET_NO_DISCARD()
         virtual sizetype indexOf(const Type& value) const = 0;
 

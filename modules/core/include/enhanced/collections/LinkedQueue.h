@@ -43,9 +43,9 @@
 #include <enhanced/collections/Queue.h>
 
 namespace enhanced::collections {
+    // TODO
     template <typename Type>
     class LinkedQueue : public Queue<Type> {
-    public:
-        // TODO
+        E_CLASS(LinkedQueue)
     };
 }

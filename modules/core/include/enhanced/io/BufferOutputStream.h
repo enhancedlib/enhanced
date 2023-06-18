@@ -43,7 +43,9 @@
 
 namespace enhanced::io {
     class E_CORE_API BufferOutputStream : public OutputStream {
-    public:
+        E_CLASS(BufferOutputStream)
+
+    E_CLASS_BODY
         void write(byte ch) const override;
 
         void write(const byte* buffer, sizetype size) const override;

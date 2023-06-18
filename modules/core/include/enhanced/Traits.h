@@ -1252,18 +1252,18 @@ namespace enhanced::inline traits {
         return static_cast<Type&&>(value);
     }
 
-    template <typename Case, typename First, typename... Types>
-    requires isSame<Case, First>
+    template <typename Result, typename First, typename... Cases>
+    requires isSame<Result, First>
     E_RET_NO_DISCARD()
-    inline constexpr Case& switchType(First&& first, Types&&...) noexcept {
-        return first;
+    inline constexpr Result& select(First&& result, Cases&&...) noexcept {
+        return result;
     }
 
-    template <typename Case, typename First, typename... Types>
-    requires (!isSame<Case, First>)
+    template <typename Result, typename First, typename... Cases>
+    requires (!isSame<Result, First>)
     E_RET_NO_DISCARD()
-    inline constexpr Case& switchType(First&&, Types&&... values) noexcept {
-        return switchType<Case, Types...>(static_cast<Types&&>(values)...);
+    inline constexpr Result& select(First&&, Cases&&... values) noexcept {
+        return select<Result, Cases...>(static_cast<Cases&&>(values)...);
     }
 
     template <typename Type>
@@ -1358,6 +1358,9 @@ namespace enhanced::inline traits {
     inline constexpr RemovePtrCv<RemoveRef<Type>>& removePtrCv(Type&& value) noexcept {
         return const_cast<RemovePtrCv<RemoveRef<Type>&>>(value);
     }
+
+    template <typename Type>
+    inline constexpr void ignore(Type&&) noexcept {}
 
     template <typename Callable, typename... Args>
     requires (!isMemberPointer<RemoveRef<Callable>>)

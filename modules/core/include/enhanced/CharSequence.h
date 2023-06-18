@@ -47,10 +47,14 @@ namespace enhanced {
     template <typename CharType>
     requires isCharType<CharType>
     class E_CORE_API CharSequence {
+        E_CLASS(CharSequence)
+
+    E_CLASS_HEADER
         template <typename Type>
         requires isCharType<Type>
         friend class TString;
 
+    E_CLASS_BODY
     protected:
         CharType* value;
 

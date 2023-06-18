@@ -219,18 +219,6 @@ namespace enhancedInternal::collections {
         return indexer == arrayList->elements + arrayList->size;
     }
 
-    void ArrayListImpl::ArrayListIteratorImpl::next0() const {
-        if (isEnd0()) throw OperationException("The iterator is at the end of the list");
-        ++indexer;
-    }
-
-    void ArrayListImpl::ArrayListIteratorImpl::next0(sizetype count) const {
-        if (indexer + count > arrayList->elements + arrayList->size) {
-            throw OperationException("The iterator is at the end of the list");
-        }
-        indexer += count;
-    }
-
     void ArrayListImpl::ArrayListIteratorImpl::prev0() const {
         if (isBegin0()) throw OperationException("The iterator is at the begin of the list");
         --indexer;
@@ -238,9 +226,21 @@ namespace enhancedInternal::collections {
 
     void ArrayListImpl::ArrayListIteratorImpl::prev0(sizetype count) const {
         if (indexer < arrayList->elements - 1 + count) {
-            throw OperationException("The iterator is at the begin of the list");
+            throw OperationException("Out of range");
         }
         indexer -= count;
+    }
+
+    void ArrayListImpl::ArrayListIteratorImpl::next0() const {
+        if (isEnd0()) throw OperationException("The iterator is at the end of the list");
+        ++indexer;
+    }
+
+    void ArrayListImpl::ArrayListIteratorImpl::next0(sizetype count) const {
+        if (indexer + count > arrayList->elements + arrayList->size) {
+            throw OperationException("Out of range");
+        }
+        indexer += count;
     }
 
     void ArrayListImpl::ArrayListIteratorImpl::setBegin0() const {

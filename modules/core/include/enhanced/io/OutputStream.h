@@ -47,7 +47,9 @@
 
 namespace enhanced::io {
     class E_CORE_API OutputStream : public Closeable, Flushable {
-    public:
+        E_CLASS(OutputStream)
+
+    E_CLASS_BODY
         virtual void write(byte b) const;
 
         virtual void write(const byte* buffer, sizetype size) const;

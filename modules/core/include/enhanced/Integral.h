@@ -44,7 +44,7 @@
 #include <enhanced/Traits.h>
 #include <enhanced/Comparable.h>
 
-#define E_INTEGRAL_EXTENSION_DEFAULT_METHODS(NAME, TYPE) \
+#define E_INTEGRAL_DEFAULT_METHODS(NAME, TYPE) \
     inline constexpr NAME() noexcept : Integral<TYPE>() {} \
     inline constexpr NAME(TYPE value) noexcept : Integral<TYPE>(value) {} \
     inline constexpr NAME(const NAME& other) noexcept = default; \
@@ -55,7 +55,10 @@
 namespace enhanced {
     template <typename IntegralType>
     requires isIntegralType<IntegralType>
-    struct Integral : public Comparable<Integral<IntegralType>> {
+    class Integral : public Comparable<Integral<IntegralType>> {
+        E_CLASS(Integral)
+
+    E_CLASS_BODY
         IntegralType value;
 
         inline constexpr Integral() noexcept : value() {}

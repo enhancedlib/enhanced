@@ -44,7 +44,10 @@
 
 namespace enhanced::collections {
     template <typename Type>
-    struct List : Queue<Type> {
+    class List : Queue<Type> {
+        E_CLASS(List)
+
+    E_CLASS_BODY
         virtual void addFirst(const Type& element) = 0;
 
         virtual void addFirst(Type&& element) = 0;

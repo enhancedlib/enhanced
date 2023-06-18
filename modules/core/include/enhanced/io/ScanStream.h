@@ -45,7 +45,9 @@
 
 namespace enhanced::io {
     class E_CORE_API ScanStream : public InputStream {
-    public:
+        E_CLASS(ScanStream)
+
+    E_CLASS_BODY
         void close() const override;
 
         void flush() const override;

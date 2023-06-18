@@ -52,6 +52,9 @@
 
 namespace enhanced::exceptions {
     class E_CORE_API Exception {
+        E_CLASS(Exception)
+
+    E_CLASS_BODY
     protected:
         String message;
 

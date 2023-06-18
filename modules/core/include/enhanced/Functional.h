@@ -41,5 +41,7 @@
 #include <enhanced/Types.h>
 
 namespace enhanced {
-    struct Functional {};
+    class Functional {
+        E_CLASS(Functional)
+    };
 }

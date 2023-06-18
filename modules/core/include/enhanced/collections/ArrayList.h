@@ -51,6 +51,9 @@
 
 namespace enhancedInternal::collections {
     class E_CORE_API ArrayListImpl {
+        E_CLASS(ArrayListImpl)
+
+    E_CLASS_BODY
     protected:
         void** elements;
 
@@ -68,6 +71,9 @@ namespace enhancedInternal::collections {
         ExpansionSizeFunc expansionSizeFunc;
 
         class E_CORE_API ArrayListIteratorImpl {
+            E_CLASS(ArrayListIteratorImpl)
+
+        E_CLASS_BODY
         protected:
             const ArrayListImpl* arrayList;
 
@@ -144,6 +150,9 @@ namespace enhanced::collections {
 
     template <typename Type>
     class ArrayList : public List<Type>, public Iterable<ArrayList<Type>>, private enhancedInternal::collections::ArrayListImpl {
+        E_CLASS(ArrayList)
+
+    E_CLASS_BODY
     private:
         using ArrayListImpl = enhancedInternal::collections::ArrayListImpl;
 
@@ -168,6 +177,9 @@ namespace enhanced::collections {
 
     public:
         class ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
+            E_CLASS(ArrayListIterator)
+
+        E_CLASS_BODY
         public:
             inline explicit ArrayListIterator(const ArrayList<Type>* arrayList, void** init) : ArrayListIteratorImpl(arrayList, init) {}
 
@@ -202,18 +214,6 @@ namespace enhanced::collections {
             }
 
             E_RETURN_SELF()
-            inline const Iterator<Type>& next() const override {
-                next0();
-                return *this;
-            }
-
-            E_RETURN_SELF()
-            inline const Iterator<Type>& next(sizetype count) const override {
-                next0(count);
-                return *this;
-            }
-
-            E_RETURN_SELF()
             inline const Iterator<Type>& prev() const override {
                 prev0();
                 return *this;
@@ -222,6 +222,18 @@ namespace enhanced::collections {
             E_RETURN_SELF()
             inline const Iterator<Type>& prev(sizetype count) const override {
                 prev0(count);
+                return *this;
+            }
+
+            E_RETURN_SELF()
+            inline const Iterator<Type>& next() const override {
+                next0();
+                return *this;
+            }
+
+            E_RETURN_SELF()
+            inline const Iterator<Type>& next(sizetype count) const override {
+                next0(count);
                 return *this;
             }
 

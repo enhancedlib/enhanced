@@ -44,7 +44,9 @@
 
 namespace enhanced::exceptions {
     class E_CORE_API NullPointerException : public Exception {
-    public:
+        E_CLASS(NullPointerException)
+
+    E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::NullPointerException)
 
         explicit NullPointerException(const String& message = "") noexcept;

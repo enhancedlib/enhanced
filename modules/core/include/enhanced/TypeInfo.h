@@ -45,18 +45,25 @@
 
 namespace enhanced {
     class TypeInfo final {
+        E_CLASS(TypeInfo)
+
+    E_CLASS_BODY
     private:
-        template <typename>
-        friend constexpr TypeInfo typeInfoOf();
-
-        template <typename Type>
-        friend constexpr TypeInfo typeInfoOf(Type&& value);
-
         const std::type_info& info;
 
         constexpr TypeInfo(const std::type_info& info) : info(info) {}
 
     public:
+        template <typename Type>
+        static inline constexpr TypeInfo of() {
+            return typeid(Type);
+        }
+
+        template <typename Type>
+        static inline constexpr TypeInfo of(Type&& value) {
+            return typeid(value);
+        }
+
         TypeInfo(const TypeInfo& info) = delete;
 
         TypeInfo& operator=(const TypeInfo& info) = delete;
@@ -67,14 +74,4 @@ namespace enhanced {
         E_RET_NO_DISCARD()
         sizetype hashCode() const;
     };
-
-    template <typename Type>
-    inline constexpr TypeInfo typeInfoOf() {
-        return typeid(Type);
-    }
-
-    template <typename Type>
-    inline constexpr TypeInfo typeInfoOf(Type&& value) {
-        return typeid(value);
-    }
 }

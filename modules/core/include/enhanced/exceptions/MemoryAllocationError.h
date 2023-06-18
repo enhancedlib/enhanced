@@ -45,7 +45,9 @@
 
 namespace enhanced::exceptions {
     class E_CORE_API MemoryAllocationError : public Error {
-    public:
+        E_CLASS(MemoryAllocationError)
+
+    E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::MemoryAllocationError)
 
         explicit MemoryAllocationError(const String& message = "") noexcept;

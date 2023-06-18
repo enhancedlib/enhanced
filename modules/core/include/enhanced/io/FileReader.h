@@ -42,5 +42,7 @@
 #include <enhanced/Types.h>
 
 namespace enhanced::io {
-    class E_CORE_API FileReader {};
+    class E_CORE_API FileReader {
+        E_CLASS(FileReader)
+    };
 }

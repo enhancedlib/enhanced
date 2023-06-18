@@ -44,7 +44,10 @@
 
 namespace enhanced::collections {
     template <typename Type>
-    struct Collection {
+    class Collection {
+        E_CLASS(Collection)
+
+    E_CLASS_BODY
         using Element = Type;
 
         virtual ~Collection() noexcept = default;

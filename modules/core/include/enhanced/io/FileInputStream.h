@@ -45,7 +45,9 @@
 
 namespace enhanced::io {
     class E_CORE_API FileInputStream : public InputStream {
-    public:
+        E_CLASS(FileInputStream)
+
+    E_CLASS_BODY
         void close() const override;
 
         void flush() const override;

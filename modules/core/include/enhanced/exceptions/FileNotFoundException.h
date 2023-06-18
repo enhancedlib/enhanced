@@ -44,7 +44,9 @@
 
 namespace enhanced::exceptions {
     class E_CORE_API FileNotFoundException : public IOException {
-    public:
+        E_CLASS(FileNotFoundException)
+
+    E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::FileNotFoundException)
 
         explicit FileNotFoundException(const String& name) noexcept;

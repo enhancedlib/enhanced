@@ -52,7 +52,9 @@
 
 namespace enhanced::io {
     class File {
-    public:
+        E_CLASS(File)
+
+    E_CLASS_BODY
     	File(const String& path);
 
         File(const File& file);

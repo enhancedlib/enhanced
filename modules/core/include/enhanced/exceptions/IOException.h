@@ -44,7 +44,9 @@
 
 namespace enhanced::exceptions {
     class E_CORE_API IOException : public Exception {
-    public:
+        E_CLASS(IOException)
+
+    E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::IOException)
 
         explicit IOException(const String& message = "") noexcept;
