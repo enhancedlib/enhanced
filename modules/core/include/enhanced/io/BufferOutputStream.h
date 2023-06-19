@@ -38,11 +38,11 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/io/OutputStream.h>
 
 namespace enhanced::io {
-    class E_CORE_API BufferOutputStream : public OutputStream {
+    class E_API(core) BufferOutputStream : public OutputStream {
         E_CLASS(BufferOutputStream)
 
     E_CLASS_BODY

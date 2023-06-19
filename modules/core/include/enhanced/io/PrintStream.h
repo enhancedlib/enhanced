@@ -38,14 +38,14 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/String.h>
 #include <enhanced/io/OutputStream.h>
 #include <enhanced/io/Display.h>
 
 namespace enhanced::io {
-    class E_CORE_API PrintStream : public OutputStream {
+    class E_API(core) PrintStream : public OutputStream {
         E_CLASS(PrintStream)
 
     E_CLASS_BODY

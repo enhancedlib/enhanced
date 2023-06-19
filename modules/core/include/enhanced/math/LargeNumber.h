@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
@@ -50,9 +50,9 @@
 #define E_LARGE_NUM(NUMBER) enhanced::math::LargeNumber(#NUMBER)
 
 namespace enhanced::math {
-    class E_CORE_API LargeNumber : public Comparable<LargeNumber> {
+    class E_API(core) LargeNumber : public Comparable<LargeNumber> {
         E_CLASS(LargeNumber)
-    
+
     E_CLASS_BODY
     private:
         E_MSVC_WARNING_PAD(4251)

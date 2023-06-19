@@ -42,138 +42,138 @@
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
 
-#define _FUNC_TEMPLATE_CV(CALLING_CONVENTION, CALL_OPT, REF_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(CALLING_CONVENTION, CALL_OPT, , REF_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(CALLING_CONVENTION, CALL_OPT, const, REF_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(CALLING_CONVENTION, CALL_OPT, volatile, REF_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(CALLING_CONVENTION, CALL_OPT, const volatile, REF_OPT, NOEXCEPT_OPT)
+#define __FUNC_TEMPLATE_CV(CALLING_CONVENTION, CALL_OPT, REF_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(CALLING_CONVENTION, CALL_OPT, , REF_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(CALLING_CONVENTION, CALL_OPT, const, REF_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(CALLING_CONVENTION, CALL_OPT, volatile, REF_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(CALLING_CONVENTION, CALL_OPT, const volatile, REF_OPT, NOEXCEPT_OPT)
 
-#define _FUNC_TEMPLATE_CV_REF(CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_CV(CALLING_CONVENTION, CALL_OPT, , NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_CV(CALLING_CONVENTION, CALL_OPT, &, NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_CV(CALLING_CONVENTION, CALL_OPT, &&, NOEXCEPT_OPT)
+#define __FUNC_TEMPLATE_CV_REF(CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_CV(CALLING_CONVENTION, CALL_OPT, , NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_CV(CALLING_CONVENTION, CALL_OPT, &, NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_CV(CALLING_CONVENTION, CALL_OPT, &&, NOEXCEPT_OPT)
 
-#define _FUNC_TEMPLATE_CV_REF_NOEXCEPT(CALLING_CONVENTION, CALL_OPT) \
-    _FUNC_TEMPLATE_CV_REF(CALLING_CONVENTION, CALL_OPT, ) \
-    _FUNC_TEMPLATE_CV_REF(CALLING_CONVENTION, CALL_OPT, noexcept)
-
-// ======================================================================
-
-#define _FUNC_TEMPLATE_PTR(CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(const, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(volatile, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(const volatile, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT)
-
-#define _FUNC_TEMPLATE_PTR_NOEXCEPT(CALLING_CONVENTION, CALL_OPT) \
-    _FUNC_TEMPLATE_PTR(CALLING_CONVENTION, CALL_OPT, ) \
-    _FUNC_TEMPLATE_PTR(CALLING_CONVENTION, CALL_OPT, noexcept)
+#define __FUNC_TEMPLATE_CV_REF_NOEXCEPT(CALLING_CONVENTION, CALL_OPT) \
+    __FUNC_TEMPLATE_CV_REF(CALLING_CONVENTION, CALL_OPT, ) \
+    __FUNC_TEMPLATE_CV_REF(CALLING_CONVENTION, CALL_OPT, noexcept)
 
 // ======================================================================
 
-#define _FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(const, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(volatile, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
-    _TEMPLATE(const volatile, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT)
+#define __FUNC_TEMPLATE_PTR(CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(const, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(volatile, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(const volatile, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT)
 
-#define _FUNC_TEMPLATE_MEMBER_PTR_CV(CALLING_CONVENTION, CALL_OPT, REF_OPT, NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, , REF_OPT, NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, const, REF_OPT, NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, volatile, REF_OPT, NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, const volatile, REF_OPT, NOEXCEPT_OPT)
-
-#define _FUNC_TEMPLATE_MEMBER_PTR_CV_REF(CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_MEMBER_PTR_CV(CALLING_CONVENTION, CALL_OPT, , NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_MEMBER_PTR_CV(CALLING_CONVENTION, CALL_OPT, &, NOEXCEPT_OPT) \
-    _FUNC_TEMPLATE_MEMBER_PTR_CV(CALLING_CONVENTION, CALL_OPT, &&, NOEXCEPT_OPT)
-
-#define _FUNC_TEMPLATE_MEMBER_PTR_CV_REF_NOEXCEPT(CALLING_CONVENTION, CALL_OPT) \
-    _FUNC_TEMPLATE_MEMBER_PTR_CV_REF(CALLING_CONVENTION, CALL_OPT, ) \
-    _FUNC_TEMPLATE_MEMBER_PTR_CV_REF(CALLING_CONVENTION, CALL_OPT, noexcept)
+#define __FUNC_TEMPLATE_PTR_NOEXCEPT(CALLING_CONVENTION, CALL_OPT) \
+    __FUNC_TEMPLATE_PTR(CALLING_CONVENTION, CALL_OPT, ) \
+    __FUNC_TEMPLATE_PTR(CALLING_CONVENTION, CALL_OPT, noexcept)
 
 // ======================================================================
 
-#define _FUNC_TEMPLATE_CDECL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Cdecl, E_CDECL)
+#define __FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(const, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(volatile, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
+    __TEMPLATE(const volatile, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT)
+
+#define __FUNC_TEMPLATE_MEMBER_PTR_CV(CALLING_CONVENTION, CALL_OPT, REF_OPT, NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, , REF_OPT, NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, const, REF_OPT, NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, volatile, REF_OPT, NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_MEMBER_PTR(CALLING_CONVENTION, CALL_OPT, const volatile, REF_OPT, NOEXCEPT_OPT)
+
+#define __FUNC_TEMPLATE_MEMBER_PTR_CV_REF(CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_MEMBER_PTR_CV(CALLING_CONVENTION, CALL_OPT, , NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_MEMBER_PTR_CV(CALLING_CONVENTION, CALL_OPT, &, NOEXCEPT_OPT) \
+    __FUNC_TEMPLATE_MEMBER_PTR_CV(CALLING_CONVENTION, CALL_OPT, &&, NOEXCEPT_OPT)
+
+#define __FUNC_TEMPLATE_MEMBER_PTR_CV_REF_NOEXCEPT(CALLING_CONVENTION, CALL_OPT) \
+    __FUNC_TEMPLATE_MEMBER_PTR_CV_REF(CALLING_CONVENTION, CALL_OPT, ) \
+    __FUNC_TEMPLATE_MEMBER_PTR_CV_REF(CALLING_CONVENTION, CALL_OPT, noexcept)
+
+// ======================================================================
+
+#define __FUNC_TEMPLATE_CDECL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Cdecl, E_CDECL)
 
 #if defined(E_SM_ARCH_X86) && !defined(E_SM_MS_CLR)
-    #define _FUNC_TEMPLATE_FASTCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Fastcall, E_FASTCALL)
+    #define __FUNC_TEMPLATE_FASTCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Fastcall, E_FASTCALL)
 #else
-    #define _FUNC_TEMPLATE_FASTCALL(SUFFIX)
+    #define __FUNC_TEMPLATE_FASTCALL(SUFFIX)
 #endif
 
 #ifdef E_SM_ARCH_X86
-    #define _FUNC_TEMPLATE_STDCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Stdcall, E_STDCALL)
-    #define _FUNC_TEMPLATE_THISCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Thiscall, E_THISCALL)
+    #define __FUNC_TEMPLATE_STDCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Stdcall, E_STDCALL)
+    #define __FUNC_TEMPLATE_THISCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Thiscall, E_THISCALL)
 #else
-    #define _FUNC_TEMPLATE_STDCALL(SUFFIX)
-    #define _FUNC_TEMPLATE_THISCALL(SUFFIX)
+    #define __FUNC_TEMPLATE_STDCALL(SUFFIX)
+    #define __FUNC_TEMPLATE_THISCALL(SUFFIX)
 #endif
 
 #ifdef E_SM_COMPATIBILITY_MS
     #ifdef E_SM_MS_CLR
-        #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX)
-        #define _FUNC_TEMPLATE_CLRCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Clrcall, E_CLRCALL)
+        #define __FUNC_TEMPLATE_VECTORCALL(SUFFIX)
+        #define __FUNC_TEMPLATE_CLRCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Clrcall, E_CLRCALL)
     #elif (defined(E_SM_ARCH_X86) && _M_IX86_FP >= 2) || defined(E_SM_ARCH_X64)
-        #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX) _FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Vectorcall, E_VECTORCALL)
-        #define _FUNC_TEMPLATE_CLRCALL(SUFFIX)
+        #define __FUNC_TEMPLATE_VECTORCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Vectorcall, E_VECTORCALL)
+        #define __FUNC_TEMPLATE_CLRCALL(SUFFIX)
     #endif
 #else
-    #define _FUNC_TEMPLATE_VECTORCALL(SUFFIX)
-    #define _FUNC_TEMPLATE_CLRCALL(SUFFIX)
+    #define __FUNC_TEMPLATE_VECTORCALL(SUFFIX)
+    #define __FUNC_TEMPLATE_CLRCALL(SUFFIX)
 #endif
 
 // ======================================================================
 
-#define _CV_OPT_TEMPLATE \
-    _TEMPLATE(E_EMPTY_MACRO_ARG) \
-    _TEMPLATE(const) \
-    _TEMPLATE(volatile) \
-    _TEMPLATE(const volatile)
+#define __CV_OPT_TEMPLATE \
+    __TEMPLATE(E_EMPTY_MACRO_ARG) \
+    __TEMPLATE(const) \
+    __TEMPLATE(volatile) \
+    __TEMPLATE(const volatile)
 
-#define _BASE_INT_TYPE_TEMPLATE \
-    _TEMPLATE(char) \
-    _TEMPLATE(short) \
-    _TEMPLATE(int) \
-    _TEMPLATE(long) \
-    _TEMPLATE(long long)
+#define __BASE_INT_TYPE_TEMPLATE \
+    __TEMPLATE(char) \
+    __TEMPLATE(short) \
+    __TEMPLATE(int) \
+    __TEMPLATE(long) \
+    __TEMPLATE(long long)
 
-#define _FUNC_TEMPLATE \
-    _FUNC_TEMPLATE_CDECL(CV_REF_NOEXCEPT) \
-    _FUNC_TEMPLATE_FASTCALL(CV_REF_NOEXCEPT) \
-    _FUNC_TEMPLATE_STDCALL(CV_REF_NOEXCEPT) \
-    _FUNC_TEMPLATE_VECTORCALL(CV_REF_NOEXCEPT) \
-    _FUNC_TEMPLATE_CLRCALL(CV_REF_NOEXCEPT)
+#define __FUNC_TEMPLATE \
+    __FUNC_TEMPLATE_CDECL(CV_REF_NOEXCEPT) \
+    __FUNC_TEMPLATE_FASTCALL(CV_REF_NOEXCEPT) \
+    __FUNC_TEMPLATE_STDCALL(CV_REF_NOEXCEPT) \
+    __FUNC_TEMPLATE_VECTORCALL(CV_REF_NOEXCEPT) \
+    __FUNC_TEMPLATE_CLRCALL(CV_REF_NOEXCEPT)
 
-#define _FUNC_WITH_VARARGS_TEMPLATE \
-    _FUNC_TEMPLATE_CDECL(CV_REF_NOEXCEPT)
+#define __FUNC_WITH_VARARGS_TEMPLATE \
+    __FUNC_TEMPLATE_CDECL(CV_REF_NOEXCEPT)
 
-#define _FUNC_PTR_TEMPLATE \
-    _FUNC_TEMPLATE_CDECL(PTR_NOEXCEPT) \
-    _FUNC_TEMPLATE_FASTCALL(PTR_NOEXCEPT) \
-    _FUNC_TEMPLATE_STDCALL(PTR_NOEXCEPT) \
-    _FUNC_TEMPLATE_VECTORCALL(PTR_NOEXCEPT) \
-    _FUNC_TEMPLATE_CLRCALL(PTR_NOEXCEPT)
+#define __FUNC_PTR_TEMPLATE \
+    __FUNC_TEMPLATE_CDECL(PTR_NOEXCEPT) \
+    __FUNC_TEMPLATE_FASTCALL(PTR_NOEXCEPT) \
+    __FUNC_TEMPLATE_STDCALL(PTR_NOEXCEPT) \
+    __FUNC_TEMPLATE_VECTORCALL(PTR_NOEXCEPT) \
+    __FUNC_TEMPLATE_CLRCALL(PTR_NOEXCEPT)
 
-#define _FUNC_WITH_VARARGS_PTR_TEMPLATE \
-    _FUNC_TEMPLATE_CDECL(PTR_NOEXCEPT)
+#define __FUNC_WITH_VARARGS_PTR_TEMPLATE \
+    __FUNC_TEMPLATE_CDECL(PTR_NOEXCEPT)
 
-#define _MEMBER_FUNC_PTR_TEMPLATE \
-    _FUNC_TEMPLATE_CDECL(MEMBER_PTR_CV_REF_NOEXCEPT) \
-    _FUNC_TEMPLATE_FASTCALL(MEMBER_PTR_CV_REF_NOEXCEPT) \
-    _FUNC_TEMPLATE_STDCALL(MEMBER_PTR_CV_REF_NOEXCEPT) \
-    _FUNC_TEMPLATE_THISCALL(MEMBER_PTR_CV_REF_NOEXCEPT) \
-    _FUNC_TEMPLATE_VECTORCALL(MEMBER_PTR_CV_REF_NOEXCEPT) \
-    _FUNC_TEMPLATE_CLRCALL(MEMBER_PTR_CV_REF_NOEXCEPT)
+#define __MEMBER_FUNC_PTR_TEMPLATE \
+    __FUNC_TEMPLATE_CDECL(MEMBER_PTR_CV_REF_NOEXCEPT) \
+    __FUNC_TEMPLATE_FASTCALL(MEMBER_PTR_CV_REF_NOEXCEPT) \
+    __FUNC_TEMPLATE_STDCALL(MEMBER_PTR_CV_REF_NOEXCEPT) \
+    __FUNC_TEMPLATE_THISCALL(MEMBER_PTR_CV_REF_NOEXCEPT) \
+    __FUNC_TEMPLATE_VECTORCALL(MEMBER_PTR_CV_REF_NOEXCEPT) \
+    __FUNC_TEMPLATE_CLRCALL(MEMBER_PTR_CV_REF_NOEXCEPT)
 
-#define _MEMBER_FUNC_WITH_VARARGS_PTR_TEMPLATE \
-    _FUNC_TEMPLATE_CDECL(MEMBER_PTR_CV_REF_NOEXCEPT)
+#define __MEMBER_FUNC_WITH_VARARGS_PTR_TEMPLATE \
+    __FUNC_TEMPLATE_CDECL(MEMBER_PTR_CV_REF_NOEXCEPT)
 
 // ======================================================================
 
 E_CTIDY_NOLINTBEGIN(bugprone-macro-parentheses)
 
-namespace enhancedInternal::traits {
+namespace _E_INTERNAL::traits {
     template <bool, typename, typename Result>
     struct ConditionalImpl final {
         using Type = Result;
@@ -278,14 +278,14 @@ namespace enhancedInternal::traits {
         using Type = Result;
     };
 
-#define _TEMPLATE(CV_OPT) \
+#define __TEMPLATE(CV_OPT) \
     template <typename Result> \
     struct RemovePointerImpl<Result* CV_OPT> final { \
         using Type = Result; \
     };
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    __CV_OPT_TEMPLATE
+#undef __TEMPLATE
 
     // ======================================================================
 
@@ -308,14 +308,14 @@ namespace enhancedInternal::traits {
         using Type = Result;
     };
 
-#define _TEMPLATE(CV_OPT) \
+#define __TEMPLATE(CV_OPT) \
     template <typename InterType> \
     struct RemovePtrConstImpl<const InterType* CV_OPT> final { \
         using Type = InterType* CV_OPT; \
     };
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    __CV_OPT_TEMPLATE
+#undef __TEMPLATE
 
     // ======================================================================
 
@@ -324,14 +324,14 @@ namespace enhancedInternal::traits {
         using Type = Result;
     };
 
-#define _TEMPLATE(CV_OPT) \
+#define __TEMPLATE(CV_OPT) \
     template <typename InterType> \
     struct RemovePtrVolatileImpl<volatile InterType* CV_OPT> final { \
         using Type = InterType* CV_OPT; \
     };
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    __CV_OPT_TEMPLATE
+#undef __TEMPLATE
 
     // ======================================================================
 
@@ -387,14 +387,14 @@ namespace enhancedInternal::traits {
         using Type = enhanced::schar;
     };
 
-#define _TEMPLATE(BASE_INT_TYPE) \
+#define __TEMPLATE(BASE_INT_TYPE) \
     template <> \
     struct ToSignedImpl<unsigned BASE_INT_TYPE> final { \
         using Type = signed BASE_INT_TYPE; \
     };
 
-    _BASE_INT_TYPE_TEMPLATE
-#undef _TEMPLATE
+    __BASE_INT_TYPE_TEMPLATE
+#undef __TEMPLATE
 
     // ======================================================================
 
@@ -408,14 +408,14 @@ namespace enhancedInternal::traits {
         using Type = enhanced::uchar;
     };
 
-#define _TEMPLATE(BASE_INT_TYPE) \
+#define __TEMPLATE(BASE_INT_TYPE) \
     template <> \
     struct ToUnsignedImpl<signed BASE_INT_TYPE> final { \
         using Type = unsigned BASE_INT_TYPE; \
     };
 
-    _BASE_INT_TYPE_TEMPLATE
-#undef _TEMPLATE
+    __BASE_INT_TYPE_TEMPLATE
+#undef __TEMPLATE
 
     struct FunctionParserImpl {
         template <enhanced::sizetype size>
@@ -454,10 +454,10 @@ E_CLANG_WARNING_PAD("-Wdeprecated-volatile") E_MSVC_WARNING_PAD(4180) E_GCC_WARN
 
 namespace enhanced::inline traits {
     template <bool condition, typename Type1, typename Type2>
-    using Conditional = typename enhancedInternal::traits::ConditionalImpl<condition, Type1, Type2>::Type;
+    using Conditional = typename _E_INTERNAL::traits::ConditionalImpl<condition, Type1, Type2>::Type;
 
     template <sizetype index, typename... Types>
-    using TypeAt = typename enhancedInternal::traits::TypeAtImpl<index, Types...>::Type;
+    using TypeAt = typename _E_INTERNAL::traits::TypeAtImpl<index, Types...>::Type;
 
     template <bool first, bool... conditions>
     inline constexpr bool allOf = first;
@@ -498,15 +498,15 @@ namespace enhanced::inline traits {
         return value;
     }
 
-#define _TEMPLATE(CV_OPT) \
+#define __TEMPLATE(CV_OPT) \
     template <typename Type> \
     E_RET_NO_DISCARD() \
     inline constexpr Type& weakCast(CV_OPT Type& value) noexcept { \
         return const_cast<Type&>(value); \
     }
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    __CV_OPT_TEMPLATE
+#undef __TEMPLATE
 
     template <typename Type>
     E_RET_NO_DISCARD()
@@ -644,12 +644,12 @@ namespace enhanced::inline traits {
     template <typename>
     inline constexpr bool isPointer = false;
 
-#define _TEMPLATE(CV_OPT) \
+#define __TEMPLATE(CV_OPT) \
     template <typename Type> \
     inline constexpr bool isPointer<Type* CV_OPT> = true;
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    __CV_OPT_TEMPLATE
+#undef __TEMPLATE
 
     template <typename Type>
     inline constexpr bool isPtrConst = false;
@@ -685,10 +685,10 @@ namespace enhanced::inline traits {
     inline constexpr bool isArray = isBoundedArray<Type> || isUnboundedArray<Type>;
 
     template <typename Type>
-    using LvalueRef = typename enhancedInternal::traits::ReferenceImpl<isReferenceable<Type>, Type>::LvalueRef;
+    using LvalueRef = typename _E_INTERNAL::traits::ReferenceImpl<isReferenceable<Type>, Type>::LvalueRef;
 
     template <typename Type>
-    using RvalueRef = typename enhancedInternal::traits::ReferenceImpl<isReferenceable<Type>, Type>::RvalueRef;
+    using RvalueRef = typename _E_INTERNAL::traits::ReferenceImpl<isReferenceable<Type>, Type>::RvalueRef;
 
     template <typename Type>
     using Const = const Type; // Use this type-alias to constify the type to prevent the MSVC C4180 warning.
@@ -700,24 +700,24 @@ namespace enhanced::inline traits {
     using ConstRvaRef = RvalueRef<const Type>;
 
     template <typename Type>
-    using RemoveConst = typename enhancedInternal::traits::RemoveConstImpl<Type>::Type;
+    using RemoveConst = typename _E_INTERNAL::traits::RemoveConstImpl<Type>::Type;
 
     template <typename Type>
-    using RemoveVolatile = typename enhancedInternal::traits::RemoveVolatileImpl<Type>::Type;
+    using RemoveVolatile = typename _E_INTERNAL::traits::RemoveVolatileImpl<Type>::Type;
 
     template <typename Type>
     using RemoveCv = RemoveConst<RemoveVolatile<Type>>;
 
     template <typename Type>
-    using RemoveRef = typename enhancedInternal::traits::RemoveRefImpl<Type>::Type;
+    using RemoveRef = typename _E_INTERNAL::traits::RemoveRefImpl<Type>::Type;
 
     template <typename Type>
     requires isReference<Type>
-    using RemoveRefConst = typename enhancedInternal::traits::RemoveRefConstImpl<Type>::Type;
+    using RemoveRefConst = typename _E_INTERNAL::traits::RemoveRefConstImpl<Type>::Type;
 
     template <typename Type>
     requires isReference<Type>
-    using RemoveRefVolatile = typename enhancedInternal::traits::RemoveRefVolatileImpl<Type>::Type;
+    using RemoveRefVolatile = typename _E_INTERNAL::traits::RemoveRefVolatileImpl<Type>::Type;
 
     template <typename Type>
     requires isReference<Type>
@@ -727,15 +727,15 @@ namespace enhanced::inline traits {
     using RemoveRefAndCv = RemoveCv<RemoveRef<Type>>;
 
     template <typename Type>
-    using RemovePointer = typename enhancedInternal::traits::RemovePointerImpl<Type>::Type;
+    using RemovePointer = typename _E_INTERNAL::traits::RemovePointerImpl<Type>::Type;
 
     template <typename Type>
     requires isPointer<Type>
-    using RemovePtrConst = typename enhancedInternal::traits::RemovePtrConstImpl<Type>::Type;
+    using RemovePtrConst = typename _E_INTERNAL::traits::RemovePtrConstImpl<Type>::Type;
 
     template <typename Type>
     requires isPointer<Type>
-    using RemovePtrVolatile = typename enhancedInternal::traits::RemovePtrVolatileImpl<Type>::Type;
+    using RemovePtrVolatile = typename _E_INTERNAL::traits::RemovePtrVolatileImpl<Type>::Type;
 
     template <typename Type>
     requires isPointer<Type>
@@ -745,10 +745,10 @@ namespace enhanced::inline traits {
     using RemovePtrAndCv = RemoveCv<RemovePointer<Type>>;
 
     template <typename Type, sizetype extent = 0>
-    using RemoveExtent = typename enhancedInternal::traits::RemoveExtentImpl<Type, extent>::Type;
+    using RemoveExtent = typename _E_INTERNAL::traits::RemoveExtentImpl<Type, extent>::Type;
 
     template <typename Type>
-    using RemoveAllExtents = typename enhancedInternal::traits::RemoveAllExtentsImpl<Type>::Type;
+    using RemoveAllExtents = typename _E_INTERNAL::traits::RemoveAllExtentsImpl<Type>::Type;
 
     template <typename Type, sizetype extent = 0>
     inline constexpr sizetype arrayExtent = arrayExtent<RemoveExtent<Type>, extent - 1>;
@@ -798,11 +798,11 @@ namespace enhanced::inline traits {
 
     template <typename Type>
     requires isIntegralType<Type>
-    using ToSigned = typename enhancedInternal::traits::ToSignedImpl<Type>::Type;
+    using ToSigned = typename _E_INTERNAL::traits::ToSignedImpl<Type>::Type;
 
     template <typename Type>
     requires isIntegralType<Type>
-    using ToUnsigned = typename enhancedInternal::traits::ToUnsignedImpl<Type>::Type;
+    using ToUnsigned = typename _E_INTERNAL::traits::ToUnsignedImpl<Type>::Type;
 
     template <typename Type>
     inline constexpr bool isEmptyType = __is_empty(Type);
@@ -1038,7 +1038,7 @@ namespace enhanced::inline traits {
     requires isFunction<Type>
     struct FunctionParser {};
 
-#define _TEMPLATE(CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
+#define __TEMPLATE(CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
     template <typename Return, typename... Args> \
     struct FunctionParser<Return CALL_OPT (Args...) CV_OPT REF_OPT NOEXCEPT_OPT> { \
         using Type = Return CALL_OPT (Args...) CV_OPT REF_OPT NOEXCEPT_OPT; \
@@ -1047,18 +1047,18 @@ namespace enhanced::inline traits {
         using NeatFunctionType = Return (Args...); \
         static inline constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static inline constexpr bool hasVarargs = false; \
-        static inline constexpr bool isNothrow = enhancedInternal::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
-        static inline constexpr bool isObjectConst = enhancedInternal::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
-        static inline constexpr bool isObjectVolatile = enhancedInternal::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
-        static inline constexpr bool isObjectReference = enhancedInternal::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
-        static inline constexpr bool isObjectLvalueRef = enhancedInternal::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
-        static inline constexpr bool isObjectRvalueRef = enhancedInternal::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
+        static inline constexpr bool isNothrow = _E_INTERNAL::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static inline constexpr bool isObjectConst = _E_INTERNAL::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
+        static inline constexpr bool isObjectVolatile = _E_INTERNAL::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
+        static inline constexpr bool isObjectReference = _E_INTERNAL::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
+        static inline constexpr bool isObjectLvalueRef = _E_INTERNAL::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
+        static inline constexpr bool isObjectRvalueRef = _E_INTERNAL::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
     };
 
-    _FUNC_TEMPLATE
-#undef _TEMPLATE
+    __FUNC_TEMPLATE
+#undef __TEMPLATE
 
-#define _TEMPLATE(CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
+#define __TEMPLATE(CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
     template <typename Return, typename... Args> \
     struct FunctionParser<Return CALL_OPT (Args..., ...) CV_OPT REF_OPT NOEXCEPT_OPT> { \
         using Type = Return CALL_OPT (Args..., ...) CV_OPT REF_OPT NOEXCEPT_OPT; \
@@ -1067,33 +1067,33 @@ namespace enhanced::inline traits {
         using NeatFunctionType = Return (Args..., ...); \
         static inline constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static inline constexpr bool hasVarargs = true; \
-        static inline constexpr bool isNothrow = enhancedInternal::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
-        static inline constexpr bool isObjectConst = enhancedInternal::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
-        static inline constexpr bool isObjectVolatile = enhancedInternal::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
-        static inline constexpr bool isObjectReference = enhancedInternal::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
-        static inline constexpr bool isObjectLvalueRef = enhancedInternal::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
-        static inline constexpr bool isObjectRvalueRef = enhancedInternal::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
+        static inline constexpr bool isNothrow = _E_INTERNAL::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static inline constexpr bool isObjectConst = _E_INTERNAL::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
+        static inline constexpr bool isObjectVolatile = _E_INTERNAL::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
+        static inline constexpr bool isObjectReference = _E_INTERNAL::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
+        static inline constexpr bool isObjectLvalueRef = _E_INTERNAL::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
+        static inline constexpr bool isObjectRvalueRef = _E_INTERNAL::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
     };
 
-    _FUNC_WITH_VARARGS_TEMPLATE
-#undef _TEMPLATE
+    __FUNC_WITH_VARARGS_TEMPLATE
+#undef __TEMPLATE
 
     template <typename Type>
     inline constexpr bool isFunctionPtr = false;
 
-#define _TEMPLATE(CV_OPT) \
+#define __TEMPLATE(CV_OPT) \
     template <typename Type> \
     requires isFunction<Type> \
     inline constexpr bool isFunctionPtr<Type* CV_OPT> = true;
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    __CV_OPT_TEMPLATE
+#undef __TEMPLATE
 
     template <typename Type>
     requires isFunctionPtr<Type>
     struct FunctionPtrParser {};
 
-#define _TEMPLATE(PTR_CV_OPT, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
+#define __TEMPLATE(PTR_CV_OPT, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
     template <typename Return, typename... Args> \
     struct FunctionPtrParser<Return (CALL_OPT* PTR_CV_OPT)(Args...) NOEXCEPT_OPT> { \
         using Type = Return (CALL_OPT* PTR_CV_OPT)(Args...) NOEXCEPT_OPT; \
@@ -1102,13 +1102,13 @@ namespace enhanced::inline traits {
         using NeatFunctionType = Return (Args...); \
         static inline constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static inline constexpr bool hasVarargs = false; \
-        static inline constexpr bool isNothrow = enhancedInternal::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static inline constexpr bool isNothrow = _E_INTERNAL::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
     };
 
-    _FUNC_PTR_TEMPLATE
-#undef _TEMPLATE
+    __FUNC_PTR_TEMPLATE
+#undef __TEMPLATE
 
-#define _TEMPLATE(PTR_CV_OPT, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
+#define __TEMPLATE(PTR_CV_OPT, CALLING_CONVENTION, CALL_OPT, NOEXCEPT_OPT) \
     template <typename Return, typename... Args> \
     struct FunctionPtrParser<Return (CALL_OPT* PTR_CV_OPT)(Args..., ...) NOEXCEPT_OPT> { \
         using Type = Return (CALL_OPT* PTR_CV_OPT)(Args..., ...) NOEXCEPT_OPT; \
@@ -1117,11 +1117,11 @@ namespace enhanced::inline traits {
         using NeatFunctionType = Return (Args..., ...); \
         static inline constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static inline constexpr bool hasVarargs = true; \
-        static inline constexpr bool isNothrow = enhancedInternal::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static inline constexpr bool isNothrow = _E_INTERNAL::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
     };
 
-    _FUNC_WITH_VARARGS_PTR_TEMPLATE
-#undef _TEMPLATE
+    __FUNC_WITH_VARARGS_PTR_TEMPLATE
+#undef __TEMPLATE
 
 #ifdef E_SM_COMPILER_CLANG
     template <typename Type>
@@ -1136,22 +1136,22 @@ namespace enhanced::inline traits {
     template <typename Type>
     inline constexpr bool isMemObjPtr = false;
 
-#define _TEMPLATE(CV_OPT) \
+#define __TEMPLATE(CV_OPT) \
     template <typename Type, typename Class> \
     inline constexpr bool isMemObjPtr<Type Class::* CV_OPT> = enhanced::isObject<Type>;
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    __CV_OPT_TEMPLATE
+#undef __TEMPLATE
 
     template <typename Type>
     inline constexpr bool isMemFuncPtr = false;
 
-#define _TEMPLATE(CV_OPT) \
+#define __TEMPLATE(CV_OPT) \
     template <typename Type, typename Class> \
     inline constexpr bool isMemFuncPtr<Type Class::* CV_OPT> = enhanced::isFunction<Type>;
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    __CV_OPT_TEMPLATE
+#undef __TEMPLATE
 
     template <typename Type>
     inline constexpr bool isMemberPointer = isMemObjPtr<Type> || isMemFuncPtr<Type>;
@@ -1164,7 +1164,7 @@ namespace enhanced::inline traits {
     requires isMemberPointer<Type>
     struct MemberPointerParser {};
 
-#define _TEMPLATE(CV_OPT) \
+#define __TEMPLATE(CV_OPT) \
     template <typename Member, typename Class> \
     struct MemberPointerParser<Member Class::* CV_OPT> { \
         using Type = Member Class::* CV_OPT; \
@@ -1172,8 +1172,8 @@ namespace enhanced::inline traits {
         using ClassType = Class; \
     };
 
-    _CV_OPT_TEMPLATE
-#undef _TEMPLATE
+    __CV_OPT_TEMPLATE
+#undef __TEMPLATE
 
     template <typename Type>
     requires isMemObjPtr<Type>
@@ -1183,7 +1183,7 @@ namespace enhanced::inline traits {
     requires isMemFuncPtr<Type>
     struct MemFuncPtrParser final : MemberPointerParser<Type> {};
 
-#define _TEMPLATE(PTR_CV_OPT, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
+#define __TEMPLATE(PTR_CV_OPT, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
     template <typename Return, typename Class, typename... Args> \
     struct MemFuncPtrParser<Return (CALL_OPT Class::* PTR_CV_OPT)(Args...) CV_OPT REF_OPT NOEXCEPT_OPT> final : \
         MemberPointerParser<Return (CALL_OPT Class::* PTR_CV_OPT)(Args...) CV_OPT REF_OPT NOEXCEPT_OPT> { \
@@ -1194,18 +1194,18 @@ namespace enhanced::inline traits {
         using NeatFunctionType = Return (Args...); \
         static inline constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static inline constexpr bool hasVarargs = false; \
-        static inline constexpr bool isNothrow = enhancedInternal::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
-        static inline constexpr bool isObjectConst = enhancedInternal::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
-        static inline constexpr bool isObjectVolatile = enhancedInternal::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
-        static inline constexpr bool isObjectReference = enhancedInternal::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
-        static inline constexpr bool isObjectLvalueRef = enhancedInternal::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
-        static inline constexpr bool isObjectRvalueRef = enhancedInternal::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
+        static inline constexpr bool isNothrow = _E_INTERNAL::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static inline constexpr bool isObjectConst = _E_INTERNAL::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
+        static inline constexpr bool isObjectVolatile = _E_INTERNAL::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
+        static inline constexpr bool isObjectReference = _E_INTERNAL::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
+        static inline constexpr bool isObjectLvalueRef = _E_INTERNAL::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
+        static inline constexpr bool isObjectRvalueRef = _E_INTERNAL::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
     };
 
-    _MEMBER_FUNC_PTR_TEMPLATE
-#undef _TEMPLATE
+    __MEMBER_FUNC_PTR_TEMPLATE
+#undef __TEMPLATE
 
-#define _TEMPLATE(PTR_CV_OPT, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
+#define __TEMPLATE(PTR_CV_OPT, CALLING_CONVENTION, CALL_OPT, CV_OPT, REF_OPT, NOEXCEPT_OPT) \
     template <typename Return, typename Class, typename... Args> \
     struct MemFuncPtrParser<Return (CALL_OPT Class::* PTR_CV_OPT)(Args..., ...) CV_OPT REF_OPT NOEXCEPT_OPT> final : \
         MemberPointerParser<Return (CALL_OPT Class::* PTR_CV_OPT)(Args..., ...) CV_OPT REF_OPT NOEXCEPT_OPT> { \
@@ -1216,16 +1216,16 @@ namespace enhanced::inline traits {
         using NeatFunctionType = Return (Args..., ...); \
         static inline constexpr CallingConvention callingConvention = CALLING_CONVENTION; \
         static inline constexpr bool hasVarargs = false; \
-        static inline constexpr bool isNothrow = enhancedInternal::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
-        static inline constexpr bool isObjectConst = enhancedInternal::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
-        static inline constexpr bool isObjectVolatile = enhancedInternal::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
-        static inline constexpr bool isObjectReference = enhancedInternal::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
-        static inline constexpr bool isObjectLvalueRef = enhancedInternal::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
-        static inline constexpr bool isObjectRvalueRef = enhancedInternal::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
+        static inline constexpr bool isNothrow = _E_INTERNAL::traits::FunctionParserImpl::isNothrowImpl(#NOEXCEPT_OPT); \
+        static inline constexpr bool isObjectConst = _E_INTERNAL::traits::FunctionParserImpl::isObjectConstImpl(#CV_OPT); \
+        static inline constexpr bool isObjectVolatile = _E_INTERNAL::traits::FunctionParserImpl::isObjectVolatileImpl(#CV_OPT); \
+        static inline constexpr bool isObjectReference = _E_INTERNAL::traits::FunctionParserImpl::isObjectReferenceImpl(#REF_OPT); \
+        static inline constexpr bool isObjectLvalueRef = _E_INTERNAL::traits::FunctionParserImpl::isObjectLvalueRefImpl(#REF_OPT); \
+        static inline constexpr bool isObjectRvalueRef = _E_INTERNAL::traits::FunctionParserImpl::isObjectRvalueRefImpl(#REF_OPT); \
     };
 
-    _MEMBER_FUNC_WITH_VARARGS_PTR_TEMPLATE
-#undef _TEMPLATE
+    __MEMBER_FUNC_WITH_VARARGS_PTR_TEMPLATE
+#undef __TEMPLATE
 
     template <typename Type>
     E_RET_NO_DISCARD()
@@ -1414,30 +1414,30 @@ E_CLANG_WARNING_POP E_MSVC_WARNING_POP E_GCC_WARNING_POP
 
 E_CTIDY_NOLINTEND(bugprone-macro-parentheses)
 
-#undef _FUNC_TEMPLATE_CV
-#undef _FUNC_TEMPLATE_CV_REF
-#undef _FUNC_TEMPLATE_CV_REF_NOEXCEPT
+#undef __FUNC_TEMPLATE_CV
+#undef __FUNC_TEMPLATE_CV_REF
+#undef __FUNC_TEMPLATE_CV_REF_NOEXCEPT
 
-#undef _FUNC_TEMPLATE_PTR
-#undef _FUNC_TEMPLATE_PTR_NOEXCEPT
+#undef __FUNC_TEMPLATE_PTR
+#undef __FUNC_TEMPLATE_PTR_NOEXCEPT
 
-#undef _FUNC_TEMPLATE_MEMBER_PTR
-#undef _FUNC_TEMPLATE_MEMBER_PTR_CV
-#undef _FUNC_TEMPLATE_MEMBER_PTR_CV_REF
-#undef _FUNC_TEMPLATE_MEMBER_PTR_CV_REF_NOEXCEPT
+#undef __FUNC_TEMPLATE_MEMBER_PTR
+#undef __FUNC_TEMPLATE_MEMBER_PTR_CV
+#undef __FUNC_TEMPLATE_MEMBER_PTR_CV_REF
+#undef __FUNC_TEMPLATE_MEMBER_PTR_CV_REF_NOEXCEPT
 
-#undef _FUNC_TEMPLATE_CDECL
-#undef _FUNC_TEMPLATE_FASTCALL
-#undef _FUNC_TEMPLATE_STDCALL
-#undef _FUNC_TEMPLATE_THISCALL
-#undef _FUNC_TEMPLATE_VECTORCALL
-#undef _FUNC_TEMPLATE_CLRCALL
+#undef __FUNC_TEMPLATE_CDECL
+#undef __FUNC_TEMPLATE_FASTCALL
+#undef __FUNC_TEMPLATE_STDCALL
+#undef __FUNC_TEMPLATE_THISCALL
+#undef __FUNC_TEMPLATE_VECTORCALL
+#undef __FUNC_TEMPLATE_CLRCALL
 
-#undef _CV_OPT_TEMPLATE
-#undef _BASE_INT_TYPE_TEMPLATE
-#undef _FUNC_TEMPLATE
-#undef _FUNC_WITH_VARARGS_TEMPLATE
-#undef _FUNC_PTR_TEMPLATE
-#undef _FUNC_WITH_VARARGS_PTR_TEMPLATE
-#undef _MEMBER_FUNC_PTR_TEMPLATE
-#undef _MEMBER_FUNC_WITH_VARARGS_PTR_TEMPLATE
+#undef __CV_OPT_TEMPLATE
+#undef __BASE_INT_TYPE_TEMPLATE
+#undef __FUNC_TEMPLATE
+#undef __FUNC_WITH_VARARGS_TEMPLATE
+#undef __FUNC_PTR_TEMPLATE
+#undef __FUNC_WITH_VARARGS_PTR_TEMPLATE
+#undef __MEMBER_FUNC_PTR_TEMPLATE
+#undef __MEMBER_FUNC_WITH_VARARGS_PTR_TEMPLATE

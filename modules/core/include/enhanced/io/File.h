@@ -51,7 +51,7 @@
 #define E_EOF (-1)
 
 namespace enhanced::io {
-    class File {
+    class E_API(core) File {
         E_CLASS(File)
 
     E_CLASS_BODY

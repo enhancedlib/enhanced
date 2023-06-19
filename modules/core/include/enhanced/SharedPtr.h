@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
@@ -47,8 +47,8 @@
 #include <enhanced/exceptions/NullPointerException.h>
 #include <enhanced/exceptions/NotImplementedError.h>
 
-namespace enhancedInternal {
-    class E_CORE_API SharedPtrImpl {
+namespace _E_INTERNAL {
+    class E_API(core) SharedPtrImpl {
     protected:
         mutable enhanced::sizetype* referenceCount;
 
@@ -76,7 +76,7 @@ namespace enhancedInternal {
 
 namespace enhanced {
     template <typename Type>
-    class SharedPtr final : private enhancedInternal::SharedPtrImpl {
+    class SharedPtr final : private _E_INTERNAL::SharedPtrImpl {
         E_CLASS(SharedPtr)
 
     E_CLASS_BODY

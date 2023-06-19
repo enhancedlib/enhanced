@@ -49,7 +49,7 @@ using enhanced::sizetype;
 using enhanced::exceptions::IndexOutOfBoundsException;
 using enhanced::exceptions::OperationException;
 
-namespace enhancedInternal::collections {
+namespace _E_INTERNAL::collections {
     LinkedListImpl::LinkedListImpl() : first(nullptr), last(nullptr), size(0) {}
 
     LinkedListImpl::LinkedListImpl(const LinkedListImpl& other, OpCopy opCopy) :

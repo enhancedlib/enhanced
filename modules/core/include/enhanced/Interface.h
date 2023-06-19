@@ -46,15 +46,15 @@
 
 #define E_INTERFACE() template <typename E_INTERFACE_IMPL_CLASS>
 
-#define E_INTERFACE_IMPL_CLASS __E_InterfaceImplementationClass
+#define E_INTERFACE_IMPL_CLASS _enhanced_InterfaceImplementationClass
 
 #define E_INTERFACE_METHOD(NAME, RETURN, PARAMETERS, ...) \
     private: \
-        inline constexpr void __e_interfaceMethodTest_##NAME PARAMETERS __VA_ARGS__ {}; \
+        inline constexpr void _enhanced_interfaceMethodTest_##NAME PARAMETERS __VA_ARGS__ {}; \
         template <typename... Args> \
         inline constexpr auto NAME(Args&&... args) __VA_ARGS__ \
         noexcept(noexcept(static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) -> RETURN \
-        requires enhanced::testValid<decltype(this->__e_interfaceMethodTest_##NAME(args...))> && enhanced::isSame<RETURN, \
+        requires enhanced::testValid<decltype(this->_enhanced_interfaceMethodTest_##NAME(args...))> && enhanced::isSame<RETURN, \
             decltype(static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))> { \
             return static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
         } \
@@ -62,11 +62,11 @@
 
 #define E_INTERFACE_METHOD_RET_AUTO(NAME, PARAMETERS, ...) \
     private: \
-        inline constexpr void __e_interfaceMethodTest_##NAME PARAMETERS __VA_ARGS__ {}; \
+        inline constexpr void _enhanced_interfaceMethodTest_##NAME PARAMETERS __VA_ARGS__ {}; \
         template <typename... Args> \
         inline constexpr auto NAME(Args&&... args) __VA_ARGS__ \
         noexcept(noexcept(static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) \
-        requires enhanced::testValid<decltype(this->__e_interfaceMethodTest_##NAME(args...))> { \
+        requires enhanced::testValid<decltype(this->_enhanced_interfaceMethodTest_##NAME(args...))> { \
             return static_cast<__VA_ARGS__ E_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
         } \
     public:

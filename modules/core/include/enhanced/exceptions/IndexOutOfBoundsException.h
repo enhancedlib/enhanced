@@ -38,15 +38,15 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/exceptions/Exception.h>
 #include <enhanced/exceptions/RuntimeException.h>
 
 namespace enhanced::exceptions {
-    class E_CORE_API IndexOutOfBoundsException : public RuntimeException {
+    class E_API(core) IndexOutOfBoundsException : public RuntimeException {
         E_CLASS(IndexOutOfBoundsException)
-    
+
     E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::IndexOutOfBoundsException)
 

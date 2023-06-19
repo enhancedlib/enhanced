@@ -38,13 +38,13 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/String.h>
 #include <enhanced/exceptions/Error.h>
 
 namespace enhanced::exceptions {
-    class E_CORE_API MemoryAllocationError : public Error {
+    class E_API(core) MemoryAllocationError : public Error {
         E_CLASS(MemoryAllocationError)
 
     E_CLASS_BODY

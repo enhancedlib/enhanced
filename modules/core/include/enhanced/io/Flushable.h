@@ -40,9 +40,10 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/CoreApi.h>
 
 namespace enhanced::io {
-    class Flushable {
+    class E_API(core) Flushable {
         E_CLASS(Flushable)
 
     E_CLASS_BODY

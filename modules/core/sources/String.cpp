@@ -415,14 +415,14 @@ namespace enhanced {
     requires isCharType<CharType>
     E_RET_NO_DISCARD()
     TString<CharType> TString<CharType>::uppercase() const {
-        return TString<CharType>(this->value).toUppercase();
+        return TString<CharType>(this->value).uppercaseTo();
     }
 
     template <typename CharType>
     requires isCharType<CharType>
     E_RET_NO_DISCARD()
     TString<CharType> TString<CharType>::lowercase() const {
-        return TString<CharType>(this->value).toLowercase();
+        return TString<CharType>(this->value).lowercaseTo();
     }
 
     template <typename CharType>
@@ -727,7 +727,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    TString<CharType>& TString<CharType>::toUppercase() {
+    TString<CharType>& TString<CharType>::uppercaseTo() {
         toOwn();
         for (sizetype index = 0; index < this->length; ++index) {
             this->value[index] = enhanced::uppercase(this->value[index]);
@@ -737,7 +737,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    TString<CharType>& TString<CharType>::toLowercase() {
+    TString<CharType>& TString<CharType>::lowercaseTo() {
         toOwn();
         for (sizetype index = 0; index < this->length; ++index) {
             this->value[index] = enhanced::lowercase(this->value[index]);

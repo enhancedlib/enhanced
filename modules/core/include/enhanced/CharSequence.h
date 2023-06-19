@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
@@ -46,7 +46,7 @@
 namespace enhanced {
     template <typename CharType>
     requires isCharType<CharType>
-    class E_CORE_API CharSequence {
+    class E_API(core) CharSequence {
         E_CLASS(CharSequence)
 
     E_CLASS_HEADER

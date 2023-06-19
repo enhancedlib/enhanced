@@ -51,7 +51,7 @@ using enhanced::arrayCopy;
 using enhanced::exceptions::IndexOutOfBoundsException;
 using enhanced::exceptions::OperationException;
 
-namespace enhancedInternal::collections {
+namespace _E_INTERNAL::collections {
     ArrayListImpl::ArrayListImpl(sizetype capacity) :
         elements(new void*[capacity]), size(0), capacity(capacity),
         expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? capacity : 1; }) {}

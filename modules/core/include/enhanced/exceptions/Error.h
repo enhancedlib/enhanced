@@ -38,12 +38,12 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/exceptions/Exception.h>
 
 namespace enhanced::exceptions {
-    class E_CORE_API Error : public Exception {
+    class E_API(core) Error : public Exception {
         E_CLASS(Error)
 
     E_CLASS_BODY

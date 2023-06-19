@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
@@ -52,7 +52,7 @@
 namespace enhanced {
     template <typename CharType>
     requires isCharType<CharType>
-    class E_CORE_API TString : public CharSequence<CharType> {
+    class E_API(core) TString : public CharSequence<CharType> {
         E_CLASS(TString)
 
     E_CLASS_BODY
@@ -220,9 +220,9 @@ namespace enhanced {
 
         TString& fill(CharType ch) noexcept;
 
-        TString& toUppercase();
+        TString& uppercaseTo();
 
-        TString& toLowercase();
+        TString& lowercaseTo();
 
         E_RET_NO_DISCARD()
         bool operator==(const TString& string) const noexcept;
@@ -257,7 +257,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    class TStringUtil {
+    class E_API(core) TStringUtil {
         E_CLASS(TStringUtil)
 
     E_CLASS_BODY

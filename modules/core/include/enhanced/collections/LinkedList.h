@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
@@ -48,8 +48,8 @@
 #include <enhanced/InitializerList.h>
 #include <enhanced/collections/List.h>
 
-namespace enhancedInternal::collections {
-    class E_CORE_API LinkedListImpl {
+namespace _E_INTERNAL::collections {
+    class E_API(core) LinkedListImpl {
         E_CLASS(LinkedListImpl)
 
     E_CLASS_BODY
@@ -73,7 +73,7 @@ namespace enhancedInternal::collections {
         using OpDestroy = void (*)(void*);
         using OpEqual = bool (*)(void*, void*);
 
-        class E_CORE_API LinkedListIteratorImpl {
+        class E_API(core) LinkedListIteratorImpl {
             E_CLASS(LinkedListIteratorImpl)
 
         E_CLASS_BODY
@@ -156,12 +156,12 @@ namespace enhancedInternal::collections {
 
 namespace enhanced::collections {
     template <typename Type>
-    class LinkedList : public List<Type>, public Iterable<LinkedList<Type>>, private enhancedInternal::collections::LinkedListImpl {
+    class LinkedList : public List<Type>, public Iterable<LinkedList<Type>>, private _E_INTERNAL::collections::LinkedListImpl {
         E_CLASS(LinkedList)
 
     E_CLASS_BODY
     private:
-        using LinkedListImpl = enhancedInternal::collections::LinkedListImpl;
+        using LinkedListImpl = _E_INTERNAL::collections::LinkedListImpl;
 
         E_RET_NEED_RELEASE()
         static void* copy(void* element) {

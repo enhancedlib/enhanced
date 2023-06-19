@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
@@ -49,7 +49,7 @@
 #define E_BIT_NUM(NUMBER) enhanced::math::BitNumber(#NUMBER)
 
 namespace enhanced::math {
-    class E_CORE_API BitNumber : public Comparable<BitNumber> {
+    class E_API(core) BitNumber : public Comparable<BitNumber> {
         E_CLASS(BitNumber)
 
     E_CLASS_BODY

@@ -43,48 +43,46 @@
 #include <enhanced/String.h>
 
 namespace enhanced::io {
-#define _TEMPLATE(TYPE) \
-    void E_DISPLAY(const OutputStream& out, const TYPE& value) { \
+#define __TEMPLATE(TYPE) \
+    E_DISPLAY_IMPL(const TYPE*, out, value) { \
+        auto str = TString<TYPE>::from(value); \
+        out.write(str.toBytes(), str.getLength() * sizeof(TYPE)); \
+    } \
+    E_DISPLAY_IMPL(TString<TYPE>, out, value) { \
+        out.write(value.toBytes(), value.getLength() * sizeof(TYPE)); \
+    } \
+    E_DISPLAY_IMPL(TYPE, out, value) { \
         auto string = TString<TYPE>::from(value); \
         out.write(string.toBytes(), string.getLength() * sizeof(TYPE)); \
-    } \
+    }
 
-    _TEMPLATE(char)
-    _TEMPLATE(wchar)
-    _TEMPLATE(u8char)
-    _TEMPLATE(u16char)
-    _TEMPLATE(u32char)
+    __TEMPLATE(char)
+    __TEMPLATE(wchar)
+    __TEMPLATE(u8char)
+    __TEMPLATE(u16char)
+    __TEMPLATE(u32char)
 
-#undef _TEMPLATE
+#undef __TEMPLATE
 
-#define _TEMPLATE(TYPE) \
-    void E_DISPLAY(const OutputStream& out, const TYPE& value) { \
+#define __TEMPLATE(TYPE) \
+    E_DISPLAY_IMPL(TYPE, out, value) { \
         auto string = String::from(value); \
         out.write(string.toBytes(), string.getLength() * sizeof(char)); \
     } \
 
-    _TEMPLATE(int8)
-    _TEMPLATE(uint8)
-    _TEMPLATE(uint16)
-    _TEMPLATE(int16)
-    _TEMPLATE(int32)
-    _TEMPLATE(uint32)
-    _TEMPLATE(int64)
-    _TEMPLATE(uint64)
-    _TEMPLATE(bool)
+    __TEMPLATE(int8)
+    __TEMPLATE(uint8)
+    __TEMPLATE(uint16)
+    __TEMPLATE(int16)
+    __TEMPLATE(int32)
+    __TEMPLATE(uint32)
+    __TEMPLATE(int64)
+    __TEMPLATE(uint64)
+    __TEMPLATE(bool)
 
-#undef _TEMPLATE
+#undef __TEMPLATE
 
-    void E_DISPLAY(const OutputStream& out, const char* const& value) {
-        auto str = String::from(value);
-        out.write(str.toBytes(), str.getLength() * sizeof(char));
-    }
-
-    void E_DISPLAY(const OutputStream& out, const String& value) {
-        out.write(value.toBytes(), value.getLength() * sizeof(char));
-    }
-
-    void E_DISPLAY(const OutputStream& out, const nulltype&) {
+    E_DISPLAY_IMPL(nulltype, out,) {
         out.write("null"_e.toBytes(), 4 * sizeof(char));
     }
 }

@@ -38,13 +38,13 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/exceptions/Exception.h>
 #include <enhanced/exceptions/RuntimeException.h>
 
 namespace enhanced::exceptions {
-    class E_CORE_API InvalidArgumentException : public RuntimeException {
+    class E_API(core) InvalidArgumentException : public RuntimeException {
         E_CLASS(InvalidArgumentException)
 
     E_CLASS_BODY

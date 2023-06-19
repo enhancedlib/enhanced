@@ -40,7 +40,7 @@
 #include <new> // std::nothrow_t, std::align_val_t
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Interface.h>
@@ -94,7 +94,7 @@ namespace enhanced {
      * @return void*   A pointer to the newly allocated space.
      */
     E_RET_INSPECT() E_NULLABLE() E_FUNC_SUCCESS_IF(return != nullptr) E_RET_NEED_RELEASE()
-    E_CORE_API E_ALLOCATOR E_RET_RESTRICT void* allocate(sizetype size);
+    E_API(core) E_ALLOCATOR E_RET_RESTRICT void* allocate(sizetype size);
 
     /*!
      * Frees a memory space to which the pointer points. \n
@@ -103,7 +103,7 @@ namespace enhanced {
      *
      * @param pointer A pointer.
      */
-    E_CORE_API void release(void* pointer);
+    E_API(core) void release(void* pointer);
 
     /*!
      * Sets a memory space of a pointer to the same value.
@@ -114,7 +114,7 @@ namespace enhanced {
      * @param aByte   A byte (range: 0 ~ 255).
      * @param size    The byte size of the pointer. (generally: "<memory size> * sizeof(<type>)").
      */
-    E_CORE_API void memoryFill(void* ptr, byte aByte, sizetype size);
+    E_API(core) void memoryFill(void* ptr, byte aByte, sizetype size);
 
     /*!
      * Copies a memory space.
@@ -125,5 +125,5 @@ namespace enhanced {
      * @param source        A source pointer.
      * @param size          The byte size of the source pointer. (generally: "<count> * sizeof(<type>)").
      */
-    E_CORE_API void memoryCopy(void* destination, const void* source, sizetype size);
+    E_API(core) void memoryCopy(void* destination, const void* source, sizetype size);
 }

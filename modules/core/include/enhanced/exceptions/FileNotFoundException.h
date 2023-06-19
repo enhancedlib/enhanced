@@ -38,12 +38,12 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/exceptions/IOException.h>
 
 namespace enhanced::exceptions {
-    class E_CORE_API FileNotFoundException : public IOException {
+    class E_API(core) FileNotFoundException : public IOException {
         E_CLASS(FileNotFoundException)
 
     E_CLASS_BODY

@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
@@ -146,7 +146,7 @@ namespace enhanced {
      * @param count        The number of elements.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<array-type>)").
      */
-    E_CORE_API void arrayFill(E_IN_OUT() void* array, qword value, sizetype count, sizetype sizeOfType);
+    E_API(core) void arrayFill(E_IN_OUT() void* array, qword value, sizetype count, sizetype sizeOfType);
 
     /*!
      * Sets elements of an array to the same value (pointer edition).
@@ -161,7 +161,7 @@ namespace enhanced {
      * @param valuePtr     A pointer to the value.
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<type>)").
      */
-    E_CORE_API void arrayFillPtr(E_IN_OUT() void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
+    E_API(core) void arrayFillPtr(E_IN_OUT() void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
 
     /*!
      * Sets elements of an array to the same value (template edition).
@@ -199,7 +199,7 @@ namespace enhanced {
      * @param count         The number of elements.
      * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
      */
-    E_CORE_API void arrayCopy(E_IN_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType);
+    E_API(core) void arrayCopy(E_IN_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType);
 
 
     /*!

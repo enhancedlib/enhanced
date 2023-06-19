@@ -112,11 +112,13 @@ namespace enhanced {
     template <typename CharType>
     requires isCharType<CharType>
     E_RET_NO_DISCARD()
+    const CharType CharSequence<CharType>::operator[]
 #ifdef E_SM_SIZE_TYPE_32BIT
-    const CharType CharSequence<CharType>::operator[](int index) const noexcept {
+    (int index)
 #else
-    const CharType CharSequence<CharType>::operator[](sizetype index) const noexcept {
+    (sizetype index)
 #endif
+    const noexcept {
         return value[index];
     }
 

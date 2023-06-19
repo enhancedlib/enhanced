@@ -38,14 +38,14 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 
 namespace enhanced {
     E_NO_RETURN()
-    E_CORE_API void processExit(int status);
+    E_API(core) void processExit(int status);
 
     E_NO_RETURN()
-    E_CORE_API void processAbort();
+    E_API(core) void processAbort();
 }

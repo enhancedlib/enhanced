@@ -44,7 +44,7 @@
 
 using enhanced::sizetype;
 
-namespace enhancedInternal {
+namespace _E_INTERNAL {
     SharedPtrImpl::SharedPtrImpl(void* ptr) : referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(ptr) {}
 
     SharedPtrImpl::SharedPtrImpl(void* ptr, void* end) : referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(end) {}

@@ -38,11 +38,11 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 
 namespace enhanced::io {
-    class E_CORE_API FileWriter {
+    class E_API(core) FileWriter {
         E_CLASS(FileWriter)
     };
 }

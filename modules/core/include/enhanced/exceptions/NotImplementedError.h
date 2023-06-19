@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Warnings.h>
 #include <enhanced/exceptions/AssertionError.h>
@@ -46,9 +46,9 @@
 #define E_NOT_IMPLEMENTED throw enhanced::exceptions::NotImplementedError
 
 namespace enhanced::exceptions {
-    class E_CORE_API NotImplementedError : public AssertionError {
+    class E_API(core) NotImplementedError : public AssertionError {
         E_CLASS(NotImplementedError)
-    
+
     E_CLASS_BODY
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::NotImplementedError)
 

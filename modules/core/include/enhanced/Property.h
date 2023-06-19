@@ -42,37 +42,72 @@
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
 
-// TODO
-
-#define __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) \
+#define _E_PROPERTY_GETTER_get(ACCESS_MODIFIER) \
 ACCESS_MODIFIER: \
     E_RET_NO_DISCARD() \
     inline const Self& operator()() const
 
-#define __E_PROPERTY_SETTER_set(ACCESS_MODIFIER) \
+#define _E_PROPERTY_SETTER_set(ACCESS_MODIFIER) \
 ACCESS_MODIFIER: \
     E_RETURN_SELF() \
+    inline Self& operator()(const Self& value) { \
+        return operator=(value); \
+    } \
     inline Self& operator=(const Self& value)
 
-#define __E_PROPERTY_GETTER_getter(ACCESS_MODIFIER) \
-    __E_PROPERTY_GETTER_get(ACCESS_MODIFIER) { \
-        return value; \
+#define _E_PROPERTY_GETTER_getter(ACCESS_MODIFIER) \
+    _E_PROPERTY_GETTER_get(ACCESS_MODIFIER) { \
+        return self; \
     }
 
-#define __E_PROPERTY_SETTER_setter(ACCESS_MODIFIER) \
-    __E_PROPERTY_SETTER_set(ACCESS_MODIFIER) { \
-        return this->value = value; \
+#define _E_PROPERTY_SETTER_setter(ACCESS_MODIFIER) \
+    _E_PROPERTY_SETTER_set(ACCESS_MODIFIER) { \
+        return self = value; \
     }
 
 #define E_PROPERTY(TYPE, NAME, GETTER, SETTER, ...) \
-    class __E_Property_##NAME final { \
-        friend __E_Class; \
-    private: \
-        using Self = TYPE; \
-        Self value; \
-        inline __E_Property_##NAME(const Self& value) : value(enhanced::move(value)) {} \
-        __E_PROPERTY_GETTER_##GETTER \
-        __E_PROPERTY_SETTER_##SETTER \
+    protected: \
+        class _enhanced_Property_##NAME { \
+            friend _enhanced_Class; \
+        public: \
+            using Self = TYPE; \
+        private: \
+            Self self; \
+            inline _enhanced_Property_##NAME() : self() {} \
+            inline _enhanced_Property_##NAME(const Self& value) : self(enhanced::move(value)) {} \
+            _E_PROPERTY_GETTER_##GETTER \
+            _E_PROPERTY_SETTER_##SETTER \
+        }; \
     public: \
-        __VA_ARGS__ \
-    } NAME;
+        _enhanced_Property_##NAME NAME {__VA_ARGS__}; \
+    private:
+
+#define E_PROPERTY_REF(BASE, NAME) \
+    class _enhanced_PropertyRef_##NAME : public _enhanced_Property_##NAME { \
+        friend _enhanced_Class; \
+    private: \
+        template <typename Property = _enhanced_Property_##NAME> \
+        E_RET_NO_DISCARD() \
+        inline const Self& get() const \
+        requires enhanced::testValid<decltype(Property::operator()())> { \
+            return Property::operator()(); \
+        } \
+        template <typename Property = _enhanced_Property_##NAME> \
+        inline Self& set(const Self& value) \
+        requires enhanced::testValid<decltype(Property::operator=(value))> { \
+            return Property::operator=(value); \
+        } \
+    public: \
+        inline _enhanced_PropertyRef_##NAME() = delete; \
+    }; \
+    template <typename Property = _enhanced_Property_##NAME, typename Ref = _enhanced_PropertyRef_##NAME> \
+    E_RET_NO_DISCARD() \
+    inline const typename Property::Self& a() const \
+    requires enhanced::testValid<decltype(enhanced::forceCast<Ref>(BASE::a).get())> { \
+        return ((const _enhanced_PropertyRef_##NAME&) BASE::a).get(); \
+    } \
+    template <typename Property = _enhanced_Property_##NAME> \
+    inline typename Property::Self& a(const typename Property::Self& value) \
+    requires enhanced::testValid<decltype(enhanced::forceCast<_enhanced_PropertyRef_##NAME>(BASE::a).set(value))> { \
+        return ((_enhanced_PropertyRef_##NAME&) BASE::a).set(value); \
+    }

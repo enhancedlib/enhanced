@@ -39,12 +39,12 @@
 
 #include <enhanced/Defines.h>
 
-#ifdef E_SM_CORE_SHARED_LIBRARY
-    #ifdef E_SM_CORE_BUILDING
-        #define E_CORE_API E_LIB_EXPORT
+#ifdef _E_SM_CORE_SHARED_LIBRARY
+    #ifdef _E_SM_CORE_BUILDING
+        #define _E_API_core E_LIB_EXPORT
     #else
-        #define E_CORE_API E_LIB_IMPORT
+        #define _E_API_core E_LIB_IMPORT
     #endif
 #else
-    #define E_CORE_API
+    #define _E_API_core
 #endif

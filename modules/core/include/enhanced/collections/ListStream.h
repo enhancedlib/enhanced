@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
@@ -137,7 +137,7 @@ namespace enhanced::collections {
             const Iterator<Element>& next(sizetype count) const override {
                 sizetype generationCount = ((index != E_SIZE_TYPE_MAX) ? index + 1 : 0) + count - this->count();
                 if (!stream->isCompleted) {
-                    while (--generationCount >= 0) {
+                    while (--generationCount > 0) {
                         if (!stream->generator(stream->list)) {
                             stream->isCompleted = true;
                             break;

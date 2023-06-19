@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Memory.h>
 #include <enhanced/Process.h>
@@ -51,7 +51,7 @@
     }
 
 namespace enhanced::exceptions {
-    class E_CORE_API Exception {
+    class E_API(core) Exception {
         E_CLASS(Exception)
 
     E_CLASS_BODY
@@ -88,9 +88,9 @@ namespace enhanced::exceptions {
 
     using ExceptionHandler = void (*)();
 
-    E_CORE_API void defaultExceptionHandler() noexcept;
+    E_API(core) void defaultExceptionHandler() noexcept;
 
-    E_CORE_API const ExceptionHandler& setupExceptionHandler(const ExceptionHandler& handler) noexcept;
+    E_API(core) const ExceptionHandler& setupExceptionHandler(const ExceptionHandler& handler) noexcept;
 
-    E_CORE_API extern ExceptionHandler exceptionHandler;
+    E_API(core) extern ExceptionHandler exceptionHandler;
 }

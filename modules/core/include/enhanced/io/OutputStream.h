@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/String.h>
@@ -46,7 +46,7 @@
 #include <enhanced/io/Flushable.h>
 
 namespace enhanced::io {
-    class E_CORE_API OutputStream : public Closeable, Flushable {
+    class E_API(core) OutputStream : public Closeable, Flushable {
         E_CLASS(OutputStream)
 
     E_CLASS_BODY

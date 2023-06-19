@@ -40,10 +40,10 @@
 #include <enhanced/Defines.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 
 namespace enhanced::io {
-    class E_CORE_API Closeable {
+    class E_API(core) Closeable {
         E_CLASS(Closeable)
 
     E_CLASS_BODY

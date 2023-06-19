@@ -38,42 +38,52 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
 #include <enhanced/String.h>
 #include <enhanced/io/OutputStream.h>
 
-#define E_DISPLAY __e_interface_display
+#define E_DISPLAY _enhanced_interface_display
 #define E_DISPLAY_DECLARE(TYPE, ...) void __VA_ARGS__ E_DISPLAY(const io::OutputStream& out, const enhanced::wrap<TYPE>& value)
+#define E_DISPLAY_IMPL(TYPE, OUT, VALUE, ...) void __VA_ARGS__ E_DISPLAY(const io::OutputStream& OUT, const enhanced::wrap<TYPE>& VALUE)
 
 namespace enhanced::io {
-    E_CORE_API E_DISPLAY_DECLARE(char);
+    E_API(core) E_DISPLAY_DECLARE(String);
 #ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
-    E_CORE_API E_DISPLAY_DECLARE(wchar);
+    E_API(core) E_DISPLAY_DECLARE(WideString);
 #endif
-    E_CORE_API E_DISPLAY_DECLARE(u8char);
-    E_CORE_API E_DISPLAY_DECLARE(u16char);
-    E_CORE_API E_DISPLAY_DECLARE(u32char);
-    E_CORE_API E_DISPLAY_DECLARE(int8);
-    E_CORE_API E_DISPLAY_DECLARE(uint8);
-    E_CORE_API E_DISPLAY_DECLARE(uint16);
-    E_CORE_API E_DISPLAY_DECLARE(int16);
-    E_CORE_API E_DISPLAY_DECLARE(int32);
-    E_CORE_API E_DISPLAY_DECLARE(uint32);
-    E_CORE_API E_DISPLAY_DECLARE(int64);
-    E_CORE_API E_DISPLAY_DECLARE(uint64);
-    E_CORE_API E_DISPLAY_DECLARE(bool);
-    E_CORE_API E_DISPLAY_DECLARE(const char*);
-    E_CORE_API E_DISPLAY_DECLARE(String);
+    E_API(core) E_DISPLAY_DECLARE(U8String);
+    E_API(core) E_DISPLAY_DECLARE(U16String);
+    E_API(core) E_DISPLAY_DECLARE(U32String);
+
+    E_API(core) E_DISPLAY_DECLARE(const char*);
+    E_API(core) E_DISPLAY_DECLARE(const wchar*);
+    E_API(core) E_DISPLAY_DECLARE(const u8char*);
+    E_API(core) E_DISPLAY_DECLARE(const u16char*);
+    E_API(core) E_DISPLAY_DECLARE(const u32char*);
+
+    E_API(core) E_DISPLAY_DECLARE(char);
 #ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
-    E_CORE_API E_DISPLAY_DECLARE(WideString);
+    E_API(core) E_DISPLAY_DECLARE(wchar);
 #endif
-    E_CORE_API E_DISPLAY_DECLARE(U8String);
-    E_CORE_API E_DISPLAY_DECLARE(U16String);
-    E_CORE_API E_DISPLAY_DECLARE(U32String);
-    E_CORE_API E_DISPLAY_DECLARE(nulltype);
+    E_API(core) E_DISPLAY_DECLARE(u8char);
+    E_API(core) E_DISPLAY_DECLARE(u16char);
+    E_API(core) E_DISPLAY_DECLARE(u32char);
+
+    E_API(core) E_DISPLAY_DECLARE(int8);
+    E_API(core) E_DISPLAY_DECLARE(uint8);
+    E_API(core) E_DISPLAY_DECLARE(uint16);
+    E_API(core) E_DISPLAY_DECLARE(int16);
+    E_API(core) E_DISPLAY_DECLARE(int32);
+    E_API(core) E_DISPLAY_DECLARE(uint32);
+    E_API(core) E_DISPLAY_DECLARE(int64);
+    E_API(core) E_DISPLAY_DECLARE(uint64);
+
+    E_API(core) E_DISPLAY_DECLARE(bool);
+
+    E_API(core) E_DISPLAY_DECLARE(nulltype);
 
     template <typename Type>
     inline constexpr bool isDisplayable = false;

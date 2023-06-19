@@ -38,16 +38,16 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/io/ScanStream.h>
 #include <enhanced/io/PrintStream.h>
 
 namespace enhanced::io {
-    E_CORE_API extern const ScanStream& ein;
-    E_CORE_API extern const PrintStream& eout;
-    E_CORE_API extern const PrintStream& eerr;
+    E_API(core) extern const ScanStream& ein;
+    E_API(core) extern const PrintStream& eout;
+    E_API(core) extern const PrintStream& eerr;
 
-    E_CORE_API void setIn(const ScanStream& in);
-    E_CORE_API void setOut(const PrintStream& out);
-    E_CORE_API void setErr(const PrintStream& err);
+    E_API(core) void setIn(const ScanStream& in);
+    E_API(core) void setOut(const PrintStream& out);
+    E_API(core) void setErr(const PrintStream& err);
 }

@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/ExportCore.h>
+#include <enhanced/CoreApi.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
@@ -49,8 +49,8 @@
 #include <enhanced/InitializerList.h>
 #include <enhanced/collections/List.h>
 
-namespace enhancedInternal::collections {
-    class E_CORE_API ArrayListImpl {
+namespace _E_INTERNAL::collections {
+    class E_API(core) ArrayListImpl {
         E_CLASS(ArrayListImpl)
 
     E_CLASS_BODY
@@ -70,7 +70,7 @@ namespace enhancedInternal::collections {
 
         ExpansionSizeFunc expansionSizeFunc;
 
-        class E_CORE_API ArrayListIteratorImpl {
+        class E_API(core) ArrayListIteratorImpl {
             E_CLASS(ArrayListIteratorImpl)
 
         E_CLASS_BODY
@@ -146,15 +146,15 @@ namespace enhancedInternal::collections {
 }
 
 namespace enhanced::collections {
-    extern E_CORE_API sizetype ARRAY_LIST_DEFAULT_CAPACITY; // Default value: 16
+    extern E_API(core) sizetype ARRAY_LIST_DEFAULT_CAPACITY; // Default value: 16
 
     template <typename Type>
-    class ArrayList : public List<Type>, public Iterable<ArrayList<Type>>, private enhancedInternal::collections::ArrayListImpl {
+    class ArrayList : public List<Type>, public Iterable<ArrayList<Type>>, private _E_INTERNAL::collections::ArrayListImpl {
         E_CLASS(ArrayList)
 
     E_CLASS_BODY
     private:
-        using ArrayListImpl = enhancedInternal::collections::ArrayListImpl;
+        using ArrayListImpl = _E_INTERNAL::collections::ArrayListImpl;
 
         E_RET_NEED_RELEASE()
         static void* copy(void* element) {
