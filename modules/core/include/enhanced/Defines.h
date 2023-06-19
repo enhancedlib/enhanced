@@ -224,8 +224,8 @@
     #define E_LIB_EXPORT __declspec(dllexport)
     #define E_LIB_IMPORT __declspec(dllimport)
 #elif defined(E_SM_COMPILER_GCC)
-    #define E_LIB_EXPORT [[gnu::visibility("default")]]
-    #define E_LIB_IMPORT [[gnu::visibility("default")]]
+    #define E_LIB_EXPORT __attribute__((visibility("default")))
+    #define E_LIB_IMPORT __attribute__((visibility("default")))
 #else
     #define E_LIB_EXPORT
     #define E_LIB_IMPORT

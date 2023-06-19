@@ -80,6 +80,7 @@ function (setup_module MODULE_NAME)
 
     if (NOT WIN32 AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
         target_compile_options(${MODULE_NAME}-static PRIVATE -stdlib=libc++)
+        target_link_options(${MODULE_NAME}-static PRIVATE -stdlib=libc++)
     endif ()
 
     foreach (DEPENDENT_MODULE IN ITEMS ${DEPENDENT_MODULES})
