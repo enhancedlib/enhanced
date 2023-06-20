@@ -18,8 +18,8 @@
  * 3. You may not misrepresent the modified version as the original version.
  *
  * 4. You may not charge any fees or receive other compensation for the
- *    distribution of the Software, excluding distribution of modified versions
- *    and products using the Software.
+ *    distribution of the Software, except for distributing modified versions and
+ *    products that use the Software.
  *
  * 5. If you use this Software in your product, you shall indicate it.
  *
@@ -34,13 +34,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 #pragma once
 
 #include <enhanced/Defines.h>
 
 // Clang
-#ifdef E_SM_COMPILER_CLANG
+#ifdef E_COMPILER_CLANG
     #define E_CLANG_WARNING_DISABLE(ID) E_PRAGMA(clang diagnostic ignored ID)
     #define E_CLANG_WARNING_PUSH E_PRAGMA(clang diagnostic push)
     #define E_CLANG_WARNING_POP E_PRAGMA(clang diagnostic pop)
@@ -51,7 +50,7 @@
 #endif
 
 // MSVC
-#ifdef E_SM_COMPILER_MSVC
+#ifdef E_COMPILER_MSVC
     #define E_MSVC_WARNING_DISABLE(ID) E_PRAGMA(warning(disable: ID))
     #define E_MSVC_WARNING_PUSH E_PRAGMA(warning(push))
     #define E_MSVC_WARNING_POP E_PRAGMA(warning(pop))
@@ -62,7 +61,7 @@
 #endif
 
 // GCC
-#ifdef E_SM_COMPILER_GCC
+#ifdef E_COMPILER_GCC
     #define E_GCC_WARNING_DISABLE(ID) E_PRAGMA(GCC diagnostic ignored ID)
     #define E_GCC_WARNING_PUSH E_PRAGMA(GCC diagnostic push)
     #define E_GCC_WARNING_POP E_PRAGMA(GCC diagnostic pop)

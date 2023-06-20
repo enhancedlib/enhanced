@@ -21,17 +21,15 @@
 此软件是一个C++库。
 它包含了许多有用的模块，具有各种功能强大的类和函数：
 
-注意：以下许多功能尚未开发，会在未来逐渐添加。
+- 注意：以下许多功能尚未开发，会在未来逐渐添加。
 
 1. 实用的类和函数
 2. 更强大的异常处理
-3. 封装的数据类型，比如：String
-4. 集合/容器 （列表、组等）
-5. 线程
-6. 数据处理
-7. 网络
-
-- 还有更多……
+3. 集合/容器（列表、组等）
+4. 线程
+5. 数据处理
+6. 网络
+7. 还有更多……
 
 要使用此库，应至少使用C++20标准
 
@@ -39,11 +37,11 @@
 
 环境：
 
-- 编译器：[Clang](https://clang.llvm.org/)、[Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU Compiler Collections](https://gcc.gnu.org/)
-- 操作系统：Microsoft Windows、Linux内核操作系统、Apple macOS
-- 处理器：amd64 (x86_64)、x86、arm (arm32)、arm64 (aarch64)
-- 构建系统: [CMake](https://cmake.org/)
-- C++标准: C++20或更高标准
+- 编译器：[Clang](https://clang.llvm.org/) (>=15.0.0), [Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/) (>=17.0.0), [GNU Compiler Collections](https://gcc.gnu.org/) (>=11.0.0) *(验证版本，推荐使用最新版本)*
+- 操作系统：Microsoft Windows, Linux內核操作系統, Apple macOS
+- 处理器：amd64 (x86_64)、x86、arm (arm32)\*、arm64 (aarch64)\* *(\* - 未验证)*
+- 构建系统: [CMake](https://cmake.org/) 3.13或更高 (推荐和 [Ninja](https://ninja-build.org)一起使用)
+- C++标准：C++20或更高
 
 ## 愿望
 

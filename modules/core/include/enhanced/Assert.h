@@ -18,8 +18,8 @@
  * 3. You may not misrepresent the modified version as the original version.
  *
  * 4. You may not charge any fees or receive other compensation for the
- *    distribution of the Software, excluding distribution of modified versions
- *    and products using the Software.
+ *    distribution of the Software, except for distributing modified versions and
+ *    products that use the Software.
  *
  * 5. If you use this Software in your product, you shall indicate it.
  *
@@ -48,14 +48,14 @@
         throw enhanced::exceptions::AssertionError(#EXPRESSION, E_CURRENT_FILE, E_CURRENT_LINE __VA_OPT__(,) __VA_ARGS__); \
     }
 
-#if (defined(E_SM_DEBUG) && !defined(E_SM_ASSERT_DISABLE)) || defined(E_SM_ASSERT_ENABLE)
+#if (defined(E_DEBUG) && !defined(E_ASSERT_DISABLE)) || defined(E_ASSERT_ENABLE)
     #define E_ASSERT(EXPRESSION, ...) E_DYNAMIC_ASSERT(EXPRESSION __VA_OPT__(,) __VA_ARGS__)
 #else
     #define E_ASSERT(EXPRESSION, ...) (void) 0
 #endif
 
-#if defined(E_SM_COMPILER_GCC) || defined(E_SM_COMPILER_CLANG)
+#if defined(E_COMPILER_GCC) || defined(E_COMPILER_CLANG)
     #define E_UNREACHABLE_CODE() __builtin_unreachable();
-#elif defined(E_SM_COMPILER_MSVC)
+#elif defined(E_COMPILER_MSVC)
     #define E_UNREACHABLE_CODE() __assume(false);
 #endif

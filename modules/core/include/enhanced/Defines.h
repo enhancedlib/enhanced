@@ -18,8 +18,8 @@
  * 3. You may not misrepresent the modified version as the original version.
  *
  * 4. You may not charge any fees or receive other compensation for the
- *    distribution of the Software, excluding distribution of modified versions
- *    and products using the Software.
+ *    distribution of the Software, except for distributing modified versions and
+ *    products that use the Software.
  *
  * 5. If you use this Software in your product, you shall indicate it.
  *
@@ -42,82 +42,89 @@
 #endif
 
 #ifdef _MSC_VER
-    #define E_SM_COMPATIBILITY_MS
-    #ifdef E_SM_COMPATIBILITY_MS
+    #define E_COMPATIBILITY_MS
+    #ifdef E_COMPATIBILITY_MS
         #define SM_COMPATIBILITY_MS
     #endif
 #elif defined(__GNUC__)
-    #define E_SM_COMPATIBILITY_GNU
-    #ifdef E_SM_COMPATIBILITY_GNU
+    #define E_COMPATIBILITY_GNU
+    #ifdef E_COMPATIBILITY_GNU
         #define SM_COMPATIBILITY_GNU
     #endif
 #endif
 
 // Detect current using which compiler to compile
 #ifdef __clang__ // Clang
-    #define E_SM_COMPILER_CLANG
+    #define E_COMPILER_CLANG
+    #define E_COMPILER_CLANG_VERSION_MAJOR __clang_major__
+    #define E_COMPILER_CLANG_VERSION_MINOR __clang_minor__
+    #define E_COMPILER_CLANG_VERSION_PATCH __clang_patchlevel__
 #elif defined(_MSC_VER) // Microsoft Visual C++
-    #define E_SM_COMPILER_MSVC
+    #define E_COMPILER_MSVC
+    #define E_COMPILER_MSVC_VERSION_ID _MSC_VER
 #elif defined(__GNUC__) // GNU Compiler Collections
-    #define E_SM_COMPILER_GCC
+    #define E_COMPILER_GCC
+    #define E_COMPILER_GCC_VERSION_MAJOR __GNUC__
+    #define E_COMPILER_GCC_VERSION_MINOR __GNUC_MINOR__
+    #define E_COMPILER_GCC_VERSION_PATCH __GNUC_PATCHLEVEL__
 #else // Unsupported
     #error Unsupported compiler
 #endif
 
-#if defined(E_SM_COMPATIBILITY_MS) && defined(_M_CEE)
-    #define E_SM_MS_CLR
+#if defined(E_COMPATIBILITY_MS) && defined(_M_CEE)
+    #define E_MS_CLR
 #endif
 
 // Detect the architecture for the current platform
 #if defined(_M_IX86) || defined(__i386__) // x86
-    #define E_SM_ARCH_X86
+    #define E_ARCH_X86
 #elif defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64__) // x86_64 (amd64)
-    #define E_SM_ARCH_X64
+    #define E_ARCH_X64
 #elif defined(_M_ARM) || defined(__arm__) // arm (arm32)
-    #define E_SM_ARCH_ARM32
+    #define E_ARCH_ARM32
 #elif defined(_M_ARM64) || defined(__aarch64__) // arm64 (aarch64)
-    #define E_SM_ARCH_ARM64
+    #define E_ARCH_ARM64
 #else // Unsupported
     #error Unsupported architecture
 #endif
 
 // Detect the operating system
 #if defined(_WIN32) || defined(_WIN64) || defined(WIN32) // Microsoft Windows
-    #define E_SM_OS_WINDOWS
+    #define E_OS_WINDOWS
 
 #elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__))
     // Unix-style operating systems
-    #define E_SM_OS_UNIX_STYLE
+    #define E_OS_UNIX_STYLE
 
     #if defined(__linux__) || defined(__linux) || defined(linux) || defined(__LINUX__) // Linux kernel OS
-        #define E_SM_OS_LINUX_KERNEL
+        #define E_OS_LINUX_KERNEL
 
         #if defined(__gnu_linux__) || defined(__gnu_linux) // GNU/Linux
-            #define E_SM_OS_GNU_LINUX
+            #define E_OS_GNU_LINUX
 
         #elif defined(__ANDROID__) // Android
-            #define E_SM_OS_ANDROID
+            #define E_OS_ANDROID
         #endif
     #else
         #include <sys/param.h>
         #ifdef BSD // BSD operating systems
-            #define E_SM_OS_BSD
+            #define E_OS_BSD
 
             #ifdef __FreeBSD__ // FreeBSD
-                #define E_SM_OS_FREE_BSD
+                #define E_OS_FREE_BSD
             #elif defined(__NetBSD__) // NetBSD
-                #define E_SM_OS_NET_BSD
+                #define E_OS_NET_BSD
             #elif defined(__OpenBSD__) // OpenBSD
-                #define E_SM_OS_OPEN_BSD
+                #define E_OS_OPEN_BSD
             #elif defined(__DragonFly__) // DragonFly BSD
-                #define E_SM_OS_DRAGON_FLY_BSD
+                #define E_OS_DRAGON_FLY_BSD
             #elif defined(__APPLE__) && defined(__MACH__) // Apple operating systems
-                #define E_SM_OS_APPLE
+                #define E_OS_APPLE
                 #include <TargetConditionals.h>
                 #if OS_TARGET_MAC == 1 // Apple macOS
-                    #define E_SM_OS_MAC
+                    #define E_OS_MAC
                 #elif OS_TARGET_IPHONE == 1 // Apple iOS
-                    #define E_SM_OS_IPHONE
+                    #define E_OS_IPHONE
                 #endif
             #endif
         #endif
@@ -126,7 +133,7 @@
     #error Unsupported operating system
 #endif
 
-#ifndef E_SM_COMPILER_MSVC
+#ifndef E_COMPILER_MSVC
     #define E_CXX_STANDARD __cplusplus
 #else
     #define E_CXX_STANDARD _MSVC_LANG
@@ -135,9 +142,9 @@
 // Detect the C++ standard
 #if E_CXX_STANDARD >= 202002L // C++20 or later
     #if E_CXX_STANDARD > 202002L // C++23 or later
-        #define E_SM_CXX_23_OR_LATER
+        #define E_CXX_23_OR_LATER
     #else // C++20
-        #define E_SM_CXX_20
+        #define E_CXX_20
     #endif
 #else // Unsupported
     #error Unsupported C++ standard, please use the C++20 standard or later
@@ -145,7 +152,7 @@
 
 // Determine whether debugging information is enabled
 #if ((defined(_DEBUG) || defined(DBG)) || !defined(NDEBUG)) && !defined(DEBUG)
-    #define E_SM_DEBUG
+    #define E_DEBUG
 #endif
 
 // Pre-processor
@@ -184,7 +191,7 @@
 
 #define E_RESTRICT __restrict
 
-#ifdef E_SM_COMPATIBILITY_MS
+#ifdef E_COMPATIBILITY_MS
     #define E_FORCE_INLINE __forceinline
     #define E_NO_INLINE __declspec(noinline)
     #define E_ALLOCATOR __declspec(allocator)
@@ -196,7 +203,7 @@
     #define E_RET_RESTRICT [[gnu::malloc]]
 #endif
 
-#ifdef E_SM_COMPILER_GCC
+#ifdef E_COMPILER_GCC
     #define E_CDECL __attribute__((cdecl))
     #define E_FASTCALL __attribute__((fastcall))
     #define E_STDCALL __attribute__((stdcall))
@@ -208,22 +215,22 @@
     #define E_THISCALL __thiscall
 #endif
 
-#ifdef E_SM_COMPATIBILITY_MS
+#ifdef E_COMPATIBILITY_MS
     #define E_VECTORCALL __vectorcall
 #else
     #define E_VECTORCALL
 #endif
 
-#ifdef E_SM_MS_CLR
+#ifdef E_MS_CLR
     #define E_CLRCALL __clrcall
 #else
     #define E_CLRCALL
 #endif
 
-#ifdef E_SM_OS_WINDOWS
+#ifdef E_OS_WINDOWS
     #define E_LIB_EXPORT __declspec(dllexport)
     #define E_LIB_IMPORT __declspec(dllimport)
-#elif defined(E_SM_COMPILER_GCC)
+#elif defined(E_COMPILER_GCC)
     #define E_LIB_EXPORT __attribute__((visibility("default")))
     #define E_LIB_IMPORT __attribute__((visibility("default")))
 #else

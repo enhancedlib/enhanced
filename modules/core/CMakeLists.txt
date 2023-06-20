@@ -17,8 +17,8 @@
 ## 3. You may not misrepresent the modified version as the original version.
 ##
 ## 4. You may not charge any fees or receive other compensation for the
-##    distribution of the Software, excluding distribution of modified versions
-##    and products using the Software.
+##    distribution of the Software, except for distributing modified versions and
+##    products that use the Software.
 ##
 ## 5. If you use this Software in your product, you shall indicate it.
 ##

@@ -18,8 +18,8 @@
  * 3. You may not misrepresent the modified version as the original version.
  *
  * 4. You may not charge any fees or receive other compensation for the
- *    distribution of the Software, excluding distribution of modified versions
- *    and products using the Software.
+ *    distribution of the Software, except for distributing modified versions and
+ *    products that use the Software.
  *
  * 5. If you use this Software in your product, you shall indicate it.
  *
@@ -96,13 +96,13 @@
 
 #define __FUNC_TEMPLATE_CDECL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Cdecl, E_CDECL)
 
-#if defined(E_SM_ARCH_X86) && !defined(E_SM_MS_CLR)
+#if defined(E_ARCH_X86) && !defined(E_MS_CLR)
     #define __FUNC_TEMPLATE_FASTCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Fastcall, E_FASTCALL)
 #else
     #define __FUNC_TEMPLATE_FASTCALL(SUFFIX)
 #endif
 
-#ifdef E_SM_ARCH_X86
+#ifdef E_ARCH_X86
     #define __FUNC_TEMPLATE_STDCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Stdcall, E_STDCALL)
     #define __FUNC_TEMPLATE_THISCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Thiscall, E_THISCALL)
 #else
@@ -110,11 +110,11 @@
     #define __FUNC_TEMPLATE_THISCALL(SUFFIX)
 #endif
 
-#ifdef E_SM_COMPATIBILITY_MS
-    #ifdef E_SM_MS_CLR
+#ifdef E_COMPATIBILITY_MS
+    #ifdef E_MS_CLR
         #define __FUNC_TEMPLATE_VECTORCALL(SUFFIX)
         #define __FUNC_TEMPLATE_CLRCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Clrcall, E_CLRCALL)
-    #elif (defined(E_SM_ARCH_X86) && _M_IX86_FP >= 2) || defined(E_SM_ARCH_X64)
+    #elif (defined(E_ARCH_X86) && _M_IX86_FP >= 2) || defined(E_ARCH_X64)
         #define __FUNC_TEMPLATE_VECTORCALL(SUFFIX) __FUNC_TEMPLATE_ ## SUFFIX(enhanced::CallingConvention::Vectorcall, E_VECTORCALL)
         #define __FUNC_TEMPLATE_CLRCALL(SUFFIX)
     #endif
@@ -527,7 +527,7 @@ namespace enhanced::inline traits {
         return valueAt<index - 1>(values...);
     }
 
-#ifdef E_SM_COMPILER_MSVC
+#ifdef E_COMPILER_MSVC
     template <typename, typename>
     inline constexpr bool isSame = false;
 
@@ -766,7 +766,7 @@ namespace enhanced::inline traits {
     template <typename Type>
     inline constexpr bool isCharType =
         isAnyOf<RemoveCv<Type>, char,
-    #ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
+    #ifdef E_WCHAR_IS_BUILTIN_TYPE
         wchar,
     #endif
         u8char, u16char, u32char>;
@@ -774,7 +774,7 @@ namespace enhanced::inline traits {
     template <typename Type>
     inline constexpr bool isIntegralType =
         isAnyOf<RemoveCv<Type>, char,
-    #ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
+    #ifdef E_WCHAR_IS_BUILTIN_TYPE
         wchar,
     #endif
         u8char, u16char, u32char, bool, schar, uchar, short, ushort, int, uint, long, ulong, llong, ullong>;
@@ -840,7 +840,7 @@ namespace enhanced::inline traits {
     template <typename Type>
     inline constexpr bool isCompoundType = !isBasicType<Type>;
 
-#ifdef E_SM_COMPILER_GCC
+#ifdef E_COMPILER_GCC
     template <typename From, typename To>
     inline constexpr bool isConvertible = false;
 
@@ -976,7 +976,7 @@ namespace enhanced::inline traits {
     template <typename From, typename To = From>
     inline constexpr bool isNothrowMoveAssignable = isNothrowAssignable<From, LvalueRef<To>>;
 
-#ifdef E_SM_COMPATIBILITY_MS
+#ifdef E_COMPATIBILITY_MS
     template <typename Type>
     inline constexpr bool isDestructible = __is_destructible(Type);
 #else
@@ -992,7 +992,7 @@ namespace enhanced::inline traits {
     inline constexpr bool isDestructible<Type> = true;
 #endif
 
-#ifdef E_SM_COMPILER_GCC
+#ifdef E_COMPILER_GCC
     template <typename Type>
     inline constexpr bool isTriviallyDestructible = __has_trivial_destructor(Type);
 #else
@@ -1000,7 +1000,7 @@ namespace enhanced::inline traits {
     inline constexpr bool isTriviallyDestructible = __is_trivially_destructible(Type);
 #endif
 
-#ifdef E_SM_COMPILER_GCC
+#if defined(E_COMPILER_GCC) || (defined(E_COMPILER_CLANG) && E_COMPILER_CLANG_VERSION_MAJOR < 16)
     template <typename Type>
     inline constexpr bool isNothrowDestructible = false;
 
@@ -1019,7 +1019,7 @@ namespace enhanced::inline traits {
     template <typename Type>
     inline constexpr bool isTriviallyCopyable = __is_trivially_copyable(Type);
 
-#ifdef E_SM_COMPATIBILITY_GNU
+#ifdef E_COMPATIBILITY_GNU
     template <typename Type>
     inline constexpr bool isTrivial = __is_trivial(Type);
 #else
@@ -1123,7 +1123,7 @@ namespace enhanced::inline traits {
     __FUNC_WITH_VARARGS_PTR_TEMPLATE
 #undef __TEMPLATE
 
-#ifdef E_SM_COMPILER_CLANG
+#ifdef E_COMPILER_CLANG
     template <typename Type>
     inline constexpr bool isMemObjPtr = __is_member_object_pointer(Type);
 

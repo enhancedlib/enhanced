@@ -18,8 +18,8 @@
  * 3. You may not misrepresent the modified version as the original version.
  *
  * 4. You may not charge any fees or receive other compensation for the
- *    distribution of the Software, excluding distribution of modified versions
- *    and products using the Software.
+ *    distribution of the Software, except for distributing modified versions and
+ *    products that use the Software.
  *
  * 5. If you use this Software in your product, you shall indicate it.
  *
@@ -330,7 +330,7 @@ namespace enhanced {
     };
 
     using String = TString<char>;
-#ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
+#ifdef E_WCHAR_IS_BUILTIN_TYPE
     using WideString = TString<wchar>;
 #endif
     using U8String = TString<u8char>;
@@ -338,7 +338,7 @@ namespace enhanced {
     using U32String = TString<u32char>;
 
     using StringUtil = TStringUtil<char>;
-#ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
+#ifdef E_WCHAR_IS_BUILTIN_TYPE
     using WideStringUtil = TStringUtil<wchar>;
 #endif
     using U8StringUtil = TStringUtil<u8char>;
@@ -350,7 +350,7 @@ namespace enhanced {
             return {string, size};
         }
 
-    #ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
+    #ifdef E_WCHAR_IS_BUILTIN_TYPE
         inline WideString operator""_e(const wchar* string, sizetype size) {
             return {string, size};
         }
@@ -372,7 +372,7 @@ namespace enhanced {
             return String::own(string, size);
         }
 
-    #ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
+    #ifdef E_WCHAR_IS_BUILTIN_TYPE
         inline WideString operator""_eo(const wchar* string, sizetype size) {
             return WideString::own(string, size);
         }

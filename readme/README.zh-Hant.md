@@ -21,17 +21,15 @@
 此軟件是一個C++庫。
 它包含了許多有用的模塊，具有各種功能強大的類和函數：
 
-註意：以下許多功能尚未開發，會在未來逐漸添加。
+- 註意：以下許多功能尚未開發，會在未來逐漸添加。
 
 1. 實用的類和函數
 2. 更強大的異常處理
-3. 封裝的數據類型，比如：String
-4. 集合/容器 （列表、組等）
-5. 線程
-6. 數據處理
-7. 網絡
-
-- 還有更多……
+3. 集合/容器（列表、組等）
+4. 線程
+5. 數據處理
+6. 網絡
+7. 更多……
 
 要使用此庫，應至少使用C++20標準
 
@@ -39,11 +37,11 @@
 
 環境：
 
-- 編譯器：[Clang](https://clang.llvm.org/)、[Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/)、[GNU Compiler Collections](https://gcc.gnu.org/)
-- 操作系統：Microsoft Windows、Linux內核操作系統、Apple macOS
-- 處理器：amd64 (x86_64)、x86、arm (arm32)、arm64 (aarch64)
-- 構建系統: [CMake](https://cmake.org/)
-- C++標準: C++20或更高標準
+- 編譯器：[Clang](https://clang.llvm.org/) (>=15.0.0), [Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/) (>=17.0.0), [GNU Compiler Collections](https://gcc.gnu.org/) (>=11.0.0) *(驗證版本，推薦使用最新版本)*
+- 操作系統：Microsoft Windows, Linux內核操作系統, Apple macOS
+- 處理器：amd64 (x86_64)、x86、arm (arm32)\*、arm64 (aarch64)\* *(\* - 未驗證)*
+- 構建系統: [CMake](https://cmake.org/) 3.13或更高 (推薦和 [Ninja](https://ninja-build.org)一起使用)
+- C++標準：C++20或更高
 
 ## 願望
 

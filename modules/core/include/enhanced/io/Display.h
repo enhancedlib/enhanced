@@ -18,8 +18,8 @@
  * 3. You may not misrepresent the modified version as the original version.
  *
  * 4. You may not charge any fees or receive other compensation for the
- *    distribution of the Software, excluding distribution of modified versions
- *    and products using the Software.
+ *    distribution of the Software, except for distributing modified versions and
+ *    products that use the Software.
  *
  * 5. If you use this Software in your product, you shall indicate it.
  *
@@ -51,7 +51,7 @@
 
 namespace enhanced::io {
     E_API(core) E_DISPLAY_DECLARE(String);
-#ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
+#ifdef E_WCHAR_IS_BUILTIN_TYPE
     E_API(core) E_DISPLAY_DECLARE(WideString);
 #endif
     E_API(core) E_DISPLAY_DECLARE(U8String);
@@ -65,7 +65,7 @@ namespace enhanced::io {
     E_API(core) E_DISPLAY_DECLARE(const u32char*);
 
     E_API(core) E_DISPLAY_DECLARE(char);
-#ifdef E_SM_WCHAR_IS_BUILTIN_TYPE
+#ifdef E_WCHAR_IS_BUILTIN_TYPE
     E_API(core) E_DISPLAY_DECLARE(wchar);
 #endif
     E_API(core) E_DISPLAY_DECLARE(u8char);

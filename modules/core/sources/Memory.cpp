@@ -18,8 +18,8 @@
  * 3. You may not misrepresent the modified version as the original version.
  *
  * 4. You may not charge any fees or receive other compensation for the
- *    distribution of the Software, excluding distribution of modified versions
- *    and products using the Software.
+ *    distribution of the Software, except for distributing modified versions and
+ *    products that use the Software.
  *
  * 5. If you use this Software in your product, you shall indicate it.
  *
@@ -64,7 +64,7 @@ namespace enhanced {
     }
 
     void memoryFill(void* ptr, byte aByte, sizetype size) {
-    #ifndef E_SM_COMPILER_MSVC
+    #ifndef E_COMPILER_MSVC
         __builtin_memset(ptr, aByte, size);
     #else
         if (ptr == nullptr || size == 0) return;
@@ -76,7 +76,7 @@ namespace enhanced {
     }
 
     void memoryCopy(void* destination, const void* source, sizetype size) {
-    #ifndef E_SM_COMPILER_MSVC
+    #ifndef E_COMPILER_MSVC
         __builtin_memcpy(destination, source, size);
     #else
         if (destination == nullptr || source == nullptr || size == 0) return;

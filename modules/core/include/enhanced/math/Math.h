@@ -18,8 +18,8 @@
  * 3. You may not misrepresent the modified version as the original version.
  *
  * 4. You may not charge any fees or receive other compensation for the
- *    distribution of the Software, excluding distribution of modified versions
- *    and products using the Software.
+ *    distribution of the Software, except for distributing modified versions and
+ *    products that use the Software.
  *
  * 5. If you use this Software in your product, you shall indicate it.
  *
@@ -69,12 +69,10 @@ namespace enhanced::math {
     using NInt32 = TInt<uint32, TIntMode::NEGATIVE>;
     using NInt64 = TInt<uint64, TIntMode::NEGATIVE>;
 
-#if defined(E_SM_SUPPRESS_OVERWRITE) || defined(E_SM_CORE_SUPPRESS_OVERWRITE_MATH_MACRO)
-    #pragma push_macro("max")
-    #pragma push_macro("min")
+#ifdef E_OS_WINDOWS
+    #undef max
+    #undef min
 #endif
-#undef max
-#undef min
 
     template <typename Type>
     E_RET_NO_DISCARD()
@@ -101,11 +99,6 @@ namespace enhanced::math {
     inline constexpr Conditional<(sizeof(X) > sizeof(Y)), X, Y> min(const X& x, const Y& y) noexcept {
         return (x < y) ? x : y;
     }
-
-#if defined(E_SM_SUPPRESS_OVERWRITE) || defined(E_SM_CORE_SUPPRESS_OVERWRITE_MATH_MACRO)
-    #pragma pop_macro("max")
-    #pragma pop_macro("min")
-#endif
 
     template <typename IntegralType>
     requires isIntegralType<IntegralType>
