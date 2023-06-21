@@ -4,7 +4,7 @@
 
 A Powerful C++ Development Framework
 
-[Languages](readme/LANGUAGES.md) | [License](LICENSE) | [Copyright Notice](COPYRIGHT) | [Website](https://enhancedlib.github.io/) | [GitHub Repository](https://github.com/enhancedlib/enhanced/)
+[Languages](readme/LANGUAGES.md) | [License](LICENSE) | [Website](https://enhancedlib.github.io/) | [GitHub Repository](https://github.com/enhancedlib/enhanced/)
 
 ---
 

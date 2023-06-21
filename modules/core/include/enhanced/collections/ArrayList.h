@@ -180,7 +180,6 @@ namespace enhanced::collections {
             E_CLASS(ArrayListIterator)
 
         E_CLASS_BODY
-        public:
             inline explicit ArrayListIterator(const ArrayList<Type>* arrayList, void** init) : ArrayListIteratorImpl(arrayList, init) {}
 
             E_RET_NO_DISCARD()

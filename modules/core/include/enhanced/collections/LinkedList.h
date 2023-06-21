@@ -187,7 +187,6 @@ namespace enhanced::collections {
             E_CLASS(LinkedListIterator)
 
         E_CLASS_BODY
-        public:
             inline explicit LinkedListIterator(const LinkedList<Type>* linkedList, Node* init) : LinkedListIteratorImpl(linkedList, init) {}
 
             E_RET_NO_DISCARD()

@@ -4,7 +4,7 @@
 
 一個強大的C++開發框架
 
-[語言](LANGUAGES.md) | [許可協議](../LICENSE) | [版權聲明](../COPYRIGHT) | [網站](https://enhancedlib.github.io/) | [GitHub倉庫](https://github.com/enhancedlib/enhanced/)
+[語言](LANGUAGES.md) | [許可協議](../LICENSE) | [網站](https://enhancedlib.github.io/) | [GitHub倉庫](https://github.com/enhancedlib/enhanced/)
 
 ---
 
