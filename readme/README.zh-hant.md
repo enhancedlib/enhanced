@@ -1,8 +1,8 @@
 # Enhanced
 
-***開發中 - 請在[GitHub Issues](https://github.com/enhancedlib/enhanced/issues)提交bug***
-
 一個強大的C++開發框架
+
+- 開發中，請在[GitHub Issues](https://github.com/enhancedlib/enhanced/issues)提交bug。
 
 [語言](LANGUAGES.md) | [許可協議](../LICENSE) | [網站](https://enhancedlib.github.io/) | [GitHub倉庫](https://github.com/enhancedlib/enhanced/)
 
@@ -37,11 +37,11 @@
 
 環境：
 
-- 編譯器：[Clang](https://clang.llvm.org/) (>=15.0.0), [Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/) (>=17.0.0), [GNU Compiler Collections](https://gcc.gnu.org/) (>=11.0.0) *(驗證版本，推薦使用最新版本)*
+- 編譯器：[Clang](https://clang.llvm.org/) >= 15.0.0, [Microsoft Visual C++ (MSVC)](https://visualstudio.microsoft.com/vs/features/cplusplus/) >= 17.0.0, [GNU Compiler Collections (GCC)](https://gcc.gnu.org/) >= 11.0.0 **(標明的版本為已測試，其它版本兼容性未知)**
 - 操作系統：Microsoft Windows, Linux內核操作系統, Apple macOS
-- 處理器：amd64 (x86_64)、x86、arm (arm32)\*、arm64 (aarch64)\* *(\* - 未驗證)*
-- 構建系統: [CMake](https://cmake.org/) 3.13或更高 (推薦和 [Ninja](https://ninja-build.org)一起使用)
-- C++標準：C++20或更高
+- 處理器：amd64 (x86_64)、x86、arm (arm32)\*、arm64 (aarch64)\* **(「\*」表示未測試)**
+- 構建系統: [CMake](https://cmake.org/) >= 3.13 (推薦使用[Ninja](https://ninja-build.org)作為下遊構建系統)
+- C++標準：至少為C++20
 
 ## 願望
 

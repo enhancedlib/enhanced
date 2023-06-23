@@ -1,8 +1,8 @@
 # Enhanced
 
-***In Development - Please Report Bugs at [GitHub Issues](https://github.com/enhancedlib/enhanced/issues)***
+***A Powerful C++ Development Framework***
 
-A Powerful C++ Development Framework
+- In development, please report bugs at [GitHub Issues](https://github.com/enhancedlib/enhanced/issues).
 
 [Languages](readme/LANGUAGES.md) | [License](LICENSE) | [Website](https://enhancedlib.github.io/) | [GitHub Repository](https://github.com/enhancedlib/enhanced/)
 
@@ -37,11 +37,11 @@ To use this library, you should use at least the C++20 standard.
 
 Environments:
 
-- Compiler: [Clang](https://clang.llvm.org/) (>=15.0.0), [Microsoft Visual C++](https://visualstudio.microsoft.com/vs/features/cplusplus/) (>=17.0.0), [GNU Compiler Collections](https://gcc.gnu.org/) (>=11.0.0) *(verified versions, recommended to use the latest version)*
+- Compiler: [Clang](https://clang.llvm.org/) >= 15.0.0, [Microsoft Visual C++ (MSVC)](https://visualstudio.microsoft.com/vs/features/cplusplus/) >= 17.0.0, [GNU Compiler Collections (GCC)](https://gcc.gnu.org/) >= 11.0.0 **(versions indicated are tested, the compatibility of other versions is unknown)**
 - Operating system: Microsoft Windows, Linux kernel OS, Apple macOS
-- Processor architecture: amd64 (x86_64), x86, arm (arm32)\*, arm64 (aarch64)\* *(\* - unverified)*
-- Build System: [CMake](https://cmake.org/) 3.13 or later (recommended to use with [Ninja](https://ninja-build.org))
-- C++ Standard: C++20 or later
+- Processor architecture: amd64 (x86_64), x86, arm (arm32)\*, arm64 (aarch64)\* **('\*' means not tested)**
+- Build System: [CMake](https://cmake.org/) >= 3.13 (recommended to use [Ninja](https://ninja-build.org) as the downstream build system)
+- C++ Standard: At least C++20
 
 ## Wish
 
