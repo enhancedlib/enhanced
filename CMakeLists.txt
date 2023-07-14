@@ -196,7 +196,8 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/test")
     endif ()
 endif ()
 
-install(FILES "README.md" "LICENSE" "COPYRIGHT" DESTINATION ".")
+install(DIRECTORY "readme" DESTINATION ".")
+install(FILES "README.md" "LICENSE" DESTINATION ".")
 
 # Output information.
 

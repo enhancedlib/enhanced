@@ -40,7 +40,7 @@
 #include <new> // std::nothrow_t, std::align_val_t
 
 #include <enhanced/Defines.h>
-#include <enhanced/CoreApi.h>
+#include <enhanced/CoreAPI.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Interface.h>

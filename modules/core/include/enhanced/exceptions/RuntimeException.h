@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/CoreApi.h>
+#include <enhanced/CoreAPI.h>
 #include <enhanced/Types.h>
 #include <enhanced/exceptions/Exception.h>
 

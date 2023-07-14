@@ -38,7 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
-#include <enhanced/CoreApi.h>
+#include <enhanced/CoreAPI.h>
 #include <enhanced/io/InputStream.h>
 
 namespace enhanced::io {
