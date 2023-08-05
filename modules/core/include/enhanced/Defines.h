@@ -62,7 +62,7 @@
 #elif defined(_MSC_VER) // Microsoft Visual C++
     #define E_COMPILER_MSVC
     #define E_COMPILER_MSVC_VERSION_ID _MSC_VER
-#elif defined(__GNUC__) // GNU Compiler Collections
+#elif defined(__GNUC__) // GNU Compiler Collection
     #define E_COMPILER_GCC
     #define E_COMPILER_GCC_VERSION_MAJOR __GNUC__
     #define E_COMPILER_GCC_VERSION_MINOR __GNUC_MINOR__

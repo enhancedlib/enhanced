@@ -37,7 +37,7 @@
 
 环境：
 
-- 编译器：[Clang](https://clang.llvm.org/) >= 15.0.0, [Microsoft Visual C++ (MSVC)](https://visualstudio.microsoft.com/vs/features/cplusplus/) >= 17.0.0, [GNU Compiler Collections (GCC)](https://gcc.gnu.org/) >= 11.0.0 **(标明的版本为已测试，其它版本兼容性未知)**
+- 编译器：[Clang](https://clang.llvm.org/) >= 15.0.0, [Microsoft Visual C++ (MSVC)](https://visualstudio.microsoft.com/vs/features/cplusplus/) >= 17.0.0, [GNU Compiler Collection (GCC)](https://gcc.gnu.org/) >= 11.0.0 **(标明的版本为已测试，其它版本兼容性未知)**
 - 操作系统：Microsoft Windows, Linux內核操作系統, Apple macOS
 - 处理器：amd64 (x86_64)、x86、arm (arm32)\*、arm64 (aarch64)\* **(“\*”表示未测试)**
 - 构建系统: [CMake](https://cmake.org/) >= 3.13 (推荐使用[Ninja](https://ninja-build.org)作为下游构建系统)
