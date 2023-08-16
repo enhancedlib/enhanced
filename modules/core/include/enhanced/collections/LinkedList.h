@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -304,8 +304,8 @@ namespace enhanced::collections {
         }
 
         E_RET_NO_DISCARD()
-        inline ReversedIterable<LinkedList<Type>> reversed() const noexcept {
-            return ReversedIterable<LinkedList<Type>>(*this);
+        inline ReversedForEach<LinkedList<Type>> reversedForEach() const noexcept {
+            return ReversedForEach<LinkedList<Type>>(*this);
         }
 
         E_RET_NO_DISCARD()

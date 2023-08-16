@@ -1,7 +1,7 @@
  /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -61,11 +61,6 @@ namespace enhanced::exceptions {
         const Exception* cause;
 
     public:
-        E_RET_NO_DISCARD()
-        virtual const String getName() const {
-            return "enhanced::exceptions::Exception";
-        }
-
         explicit Exception(const String& message = "") noexcept;
 
         explicit Exception(const Exception* cause) noexcept;
@@ -84,6 +79,11 @@ namespace enhanced::exceptions {
 
         E_RET_NO_DISCARD()
         virtual const String& getMessage() const noexcept;
+
+        E_RET_NO_DISCARD()
+        virtual const String getName() const {
+            return "enhanced::exceptions::Exception";
+        }
     };
 
     using ExceptionHandler = void (*)();

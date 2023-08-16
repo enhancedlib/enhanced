@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -50,12 +50,12 @@ namespace enhanced {
         E_CLASS(Iterable)
 
     E_CLASS_HEADER
-        E_INTERFACE_METHOD_RET_AUTO(forwardIterator, (), const)
+        E_INTERFACE_METHOD_RET_ANY(iterator, (), const)
 
     E_CLASS_BODY
         E_RET_NO_DISCARD()
         inline constexpr auto begin() const noexcept {
-            auto it = ForEachIterator<decltype(forwardIterator())>(forwardIterator());
+            auto it = ForEachIterator<ForwardIterator<decltype(iterator())>>(ForwardIterator<decltype(iterator())>(iterator()));
             it.step();
             return it;
         }
@@ -67,15 +67,16 @@ namespace enhanced {
     };
 
     template <typename Type>
-    class ReversedIterable : Type {
-        E_CLASS(ReversedIterable)
+    class ReversedForEach {
+        E_CLASS(ReversedForEach)
+
+        static_assert(isBaseOf<Iterable<Type>, Type>);
+        static_assert(testValid<decltype(declvalue<const Type&>().reverseIterator())>);
 
     E_CLASS_BODY
         const Type& iterable;
 
-        static_assert(isBaseOf<Iterable<Type>, Type>);
-
-        ReversedIterable(const Type& iterable) noexcept : iterable(iterable) {}
+        ReversedForEach(const Type& iterable) noexcept : iterable(iterable) {}
 
         E_RET_NO_DISCARD()
         inline constexpr auto begin() const noexcept {

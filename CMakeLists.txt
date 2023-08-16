@@ -1,6 +1,6 @@
 ## This file is part of Enhanced Framework.
 ##
-## Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+## Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
 ##
 ## Permission is hereby granted, to any person obtaining a copy of this software
 ## and associated documentation files (the "Software"), to deal in the Software,
@@ -38,7 +38,7 @@ cmake_minimum_required(VERSION 3.13)
 project("Enhanced")
 
 message("* Enhanced Framework")
-message("* Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.")
+message("* Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.")
 
 function (setup_module MODULE_NAME)
     file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/sources/*.cpp)

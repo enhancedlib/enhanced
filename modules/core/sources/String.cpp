@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -87,26 +87,22 @@ namespace enhanced {
             value /= 10;
         }
         if (isNegative) bits[index--] = '-';
-        return own(bits + index + 1, 20 - index);
+        return allocate(bits + index + 1, 20 - index);
     }
 
     template <typename CharType>
     requires isCharType<CharType>
     E_RET_NO_DISCARD()
-    TString<CharType> TString<CharType>::own(const CharType* value, sizetype length) {
+    TString<CharType> TString<CharType>::allocate(const CharType* value) {
+        return allocate(value, TStringUtil<CharType>::calcLength(value));
+    }
+
+    template <typename CharType>
+    requires isCharType<CharType>
+    E_RET_NO_DISCARD()
+    TString<CharType> TString<CharType>::allocate(const CharType* value, sizetype length) {
         return {TStringUtil<CharType>::copy(value), length, true};
     }
-
-    template <typename CharType>
-    requires isCharType<CharType>
-    E_RET_NO_DISCARD()
-    TString<CharType> TString<CharType>::own(const CharType* value) {
-        return own(value, TStringUtil<CharType>::calcLength(value));
-    }
-
-    template <typename CharType>
-    requires isCharType<CharType>
-    TString<CharType>::TString(const CharType* value, sizetype length, bool isOwn) noexcept : CharSequence<CharType>(value, length, isOwn) {}
 
     template <typename CharType>
     requires isCharType<CharType>
@@ -114,7 +110,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    TString<CharType>::TString(const CharType* value, sizetype length) noexcept : CharSequence<CharType>(value, length) {}
+    TString<CharType>::TString(CharType*& value) noexcept : TString<CharType>(value, TStringUtil<CharType>::calcLength(value)) {}
 
     template <typename CharType>
     requires isCharType<CharType>
@@ -122,11 +118,36 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    TString<CharType>::TString(CharType*& value) noexcept : TString<CharType>(value, TStringUtil<CharType>::calcLength(value)) {}
+    TString<CharType>::TString(CharType* const& value) noexcept : TString(removeConst(value)) {}
 
     template <typename CharType>
     requires isCharType<CharType>
-    TString<CharType>::TString(CharType* const& value) noexcept : TString(removeConst(value)) {}
+    TString<CharType>::TString(Array<TString> strings) : TString() {
+        sizetype length = 0;
+        for (sizetype index = 0; index < strings.getSize(); ++index) {
+            length += strings[index].length;
+        }
+
+        auto string = TStringUtil<CharType>::make(length);
+
+        sizetype offset = 0;
+        for (sizetype index = 0; index < strings.getSize(); ++index) {
+            arrayCopy(string + offset, strings[index].value, strings[index].length);
+            offset += strings[index].length;
+        }
+
+        this->value = string;
+        this->length = length;
+        this->ownStorage = true;
+    }
+
+    template <typename CharType>
+    requires isCharType<CharType>
+    TString<CharType>::TString(InitializerList<TString> list) : TString(Array<TString>(list)) {}
+
+    template <typename CharType>
+    requires isCharType<CharType>
+    TString<CharType>::TString(const CharType* value, sizetype length) noexcept : CharSequence<CharType>(value, length) {}
 
     template <typename CharType>
     requires isCharType<CharType>
@@ -134,33 +155,12 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    TString<CharType>::TString(const TString* strings, sizetype count) : TString() {
-        sizetype length = 0;
-        for (sizetype index = 0; index < count; ++index) {
-            length += strings[index].length;
-        }
-
-        auto string = TStringUtil<CharType>::make(length);
-
-        sizetype offset = 0;
-        for (sizetype index = 0; index < count; ++index) {
-            arrayCopy(string + offset, strings[index].value, strings[index].length);
-            offset += strings[index].length;
-        }
-
-        this->value = string;
-        this->length = length;
-        this->isOwn = true;
-    }
-
-    template <typename CharType>
-    requires isCharType<CharType>
-    TString<CharType>::TString(InitializerList<TString> list) : TString(list.toArray(), list.getSize()) {}
+    TString<CharType>::TString(const CharType* value, sizetype length, bool ownStorage) noexcept : CharSequence<CharType>(value, length, ownStorage) {}
 
     template <typename CharType>
     requires isCharType<CharType>
     TString<CharType>::TString(const TString& other) :
-        TString(other.isOwn ? TStringUtil<CharType>::copy(other.value) : other.value, other.length, other.isOwn) {}
+        TString(other.ownStorage ? TStringUtil<CharType>::copy(other.value) : other.value, other.length, other.ownStorage) {}
 
     template <typename CharType>
     requires isCharType<CharType>
@@ -337,8 +337,8 @@ namespace enhanced {
     template <typename CharType>
     requires isCharType<CharType>
     E_RET_NO_DISCARD()
-    bool TString<CharType>::ownStorage() const noexcept {
-        return this->isOwn;
+    bool TString<CharType>::isOwnStorage() const noexcept {
+        return this->ownStorage;
     }
 
     template <typename CharType>
@@ -427,23 +427,27 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    TString<CharType>& TString<CharType>::toOwn() {
-        if (!this->isOwn) this->value = TStringUtil<CharType>::copy(this->value, this->length);
-        this->isOwn = true;
-
+    E_RETURN_SELF()
+    TString<CharType>& TString<CharType>::toOwnStorage() {
+        if (!this->ownStorage) {
+            this->value = TStringUtil<CharType>::copy(this->value, this->length);
+            this->ownStorage = true;
+        }
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::set(sizetype index, CharType ch) {
-        toOwn();
+        toOwnStorage();
         this->value[index] = ch;
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::append(CharType ch) {
         sizetype newLength = this->length + 1;
         auto newString = TStringUtil<CharType>::make(newLength);
@@ -451,17 +455,18 @@ namespace enhanced {
         arrayCopy(newString, this->value, this->length);
         newString[this->length] = ch;
 
-        if (this->isOwn) delete[] this->value;
+        if (this->ownStorage) delete[] this->value;
 
         this->value = newString;
         this->length = newLength;
-        this->isOwn = true;
+        this->ownStorage = true;
 
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::append(const TString<CharType>& string) {
         if (string.length == 0) return *this;
 
@@ -471,17 +476,18 @@ namespace enhanced {
         arrayCopy(newString, this->value, this->length);
         arrayCopy(newString + this->length, string.value, string.length);
 
-        if (this->isOwn) delete[] this->value;
+        if (this->ownStorage) delete[] this->value;
 
         this->value = newString;
         this->length = newLength;
-        this->isOwn = true;
+        this->ownStorage = true;
 
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::insertFirst(CharType ch) {
         sizetype newLength = this->length + 1;
         auto newString = TStringUtil<CharType>::make(newLength);
@@ -489,17 +495,18 @@ namespace enhanced {
         newString[0] = ch;
         arrayCopy(newString + 1, this->value, this->length);
 
-        if (this->isOwn) delete[] this->value;
+        if (this->ownStorage) delete[] this->value;
 
         this->value = newString;
         this->length = newLength;
-        this->isOwn = true;
+        this->ownStorage = true;
 
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::insertFirst(const TString<CharType>& string) {
         if (string.length == 0) return *this;
 
@@ -509,17 +516,18 @@ namespace enhanced {
         arrayCopy(newString, string.value, string.length);
         arrayCopy(newString + string.length, this->value, this->length);
 
-        if (this->isOwn) delete[] this->value;
+        if (this->ownStorage) delete[] this->value;
 
         this->value = newString;
         this->length = newLength;
-        this->isOwn = true;
+        this->ownStorage = true;
 
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceTo(sizetype start, sizetype end, CharType newChar) {
         sizetype newLength = this->length - (end - start) + 1;
         auto newString = TStringUtil<CharType>::make(newLength);
@@ -528,17 +536,18 @@ namespace enhanced {
         newString[start] = newChar;
         arrayCopy(newString + start + 1, this->value + end, this->length - end);
 
-        if (this->isOwn) delete[] this->value;
+        if (this->ownStorage) delete[] this->value;
 
         this->value = newString;
         this->length = newLength;
-        this->isOwn = true;
+        this->ownStorage = true;
 
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceTo(sizetype start, sizetype end, const TString<CharType>& newSubstring) {
         sizetype newLength = this->length - (end - start) + newSubstring.length;
         auto newString = TStringUtil<CharType>::make(newLength);
@@ -547,27 +556,29 @@ namespace enhanced {
         arrayCopy(newString + start, newSubstring.value, newSubstring.length);
         arrayCopy(newString + start + newSubstring.length, this->value + end, this->length - end);
 
-        if (this->isOwn) delete[] this->value;
+        if (this->ownStorage) delete[] this->value;
 
         this->value = newString;
         this->length = newLength;
-        this->isOwn = true;
+        this->ownStorage = true;
 
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceTo(const CharType oldChar, const CharType newChar) {
         sizetype index = this->indexOf(oldChar);
         if (index == E_SIZE_TYPE_MAX) return *this;
-        toOwn();
+        toOwnStorage();
         this->value[index] = newChar;
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring) {
         sizetype index = this->indexOf(oldSubstring);
         if (index == E_SIZE_TYPE_MAX) return *this;
@@ -576,6 +587,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceTo(CharType oldChar, const TString<CharType>& newSubstring) {
         sizetype index = this->indexOf(oldChar);
         if (index == E_SIZE_TYPE_MAX) return *this;
@@ -584,6 +596,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceTo(const TString<CharType>& oldSubstring, CharType newChar) {
         sizetype index = this->indexOf(oldSubstring);
         if (index == E_SIZE_TYPE_MAX) return *this;
@@ -592,6 +605,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceAllTo(CharType oldChar, CharType newChar) {
         auto result = this->indexOfAll(oldChar);
         for (auto index : result) {
@@ -602,6 +616,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceAllTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring) {
         auto result = this->indexOfAll(oldSubstring);
         if (result.isEmpty()) return *this;
@@ -630,17 +645,18 @@ namespace enhanced {
             }
         }
 
-        if (this->isOwn) delete[] this->value;
+        if (this->ownStorage) delete[] this->value;
 
         this->value = newString;
         this->length = newLength;
-        this->isOwn = true;
+        this->ownStorage = true;
 
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceAllTo(CharType oldChar, const TString<CharType>& newSubstring) {
         auto result = this->indexOfAll(oldChar);
         if (result.isEmpty()) return *this;
@@ -669,17 +685,18 @@ namespace enhanced {
             }
         }
 
-        if (this->isOwn) delete[] this->value;
+        if (this->ownStorage) delete[] this->value;
 
         this->value = newString;
         this->length = newLength;
-        this->isOwn = true;
+        this->ownStorage = true;
 
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::replaceAllTo(const TString<CharType>& oldSubstring, CharType newChar) {
         auto result = this->indexOfAll(oldSubstring);
         if (result.isEmpty()) return *this;
@@ -708,27 +725,29 @@ namespace enhanced {
             }
         }
 
-        if (this->isOwn) delete[] this->value;
+        if (this->ownStorage) delete[] this->value;
 
         this->value = newString;
         this->length = newLength;
-        this->isOwn = true;
+        this->ownStorage = true;
 
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::fill(CharType ch) noexcept {
-        toOwn();
+        toOwnStorage();
         arrayFill(this->value, ch, this->length);
         return *this;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::uppercaseTo() {
-        toOwn();
+        toOwnStorage();
         for (sizetype index = 0; index < this->length; ++index) {
             this->value[index] = enhanced::uppercase(this->value[index]);
         }
@@ -737,8 +756,9 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
+    E_RETURN_SELF()
     TString<CharType>& TString<CharType>::lowercaseTo() {
-        toOwn();
+        toOwnStorage();
         for (sizetype index = 0; index < this->length; ++index) {
             this->value[index] = enhanced::lowercase(this->value[index]);
         }
@@ -780,20 +800,6 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    E_RET_NO_DISCARD()
-    TString<CharType>& TString<CharType>::operator+=(CharType ch) {
-        return append(ch);
-    }
-
-    template <typename CharType>
-    requires isCharType<CharType>
-    E_RET_NO_DISCARD()
-    TString<CharType>& TString<CharType>::operator+=(const TString& string) {
-        return append(string);
-    }
-
-    template <typename CharType>
-    requires isCharType<CharType>
     E_RETURN_SELF()
     TString<CharType>& TString<CharType>::operator=(const TString& other) noexcept {
         CharSequence<CharType>::operator=(other);
@@ -806,6 +812,20 @@ namespace enhanced {
     TString<CharType>& TString<CharType>::operator=(TString&& other) noexcept {
         CharSequence<CharType>::operator=(move(other));
         return *this;
+    }
+
+    template <typename CharType>
+    requires isCharType<CharType>
+    E_RETURN_SELF()
+    TString<CharType>& TString<CharType>::operator+=(CharType ch) {
+        return append(ch);
+    }
+
+    template <typename CharType>
+    requires isCharType<CharType>
+    E_RETURN_SELF()
+    TString<CharType>& TString<CharType>::operator+=(const TString& string) {
+        return append(string);
     }
 
     template <typename CharType>
@@ -884,7 +904,6 @@ namespace enhanced {
         if (string1 == string2) return true;
         else if (string1 == nullptr || string2 == nullptr) return false;
 
-
         for (sizetype index = 0; index < length1; ++index) {
             if (string1[index] != string2[index]) return false;
         }
@@ -898,7 +917,6 @@ namespace enhanced {
         if (calcLength(string1) != length2) return false;
         if (string1 == string2) return true;
         else if (string1 == nullptr || string2 == nullptr) return false;
-
 
         for (sizetype index = 0; index < length2; ++index) {
             if (string1[index] != string2[index]) return false;

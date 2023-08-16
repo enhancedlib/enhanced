@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -45,24 +45,24 @@
 #define _E_PROPERTY_GETTER_get(ACCESS_MODIFIER) \
 ACCESS_MODIFIER: \
     E_RET_NO_DISCARD() \
-    inline const Self& operator()() const
+    inline const Type& operator()() const
 
 #define _E_PROPERTY_SETTER_set(ACCESS_MODIFIER) \
 ACCESS_MODIFIER: \
     E_RETURN_SELF() \
-    inline Self& operator()(const Self& value) { \
+    inline Type& operator()(const Type& value) { \
         return operator=(value); \
     } \
-    inline Self& operator=(const Self& value)
+    inline Type& operator=(const Type& value)
 
 #define _E_PROPERTY_GETTER_getter(ACCESS_MODIFIER) \
     _E_PROPERTY_GETTER_get(ACCESS_MODIFIER) { \
-        return self; \
+        return property; \
     }
 
 #define _E_PROPERTY_SETTER_setter(ACCESS_MODIFIER) \
     _E_PROPERTY_SETTER_set(ACCESS_MODIFIER) { \
-        return self = value; \
+        return property = value; \
     }
 
 #define E_PROPERTY(TYPE, NAME, GETTER, SETTER, ...) \
@@ -70,11 +70,11 @@ ACCESS_MODIFIER: \
         class _enhanced_Property_##NAME { \
             friend _enhanced_Class; \
         public: \
-            using Self = TYPE; \
+            using Type = TYPE; \
         private: \
-            Self self; \
-            inline _enhanced_Property_##NAME() : self() {} \
-            inline _enhanced_Property_##NAME(const Self& value) : self(enhanced::move(value)) {} \
+            Type property; \
+            inline _enhanced_Property_##NAME() : property() {} \
+            inline _enhanced_Property_##NAME(const Type& value) : property(enhanced::move(value)) {} \
             _E_PROPERTY_GETTER_##GETTER \
             _E_PROPERTY_SETTER_##SETTER \
         }; \
@@ -88,12 +88,12 @@ ACCESS_MODIFIER: \
     private: \
         template <typename Property = _enhanced_Property_##NAME> \
         E_RET_NO_DISCARD() \
-        inline const Self& get() const \
+        inline const Type& get() const \
         requires enhanced::testValid<decltype(Property::operator()())> { \
             return Property::operator()(); \
         } \
         template <typename Property = _enhanced_Property_##NAME> \
-        inline Self& set(const Self& value) \
+        inline Type& set(const Type& value) \
         requires enhanced::testValid<decltype(Property::operator=(value))> { \
             return Property::operator=(value); \
         } \
@@ -102,12 +102,12 @@ ACCESS_MODIFIER: \
     }; \
     template <typename Property = _enhanced_Property_##NAME, typename Ref = _enhanced_PropertyRef_##NAME> \
     E_RET_NO_DISCARD() \
-    inline const typename Property::Self& a() const \
-    requires enhanced::testValid<decltype(enhanced::forceCast<Ref>(BASE::a).get())> { \
-        return ((const _enhanced_PropertyRef_##NAME&) BASE::a).get(); \
+    inline const typename Property::Type& NAME() const \
+    requires enhanced::testValid<decltype(enhanced::forceCast<Ref>(BASE::NAME).get())> { \
+        return ((const _enhanced_PropertyRef_##NAME&) BASE::NAME).get(); \
     } \
     template <typename Property = _enhanced_Property_##NAME> \
-    inline typename Property::Self& a(const typename Property::Self& value) \
-    requires enhanced::testValid<decltype(enhanced::forceCast<_enhanced_PropertyRef_##NAME>(BASE::a).set(value))> { \
-        return ((_enhanced_PropertyRef_##NAME&) BASE::a).set(value); \
+    inline typename Property::Type& NAME(const typename Property::Type& value) \
+    requires enhanced::testValid<decltype(enhanced::forceCast<_enhanced_PropertyRef_##NAME>(BASE::NAME).set(value))> { \
+        return ((_enhanced_PropertyRef_##NAME&) BASE::NAME).set(value); \
     }

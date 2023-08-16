@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -45,25 +45,25 @@
 using enhanced::sizetype;
 
 namespace _E_INTERNAL {
-    SharedPtrImpl::SharedPtrImpl(void* ptr) : referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(ptr) {}
+    SharedPtrImpl::SharedPtrImpl(void* pointer) : referenceCount(pointer != nullptr ? new sizetype(1) : nullptr), pointer(pointer), endAddress(pointer) {}
 
-    SharedPtrImpl::SharedPtrImpl(void* ptr, void* end) : referenceCount(ptr != nullptr ? new sizetype(1) : nullptr), pointer(ptr), end(end) {}
+    SharedPtrImpl::SharedPtrImpl(void* pointer, void* endAddress) : referenceCount(pointer != nullptr ? new sizetype(1) : nullptr), pointer(pointer), endAddress(endAddress) {}
 
     SharedPtrImpl::SharedPtrImpl(const SharedPtrImpl& other) noexcept :
-        referenceCount(other.referenceCount), pointer(other.pointer), end(other.end) {
+        referenceCount(other.referenceCount), pointer(other.pointer), endAddress(other.endAddress) {
         if (other.referenceCount != nullptr) ++(*other.referenceCount);
     }
 
     SharedPtrImpl::SharedPtrImpl(SharedPtrImpl&& other) noexcept :
-        referenceCount(other.referenceCount), pointer(other.pointer), end(other.end) {
+        referenceCount(other.referenceCount), pointer(other.pointer), endAddress(other.endAddress) {
         other.pointer = nullptr;
-        other.end = nullptr;
+        other.endAddress = nullptr;
         other.referenceCount = nullptr;
     }
 
     void SharedPtrImpl::release0(OpDestroy opDestroy) const noexcept {
         if (referenceCount != nullptr && (--(*referenceCount)) == 0) {
-            opDestroy(pointer, end);
+            opDestroy(pointer, endAddress);
             delete referenceCount;
             referenceCount = nullptr;
         }
@@ -73,7 +73,7 @@ namespace _E_INTERNAL {
         release0(opDestroy);
 
         pointer = other.pointer;
-        end = other.end;
+        endAddress = other.endAddress;
         referenceCount = other.referenceCount;
 
         if (referenceCount != nullptr) ++(*referenceCount);
@@ -83,11 +83,11 @@ namespace _E_INTERNAL {
         release0(opDestroy);
 
         pointer = other.pointer;
-        end = other.end;
+        endAddress = other.endAddress;
         referenceCount = other.referenceCount;
 
         other.pointer = nullptr;
-        other.end = nullptr;
+        other.endAddress = nullptr;
         other.referenceCount = nullptr;
     }
 }

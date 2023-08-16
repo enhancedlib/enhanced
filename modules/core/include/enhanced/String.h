@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -37,6 +37,7 @@
 
 #pragma once
 
+#include "enhanced/Array.h"
 #include <enhanced/Defines.h>
 #include <enhanced/CoreAPI.h>
 #include <enhanced/Types.h>
@@ -56,12 +57,6 @@ namespace enhanced {
         E_CLASS(TString)
 
     E_CLASS_BODY
-    protected:
-        TString(const CharType* value, sizetype length, bool isOwn) noexcept;
-
-        E_RET_NO_DISCARD()
-        static TString from(qword value, bool isNegative);
-
     public:
         E_RET_NO_DISCARD()
         static TString<CharType> from(bool value);
@@ -82,37 +77,41 @@ namespace enhanced {
         }
 
         E_RET_NO_DISCARD()
-        static TString<CharType> own(const CharType* value, sizetype length);
-
-        E_RET_NO_DISCARD()
-        static TString<CharType> own(const CharType* value);
+        static TString<CharType> allocate(const CharType* value);
 
         template <sizetype size>
         E_RET_NO_DISCARD()
-        static inline TString own(const wrap<CharType[size]>& value) {
-            return own(value, size);
+        static inline TString allocate(const wrap<CharType[size]>& value) {
+            return allocate(value, size);
         }
 
-        TString() noexcept;
+        E_RET_NO_DISCARD()
+        static TString<CharType> allocate(const CharType* value, sizetype length);
 
-        TString(const CharType* value, sizetype length) noexcept;
+        TString() noexcept;
 
         template <sizetype size>
         inline TString(const wrap<CharType[size]>& value) noexcept : TString((CharType*) value, size - 1) {}
 
-        TString(const CharType*& value) noexcept;
-
         TString(CharType*& value) noexcept;
+
+        TString(const CharType*& value) noexcept;
 
         TString(CharType* const& value) noexcept;
 
-        explicit TString(sizetype length);
-
-        TString(const TString* strings, sizetype count);
+        TString(Array<TString> strings);
 
         E_INIT_LIST_CONSTRUCTOR(TString, TString)
         TString(InitializerList<TString> list);
 
+        TString(const CharType* value, sizetype length) noexcept;
+
+        explicit TString(sizetype length);
+
+    protected:
+        TString(const CharType* value, sizetype length, bool ownStorage) noexcept;
+
+    public:
         TString(const TString& other);
 
         TString(TString&& other) noexcept;
@@ -148,7 +147,7 @@ namespace enhanced {
         collections::ArrayList<sizetype> indexOfAll(const TString& string) const noexcept;
 
         E_RET_NO_DISCARD()
-        bool ownStorage() const noexcept;
+        bool isOwnStorage() const noexcept;
 
         E_RET_NO_DISCARD()
         TString replace(sizetype start, sizetype end, CharType newChar) const;
@@ -186,42 +185,61 @@ namespace enhanced {
         E_RET_NO_DISCARD()
         TString lowercase() const;
 
-        TString& toOwn();
+        E_RETURN_SELF()
+        TString& toOwnStorage();
 
+        E_RETURN_SELF()
         TString& set(sizetype index, CharType ch);
 
+        E_RETURN_SELF()
         TString& append(CharType ch);
 
+        E_RETURN_SELF()
         TString& append(const TString<CharType>& string);
 
+        E_RETURN_SELF()
         TString& insertFirst(CharType ch);
 
+        E_RETURN_SELF()
         TString& insertFirst(const TString<CharType>& string);
 
+        E_RETURN_SELF()
         TString& replaceTo(sizetype start, sizetype end, CharType newChar);
 
+        E_RETURN_SELF()
         TString& replaceTo(sizetype start, sizetype end, const TString<CharType>& newSubstring);
 
+        E_RETURN_SELF()
         TString& replaceTo(CharType oldChar, CharType newChar);
 
+        E_RETURN_SELF()
         TString& replaceTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring);
 
+        E_RETURN_SELF()
         TString& replaceTo(CharType oldChar, const TString<CharType>& newSubstring);
 
+        E_RETURN_SELF()
         TString& replaceTo(const TString<CharType>& oldSubstring, CharType newChar);
 
+        E_RETURN_SELF()
         TString& replaceAllTo(CharType oldChar, CharType newChar);
 
+        E_RETURN_SELF()
         TString& replaceAllTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring);
 
+        E_RETURN_SELF()
         TString& replaceAllTo(CharType oldChar, const TString<CharType>& newSubstring);
 
+        E_RETURN_SELF()
         TString& replaceAllTo(const TString<CharType>& oldSubstring, CharType newChar);
 
+        E_RETURN_SELF()
         TString& fill(CharType ch) noexcept;
 
+        E_RETURN_SELF()
         TString& uppercaseTo();
 
+        E_RETURN_SELF()
         TString& lowercaseTo();
 
         E_RET_NO_DISCARD()
@@ -250,9 +268,15 @@ namespace enhanced {
         E_RETURN_SELF()
         TString& operator=(TString&& other) noexcept;
 
+        E_RETURN_SELF()
         TString& operator+=(const TString<CharType>& string);
 
+        E_RETURN_SELF()
         TString& operator+=(CharType ch);
+
+    protected:
+        E_RET_NO_DISCARD()
+        static TString from(qword value, bool isNegative);
     };
 
     template <typename CharType>
@@ -261,10 +285,6 @@ namespace enhanced {
         E_CLASS(TStringUtil)
 
     E_CLASS_BODY
-        TStringUtil() = delete;
-
-        ~TStringUtil() = delete;
-
         E_RET_NEED_RELEASE()
         static CharType* make(sizetype length);
 
@@ -327,6 +347,10 @@ namespace enhanced {
 
             return true;
         }
+
+        TStringUtil() = delete;
+
+        ~TStringUtil() = delete;
     };
 
     using String = TString<char>;
@@ -368,26 +392,26 @@ namespace enhanced {
             return {string, size};
         }
 
-        inline String operator""_eo(const char* string, sizetype size) {
-            return String::own(string, size);
+        inline String operator""_ea(const char* string, sizetype size) {
+            return String::allocate(string, size);
         }
 
     #ifdef E_WCHAR_IS_BUILTIN_TYPE
-        inline WideString operator""_eo(const wchar* string, sizetype size) {
-            return WideString::own(string, size);
+        inline WideString operator""_ea(const wchar* string, sizetype size) {
+            return WideString::allocate(string, size);
         }
     #endif
 
-        inline U8String operator""_eo(const u8char* string, sizetype size) {
-            return U8String::own(string, size);
+        inline U8String operator""_ea(const u8char* string, sizetype size) {
+            return U8String::allocate(string, size);
         }
 
-        inline U16String operator""_eo(const u16char* string, sizetype size) {
-            return U16String::own(string, size);
+        inline U16String operator""_ea(const u16char* string, sizetype size) {
+            return U16String::allocate(string, size);
         }
 
-        inline U32String operator""_eo(const u32char* string, sizetype size) {
-            return U32String::own(string, size);
+        inline U32String operator""_ea(const u32char* string, sizetype size) {
+            return U32String::allocate(string, size);
         }
     }
 }

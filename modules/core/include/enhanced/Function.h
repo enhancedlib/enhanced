@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -50,6 +50,8 @@ namespace enhanced {
     requires isFunction<FunctionType> && (!FunctionParser<FunctionType>::hasVarargs)
     class Function : public Functional {
         E_CLASS(Function)
+
+    E_CLASS_BODY
     private:
         std::function<FunctionType> function;
 

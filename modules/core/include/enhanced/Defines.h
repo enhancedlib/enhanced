@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -168,10 +168,81 @@
 
 #define E_EMPTY_MACRO_ARG
 
+#define _E_MACRO_ARG_1(P1, ...) P1
+#define _E_MACRO_ARG_2(P1, P2, ...) P2
+#define _E_MACRO_ARG_3(P1, P2, P3, ...) P3
+#define _E_MACRO_ARG_4(P1, P2, P3, P4, ...) P4
+#define _E_MACRO_ARG_5(P1, P2, P3, P4, P5, ...) P5
+#define _E_MACRO_ARG_6(P1, P2, P3, P4, P5, P6, ...) P6
+#define _E_MACRO_ARG_7(P1, P2, P3, P4, P5, P6, P7, ...) P7
+#define _E_MACRO_ARG_8(P1, P2, P3, P4, P5, P6, P7, P8, ...) P8
+#define _E_MACRO_ARG_9(P1, P2, P3, P4, P5, P6, P7, P8, P9, ...) P9
+#define _E_MACRO_ARG_10(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, ...) P10
+#define _E_MACRO_ARG_11(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, ...) P11
+#define _E_MACRO_ARG_12(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, ...) P12
+#define _E_MACRO_ARG_13(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, ...) P13
+#define _E_MACRO_ARG_14(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, ...) P14
+#define _E_MACRO_ARG_15(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, ...) P15
+#define _E_MACRO_ARG_16(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, ...) P16
+#define _E_MACRO_ARG_17(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, ...) P17
+#define _E_MACRO_ARG_18(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, ...) P18
+#define _E_MACRO_ARG_19(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, ...) P19
+#define _E_MACRO_ARG_20(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, ...) P20
+
+#define _E_MACRO_ARG_FROM_1(P1, ...) P1, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_2(P1, P2, ...) P2, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_3(P1, P2, P3, ...) P3, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_4(P1, P2, P3, P4, ...) P4, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_5(P1, P2, P3, P4, P5, ...) P5, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_6(P1, P2, P3, P4, P5, P6, ...) P6, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_7(P1, P2, P3, P4, P5, P6, P7, ...) P7, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_8(P1, P2, P3, P4, P5, P6, P7, P8, ...) P8, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_9(P1, P2, P3, P4, P5, P6, P7, P8, P9, ...) P9, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_10(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, ...) P10, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_11(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, ...) P11, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_12(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, ...) P12, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_13(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, ...) P13, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_14(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, ...) P14, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_15(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, ...) P15, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_16(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, ...) P16, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_17(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, ...) P17, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_18(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, ...) P18, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_19(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, ...) P19, __VA_ARGS__
+#define _E_MACRO_ARG_FROM_20(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, ...) P20, __VA_ARGS__
+
+#define _E_MACRO_ARG_TO_1(P1, ...) P1
+#define _E_MACRO_ARG_TO_2(P1, P2, ...) P1, P2
+#define _E_MACRO_ARG_TO_3(P1, P2, P3, ...) P1, P2, P3
+#define _E_MACRO_ARG_TO_4(P1, P2, P3, P4, ...) P1, P2, P3, P4
+#define _E_MACRO_ARG_TO_5(P1, P2, P3, P4, P5, ...) P1, P2, P3, P4, P5
+#define _E_MACRO_ARG_TO_6(P1, P2, P3, P4, P5, P6, ...) P1, P2, P3, P4, P5, P6
+#define _E_MACRO_ARG_TO_7(P1, P2, P3, P4, P5, P6, P7, ...) P1, P2, P3, P4, P5, P6, P7
+#define _E_MACRO_ARG_TO_8(P1, P2, P3, P4, P5, P6, P7, P8, ...) P1, P2, P3, P4, P5, P6, P7, P8
+#define _E_MACRO_ARG_TO_9(P1, P2, P3, P4, P5, P6, P7, P8, P9, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9
+#define _E_MACRO_ARG_TO_10(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10
+#define _E_MACRO_ARG_TO_11(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11
+#define _E_MACRO_ARG_TO_12(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12
+#define _E_MACRO_ARG_TO_13(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13
+#define _E_MACRO_ARG_TO_14(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14
+#define _E_MACRO_ARG_TO_15(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15
+#define _E_MACRO_ARG_TO_16(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16
+#define _E_MACRO_ARG_TO_17(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, \
+    P17
+#define _E_MACRO_ARG_TO_18(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, \
+    P16, P17, P18
+#define _E_MACRO_ARG_TO_19(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, \
+    P15, P16, P17, P18, P19
+#define _E_MACRO_ARG_TO_20(P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20, ...) P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, \
+    P14, P15, P16, P17, P18, P19, P20
+
+#define E_MACRO_ARG(NUMBER, ...) _E_MACRO_ARG_##NUMBER(__VA_ARGS__)
+#define E_MACRO_ARG_FROM(NUMBER, ...) _E_MACRO_ARG_FROM_##NUMBER(__VA_ARGS__)
+#define E_MACRO_ARG_TO(NUMBER, ...) _E_MACRO_ARG_TO_##NUMBER(__VA_ARGS__)
+
 #define E_LEFT_BRACKET (
 #define E_RIGHT_BRACKET )
 
-#define E_PACK_BRACKET_IF(...) __VA_OPT__(E_LEFT_BRACKET) __VA_ARGS__ __VA_OPT__(E_RIGHT_BRACKET)
+#define E_PACK_BRACKET_IF_NOT_EMPTY(...) __VA_OPT__(E_LEFT_BRACKET) __VA_ARGS__ __VA_OPT__(E_RIGHT_BRACKET)
 
 #define _E_UNPACK_BRACKET_IMPL(...) __VA_ARGS__
 #define E_UNPACK_BRACKET(...) _E_UNPACK_BRACKET_IMPL __VA_ARGS__

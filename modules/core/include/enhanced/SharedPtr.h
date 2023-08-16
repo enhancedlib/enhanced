@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -54,13 +54,13 @@ namespace _E_INTERNAL {
 
         void* pointer;
 
-        void* end;
+        void* endAddress;
 
-        using OpDestroy = void (*)(void* ptr, void* end);
+        using OpDestroy = void (*)(void* pointer, void* endAddress);
 
-        SharedPtrImpl(void* ptr);
+        SharedPtrImpl(void* pointer);
 
-        SharedPtrImpl(void* ptr, void* end);
+        SharedPtrImpl(void* pointer, void* endAddress);
 
         SharedPtrImpl(const SharedPtrImpl& other) noexcept;
 
@@ -81,82 +81,74 @@ namespace enhanced {
 
     E_CLASS_BODY
     private:
-        static void destroy(void* ptr, void* end) {
-            if (ptr == (static_cast<Type*>(end) - 1)) {
-                delete static_cast<Type*>(ptr);
+        static void destroy(void* pointer, void* endAddress) {
+            if (pointer == (static_cast<Type*>(endAddress) - 1)) {
+                delete static_cast<Type*>(pointer);
             } else {
                 if constexpr (isClass<Type> && isDestructible<Type>) {
-                    for (Type* item = static_cast<Type*>(ptr); item != static_cast<Type*>(end); ++item) {
+                    for (Type* item = static_cast<Type*>(pointer); item != static_cast<Type*>(endAddress); ++item) {
                         item->~Type();
                     }
                 }
 
-                operator delete(ptr);
+                operator delete(pointer);
             }
         }
-
-        inline void nullPointerCheck() const {
-            if (pointer == nullptr) throw exceptions::NullPointerException("The pointer is nullptr");
-        }
-
-        inline SharedPtr(Type* ptr) : SharedPtrImpl(static_cast<void*>(ptr)) {}
-
-        inline SharedPtr(Type* ptr, Type* end) : SharedPtrImpl(static_cast<void*>(ptr), static_cast<void*>(end)) {}
 
     public:
-        template <typename... Args>
-        static inline SharedPtr make(Args&&... args) {
-            return new Type {forward<Args>(args)...};
+        static inline SharedPtr make(auto&&... args) {
+            return new Type {forward<decltype(args)...>(args)...};
         }
 
-        template <typename... Args>
-        static SharedPtr makeMulti(sizetype size, Args&&... args) {
-            auto ptr = (Type*) operator new(size * sizeof(Type));
-            auto end = ptr + size;
+        template <sizetype size>
+        static inline SharedPtr make(auto&&... args) {
+            auto pointer = (Type*) operator new(size * sizeof(Type));
+            auto endAddress = pointer + size;
 
-            for (Type* item = ptr; item != end; ++item) {
-                new (item) Type {forward<Args>(args)...};
+            for (Type* item = pointer; item != endAddress; ++item) {
+                new (item) Type {forward<decltype(args)...>(args)...};
             }
 
-            return {ptr, end};
-        }
-
-        template <sizetype size, typename... Args>
-        static inline SharedPtr make(Args&&... args) {
-            return makeMulti(size, forward<Args>(args)...);
+            return {pointer, endAddress};
         }
 
         inline SharedPtr() noexcept : SharedPtrImpl(nullptr) {}
 
-        inline SharedPtr(nulltype ptr) : SharedPtrImpl(static_cast<void*>(ptr)) {}
+        inline SharedPtr(nulltype pointer) : SharedPtrImpl(static_cast<void*>(pointer)) {}
 
         inline SharedPtr(const SharedPtr<Type>& other) noexcept : SharedPtrImpl(other) {}
 
         inline SharedPtr(SharedPtr<Type>&& other) noexcept : SharedPtrImpl(other) {}
 
+    private:
+        inline SharedPtr(Type* pointer) : SharedPtrImpl(static_cast<void*>(pointer)) {}
+
+        inline SharedPtr(Type* pointer, Type* endAddress) : SharedPtrImpl(static_cast<void*>(pointer), static_cast<void*>(endAddress)) {}
+
+    public:
         inline ~SharedPtr() noexcept {
             release();
         }
 
-        E_RET_NO_DISCARD() E_RET_NOT_NULL()
+        E_RET_NO_DISCARD() E_RET_NONNULL()
         inline Type* get() const noexcept {
             nullPointerCheck();
             return static_cast<Type*>(pointer);
         }
 
-        E_RET_NO_DISCARD() E_RET_NULLABLE_IF(pointer == null)
-        inline Type* self() const noexcept {
+        E_RET_NO_DISCARD() E_RET_NULLABLE_IF("pointer == null")
+        inline Type* raw() const noexcept {
             return static_cast<Type*>(pointer);
         }
 
         E_RET_NO_DISCARD()
-        inline const SharedPtr* addressOf() const noexcept {
-            return &self();
+        inline const SharedPtr* address() const noexcept {
+            return this;
         }
 
         E_RET_NO_DISCARD()
-        inline Type* endOf() const noexcept {
-            return static_cast<Type*>(end);
+        inline Type* end() const noexcept {
+            return static_cast<Type*>(endAddress);
         }
 
         inline void release() const noexcept {
@@ -165,17 +157,22 @@ namespace enhanced {
 
         E_RET_NO_DISCARD()
         inline Type* operator+(sizetype offset) const noexcept {
-            return self() + offset;
+            return raw() + offset;
         }
 
         E_RET_NO_DISCARD()
         inline Type* operator-(sizetype offset) const noexcept {
-            return self() - offset;
+            return raw() - offset;
         }
 
         E_RET_NO_DISCARD()
         inline Type* operator->() const {
             return get();
+        }
+
+        E_RET_NO_DISCARD()
+        inline Type** operator&() const {
+            return &raw();
         }
 
         E_RET_NO_DISCARD()
@@ -188,9 +185,9 @@ namespace enhanced {
             return get()[offset];
         }
 
-        E_RET_NO_DISCARD() E_RETURN_SELF()
+        E_RET_NO_DISCARD()
         inline operator Type*() const noexcept {
-            return self();
+            return raw();
         }
 
         E_RETURN_SELF()
@@ -203,6 +200,11 @@ namespace enhanced {
         inline SharedPtr<Type>& operator=(SharedPtr<Type>&& other) noexcept {
             assign0(other, destroy);
             return *this;
+        }
+
+    private:
+        inline void nullPointerCheck() const {
+            if (pointer == nullptr) throw exceptions::NullPointerException("The pointer is nullptr");
         }
     };
 }

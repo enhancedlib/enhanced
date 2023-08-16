@@ -1,7 +1,7 @@
 /*
  * This file is part of Enhanced Framework.
  *
- * Copyright (C) 2023 Liu Baihao (sharedwonder). All rights reserved.
+ * Copyright (C) 2023 sharedwonder (Liu Baihao). All rights reserved.
  *
  * Permission is hereby granted, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software,
@@ -48,8 +48,8 @@ using enhanced::removePtrConst;
 namespace enhanced {
     template <typename CharType>
     requires isCharType<CharType>
-    CharSequence<CharType>::CharSequence(const CharType* value, sizetype length, bool isOwn) :
-        value(removePtrConst(value)), length(length), isOwn(isOwn) {}
+    CharSequence<CharType>::CharSequence(const CharType* value, sizetype length, bool ownStorage) :
+        value(removePtrConst(value)), length(length), ownStorage(ownStorage) {}
 
     template <typename CharType>
     requires isCharType<CharType>
@@ -58,20 +58,20 @@ namespace enhanced {
     template <typename CharType>
     requires isCharType<CharType>
     CharSequence<CharType>::CharSequence(const CharSequence& other) :
-        value(other.isOwn ? TStringUtil<CharType>::copy(other.value) : other.value), length(other.length), isOwn(other.isOwn) {}
+        value(other.ownStorage ? TStringUtil<CharType>::copy(other.value) : other.value), length(other.length), ownStorage(other.ownStorage) {}
 
     template <typename CharType>
     requires isCharType<CharType>
-    CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept : value(other.value), length(other.length), isOwn(other.isOwn) {
+    CharSequence<CharType>::CharSequence(CharSequence&& other) noexcept : value(other.value), length(other.length), ownStorage(other.ownStorage) {
         other.value = nullptr;
         other.length = E_SIZE_TYPE_MAX;
-        other.isOwn = false;
+        other.ownStorage = false;
     }
 
     template <typename CharType>
     requires isCharType<CharType>
     CharSequence<CharType>::~CharSequence() noexcept {
-        if (isOwn) delete[] value;
+        if (ownStorage) delete[] value;
     }
 
     template <typename CharType>
@@ -128,11 +128,11 @@ namespace enhanced {
     CharSequence<CharType>& CharSequence<CharType>::operator=(const CharSequence& other) noexcept {
         if (this == &other) return *this;
 
-        if (isOwn) delete[] value;
+        if (ownStorage) delete[] value;
 
         value = other.value;
         length = other.length;
-        isOwn = other.isOwn;
+        ownStorage = other.ownStorage;
 
         return *this;
     }
@@ -143,15 +143,15 @@ namespace enhanced {
     CharSequence<CharType>& CharSequence<CharType>::operator=(CharSequence&& other) noexcept {
         if (this == &other) return *this;
 
-        if (isOwn) delete[] value;
+        if (ownStorage) delete[] value;
 
         value = other.value;
         length = other.length;
-        isOwn = other.isOwn;
+        ownStorage = other.ownStorage;
 
         other.value = nullptr;
         other.length = E_SIZE_TYPE_MAX;
-        other.isOwn = false;
+        other.ownStorage = false;
 
         return *this;
     }
