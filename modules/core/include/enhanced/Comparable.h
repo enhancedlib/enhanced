@@ -64,35 +64,60 @@ namespace enhanced {
         }
 
         E_RET_NO_DISCARD()
+        inline constexpr bool notEqual(const Type& other) const {
+            return !equal(other);
+        }
+
+        E_RET_NO_DISCARD()
+        inline constexpr bool greater(const Type& other) const {
+            return compare(other) == ComparisonResult::GREATER;
+        }
+
+        E_RET_NO_DISCARD()
+        inline constexpr bool less(const Type& other) const {
+            return compare(other) == ComparisonResult::LESS;
+        }
+
+        E_RET_NO_DISCARD()
+        inline constexpr bool greaterOrEqual(const Type& other) const {
+            auto result = compare(other);
+            return result == ComparisonResult::GREATER || result == ComparisonResult::EQUAL;
+        }
+
+        E_RET_NO_DISCARD()
+        inline constexpr bool lessOrEqual(const Type& other) const {
+            auto result = compare(other);
+            return result == ComparisonResult::LESS || result == ComparisonResult::EQUAL;
+        }
+
+        E_RET_NO_DISCARD()
         inline constexpr bool operator==(const Type& other) const {
             return equal(other);
         }
 
         E_RET_NO_DISCARD()
         inline constexpr bool operator!=(const Type& other) const {
-            return !equal(other);
-        }
-
-        E_RET_NO_DISCARD()
-        inline constexpr bool operator<(const Type& other) const {
-            return compare(other) == ComparisonResult::LESS;
+            return notEqual(other);
         }
 
         E_RET_NO_DISCARD()
         inline constexpr bool operator>(const Type& other) const {
-            return compare(other) == ComparisonResult::GREATER;
+            return greater(other);
         }
 
         E_RET_NO_DISCARD()
-        inline constexpr bool operator<=(const Type& other) const {
-            auto result = compare(other);
-            return result == ComparisonResult::LESS || result == ComparisonResult::EQUAL;
+        inline constexpr bool operator<(const Type& other) const {
+            return less(other);
         }
 
         E_RET_NO_DISCARD()
         inline constexpr bool operator>=(const Type& other) const {
-            auto result = compare(other);
-            return result == ComparisonResult::GREATER || result == ComparisonResult::EQUAL;
+            return greaterOrEqual(other);
+        }
+
+        E_RET_NO_DISCARD()
+        inline constexpr bool operator<=(const Type& other) const {
+            return lessOrEqual(other);
         }
 
         E_RET_NO_DISCARD()

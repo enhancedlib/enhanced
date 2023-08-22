@@ -126,7 +126,7 @@
 // ======================================================================
 
 #define __CV_OPT_TEMPLATE \
-    __TEMPLATE(E_EMPTY_MACRO_ARG) \
+    __TEMPLATE(E_EMPTY) \
     __TEMPLATE(const) \
     __TEMPLATE(volatile) \
     __TEMPLATE(const volatile)

@@ -43,13 +43,13 @@
 #include <enhanced/String.h>
 #include <enhanced/exceptions/AssertionError.h>
 
-#define E_DYNAMIC_ASSERT(EXPRESSION, ...) \
+#define E_RUNTIME_ASSERT(EXPRESSION, ...) \
     if (EXPRESSION) { \
         throw enhanced::exceptions::AssertionError(#EXPRESSION, E_CURRENT_FILE, E_CURRENT_LINE __VA_OPT__(,) __VA_ARGS__); \
     }
 
 #if (defined(E_DEBUG) && !defined(E_ASSERT_DISABLE)) || defined(E_ASSERT_ENABLE)
-    #define E_ASSERT(EXPRESSION, ...) E_DYNAMIC_ASSERT(EXPRESSION __VA_OPT__(,) __VA_ARGS__)
+    #define E_ASSERT(EXPRESSION, ...) E_RUNTIME_ASSERT(EXPRESSION __VA_OPT__(,) __VA_ARGS__)
 #else
     #define E_ASSERT(EXPRESSION, ...) (void) 0
 #endif

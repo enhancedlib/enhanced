@@ -131,13 +131,13 @@ namespace enhanced {
         }
 
         E_RET_NO_DISCARD()
-        inline constexpr Integral operator<<(const Integral& other) const noexcept {
-            return value << other.value;
+        inline constexpr Integral operator>>(const Integral& other) const noexcept {
+            return value >> other.value;
         }
 
         E_RET_NO_DISCARD()
-        inline constexpr Integral operator>>(const Integral& other) const noexcept {
-            return value >> other.value;
+        inline constexpr Integral operator<<(const Integral& other) const noexcept {
+            return value << other.value;
         }
 
         E_RET_NO_DISCARD()
@@ -156,23 +156,23 @@ namespace enhanced {
         }
 
         E_RET_NO_DISCARD()
-        inline constexpr bool operator<(const Integral& other) const noexcept {
-            return value < other.value;
-        }
-
-        E_RET_NO_DISCARD()
         inline constexpr bool operator>(const Integral& other) const noexcept {
             return value > other.value;
         }
 
         E_RET_NO_DISCARD()
-        inline constexpr bool operator<=(const Integral& other) const noexcept {
-            return value <= other.value;
+        inline constexpr bool operator<(const Integral& other) const noexcept {
+            return value < other.value;
         }
 
         E_RET_NO_DISCARD()
         inline constexpr bool operator>=(const Integral& other) const noexcept {
             return value >= other.value;
+        }
+
+        E_RET_NO_DISCARD()
+        inline constexpr bool operator<=(const Integral& other) const noexcept {
+            return value <= other.value;
         }
 
         inline constexpr const Integral operator++(int) const noexcept {
@@ -231,13 +231,13 @@ namespace enhanced {
             return *this;
         }
 
-        inline constexpr Integral& operator<<=(const Integral& other) noexcept {
-            value <<= other.value;
+        inline constexpr Integral& operator>>=(const Integral& other) noexcept {
+            value >>= other.value;
             return *this;
         }
 
-        inline constexpr Integral& operator>>=(const Integral& other) noexcept {
-            value >>= other.value;
+        inline constexpr Integral& operator<<=(const Integral& other) noexcept {
+            value <<= other.value;
             return *this;
         }
 
