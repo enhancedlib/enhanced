@@ -24,7 +24,7 @@
  * 5. If you use this Software in your product, you shall indicate it.
  *
  * 6. Neither the name of the author nor the names of its contributors may
- *    be used to endorse or promote products derived from the Software
+ *    be used to endorse or promote products derived from the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
