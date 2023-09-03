@@ -69,6 +69,10 @@ namespace enhanced {
 
         CharSequence(CharSequence&& other) noexcept;
 
+    protected:
+        CharSequence(const CharType* value, sizetype length, bool ownStorage);
+
+    public:
         ~CharSequence() noexcept;
 
         E_RET_NO_DISCARD()
@@ -101,8 +105,5 @@ namespace enhanced {
         CharSequence& operator=(CharSequence&& other) noexcept;
 
         operator CharType*() const noexcept;
-
-    protected:
-        CharSequence(const CharType* value, sizetype length, bool ownStorage);
     };
 }

@@ -55,20 +55,12 @@ namespace _E_INTERNAL::collections {
 
     E_CLASS_BODY
     protected:
-        void** elements;
-
-        enhanced::sizetype size;
-
-        enhanced::sizetype capacity;
-
         using OpCopy = void* (*)(void*);
         using OpMove = void* (*)(void*);
         using OpDestroy = void (*)(void*);
         using OpEqual = bool (*)(void*, void*);
 
         using ExpansionSizeFunc = enhanced::sizetype (*)(enhanced::sizetype);
-
-        ExpansionSizeFunc expansionSizeFunc;
 
         class E_API(core) ArrayListIteratorImpl {
             E_CLASS(ArrayListIteratorImpl)
@@ -108,6 +100,14 @@ namespace _E_INTERNAL::collections {
 
             void setEnd0() const;
         };
+
+        void** elements;
+
+        enhanced::sizetype size;
+
+        enhanced::sizetype capacity;
+
+        ExpansionSizeFunc expansionSizeFunc;
 
         ArrayListImpl(enhanced::sizetype capacity);
 
@@ -156,26 +156,9 @@ namespace enhanced::collections {
     private:
         using ArrayListImpl = _E_INTERNAL::collections::ArrayListImpl;
 
-        E_RET_NEED_RELEASE()
-        static void* copy(void* element) {
-            return new Type(*reinterpret_cast<Type*>(element));
-        }
-
-        E_RET_NEED_RELEASE()
-        static void* move(void* element) {
-            return new Type(traits::move(*reinterpret_cast<Type*>(element)));
-        }
-
-        static void destroy(void* element) {
-            delete reinterpret_cast<Type*>(element);
-        }
-
-        E_RET_NO_DISCARD()
-        static bool equal(void* element, void* value) {
-            return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
-        }
-
     public:
+        using ExpansionSizeFunc = ArrayListImpl::ExpansionSizeFunc;
+
         class ArrayListIterator : public Iterator<Type>, private ArrayListImpl::ArrayListIteratorImpl {
             E_CLASS(ArrayListIterator)
 
@@ -249,8 +232,27 @@ namespace enhanced::collections {
             }
         };
 
-        using ExpansionSizeFunc = ArrayListImpl::ExpansionSizeFunc;
+    private:
+        E_RET_NEED_RELEASE()
+        static void* copy(void* element) {
+            return new Type(*reinterpret_cast<Type*>(element));
+        }
 
+        E_RET_NEED_RELEASE()
+        static void* move(void* element) {
+            return new Type(traits::move(*reinterpret_cast<Type*>(element)));
+        }
+
+        static void destroy(void* element) {
+            delete reinterpret_cast<Type*>(element);
+        }
+
+        E_RET_NO_DISCARD()
+        static bool equal(void* element, void* value) {
+            return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
+        }
+
+    public:
         inline ArrayList() : ArrayListImpl(ARRAY_LIST_DEFAULT_CAPACITY) {}
 
         E_INIT_LIST_CONSTRUCTOR(ArrayList, Type)

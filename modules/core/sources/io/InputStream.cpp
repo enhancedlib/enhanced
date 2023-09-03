@@ -43,11 +43,11 @@
 #include <enhanced/exceptions/NotImplementedError.h>
 
 namespace enhanced::io {
-    byte InputStream::get() const {
+    byte InputStream::read() const {
         E_NOT_IMPLEMENTED();
     }
 
-    void InputStream::read(byte *buffer, sizetype size) const {
+    sizetype InputStream::read(byte *buffer, sizetype size) const {
         E_NOT_IMPLEMENTED();
     }
 

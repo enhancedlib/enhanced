@@ -41,16 +41,16 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
-#include <enhanced/Interface.h>
+#include <enhanced/TraitInterface.h>
 #include <enhanced/Iterator.h>
 
 namespace enhanced {
-    E_INTERFACE()
+    E_TRAIT_INTERFACE()
     class Iterable {
         E_CLASS(Iterable)
 
     E_CLASS_HEADER
-        E_INTERFACE_METHOD_RET_ANY(iterator, (), const)
+        E_TRAIT_INTERFACE_METHOD_RET_ANY(iterator, (), const)
 
     E_CLASS_BODY
         E_RET_NO_DISCARD()
@@ -70,12 +70,15 @@ namespace enhanced {
     class ReversedForEach {
         E_CLASS(ReversedForEach)
 
+    E_CLASS_HEADER
         static_assert(isBaseOf<Iterable<Type>, Type>);
         static_assert(testValid<decltype(declvalue<const Type&>().reverseIterator())>);
 
     E_CLASS_BODY
+    private:
         const Type& iterable;
 
+    public:
         ReversedForEach(const Type& iterable) noexcept : iterable(iterable) {}
 
         E_RET_NO_DISCARD()

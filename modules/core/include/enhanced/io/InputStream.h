@@ -51,9 +51,9 @@ namespace enhanced::io {
 
     E_CLASS_BODY
         E_RET_NO_DISCARD()
-        virtual byte get() const;
+        virtual byte read() const;
 
-        virtual void read(byte* buffer, sizetype size) const;
+        virtual sizetype read(byte* buffer, sizetype size) const;
 
         E_RET_NO_DISCARD()
         virtual String readLine() const;

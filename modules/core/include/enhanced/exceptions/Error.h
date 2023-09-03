@@ -46,9 +46,10 @@ namespace enhanced::exceptions {
     class E_API(core) Error : public Exception {
         E_CLASS(Error)
 
-    E_CLASS_BODY
+    E_CLASS_HEADER
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::Error)
 
+    E_CLASS_BODY
         explicit Error(const String& message = "") noexcept;
 
         explicit Error(const Exception* cause) noexcept;

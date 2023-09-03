@@ -57,7 +57,6 @@ namespace enhanced {
         E_CLASS(TString)
 
     E_CLASS_BODY
-    public:
         E_RET_NO_DISCARD()
         static TString<CharType> from(bool value);
 
@@ -76,6 +75,11 @@ namespace enhanced {
             return TString(static_cast<const CharType*&>(value));
         }
 
+    protected:
+        E_RET_NO_DISCARD()
+        static TString from(qword value, bool isNegative);
+
+    public:
         E_RET_NO_DISCARD()
         static TString<CharType> allocate(const CharType* value);
 
@@ -108,14 +112,14 @@ namespace enhanced {
 
         explicit TString(sizetype length);
 
-    protected:
-        TString(const CharType* value, sizetype length, bool ownStorage) noexcept;
-
-    public:
         TString(const TString& other);
 
         TString(TString&& other) noexcept;
 
+    protected:
+        TString(const CharType* value, sizetype length, bool ownStorage) noexcept;
+
+    public:
         E_RET_NO_DISCARD()
         sizetype indexOf(CharType ch) const noexcept;
 
@@ -273,10 +277,6 @@ namespace enhanced {
 
         E_RETURN_SELF()
         TString& operator+=(CharType ch);
-
-    protected:
-        E_RET_NO_DISCARD()
-        static TString from(qword value, bool isNegative);
     };
 
     template <typename CharType>

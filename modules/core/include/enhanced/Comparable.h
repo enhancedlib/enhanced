@@ -41,23 +41,23 @@
 #include <enhanced/CoreAPI.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/Interface.h>
+#include <enhanced/TraitInterface.h>
 
 namespace enhanced {
     enum class ComparisonResult : int8 {
         EQUAL = 0, LESS = -1, GREATER = 1
     };
 
-    E_INTERFACE()
+    E_TRAIT_INTERFACE()
     class Comparable {
         E_CLASS(Comparable)
 
     E_CLASS_HEADER
-        using Type = E_INTERFACE_IMPL_CLASS;
-
-        E_INTERFACE_METHOD(compare, ComparisonResult, (const Type&), const)
+        E_TRAIT_INTERFACE_METHOD(compare, ComparisonResult, (const E_TRAIT_INTERFACE_IMPL_CLASS&), const)
 
     E_CLASS_BODY
+        using Type = E_TRAIT_INTERFACE_IMPL_CLASS;
+
         E_RET_NO_DISCARD()
         inline constexpr bool equal(const Type& other) const {
             return compare(other) == ComparisonResult::EQUAL;

@@ -46,9 +46,10 @@ namespace enhanced::exceptions {
     class E_API(core) RuntimeException : public Exception {
         E_CLASS(RuntimeException)
 
-    E_CLASS_BODY
+    E_CLASS_HEADER
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::RuntimeException)
 
+    E_CLASS_BODY
         explicit RuntimeException(const String& message = "") noexcept;
 
         explicit RuntimeException(const Exception* cause) noexcept;

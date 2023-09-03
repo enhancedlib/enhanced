@@ -38,11 +38,28 @@
 #pragma once
 
 #include <enhanced/Defines.h>
+#include <enhanced/Traits.h>
 
 namespace enhanced {
     template <typename FirstType, typename SecondType>
-    struct Pair {
-        FirstType first;
-        SecondType second;
+    class Pair {
+        E_CLASS(Pair)
+
+    E_CLASS_BODY
+        const FirstType first;
+
+        const SecondType second;
+
+        inline constexpr Pair(FirstType&& first, SecondType&& second) noexcept(noexcept(FirstType(first)) && noexcept(SecondType(second))) : first(first), second(second) {}
+
+        inline constexpr Pair(const Pair& other) noexcept(noexcept(FirstType(other.first)) && noexcept(SecondType(other.second))) : first(other.first), second(other.second) {}
+
+        inline constexpr Pair(Pair&& other) noexcept(noexcept(FirstType(move(other.first))) && noexcept(SecondType(move(other.second)))) : first(move(other.first)),
+            second(move(other.second)) {}
     };
+
+    template <typename FirstType, typename SecondType>
+    inline constexpr Pair<FirstType, SecondType> makePair(FirstType&& first, SecondType&& second) {
+        return Pair(move(first), move(second));
+    }
 }

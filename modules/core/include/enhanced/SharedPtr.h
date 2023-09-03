@@ -50,11 +50,11 @@
 namespace _E_INTERNAL {
     class E_API(core) SharedPtrImpl {
     protected:
-        mutable enhanced::sizetype* referenceCount;
-
         void* pointer;
 
         void* endAddress;
+
+        mutable enhanced::sizetype* referenceCount;
 
         using OpDestroy = void (*)(void* pointer, void* endAddress);
 
@@ -80,22 +80,6 @@ namespace enhanced {
         E_CLASS(SharedPtr)
 
     E_CLASS_BODY
-    private:
-        static void destroy(void* pointer, void* endAddress) {
-            if (pointer == (static_cast<Type*>(endAddress) - 1)) {
-                delete static_cast<Type*>(pointer);
-            } else {
-                if constexpr (isClass<Type> && isDestructible<Type>) {
-                    for (Type* item = static_cast<Type*>(pointer); item != static_cast<Type*>(endAddress); ++item) {
-                        item->~Type();
-                    }
-                }
-
-                operator delete(pointer);
-            }
-        }
-
-    public:
         static inline SharedPtr make(auto&&... args) {
             return new Type {forward<decltype(args)...>(args)...};
         }
@@ -112,20 +96,34 @@ namespace enhanced {
             return {pointer, endAddress};
         }
 
+    private:
+        static void destroy(void* pointer, void* endAddress) {
+            if (pointer == (static_cast<Type*>(endAddress) - 1)) {
+                delete static_cast<Type*>(pointer);
+            } else {
+                if constexpr (isClass<Type> && isDestructible<Type>) {
+                    for (Type* item = static_cast<Type*>(pointer); item != static_cast<Type*>(endAddress); ++item) {
+                        item->~Type();
+                    }
+                }
+
+                operator delete(pointer);
+            }
+        }
+
+    public:
         inline SharedPtr() noexcept : SharedPtrImpl(nullptr) {}
 
         inline SharedPtr(nulltype pointer) : SharedPtrImpl(static_cast<void*>(pointer)) {}
+
+        explicit inline SharedPtr(Type* pointer) : SharedPtrImpl(static_cast<void*>(pointer)) {}
+
+        explicit inline SharedPtr(Type* pointer, Type* endAddress) : SharedPtrImpl(static_cast<void*>(pointer), static_cast<void*>(endAddress)) {}
 
         inline SharedPtr(const SharedPtr<Type>& other) noexcept : SharedPtrImpl(other) {}
 
         inline SharedPtr(SharedPtr<Type>&& other) noexcept : SharedPtrImpl(other) {}
 
-    private:
-        inline SharedPtr(Type* pointer) : SharedPtrImpl(static_cast<void*>(pointer)) {}
-
-        inline SharedPtr(Type* pointer, Type* endAddress) : SharedPtrImpl(static_cast<void*>(pointer), static_cast<void*>(endAddress)) {}
-
-    public:
         inline ~SharedPtr() noexcept {
             release();
         }

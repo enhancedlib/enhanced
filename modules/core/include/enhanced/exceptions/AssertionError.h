@@ -47,9 +47,10 @@ namespace enhanced::exceptions {
     class E_API(core) AssertionError : public Error {
         E_CLASS(AssertionError)
 
-    E_CLASS_BODY
+    E_CLASS_HEADER
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::AssertionError)
 
+    E_CLASS_BODY
         explicit AssertionError(const String& message = "") noexcept;
 
         explicit AssertionError(const String& expression, const String& file, sizetype line) noexcept;

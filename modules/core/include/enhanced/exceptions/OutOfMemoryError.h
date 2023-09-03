@@ -44,12 +44,13 @@
 #include <enhanced/exceptions/Error.h>
 
 namespace enhanced::exceptions {
-    class E_API(core) MemoryAllocationError : public Error {
-        E_CLASS(MemoryAllocationError)
+    class E_API(core) OutOfMemoryError : public Error {
+        E_CLASS(OutOfMemoryError)
+
+    E_CLASS_HEADER
+        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::OutOfMemoryError)
 
     E_CLASS_BODY
-        E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::MemoryAllocationError)
-
-        explicit MemoryAllocationError(const String& message = "") noexcept;
+        explicit OutOfMemoryError(const String& message = "") noexcept;
     };
 }

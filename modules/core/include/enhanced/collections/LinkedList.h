@@ -54,6 +54,11 @@ namespace _E_INTERNAL::collections {
 
     E_CLASS_BODY
     protected:
+        using OpCopy = void* (*)(void*);
+        using OpMove = void* (*)(void*);
+        using OpDestroy = void (*)(void*);
+        using OpEqual = bool (*)(void*, void*);
+
         struct Node {
             void* value;
 
@@ -61,17 +66,6 @@ namespace _E_INTERNAL::collections {
 
             Node* next;
         };
-
-        Node* first;
-
-        Node* last;
-
-        enhanced::sizetype size;
-
-        using OpCopy = void* (*)(void*);
-        using OpMove = void* (*)(void*);
-        using OpDestroy = void (*)(void*);
-        using OpEqual = bool (*)(void*, void*);
 
         class E_API(core) LinkedListIteratorImpl {
             E_CLASS(LinkedListIteratorImpl)
@@ -120,6 +114,12 @@ namespace _E_INTERNAL::collections {
             return node = node->next;
         }
 
+        Node* first;
+
+        Node* last;
+
+        enhanced::sizetype size;
+
         LinkedListImpl();
 
         LinkedListImpl(const LinkedListImpl& other, OpCopy opCopy);
@@ -162,25 +162,6 @@ namespace enhanced::collections {
     E_CLASS_BODY
     private:
         using LinkedListImpl = _E_INTERNAL::collections::LinkedListImpl;
-
-        E_RET_NEED_RELEASE()
-        static void* copy(void* element) {
-            return new Type(*reinterpret_cast<Type*>(element));
-        }
-
-        E_RET_NEED_RELEASE()
-        static void* move(void* element) {
-            return new Type(traits::move(*reinterpret_cast<Type*>(element)));
-        }
-
-        static void destroy(void* element) {
-            delete reinterpret_cast<Type*>(element);
-        }
-
-        E_RET_NO_DISCARD()
-        static bool equal(void* element, void* value) {
-            return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
-        }
 
     public:
         class LinkedListIterator : public Iterator<Type>, private LinkedListImpl::LinkedListIteratorImpl {
@@ -256,6 +237,27 @@ namespace enhanced::collections {
             }
         };
 
+    private:
+        E_RET_NEED_RELEASE()
+        static void* copy(void* element) {
+            return new Type(*reinterpret_cast<Type*>(element));
+        }
+
+        E_RET_NEED_RELEASE()
+        static void* move(void* element) {
+            return new Type(traits::move(*reinterpret_cast<Type*>(element)));
+        }
+
+        static void destroy(void* element) {
+            delete reinterpret_cast<Type*>(element);
+        }
+
+        E_RET_NO_DISCARD()
+        static bool equal(void* element, void* value) {
+            return *reinterpret_cast<Type*>(element) == *reinterpret_cast<Type*>(value);
+        }
+
+    public:
         inline LinkedList() : LinkedListImpl() {}
 
         E_INIT_LIST_CONSTRUCTOR(LinkedList, Type)

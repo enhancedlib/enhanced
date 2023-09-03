@@ -43,7 +43,7 @@
 #include <enhanced/CoreAPI.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
-#include <enhanced/Interface.h>
+#include <enhanced/TraitInterface.h>
 #include <enhanced/Traits.h>
 
 namespace enhanced {
@@ -52,12 +52,13 @@ namespace enhanced {
 
     extern const Nothrow nothrow;
 
-    E_INTERFACE()
+    E_TRAIT_INTERFACE()
     class Swappable {
     E_CLASS_HEADER
-        using Type = E_INTERFACE_IMPL_CLASS;
+        E_TRAIT_INTERFACE_METHOD(swap, void, (const E_TRAIT_INTERFACE_IMPL_CLASS&))
 
-        E_INTERFACE_METHOD(swap, void, (const Type&))
+    E_CLASS_BODY
+        using Type = E_TRAIT_INTERFACE_IMPL_CLASS;
     };
 
     template <typename Type>

@@ -45,17 +45,15 @@
 using enhanced::sizetype;
 
 namespace _E_INTERNAL {
-    SharedPtrImpl::SharedPtrImpl(void* pointer) : referenceCount(pointer != nullptr ? new sizetype(1) : nullptr), pointer(pointer), endAddress(pointer) {}
+    SharedPtrImpl::SharedPtrImpl(void* pointer) : pointer(pointer), endAddress(pointer), referenceCount(pointer != nullptr ? new sizetype(1) : nullptr) {}
 
-    SharedPtrImpl::SharedPtrImpl(void* pointer, void* endAddress) : referenceCount(pointer != nullptr ? new sizetype(1) : nullptr), pointer(pointer), endAddress(endAddress) {}
+    SharedPtrImpl::SharedPtrImpl(void* pointer, void* endAddress) : pointer(pointer), endAddress(endAddress), referenceCount(pointer != nullptr ? new sizetype(1) : nullptr) {}
 
-    SharedPtrImpl::SharedPtrImpl(const SharedPtrImpl& other) noexcept :
-        referenceCount(other.referenceCount), pointer(other.pointer), endAddress(other.endAddress) {
+    SharedPtrImpl::SharedPtrImpl(const SharedPtrImpl& other) noexcept : pointer(other.pointer), endAddress(other.endAddress), referenceCount(other.referenceCount) {
         if (other.referenceCount != nullptr) ++(*other.referenceCount);
     }
 
-    SharedPtrImpl::SharedPtrImpl(SharedPtrImpl&& other) noexcept :
-        referenceCount(other.referenceCount), pointer(other.pointer), endAddress(other.endAddress) {
+    SharedPtrImpl::SharedPtrImpl(SharedPtrImpl&& other) noexcept : pointer(other.pointer), endAddress(other.endAddress), referenceCount(other.referenceCount) {
         other.pointer = nullptr;
         other.endAddress = nullptr;
         other.referenceCount = nullptr;

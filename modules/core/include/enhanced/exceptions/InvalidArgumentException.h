@@ -47,9 +47,10 @@ namespace enhanced::exceptions {
     class E_API(core) InvalidArgumentException : public RuntimeException {
         E_CLASS(InvalidArgumentException)
 
-    E_CLASS_BODY
+    E_CLASS_HEADER
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::InvalidArgumentException)
 
+    E_CLASS_BODY
         explicit InvalidArgumentException(const String& message = "") noexcept;
 
         explicit InvalidArgumentException(const Exception* cause) noexcept;

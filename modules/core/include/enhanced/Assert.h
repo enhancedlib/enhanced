@@ -48,7 +48,7 @@
         throw enhanced::exceptions::AssertionError(#EXPRESSION, E_CURRENT_FILE, E_CURRENT_LINE __VA_OPT__(,) __VA_ARGS__); \
     }
 
-#if (defined(E_DEBUG) && !defined(E_ASSERT_DISABLE)) || defined(E_ASSERT_ENABLE)
+#if defined(E_ASSERT_ENABLE) || (defined(E_DEBUG) && !defined(E_ASSERT_DISABLE))
     #define E_ASSERT(EXPRESSION, ...) E_RUNTIME_ASSERT(EXPRESSION __VA_OPT__(,) __VA_ARGS__)
 #else
     #define E_ASSERT(EXPRESSION, ...) (void) 0

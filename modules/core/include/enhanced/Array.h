@@ -199,7 +199,7 @@ namespace enhanced {
      * @param count         The number of elements.
      * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
      */
-    E_API(core) void arrayCopy(E_IN_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType);
+    E_API(core) void arrayCopy(E_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType);
 
 
     /*!
@@ -215,7 +215,7 @@ namespace enhanced {
      */
     template <typename Type>
     requires isClass<Type>
-    void arrayCopy(E_IN_OUT() Type* destination, const Type* source, sizetype count) {
+    void arrayCopy(E_OUT() Type* destination, const Type* source, sizetype count) {
         if (destination == nullptr || source == nullptr) return;
         for (sizetype index = 0; index < count; ++index) {
             destination[index] = source[index];
@@ -224,7 +224,7 @@ namespace enhanced {
 
     template <typename Type>
     requires (!isClass<Type>)
-    void arrayCopy(E_IN_OUT() Type* destination, const Type* source, sizetype count) {
+    void arrayCopy(E_OUT() Type* destination, const Type* source, sizetype count) {
         arrayCopy(destination, source, count, sizeof(Type));
     }
 }

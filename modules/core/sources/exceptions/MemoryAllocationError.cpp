@@ -35,10 +35,10 @@
  * SOFTWARE.
  */
 
-#include <enhanced/exceptions/MemoryAllocationError.h>
+#include <enhanced/exceptions/OutOfMemoryError.h>
 
 #include <enhanced/exceptions/Error.h>
 
 namespace enhanced::exceptions {
-    MemoryAllocationError::MemoryAllocationError(const String& message) noexcept : Error(message) {}
+    OutOfMemoryError::OutOfMemoryError(const String& message) noexcept : Error(message) {}
 }

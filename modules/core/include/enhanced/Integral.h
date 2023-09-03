@@ -59,8 +59,10 @@ namespace enhanced {
         E_CLASS(Integral)
 
     E_CLASS_BODY
+    protected:
         IntegralType value;
 
+    public:
         inline constexpr Integral() noexcept : value() {}
 
         inline constexpr Integral(IntegralType value) noexcept : value(value) {}
@@ -73,6 +75,11 @@ namespace enhanced {
         inline constexpr ComparisonResult compare(const Integral& other) const {
             return value == other.value ? ComparisonResult::EQUAL :
                 (value > other.value ? ComparisonResult::GREATER : ComparisonResult::LESS);
+        }
+
+        E_RET_NO_DISCARD()
+        inline constexpr Integral operator()() const noexcept {
+            return value;
         }
 
         E_RET_NO_DISCARD()

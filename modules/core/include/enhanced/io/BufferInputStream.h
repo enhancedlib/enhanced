@@ -38,6 +38,7 @@
 #pragma once
 
 #include <enhanced/Defines.h>
+#include <enhanced/Types.h>
 #include <enhanced/CoreAPI.h>
 #include <enhanced/io/InputStream.h>
 
@@ -47,8 +48,8 @@ namespace enhanced::io {
 
     E_CLASS_BODY
         E_RET_NO_DISCARD()
-        byte get() const override;
+        byte read() const override;
 
-        void read(byte* buffer, sizetype size) const override;
+        sizetype read(byte* buffer, sizetype size) const override;
     };
 }

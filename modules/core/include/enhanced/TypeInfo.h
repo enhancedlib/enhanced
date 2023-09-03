@@ -48,12 +48,6 @@ namespace enhanced {
         E_CLASS(TypeInfo)
 
     E_CLASS_BODY
-    private:
-        const std::type_info& info;
-
-        constexpr TypeInfo(const std::type_info& info) : info(info) {}
-
-    public:
         template <typename Type>
         static inline constexpr TypeInfo of() {
             return typeid(Type);
@@ -64,10 +58,18 @@ namespace enhanced {
             return typeid(value);
         }
 
+    private:
+        const std::type_info& info;
+
+    public:
         TypeInfo(const TypeInfo& info) = delete;
 
         TypeInfo& operator=(const TypeInfo& info) = delete;
 
+    private:
+        constexpr TypeInfo(const std::type_info& info) : info(info) {}
+
+    public:
         E_RET_NO_DISCARD()
         String getName() const;
 

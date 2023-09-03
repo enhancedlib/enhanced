@@ -60,7 +60,7 @@ namespace enhanced::collections {
 
         const Function<bool (ListType<Element>&)> generator;
 
-        bool isCompleted = false;
+        bool completed = false;
 
     public:
         class ListStreamIterator : public Iterator<Element> {
@@ -124,8 +124,8 @@ namespace enhanced::collections {
             E_RETURN_SELF()
             const Iterator<Element>& next() const override {
                 if (isEnd()) throw exceptions::OperationException("The iterator is at the end of the list");
-                if (!stream->isCompleted && (count() == 0 || index == count() - 1)) {
-                    if (!stream->generator(stream->list)) stream->isCompleted = true;
+                if (!stream->completed && (count() == 0 || index == count() - 1)) {
+                    if (!stream->generator(stream->list)) stream->completed = true;
                 }
 
                 if (isBegin()) index = 0;
@@ -136,10 +136,10 @@ namespace enhanced::collections {
             E_RETURN_SELF()
             const Iterator<Element>& next(sizetype count) const override {
                 sizetype generationCount = ((index != E_SIZE_TYPE_MAX) ? index + 1 : 0) + count - this->count();
-                if (!stream->isCompleted) {
+                if (!stream->completed) {
                     while (--generationCount > 0) {
                         if (!stream->generator(stream->list)) {
-                            stream->isCompleted = true;
+                            stream->completed = true;
                             break;
                         }
                     }
@@ -152,7 +152,7 @@ namespace enhanced::collections {
 
             E_RETURN_SELF()
             const Iterator<Element>& setBegin() const override {
-                if (!stream->isCompleted) throw exceptions::OperationException("ListStream is not completed");
+                if (!stream->completed) throw exceptions::OperationException("ListStream is not completed");
                 delegate.setBegin();
                 index = E_SIZE_TYPE_MAX;
                 return *this;
@@ -160,7 +160,7 @@ namespace enhanced::collections {
 
             E_RETURN_SELF()
             const Iterator<Element>& setEnd() const override {
-                if (!stream->isCompleted) throw exceptions::OperationException("ListStream is not completed");
+                if (!stream->completed) throw exceptions::OperationException("ListStream is not completed");
                 delegate.setEnd();
                 index = count() + 1;
                 return *this;
@@ -187,13 +187,18 @@ namespace enhanced::collections {
         }
 
         inline const ListType<Element>& complete() const {
-            if (!isCompleted) {
+            if (!completed) {
                 auto iter = iterator();
-                while (!isCompleted) {
+                while (!completed) {
                     iter.next();
                 }
             }
             return list;
+        }
+
+        E_RET_NO_DISCARD()
+        inline bool isCompleted() const noexcept {
+            return completed;
         }
     };
 }

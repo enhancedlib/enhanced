@@ -52,13 +52,14 @@ namespace enhanced {
         E_CLASS(Function)
 
     E_CLASS_BODY
-    private:
-        std::function<FunctionType> function;
-
     public:
         using ReturnType = typename FunctionParser<FunctionType>::ReturnType;
         using NeatFunctionType = typename FunctionParser<FunctionType>::NeatFunctionType;
 
+    private:
+        std::function<FunctionType> function;
+
+    public:
         Function() = default;
 
         Function(std::function<FunctionType> function) : function(function) {}

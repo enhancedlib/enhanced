@@ -56,7 +56,7 @@ namespace enhanced {
         }
     }
 
-    void arrayCopy(E_IN_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType) {
+    void arrayCopy(E_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType) {
         memoryCopy(destination, source, count * sizeOfType);
     }
 }

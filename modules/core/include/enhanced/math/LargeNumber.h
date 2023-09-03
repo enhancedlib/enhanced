@@ -55,27 +55,15 @@ namespace enhanced::math {
 
     E_CLASS_BODY
     private:
-        E_MSVC_WARNING_PAD(4251)
-
+    E_MSVC_WARNING_PAD(4251)
         collections::ArrayList<byte> storage;
-
-        E_MSVC_WARNING_POP
+    E_MSVC_WARNING_POP
 
         bool isNegative;
 
         sizetype length = 0;
 
         sizetype point = 0;
-
-        template <typename NumberType>
-        requires isIntegralType<NumberType>
-        inline LargeNumber(NumberType number) : storage(0), isNegative(isSigned<NumberType> && number < 0) {
-            sizetype count = 1;
-            for (NumberType value = number; value != 0; value /= 10, ++count);
-
-            length = count;
-            storage.expand(length + 1);
-        }
 
     public:
         template <typename NumberType>
@@ -90,6 +78,18 @@ namespace enhanced::math {
 
         LargeNumber(LargeNumber&& other) noexcept;
 
+    private:
+        template <typename NumberType>
+        requires isIntegralType<NumberType>
+        inline LargeNumber(NumberType number) : storage(0), isNegative(isSigned<NumberType> && number < 0) {
+            sizetype count = 1;
+            for (NumberType value = number; value != 0; value /= 10, ++count);
+
+            length = count;
+            storage.expand(length + 1);
+        }
+
+    public:
         E_RET_NO_DISCARD()
         ComparisonResult compare(const LargeNumber& other) const;
 

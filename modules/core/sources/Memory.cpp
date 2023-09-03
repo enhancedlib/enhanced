@@ -43,11 +43,11 @@
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
 #include <enhanced/Warnings.h>
-#include <enhanced/exceptions/MemoryAllocationError.h>
+#include <enhanced/exceptions/OutOfMemoryError.h>
 
 using enhanced::allocate;
 using enhanced::release;
-using enhanced::exceptions::MemoryAllocationError;
+using enhanced::exceptions::OutOfMemoryError;
 
 namespace enhanced {
     const Nothrow nothrow {};
@@ -104,7 +104,7 @@ E_RET_NONNULL()
 E_ALLOCATOR void* operator new(enhanced::sizetype size) {
     void* space = allocate(size);
     if (space == nullptr) {
-        throw MemoryAllocationError("Cannot allocate memory");
+        throw OutOfMemoryError("Cannot allocate memory");
     }
     return space;
 }

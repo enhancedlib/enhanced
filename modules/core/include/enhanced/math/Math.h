@@ -111,10 +111,8 @@ namespace enhanced::math {
     requires isIntegralType<X> && isIntegralType<Y>
     E_RET_NO_DISCARD()
     inline constexpr ToUnsigned<Conditional<(sizeof(X) > sizeof(Y)), X, Y>> difference(X x, Y y) noexcept(noexcept(x < y)) {
-        E_CLANG_WARNING_PAD("-Wsign-compare") E_GCC_WARNING_PAD("-Wsign-compare")
-
+    E_CLANG_WARNING_PAD("-Wsign-compare") E_GCC_WARNING_PAD("-Wsign-compare")
         return (x < y) ? y - x : x - y;
-
-        E_CLANG_WARNING_POP E_GCC_WARNING_POP
+    E_CLANG_WARNING_POP E_GCC_WARNING_POP
     }
 }

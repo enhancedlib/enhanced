@@ -49,9 +49,10 @@ namespace enhanced::exceptions {
     class E_API(core) NotImplementedError : public AssertionError {
         E_CLASS(NotImplementedError)
 
-    E_CLASS_BODY
+    E_CLASS_HEADER
         E_DEFINE_EXCEPTION_NAME(enhanced::exceptions::NotImplementedError)
 
+    E_CLASS_BODY
         explicit NotImplementedError(const String& message = "Not yet implemented") noexcept;
     };
 }
