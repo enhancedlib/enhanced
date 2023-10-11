@@ -29,7 +29,7 @@ It contains many useful modules with a powerful variety of classes and functions
 4. Threading
 5. Data processing
 6. Networking
-7. More...
+7. And more...
 
 To use this library, you should use at least the C++20 standard.
 
@@ -37,7 +37,7 @@ To use this library, you should use at least the C++20 standard.
 
 Environments:
 
-- Compiler: [Clang](https://clang.llvm.org/) >= 15.0.0, [Microsoft Visual C++ (MSVC)](https://visualstudio.microsoft.com/vs/features/cplusplus/) >= 17.0.0, [GNU Compiler Collection (GCC)](https://gcc.gnu.org/) >= 11.0.0 **(versions indicated are tested, the compatibility of other versions is unknown)**
+- Compiler: [Clang](https://clang.llvm.org/) >= 15.0.0, [Microsoft Visual C++ (MSVC)](https://visualstudio.microsoft.com/vs/features/cplusplus/) >= 17.0.0, [GNU Compiler Collection (GCC)](https://gcc.gnu.org/) >= 11.0.0 **(versions shown has been tested, the compatibility of other versions is unknown)**
 - Operating system: Microsoft Windows, Linux kernel OS, Apple macOS
 - Processor architecture: amd64 (x86_64), x86, arm (arm32)\*, arm64 (aarch64)\* **('\*' means not tested)**
 - Build System: [CMake](https://cmake.org/) >= 3.13 (recommended to use [Ninja](https://ninja-build.org) as the downstream build system)
@@ -46,13 +46,3 @@ Environments:
 ## Wish
 
 I hope this library can make developing software in C++ easier and more efficient.
-
-## Help & Support
-
-### Q: Why is this software named "Enhanced"?
-
-A: Because I want this software to make C++ development more efficient and easy.
-
-### Q: Is this software free?
-
-A: Yes, this software is free and open source. However, use of this software must abide by [the License](LICENSE), otherwise, you may not use this software.

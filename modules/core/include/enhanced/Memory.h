@@ -49,6 +49,7 @@
 namespace enhanced {
     using Nothrow = std::nothrow_t;
     using NothrowRef = const std::nothrow_t&;
+    using AlignVal = std::align_val_t;
 
     extern const Nothrow nothrow;
 
@@ -94,7 +95,7 @@ namespace enhanced {
      * @param size     The size to be allocated (unit: byte).
      * @return void*   A pointer to the newly allocated space.
      */
-    E_RET_INSPECT() E_NULLABLE() E_RET_NEED_RELEASE()
+    E_CHECK_RET() E_RET_NULLABLE() E_RET_NEED_RELEASE()
     E_API(core) E_ALLOCATOR E_RET_RESTRICT void* allocate(sizetype size);
 
     /*!

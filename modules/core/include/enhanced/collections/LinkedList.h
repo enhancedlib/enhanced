@@ -200,37 +200,37 @@ namespace enhanced::collections {
                 return isEnd0();
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& prev() const override {
                 prev0();
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& prev(sizetype count) const override {
                 prev0(count);
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& next() const override {
                 next0();
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& next(sizetype count) const override {
                 next0(count);
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& setBegin() const override {
                 setBegin0();
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& setEnd() const override {
                 setBegin0();
                 return *this;

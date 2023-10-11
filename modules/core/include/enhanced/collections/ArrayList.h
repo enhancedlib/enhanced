@@ -146,7 +146,7 @@ namespace _E_INTERNAL::collections {
 }
 
 namespace enhanced::collections {
-    extern E_API(core) sizetype ARRAY_LIST_DEFAULT_CAPACITY; // Default value: 16
+    inline constexpr sizetype ARRAY_LIST_DEFAULT_CAPACITY = 16;
 
     template <typename Type>
     class ArrayList : public List<Type>, public Iterable<ArrayList<Type>>, private _E_INTERNAL::collections::ArrayListImpl {
@@ -195,37 +195,37 @@ namespace enhanced::collections {
                 return hasPrev0();
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& prev() const override {
                 prev0();
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& prev(sizetype count) const override {
                 prev0(count);
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& next() const override {
                 next0();
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& next(sizetype count) const override {
                 next0(count);
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& setBegin() const override {
                 setBegin0();
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             inline const Iterator<Type>& setEnd() const override {
                 setEnd0();
                 return *this;

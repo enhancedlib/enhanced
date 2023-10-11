@@ -107,21 +107,21 @@ namespace enhanced::collections {
                 return index == E_SIZE_TYPE_MAX || index < count();
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             const Iterator<Element>& prev() const override {
                 if (isBegin()) throw exceptions::OperationException("The iterator is at the begin of the list");
                 --index;
                 return delegate.prev();
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             const Iterator<Element>& prev(sizetype count) const override {
                 if (count > (index + 1)) throw exceptions::OperationException("Out of range");
                 index -= count;
                 return delegate.prev(count);
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             const Iterator<Element>& next() const override {
                 if (isEnd()) throw exceptions::OperationException("The iterator is at the end of the list");
                 if (!stream->completed && (count() == 0 || index == count() - 1)) {
@@ -133,7 +133,7 @@ namespace enhanced::collections {
                 return delegate.next();
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             const Iterator<Element>& next(sizetype count) const override {
                 sizetype generationCount = ((index != E_SIZE_TYPE_MAX) ? index + 1 : 0) + count - this->count();
                 if (!stream->completed) {
@@ -150,7 +150,7 @@ namespace enhanced::collections {
                 return delegate.next(count);
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             const Iterator<Element>& setBegin() const override {
                 if (!stream->completed) throw exceptions::OperationException("ListStream is not completed");
                 delegate.setBegin();
@@ -158,7 +158,7 @@ namespace enhanced::collections {
                 return *this;
             }
 
-            E_RETURN_SELF()
+            E_RETURN("self")
             const Iterator<Element>& setEnd() const override {
                 if (!stream->completed) throw exceptions::OperationException("ListStream is not completed");
                 delegate.setEnd();

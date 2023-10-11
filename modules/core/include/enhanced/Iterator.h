@@ -91,31 +91,31 @@ namespace enhanced {
         /*!
          * Let the iterator pointer return to the previous element.
          */
-        E_RETURN_SELF()
+        E_RETURN("self")
         virtual const Iterator<Type>& prev() const = 0;
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         virtual const Iterator<Type>& prev(sizetype count) const = 0;
 
         /*!
          * Let the iterator pointer return to the next element.
          */
-        E_RETURN_SELF()
+        E_RETURN("self")
         virtual const Iterator<Type>& next() const = 0;
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         virtual const Iterator<Type>& next(sizetype count) const = 0;
 
         /*!
          * Let the iterator pointer return to the begin.
          */
-        E_RETURN_SELF()
+        E_RETURN("self")
         virtual const Iterator<Type>& setBegin() const = 0;
 
         /*!
          * Let the iterator pointer return to the end.
          */
-        E_RETURN_SELF()
+        E_RETURN("self")
         virtual const Iterator<Type>& setEnd() const = 0;
     };
 
@@ -152,13 +152,13 @@ namespace enhanced {
         template <typename... Args>
         inline ForwardIterator(Args&&... args) : DirectedIterator<Iter>(forward<Args>(args)...) {}
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline const ForwardIterator& step() const {
             Iter::next();
             return *this;
         }
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline const ForwardIterator& step(sizetype count) const {
             Iter::next(count);
             return *this;
@@ -174,7 +174,7 @@ namespace enhanced {
             return *this;
         }
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline const ForwardIterator& reset() const {
             Iter::setBegin();
             return *this;
@@ -194,31 +194,31 @@ namespace enhanced {
         template <typename... Args>
         inline ReverseIterator(Args&&... args) : DirectedIterator<Iter>(forward<Args>(args)...) {}
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline const ReverseIterator& step() const {
             Iter::prev();
             return *this;
         }
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline const ReverseIterator& step(sizetype count) const {
             Iter::prev(count);
             return *this;
         }
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline const ReverseIterator& back() const {
             Iter::next();
             return *this;
         }
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline const ReverseIterator& back(sizetype count) const {
             Iter::next(count);
             return *this;
         }
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline const ReverseIterator& reset() const {
             Iter::setEnd();
             return *this;

@@ -124,7 +124,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    E_RETURN_SELF()
+    E_RETURN("self")
     CharSequence<CharType>& CharSequence<CharType>::operator=(const CharSequence& other) noexcept {
         if (this == &other) return *this;
 
@@ -139,7 +139,7 @@ namespace enhanced {
 
     template <typename CharType>
     requires isCharType<CharType>
-    E_RETURN_SELF()
+    E_RETURN("self")
     CharSequence<CharType>& CharSequence<CharType>::operator=(CharSequence&& other) noexcept {
         if (this == &other) return *this;
 

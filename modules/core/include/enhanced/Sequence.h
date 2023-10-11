@@ -53,7 +53,6 @@ namespace enhanced {
 
     E_CLASS_BODY
     private:
-        E_RELEASE_FUNC(release)
         Type* elements;
 
     public:

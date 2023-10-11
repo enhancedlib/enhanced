@@ -98,10 +98,10 @@ namespace enhanced {
         const CharType operator[](sizetype index) const noexcept;
     #endif
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         CharSequence& operator=(const CharSequence& other) noexcept;
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         CharSequence& operator=(CharSequence&& other) noexcept;
 
         operator CharType*() const noexcept;

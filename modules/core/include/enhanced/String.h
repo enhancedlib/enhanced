@@ -37,11 +37,11 @@
 
 #pragma once
 
-#include "enhanced/Array.h"
 #include <enhanced/Defines.h>
 #include <enhanced/CoreAPI.h>
 #include <enhanced/Types.h>
 #include <enhanced/Annotations.h>
+#include <enhanced/Array.h>
 #include <enhanced/Traits.h>
 #include <enhanced/Character.h>
 #include <enhanced/CharSequence.h>
@@ -189,61 +189,61 @@ namespace enhanced {
         E_RET_NO_DISCARD()
         TString lowercase() const;
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& toOwnStorage();
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& set(sizetype index, CharType ch);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& append(CharType ch);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& append(const TString<CharType>& string);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& insertFirst(CharType ch);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& insertFirst(const TString<CharType>& string);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceTo(sizetype start, sizetype end, CharType newChar);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceTo(sizetype start, sizetype end, const TString<CharType>& newSubstring);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceTo(CharType oldChar, CharType newChar);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceTo(CharType oldChar, const TString<CharType>& newSubstring);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceTo(const TString<CharType>& oldSubstring, CharType newChar);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceAllTo(CharType oldChar, CharType newChar);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceAllTo(const TString<CharType>& oldSubstring, const TString<CharType>& newSubstring);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceAllTo(CharType oldChar, const TString<CharType>& newSubstring);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& replaceAllTo(const TString<CharType>& oldSubstring, CharType newChar);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& fill(CharType ch) noexcept;
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& uppercaseTo();
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& lowercaseTo();
 
         E_RET_NO_DISCARD()
@@ -266,16 +266,16 @@ namespace enhanced {
         E_RET_NO_DISCARD()
         TString operator+(CharType ch) const;
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& operator=(const TString& other) noexcept;
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& operator=(TString&& other) noexcept;
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& operator+=(const TString<CharType>& string);
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         TString& operator+=(CharType ch);
     };
 

@@ -54,11 +54,11 @@ using enhanced::exceptions::OperationException;
 namespace _E_INTERNAL::collections {
     ArrayListImpl::ArrayListImpl(sizetype capacity) :
         elements(new void*[capacity]), size(0), capacity(capacity),
-        expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? capacity : 1; }) {}
+        expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? 1 : capacity; }) {}
 
     ArrayListImpl::ArrayListImpl(const ArrayListImpl& other, OpCopy opCopy) :
         elements(new void*[other.capacity]), size(other.size),
-        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? capacity : 1; }) {
+        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? 1 : capacity; }) {
         E_ASSERT(other.capacity >= other.size);
         for (sizetype index = 0; index < other.size; ++index) {
             elements[index] = opCopy(other.elements[index]);
@@ -66,7 +66,7 @@ namespace _E_INTERNAL::collections {
     }
 
     ArrayListImpl::ArrayListImpl(ArrayListImpl&& other) noexcept : elements(other.elements), size(other.size),
-        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? capacity : 1; }) {
+        capacity(other.capacity), expansionSizeFunc([](sizetype capacity) { return capacity == 0 ? 1 : capacity; }) {
         other.elements = nullptr;
         other.size = E_SIZE_TYPE_MAX;
         other.capacity = E_SIZE_TYPE_MAX;
@@ -106,7 +106,7 @@ namespace _E_INTERNAL::collections {
 
     void ArrayListImpl::addFirst0(void* element, OpCopy opCopy) {
         if (size == capacity) {
-            capacity = expansionSizeFunc(capacity);
+            capacity = capacity + expansionSizeFunc(capacity);
         }
 
         void** array = new void*[capacity];
@@ -119,7 +119,7 @@ namespace _E_INTERNAL::collections {
 
     void ArrayListImpl::addFirst1(void* element, OpMove opMove) {
         if (size == capacity) {
-            capacity = expansionSizeFunc(capacity);
+            capacity = capacity + expansionSizeFunc(capacity);
         }
 
         void** array = new void*[capacity];
@@ -132,7 +132,7 @@ namespace _E_INTERNAL::collections {
 
     void ArrayListImpl::addLast0(void* element, OpCopy opCopy) {
         if (size == capacity) {
-            setCapacity0(expansionSizeFunc(capacity), nullptr);
+            setCapacity0(capacity + expansionSizeFunc(capacity), nullptr);
         }
 
         elements[size] = opCopy(element);
@@ -141,7 +141,7 @@ namespace _E_INTERNAL::collections {
 
     void ArrayListImpl::addLast1(void* element, OpMove opMove) {
         if (size == capacity) {
-            setCapacity0(expansionSizeFunc(capacity), nullptr);
+            setCapacity0(capacity + expansionSizeFunc(capacity), nullptr);
         }
 
         elements[size] = opMove(element);
@@ -250,8 +250,4 @@ namespace _E_INTERNAL::collections {
     void ArrayListImpl::ArrayListIteratorImpl::setEnd0() const {
         indexer = arrayList->elements + arrayList->size;
     }
-}
-
-namespace enhanced::collections {
-    sizetype ARRAY_LIST_DEFAULT_CAPACITY = 16;
 }

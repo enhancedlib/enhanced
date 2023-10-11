@@ -35,7 +35,8 @@
  * SOFTWARE.
  */
 
-#include <malloc.h>
+#include <cstdlib>
+#include <cstring>
 
 #include <enhanced/Memory.h>
 
@@ -52,7 +53,7 @@ using enhanced::exceptions::OutOfMemoryError;
 namespace enhanced {
     const Nothrow nothrow {};
 
-    E_RET_INSPECT() E_NULLABLE() E_RET_NEED_RELEASE()
+    E_CHECK_RET() E_RET_NULLABLE() E_RET_NEED_RELEASE()
     E_ALLOCATOR E_RET_RESTRICT void* allocate(sizetype size) {
         if (size == 0) return nullptr;
 
@@ -76,22 +77,7 @@ namespace enhanced {
     }
 
     void memoryCopy(void* destination, const void* source, sizetype size) {
-    #ifndef E_COMPILER_MSVC
-        __builtin_memcpy(destination, source, size);
-    #else
-        if (destination == nullptr || source == nullptr || size == 0) return;
-
-        sizetype countBlock = size / sizeof(qword);
-        sizetype countByte = size % sizeof(qword);
-
-        for (sizetype index = 0; index < countBlock; ++index) {
-            ((qword*) destination)[index] = ((qword*) source)[index];
-        }
-
-        for (sizetype index = size - countByte; index < size; ++index) {
-            ((byte*) destination)[index] = ((byte*) source)[index];
-        }
-    #endif
+        memcpy(destination, source, size);
     }
 }
 
@@ -100,7 +86,7 @@ using enhanced::nothrow;
 
 // TODO
 
-E_RET_NONNULL()
+E_RET_NONNULL() E_RET_NEED_RELEASE()
 E_ALLOCATOR void* operator new(enhanced::sizetype size) {
     void* space = allocate(size);
     if (space == nullptr) {
@@ -109,18 +95,18 @@ E_ALLOCATOR void* operator new(enhanced::sizetype size) {
     return space;
 }
 
-E_RET_NONNULL()
+E_RET_NONNULL() E_RET_NEED_RELEASE()
 E_ALLOCATOR void* operator new[](enhanced::sizetype size) {
     return operator new(size);
 }
 
-E_RET_INSPECT() E_NULLABLE() E_RET_NEED_RELEASE()
-E_ALLOCATOR E_RET_RESTRICT void* operator new(enhanced::sizetype size, enhanced::NothrowRef) noexcept {
+E_CHECK_RET() E_RET_NULLABLE() E_RET_NEED_RELEASE()
+E_ALLOCATOR void* operator new(enhanced::sizetype size, enhanced::NothrowRef) noexcept {
     return allocate(size);
 }
 
-E_RET_INSPECT() E_NULLABLE() E_RET_NEED_RELEASE()
-E_ALLOCATOR E_RET_RESTRICT void* operator new[](enhanced::sizetype size, enhanced::NothrowRef) noexcept {
+E_CHECK_RET() E_RET_NULLABLE() E_RET_NEED_RELEASE()
+E_ALLOCATOR void* operator new[](enhanced::sizetype size, enhanced::NothrowRef) noexcept {
     return operator new(size, nothrow);
 }
 

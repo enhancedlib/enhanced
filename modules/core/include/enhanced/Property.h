@@ -42,72 +42,73 @@
 #include <enhanced/Annotations.h>
 #include <enhanced/Traits.h>
 
-#define _E_PROPERTY_GETTER_get(ACCESS_MODIFIER) \
+#define _E_PROPERTY_GETTER_GET(ACCESS_MODIFIER) \
 ACCESS_MODIFIER: \
     E_RET_NO_DISCARD() \
-    inline const Type& operator()() const
-
-#define _E_PROPERTY_SETTER_set(ACCESS_MODIFIER) \
-ACCESS_MODIFIER: \
-    E_RETURN_SELF() \
-    inline Type& operator()(const Type& value) { \
-        return operator=(value); \
+    inline const enhanced::RemoveRefAndCv<Type>& operator()() const { \
+        return get(); \
     } \
-    inline Type& operator=(const Type& value)
+    E_RET_NO_DISCARD() \
+    inline const enhanced::RemoveRefAndCv<Type>& get() const
 
-#define _E_PROPERTY_GETTER_getter(ACCESS_MODIFIER) \
-    _E_PROPERTY_GETTER_get(ACCESS_MODIFIER) { \
-        return property; \
+#define _E_PROPERTY_SETTER_SET(ACCESS_MODIFIER) \
+ACCESS_MODIFIER: \
+    inline void operator()(const enhanced::RemoveRefAndCv<Type>& value) { \
+        set(value); \
+    } \
+    inline void set(const enhanced::RemoveRefAndCv<Type>& value)
+
+#define _E_PROPERTY_GETTER_DEFAULT_GETTER(ACCESS_MODIFIER) \
+    _E_PROPERTY_GETTER_GET(ACCESS_MODIFIER) { \
+        return field; \
     }
 
-#define _E_PROPERTY_SETTER_setter(ACCESS_MODIFIER) \
-    _E_PROPERTY_SETTER_set(ACCESS_MODIFIER) { \
-        return property = value; \
+#define _E_PROPERTY_SETTER_DEFAULT_SETTER(ACCESS_MODIFIER) \
+    _E_PROPERTY_SETTER_SET(ACCESS_MODIFIER) { \
+        field = value; \
     }
 
-#define E_PROPERTY(TYPE, NAME, GETTER, SETTER, ...) \
+#define E_PROPERTY(TYPE, NAME, VALUE, GETTER, SETTER) \
     protected: \
-        class _enhanced_Property_##NAME { \
-            friend _enhanced_Class; \
+        class EProperty$##NAME { \
+            friend E_CLASS_TYPE; \
         public: \
             using Type = TYPE; \
         private: \
-            Type property; \
-            inline _enhanced_Property_##NAME() : property() {} \
-            inline _enhanced_Property_##NAME(const Type& value) : property(enhanced::move(value)) {} \
+            Type field; \
+            inline EProperty$##NAME() : field(VALUE) {} \
             _E_PROPERTY_GETTER_##GETTER \
             _E_PROPERTY_SETTER_##SETTER \
         }; \
     public: \
-        _enhanced_Property_##NAME NAME {__VA_ARGS__}; \
+        EProperty$##NAME NAME {}; \
     private:
 
 #define E_PROPERTY_REF(BASE, NAME) \
-    class _enhanced_PropertyRef_##NAME : public _enhanced_Property_##NAME { \
-        friend _enhanced_Class; \
-    private: \
-        template <typename Property = _enhanced_Property_##NAME> \
-        E_RET_NO_DISCARD() \
-        inline const Type& get() const \
-        requires enhanced::testValid<decltype(Property::operator()())> { \
-            return Property::operator()(); \
-        } \
-        template <typename Property = _enhanced_Property_##NAME> \
-        inline Type& set(const Type& value) \
-        requires enhanced::testValid<decltype(Property::operator=(value))> { \
-            return Property::operator=(value); \
-        } \
+    class EPropertyRef$##NAME : public EProperty$##NAME { \
+        friend E_CLASS_TYPE; \
     public: \
-        inline _enhanced_PropertyRef_##NAME() = delete; \
+        inline EPropertyRef$##NAME() = delete; \
+        template <typename _ = void> \
+        E_RET_NO_DISCARD() \
+        inline const enhanced::RemoveRefAndCv<Type>& get() const \
+        requires enhanced::testValid<decltype(EProperty$##NAME::get())> { \
+            return EProperty$##NAME::get(); \
+        } \
+        template <typename _ = void> \
+        inline void set(const enhanced::RemoveRefAndCv<Type>& value) \
+        requires enhanced::testValid<decltype(EProperty$##NAME::set(value))> { \
+            EProperty$##NAME::set(value); \
+        } \
     }; \
-    template <typename Property = _enhanced_Property_##NAME, typename Ref = _enhanced_PropertyRef_##NAME> \
+    template <typename _ = void> \
     E_RET_NO_DISCARD() \
-    inline const typename Property::Type& NAME() const \
-    requires enhanced::testValid<decltype(enhanced::forceCast<Ref>(BASE::NAME).get())> { \
-        return ((const _enhanced_PropertyRef_##NAME&) BASE::NAME).get(); \
+    inline const typename enhanced::RemoveRefAndCv<EProperty$##NAME::Type>& NAME() const \
+    requires enhanced::testValid<decltype(enhanced::forceCast<EPropertyRef$##NAME>(BASE::NAME).get())> { \
+        return ((const EPropertyRef$##NAME&) BASE::NAME).get(); \
     } \
-    template <typename Property = _enhanced_Property_##NAME> \
-    inline typename Property::Type& NAME(const typename Property::Type& value) \
-    requires enhanced::testValid<decltype(enhanced::forceCast<_enhanced_PropertyRef_##NAME>(BASE::NAME).set(value))> { \
-        return ((_enhanced_PropertyRef_##NAME&) BASE::NAME).set(value); \
+    template <typename _ = void> \
+    inline void NAME(const enhanced::RemoveRefAndCv<typename EProperty$##NAME::Type>& value) \
+    requires enhanced::testValid<decltype(enhanced::forceCast<EPropertyRef$##NAME>(BASE::NAME).set(value))> { \
+        ((EPropertyRef$##NAME&) BASE::NAME).set(value); \
     }

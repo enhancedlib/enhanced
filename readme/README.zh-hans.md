@@ -39,20 +39,10 @@
 
 - 编译器：[Clang](https://clang.llvm.org/) >= 15.0.0, [Microsoft Visual C++ (MSVC)](https://visualstudio.microsoft.com/vs/features/cplusplus/) >= 17.0.0, [GNU Compiler Collection (GCC)](https://gcc.gnu.org/) >= 11.0.0 **(标明的版本为已测试，其它版本兼容性未知)**
 - 操作系统：Microsoft Windows, Linux內核操作系統, Apple macOS
-- 处理器：amd64 (x86_64)、x86、arm (arm32)\*、arm64 (aarch64)\* **(“\*”表示未测试)**
+- 处理器：amd64 (x86_64)，x86，arm (arm32)\*，arm64 (aarch64)\* **(“\*”表示未经测试)**
 - 构建系统: [CMake](https://cmake.org/) >= 3.13 (推荐使用[Ninja](https://ninja-build.org)作为下游构建系统)
 - C++标准：至少为C++20
 
 ## 愿望
 
 我希望这个库可以让使用C++语言开发软件更加方便和高效。
-
-## 帮助与支持
-
-### 问：为什么叫做“Enhanced”？
-
-答：因为我想要这个软件使C++开发更高效和容易。
-
-### 问：这个软件免费吗？
-
-答：是的，这个软件免费并且开源。但使用此软件必须遵守[许可协议](../LICENSE)，否则，你不得使用此软件。

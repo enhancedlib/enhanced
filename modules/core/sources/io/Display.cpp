@@ -82,7 +82,7 @@ namespace enhanced::io {
 
 #undef __TEMPLATE
 
-    E_DISPLAY_IMPL(nulltype, out,) {
+    E_DISPLAY_IMPL(nulltype, out, E_EMPTY) {
         out.write("null"_e.toBytes(), 4 * sizeof(char));
     }
 }

@@ -45,6 +45,7 @@
 #include <enhanced/Traits.h>
 #include <enhanced/InitializerList.h>
 #include <enhanced/Iterator.h>
+#include <enhanced/Memory.h>
 
 namespace enhanced {
     template <typename Type>
@@ -55,7 +56,6 @@ namespace enhanced {
     private:
         sizetype size;
 
-        E_RELEASE_FUNC(release)
         Type* elements;
 
     public:
@@ -134,21 +134,6 @@ namespace enhanced {
     };
 
     /*!
-     * Sets elements of an array to the same value. \n
-     * For float types, use the pointer edition (arrayFillPtr). \n
-     * For class/struct types, use the template edition.
-     *
-     * @example arrayFill(str, 'a', 5, sizeof(char));
-     * @example arrayFill(array, 0, 10, sizeof(int));
-     *
-     * @param array        An array.
-     * @param value        A value (can be any integral type, includes "char").
-     * @param count        The number of elements.
-     * @param sizeOfType   The byte size of array type (generally: "sizeof(<array-type>)").
-     */
-    E_API(core) void arrayFill(E_IN_OUT() void* array, qword value, sizetype count, sizetype sizeOfType);
-
-    /*!
      * Sets elements of an array to the same value (pointer edition).
      *
      * @example float f = 10.0f; \n
@@ -162,6 +147,23 @@ namespace enhanced {
      * @param sizeOfType   The byte size of array type (generally: "sizeof(<type>)").
      */
     E_API(core) void arrayFillPtr(E_IN_OUT() void* array, const void* valuePtr, sizetype count, sizetype sizeOfType);
+
+    /*!
+     * Sets elements of an array to the same value. \n
+     * For float types, use the pointer edition (arrayFillPtr). \n
+     * For class/struct types, use the template edition.
+     *
+     * @example arrayFill(str, 'a', 5, sizeof(char));
+     * @example arrayFill(array, 0, 10, sizeof(int));
+     *
+     * @param array        An array.
+     * @param value        A value (can be any integral type, includes "char").
+     * @param count        The number of elements.
+     * @param sizeOfType   The byte size of array type (generally: "sizeof(<array-type>)").
+     */
+    inline void arrayFill(E_IN_OUT() void* array, qword value, sizetype count, sizetype sizeOfType) {
+        arrayFillPtr(array, &value, count, sizeOfType);
+    }
 
     /*!
      * Sets elements of an array to the same value (template edition).
@@ -199,7 +201,9 @@ namespace enhanced {
      * @param count         The number of elements.
      * @param sizeOfType    The byte size of array type (generally: "sizeof(<type>)").
      */
-    E_API(core) void arrayCopy(E_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType);
+    inline void arrayCopy(E_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType) {
+        memoryCopy(destination, source, count * sizeOfType);
+    }
 
 
     /*!

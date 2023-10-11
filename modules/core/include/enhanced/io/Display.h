@@ -45,7 +45,7 @@
 #include <enhanced/String.h>
 #include <enhanced/io/OutputStream.h>
 
-#define E_DISPLAY _enhanced_interface_display
+#define E_DISPLAY _enhanced_io_display_impl
 #define E_DISPLAY_DECLARE(TYPE, ...) void __VA_ARGS__ E_DISPLAY(const io::OutputStream& out, const enhanced::wrap<TYPE>& value)
 #define E_DISPLAY_IMPL(TYPE, OUT, VALUE, ...) void __VA_ARGS__ E_DISPLAY(const io::OutputStream& OUT, const enhanced::wrap<TYPE>& VALUE)
 
@@ -84,6 +84,13 @@ namespace enhanced::io {
     E_API(core) E_DISPLAY_DECLARE(bool);
 
     E_API(core) E_DISPLAY_DECLARE(nulltype);
+
+    template <typename Type>
+    requires isPointer<Type>
+    E_DISPLAY_IMPL(Type, out, value) {
+        auto string = String::from((sizetype) value);
+        out.write(string.toBytes(), string.getLength() * sizeof(char));
+    }
 
     template <typename Type>
     inline constexpr bool isDisplayable = false;

@@ -42,10 +42,6 @@
 #include <enhanced/Memory.h>
 
 namespace enhanced {
-    void arrayFill(E_IN_OUT() void* array, qword value, sizetype count, sizetype sizeOfType) {
-        arrayFillPtr(array, &value, count, sizeOfType);
-    }
-
     void arrayFillPtr(E_IN_OUT() void* array, const void* valuePtr, sizetype count, sizetype sizeOfType) {
         if (array == nullptr || valuePtr == nullptr || count == 0 || sizeOfType == 0) return;
 
@@ -54,9 +50,5 @@ namespace enhanced {
         for (sizetype index = 0; index < size; ++index) {
             ((byte*) array)[index] = ((byte*) valuePtr)[index % sizeOfType];
         }
-    }
-
-    void arrayCopy(E_OUT() void* destination, const void* source, sizetype count, sizetype sizeOfType) {
-        memoryCopy(destination, source, count * sizeOfType);
     }
 }

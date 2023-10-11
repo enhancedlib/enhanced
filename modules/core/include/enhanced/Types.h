@@ -129,6 +129,81 @@ namespace enhanced {
     using wrap = Type;
 }
 
+namespace enhanced::inline primitives {
+    using Void = void;
+
+    using Char = char;
+    using Short = short;
+    using Int = int;
+    using Long = long;
+    using Float = float;
+    using Double = double;
+
+    using SChar = signed char;
+    using LLong = long long;
+    using LDouble = long double;
+
+    using UChar = unsigned char;
+    using UShort = unsigned short;
+    using UInt = unsigned int;
+    using ULong = unsigned long;
+    using ULLong = unsigned long long;
+
+    using Int8 = SChar;
+    using Int16 = Short;
+    using Int32 = Int;
+#ifdef E_LONG_EQUALS_INT
+    using Int64 = LLong;
+#else
+    using Int64 = Long;
+#endif
+
+    using UInt8 = UChar;
+    using UInt16 = UShort;
+    using UInt32 = UInt;
+#ifdef E_LONG_EQUALS_INT
+    using UInt64 = ULLong;
+#else
+    using uint64 = ULong;
+#endif
+
+    using Float32 = Float;
+    using Float64 = Double;
+
+#ifdef E_WCHAR_IS_BUILTIN_TYPE
+    using WChar = wchar_t;
+#else
+    #ifdef E_WCHAR_16BIT
+    using WChar = UInt16;
+    #else
+    using WChar = Int32;
+    #endif
+#endif
+
+    using U8Char = char8_t;
+    using U16Char = char16_t;
+    using U32Char = char32_t;
+
+    using Byte = UInt8;
+    using Word = UInt16;
+    using Dword = UInt32;
+    using Qword = UInt64;
+
+#ifdef E_SIZE_TYPE_32BIT
+    using Size = UInt32;
+#else
+    using Size = UInt64;
+#endif
+
+#ifdef E_SIZE_TYPE_32BIT
+    using SSize = Int32;
+#else
+    using SSize = Int64;
+#endif
+
+    using Nullptr = decltype(nullptr);
+}
+
 #define E_INT8_MIN (-0x80) // -128
 #define E_INT16_MIN (-0x8000) // -32768
 #define E_INT32_MIN (-0x80000000) // -2147483648

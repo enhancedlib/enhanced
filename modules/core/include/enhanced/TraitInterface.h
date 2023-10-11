@@ -50,31 +50,31 @@
 
 #if !defined(E_COMPILER_CLANG) || E_COMPILER_CLANG_VERSION_MAJOR >= 16
 #define E_TRAIT_INTERFACE_METHOD(NAME, RETURN, PARAMETERS, ...) \
-    inline constexpr void _enhanced_interfaceMethodTest_##NAME PARAMETERS __VA_ARGS__ {}; \
+    inline constexpr void _enhanced_traitInterfaceMethod_##NAME PARAMETERS __VA_ARGS__ {}; \
     template <typename... Args> \
     inline constexpr auto NAME(Args&&... args) __VA_ARGS__ \
     noexcept(noexcept(static_cast<__VA_ARGS__ E_TRAIT_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) -> RETURN \
-    requires enhanced::testValid<decltype(this->_enhanced_interfaceMethodTest_##NAME(args...))> && enhanced::isSame<RETURN, \
+    requires enhanced::testValid<decltype(this->_enhanced_traitInterfaceMethod_##NAME(args...))> && enhanced::isSame<RETURN, \
         decltype(static_cast<__VA_ARGS__ E_TRAIT_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))> { \
         return static_cast<__VA_ARGS__ E_TRAIT_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
     }
 #else
 #define E_TRAIT_INTERFACE_METHOD(NAME, RETURN, PARAMETERS, ...) \
-    inline constexpr void _enhanced_interfaceMethodTest_##NAME PARAMETERS __VA_ARGS__ {}; \
+    inline constexpr void _enhanced_traitInterfaceMethod_##NAME PARAMETERS __VA_ARGS__ {}; \
     template <typename... Args> \
     inline constexpr auto NAME(Args&&... args) __VA_ARGS__ \
     noexcept(noexcept(static_cast<__VA_ARGS__ E_TRAIT_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) -> RETURN \
-    requires enhanced::testValid<decltype(this->_enhanced_interfaceMethodTest_##NAME(args...))> { \
+    requires enhanced::testValid<decltype(this->_enhanced_traitInterfaceMethod_##NAME(args...))> { \
         static_assert(enhanced::isSame<RETURN, decltype(static_cast<__VA_ARGS__ E_TRAIT_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))>); \
         return static_cast<__VA_ARGS__ E_TRAIT_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
     }
 #endif
 
 #define E_TRAIT_INTERFACE_METHOD_RET_ANY(NAME, PARAMETERS, ...) \
-    inline constexpr void _enhanced_interfaceMethodTest_##NAME PARAMETERS __VA_ARGS__ {}; \
+    inline constexpr void _enhanced_traitInterfaceMethod_##NAME PARAMETERS __VA_ARGS__ {}; \
     template <typename... Args> \
     inline constexpr auto NAME(Args&&... args) __VA_ARGS__ \
     noexcept(noexcept(static_cast<__VA_ARGS__ E_TRAIT_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...))) \
-    requires enhanced::testValid<decltype(this->_enhanced_interfaceMethodTest_##NAME(args...))> { \
+    requires enhanced::testValid<decltype(this->_enhanced_traitInterfaceMethod_##NAME(args...))> { \
         return static_cast<__VA_ARGS__ E_TRAIT_INTERFACE_IMPL_CLASS*>(this)->NAME(enhanced::forward<decltype(args)>(args)...); \
     }

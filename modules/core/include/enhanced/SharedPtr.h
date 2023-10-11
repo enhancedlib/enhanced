@@ -188,13 +188,13 @@ namespace enhanced {
             return raw();
         }
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline SharedPtr<Type>& operator=(const SharedPtr<Type>& other) noexcept {
             assign0(other, destroy);
             return *this;
         }
 
-        E_RETURN_SELF()
+        E_RETURN("self")
         inline SharedPtr<Type>& operator=(SharedPtr<Type>&& other) noexcept {
             assign0(other, destroy);
             return *this;
